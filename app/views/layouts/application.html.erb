@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Tsdbexplorer</title>
+ <head>
+  <title>TSDB Explorer<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
   <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
+  <%= yield(:head) %>
+  <%= javascript_include_tag "tsdbexplorer", "jquery.min", "expandable-list" %>
   <%= csrf_meta_tag %>
-</head>
-<body>
+ </head>
+ <body>
 
-<%= yield %>
+  <h1>TSDB Explorer</h1>
 
-</body>
+  <%= yield %>
+
+ </body>
 </html>
