@@ -94,4 +94,35 @@ module TSDBExplorer
   
   end
 
+
+  # Split a line in to fields based on the contents of field_array.  The contents
+  # of each field is trimmed to remove whitespace, which may result in a field
+  # being blank.  In this case, blank values are replaced with a nil value.
+  #
+  # The field_array is an array comprised of one or more arrays with a field name
+  # and a field length, for example, [ :record_identity, 2 ].  Each field starts
+  # at the end of the previous field.
+
+  def TSDBExplorer.cif_parse_line(data, field_array)
+
+    raise "Field hash must be an array" unless field_array.is_a? Array
+
+    pos = 0
+    result_hash = Hash.new
+
+    field_array.each do |field|
+
+      field_name = field[0].to_sym
+
+      value = data.slice(pos, field[1])
+
+      result_hash[field_name] = value == '' ? nil : value
+      pos = pos + field[1]
+
+    end
+
+    return result_hash
+
+  end
+
 end

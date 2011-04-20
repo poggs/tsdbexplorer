@@ -67,4 +67,17 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should be able to split a line in to fields based on an array" do
+
+    sample_data = "AABBCCCDDDDEEEEE      FFFFFFF8888888899  99  9"
+    sample_data_format = [ [ :one, 2 ], [ :two, 2 ], [ :three, 3], [ :four, 4 ], [ :five, 5 ], [ :six, 6], [ :seven, 7 ], [ :eight, 8], [ :nine, 9] ]
+
+    returned_data = TSDBExplorer.cif_parse_line(sample_data, sample_data_format)
+
+    expected_data = { :one => "AA", :two => "BB", :three => "CCC", :four => "DDDD", :five => "EEEEE", :six => "      ", :seven => "FFFFFFF", :eight => "88888888", :nine => "99  99  9" }
+    
+    returned_data.should eql(expected_data)
+
+  end
+
 end
