@@ -80,4 +80,34 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should validate a correctly formatted File Mainframe Identity in a CIF HD record" do
+
+    file_mainframe_identity_1 = TSDBExplorer.cif_parse_file_mainframe_identity("TPS.UDFXXXX.PD700101")
+    file_mainframe_identity_1.should have_key(:username)
+    file_mainframe_identity_1[:username].should eql("DFXXXX")
+    file_mainframe_identity_1.should have_key(:extract_date)
+    file_mainframe_identity_1[:extract_date].should eql("700101")
+    file_mainframe_identity_1.should_not have_key(:error)
+
+    file_mainframe_identity_2 = TSDBExplorer.cif_parse_file_mainframe_identity("TPS.UCFXXXX.PD700101")
+    file_mainframe_identity_2.should have_key(:username)
+    file_mainframe_identity_2[:username].should eql("CFXXXX")
+    file_mainframe_identity_2.should have_key(:extract_date)
+    file_mainframe_identity_2[:extract_date].should eql("700101")
+    file_mainframe_identity_2.should_not have_key(:error)
+
+  end
+
+  it "should reject an incorrectly formatted File Mainframe Identity in a CIF HD record" do
+
+    file_mainframe_identity_1 = TSDBExplorer.cif_parse_file_mainframe_identity("TPS.Ufoo.PD700101")
+    file_mainframe_identity_1.should have_key(:error)
+    file_mainframe_identity_1[:error].should_not be_nil
+
+    file_mainframe_identity_2 = TSDBExplorer.cif_parse_file_mainframe_identity("TPS.U.PD700101")
+    file_mainframe_identity_2.should have_key(:error)
+    file_mainframe_identity_2[:error].should_not be_nil
+
+  end
+
 end

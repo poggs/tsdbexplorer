@@ -125,4 +125,50 @@ module TSDBExplorer
 
   end
 
+
+  # Parse and validate a File Mainframe Identity field from a CIF 'HD'
+  # record.  If the data is valid, it returns a hash with :username and
+  # :extract_date keys.  If the data is not valid, it returns a hash with a
+  # single :error key.
+
+  def TSDBExplorer.cif_parse_file_mainframe_identity(mainframe_identity)
+
+    data = Hash.new
+
+    if mainframe_identity.match(/TPS.U(.{6}).PD(.{6})/).nil?
+      data[:error] = "File Mainframe Identity '#{mainframe_identity}' is not valid - must start with TPS.U, be followed by six characters, then .PD and a further six characters"
+    end
+
+    username_match = $1
+    extract_date_match = $2
+
+    unless data.has_key? :error
+
+      username = username_match.match(/([CD]F\w{4})/)
+
+      if username.nil?
+        data[:error] = "Username " + $1.nil? ? "" : $1 + "is not valid - must start with CF or DF and be followed by four characters"
+      else
+        data[:username] = $1
+      end
+
+    end
+
+
+    unless data.has_key? :error
+
+      extract_date = extract_date_match.match(/(\d{6})/)
+
+      if extract_date.nil?
+        data[:error] = "Extract date '$2' is not valid - must be six numerics"
+      else
+        data[:extract_date] = $1
+      end
+
+    end
+
+    return data
+
+  end
+
 end
