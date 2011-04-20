@@ -29,7 +29,22 @@ class Tiploc < ActiveRecord::Base
   validates_presence_of     :nalco
   validates_numericality_of :nalco
   validates_presence_of     :tps_description
-  validates_format_of       :crs_code, :with => /[A-Z][A-Z][A-Z]/
-  validates_presence_of     :description
+  validates_format_of       :crs_code, :with => /[A-Z][A-Z][A-Z]/, :allow_blank => true
+
+  def tiploc_code=(value)
+    write_attribute(:tiploc_code, value.strip)
+  end
+
+  def description=(value)
+    write_attribute(:description, value.strip)
+  end
+
+  def tps_description=(value)
+    write_attribute(:tps_description, value.strip)
+  end
+
+  def crs_code=(value)
+    write_attribute(:crs_code, value.strip)
+  end
 
 end

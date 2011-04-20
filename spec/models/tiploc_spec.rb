@@ -51,9 +51,9 @@ describe Tiploc do
     tiploc.should_not be_valid
   end
 
-  it "should not be valid without a CRS code" do
-    tiploc = Tiploc.new(:tiploc_code => "EUSTON", :nalco => "144400", :tps_description => "LONDON EUSTON", :description => "LONDON EUSTON")
-    tiploc.should_not be_valid
+  it "should be valid with a blank CRS code" do
+    tiploc = Tiploc.new(:tiploc_code => "EUSTON", :nalco => "144400", :crs_code => "   ", :tps_description => "LONDON EUSTON", :description => "LONDON EUSTON")
+    tiploc.should be_valid
   end
 
   it "should enforce a three-letter CRS code" do
@@ -62,13 +62,13 @@ describe Tiploc do
   end
 
   it "should enforce an all-alphabetic CRS code" do
-    tiploc = Tiploc.new(:tiploc_code => "EUSTON", :nalco => "144400", :tps_description => "LONDON EUSTON", :crs_code => "Z", :description => "LONDON EUSTON")
+    tiploc = Tiploc.new(:tiploc_code => "EUSTON", :nalco => "144400", :tps_description => "LONDON EUSTON", :crs_code => "000", :description => "LONDON EUSTON")
     tiploc.should_not be_valid
   end
   
-  it "should not be valid without a description" do
+  it "should be valid without a description" do
     tiploc = Tiploc.new(:tiploc_code => "EUSTON", :nalco => "144400", :tps_description => "LONDON EUSTON", :crs_code => "EUS")
-    tiploc.should_not be_valid
+    tiploc.should be_valid
   end
 
 end
