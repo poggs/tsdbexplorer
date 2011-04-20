@@ -110,4 +110,17 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should reject an empty CIF file" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/blank_file.cif') }.should raise_error
+  end
+
+  it "should reject a CIF file with an unknown record" do
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/unknown_record_type.cif')
+    result.should have_key(:error)
+  end
+
+  it "should permit a CIF file with only an HD and ZZ record" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/header_and_trailer.cif').should be_nil
+  end
+
 end

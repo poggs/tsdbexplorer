@@ -171,4 +171,67 @@ module TSDBExplorer
 
   end
 
+
+  module CIF
+
+    def CIF.process_cif_file(filename)
+
+      cif_data = File.open(filename)
+      puts "Processing #{filename}"
+
+
+      # The first line of the CIF file must be an HD record
+
+      header_line = cif_data.first
+      header_data = TSDBExplorer.cif_parse_line(header_line, [ [ :record_identity, 2 ], [ :file_mainframe_identity, 20 ], [ :date_of_extract, 6 ], [ :time_of_extract, 4 ], [ :current_file_ref, 7 ], [ :last_file_ref, 7 ], [ :update_indicator, 1 ], [ :version, 1 ], [ :user_extract_start_date, 6 ], [ :user_extract_end_date, 6], [ :spare, 20 ] ])
+
+      raise "Expecting an HD record at the start of #{cif_filename} - found a '#{header_data[:record_identity]}' record" unless header_data[:record_identity] == "HD"
+
+
+      # Validate the HD record
+
+      file_mainframe_identity_data = TSDBExplorer.cif_parse_file_mainframe_identity(header_data[:file_mainframe_identity])
+
+      raise file_mainframe_identity_data[:error] if file_mainframe_identity_data.has_key? :error
+
+      puts "-----------------------------------------------------------------------------"
+      puts "      Mainframe ID : #{header_data[:file_mainframe_identity]}"
+      puts "              User : #{file_mainframe_identity_data[:username]}"
+      puts "      Extract date : #{header_data[:date_of_extract]}"
+      puts "      Extract time : #{header_data[:time_of_extract]}"
+      puts "    File reference : #{header_data[:current_file_ref]}"
+      puts "    Last reference : #{header_data[:last_file_ref]}"
+      puts "  Update indicator : #{header_data[:update_indicator]}"
+      puts "       CIF version : #{header_data[:version]}"
+      puts "     Extract start : #{header_data[:user_extract_start_date]}"
+      puts "       Extract end : #{header_data[:user_extract_end_date]}"
+      puts "-----------------------------------------------------------------------------"
+
+      end_of_data = 0
+      line_number = 0
+
+      cif_data.each do |record|
+
+        next if end_of_data == 1 && record.blank?
+
+        line_number = line_number + 1
+
+        record_identity = record.slice(0,2)
+
+        raise "Data found after ZZ record" if end_of_data == 1
+
+        if record_identity == "ZZ"
+          end_of_data == 1
+        else
+          return { :error => "Unsupported record type #{record_identity} found at line #{line_number}" }
+        end
+
+      end
+
+      return
+
+    end
+
+  end
+
 end
