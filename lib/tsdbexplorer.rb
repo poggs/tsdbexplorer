@@ -147,7 +147,7 @@ module TSDBExplorer
       username = username_match.match(/([CD]F\w{4})/)
 
       if username.nil?
-        data[:error] = "Username " + $1.nil? ? "" : $1 + "is not valid - must start with CF or DF and be followed by four characters"
+        data[:error] = "Username '#{username}' is not valid - must start with CF or DF and be followed by four characters"
       else
         data[:username] = $1
       end
@@ -160,7 +160,7 @@ module TSDBExplorer
       extract_date = extract_date_match.match(/(\d{6})/)
 
       if extract_date.nil?
-        data[:error] = "Extract date '$2' is not valid - must be six numerics"
+        data[:error] = "Extract date '#{extract_date}' is not valid - must be six numerics"
       else
         data[:extract_date] = $1
       end
@@ -210,6 +210,8 @@ module TSDBExplorer
       end_of_data = 0
       line_number = 0
 
+      stats = { :tiploc => { :insert => 0, :amend => 0, :delete => 0 } }
+
       cif_data.each do |record|
 
         next if end_of_data == 1 && record.blank?
@@ -222,13 +224,26 @@ module TSDBExplorer
 
         if record_identity == "ZZ"
           end_of_data == 1
+        elsif record_identity == "TI"
+
+          # TI: TIPLOC Insert
+
+          tiploc = TSDBExplorer.cif_parse_line(record, [ [ :record_identity, 2 ], [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :spare, 8 ] ])
+
+          tiploc.delete :record_identity
+          tiploc.delete :po_mcp_code
+          tiploc.delete :spare
+
+          new_tiploc = Tiploc.create!(tiploc)
+          stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
+
         else
           return { :error => "Unsupported record type #{record_identity} found at line #{line_number}" }
         end
 
       end
 
-      return
+      return stats
 
     end
 

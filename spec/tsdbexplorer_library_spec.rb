@@ -67,6 +67,15 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should convert a date in YYMMDD format to YYYY-MM-DD" do
+
+    TSDBExplorer.yymmdd_to_date("600101").should eql("1960-01-01")
+    TSDBExplorer.yymmdd_to_date("991231").should eql("1999-12-31")
+    TSDBExplorer.yymmdd_to_date("000101").should eql("2000-01-01")
+    TSDBExplorer.yymmdd_to_date("591231").should eql("2059-12-31")
+
+  end
+
   it "should be able to split a line in to fields based on an array" do
 
     sample_data = "AABBCCCDDDDEEEEE      FFFFFFF8888888899  99  9"
@@ -108,6 +117,14 @@ describe "lib/tsdbexplorer.rb" do
     file_mainframe_identity_2.should have_key(:error)
     file_mainframe_identity_2[:error].should_not be_nil
 
+    file_mainframe_identity_3 = TSDBExplorer.cif_parse_file_mainframe_identity("TPS.UZZXXXX.PD700101")
+    file_mainframe_identity_3.should have_key(:error)
+    file_mainframe_identity_3[:error].should_not be_nil
+
+    file_mainframe_identity_4 = TSDBExplorer.cif_parse_file_mainframe_identity("TPS.UDFZZZZ.PDfoobar")
+    file_mainframe_identity_4.should have_key(:error)
+    file_mainframe_identity_4[:error].should_not be_nil
+
   end
 
   it "should reject an empty CIF file" do
@@ -120,7 +137,19 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should permit a CIF file with only an HD and ZZ record" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/header_and_trailer.cif').should be_nil
+    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/header_and_trailer.cif').should eql(expected_data)
   end
+
+  it "should process TI records from a CIF file" do
+    Tiploc.all.count.should eql(0)
+    expected_data = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif').should eql(expected_data)
+    Tiploc.all.count.should eql(1)
+  end
+
+  it "should process TA records from a CIF file"
+
+  it "should process TD records from a CIF file"
 
 end
