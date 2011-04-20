@@ -34,14 +34,13 @@ class CreateTiplocs < ActiveRecord::Migration
       t.string     :nlc_check_character, :limit => 1
       t.string     :tps_description, :limit => 26
       t.string     :stanox, :limit => 5
-      t.string     :po_mcp_code, :limit => 4
       t.string     :crs_code, :limit => 3
       t.string     :description, :limit => 16
       t.timestamps
     end
 
     add_index(:tiplocs, :tiploc_code, :unique => :true)
-    add_index(:tiplocs, :crs_code, :unique => :true)
+    add_index(:tiplocs, :crs_code)
 
   end
 
