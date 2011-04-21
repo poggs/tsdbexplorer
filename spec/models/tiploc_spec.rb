@@ -65,7 +65,7 @@ describe Tiploc do
     tiploc = Tiploc.new(:tiploc_code => "EUSTON", :nalco => "144400", :tps_description => "LONDON EUSTON", :crs_code => "000", :description => "LONDON EUSTON")
     tiploc.should_not be_valid
   end
-  
+
   it "should be valid without a description" do
     tiploc = Tiploc.new(:tiploc_code => "EUSTON", :nalco => "144400", :tps_description => "LONDON EUSTON", :crs_code => "EUS")
     tiploc.should be_valid

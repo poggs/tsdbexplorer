@@ -22,7 +22,7 @@ require 'spec_helper'
 describe "lib/tsdbexplorer.rb" do
 
   it "should validate a correctly formatted train identity" do
-  
+
     TSDBExplorer.validate_train_identity("1A99").should be_true
     TSDBExplorer.validate_train_identity("2Z00").should be_true
     TSDBExplorer.validate_train_identity("3C01").should be_true
