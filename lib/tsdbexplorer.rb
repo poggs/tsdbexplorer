@@ -237,6 +237,21 @@ module TSDBExplorer
           new_tiploc = Tiploc.create!(tiploc)
           stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
 
+        elsif record_identity == "TD"
+
+          # TD: TIPLOC Delete
+
+          tiploc = TSDBExplorer.cif_parse_line(record, [ [ :record_identity, 2 ], [ :tiploc_code, 7 ], [ :spare, 71 ] ])
+
+          model_object = Tiploc.find_by_tiploc_code(tiploc[:tiploc_code].strip)
+
+          if model_object.nil?
+            return { :error => "TIPLOC #{tiploc[:tiploc_code]} not found in TD record at line #{line_number}" }
+          else
+            model_object.delete
+            stats[:tiploc][:delete] = stats[:tiploc][:delete] + 1
+          end
+
         else
           return { :error => "Unsupported record type #{record_identity} found at line #{line_number}" }
         end

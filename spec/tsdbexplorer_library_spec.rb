@@ -150,6 +150,17 @@ describe "lib/tsdbexplorer.rb" do
 
   it "should process TA records from a CIF file"
 
-  it "should process TD records from a CIF file"
+  it "should process TD records from a CIF file" do
+    Tiploc.all.count.should eql(0)
+    expected_data = {:tiploc=>{:insert=>2, :delete=>1, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td.cif').should eql(expected_data)
+    Tiploc.all.count.should eql(1)
+  end
+
+  it "should return an error when processing a TD record for an unknown location from a CIF file" do
+    Tiploc.all.count.should eql(0)
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_unknown.cif').should have_key(:error)
+    Tiploc.all.count.should eql(2)
+  end
 
 end
