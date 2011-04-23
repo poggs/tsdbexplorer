@@ -33,7 +33,7 @@ module TSDBExplorer
     end
 
   end
-  
+
 
   # Returns true if the train UID supplied is in the correct format, i.e.
   # <letter><number><number><number><number><number>.  This does *not* indicate
@@ -41,7 +41,7 @@ module TSDBExplorer
   # formatted correctly.
 
   def TSDBExplorer.validate_train_uid(train_uid)
-    
+
     if train_uid.nil? || !train_uid.match(/[A-Za-z]\d\d\d\d\d/)
       return false
     else
@@ -57,11 +57,11 @@ module TSDBExplorer
   # 60 and 99 inclusive are assumed to be in the 1900s.
 
   def TSDBExplorer.yymmdd_to_date(date)
-  
+
     yy = date.slice(0,2).to_i
     mm = date.slice(2,2).to_i
     dd = date.slice(4,2).to_i
-  
+
     if yy >= 60 && yy <= 99
       century = 19
     else
@@ -69,7 +69,7 @@ module TSDBExplorer
     end
 
     return century.to_s + yy.to_s.rjust(2,"0") + "-" + mm.to_s.rjust(2,"0") + "-" + dd.to_s.rjust(2,"0")
-  
+
   end
 
 
@@ -77,9 +77,9 @@ module TSDBExplorer
   # YYYY-MM-DD.  If the YY value supplied is between 60 and 99 inclusive,
   # '19' is prepended, otherwise '20' is prepended, i.e. years between
   # 60 and 99 inclusive are assumed to be in the 1900s.
-  
+
   def TSDBExplorer.ddmmyy_to_date(date)
-  
+
     dd = date.slice(0,2).to_i
     mm = date.slice(2,2).to_i
     yy = date.slice(4,2).to_i
@@ -91,7 +91,7 @@ module TSDBExplorer
     end
 
     return century.to_s + yy.to_s.rjust(2,"0") + "-" + mm.to_s.rjust(2,"0") + "-" + dd.to_s.rjust(2,"0")
-  
+
   end
 
 
