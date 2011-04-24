@@ -76,6 +76,15 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should return a list of dates between two days matching a mask" do
+
+    TSDBExplorer.date_range_to_list("2011-01-01", "2011-01-28", "1000000").should eql([ '2011-01-03', '2011-01-10', '2011-01-17', '2011-01-24' ])
+    TSDBExplorer.date_range_to_list("2011-01-01", "2011-01-28", "0000011").should eql([ '2011-01-01', '2011-01-02', '2011-01-08', '2011-01-09', '2011-01-15', '2011-01-16', '2011-01-22', '2011-01-23' ])
+    TSDBExplorer.date_range_to_list("2011-01-01", "2011-01-28", "0000000").should eql([])
+    TSDBExplorer.date_range_to_list("2011-01-01", "2011-01-05", "0001100").should eql([])
+
+  end
+
   it "should be able to split a line in to fields based on an array" do
 
     sample_data = "AABBCCCDDDDEEEEE      FFFFFFF8888888899  99  9"

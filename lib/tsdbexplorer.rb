@@ -172,6 +172,55 @@ module TSDBExplorer
   end
 
 
+  # Process a range of dates and return a list of dates falling on the days
+  # specified by day_mask - a binary field where the first position is
+  # Monday, second is Tuesday and so on.
+
+  def TSDBExplorer.date_range_to_list(start_date, end_date, day_mask)
+
+    # Convert the day_mask in to a list of Date day numbers
+
+    cif_days = day_mask.split(//)
+    trans_list = [ 1, 2, 3, 4, 5, 6, 0 ]
+    ruby_days = Array.new
+
+    count = 0
+
+    cif_days.each do |cif_pos|
+
+      if cif_pos == "1"
+        ruby_days.push(trans_list[count])
+      end
+
+      count = count + 1
+
+    end
+
+
+    # Iterate through all the dates in the range and add each date whose
+    # weekday falls on a day specified in ruby_days to an array
+
+    date_list = Array.new
+
+    current_date = Date.parse(start_date)
+    range_end_date = Date.parse(end_date)
+
+    while current_date <= range_end_date
+
+      if ruby_days.include? current_date.wday
+        date_list.push current_date.to_s
+      end
+
+      current_date = current_date.next
+
+    end
+
+    return date_list
+
+  end
+
+
+
   module CIF
 
     def CIF.process_cif_file(filename)
