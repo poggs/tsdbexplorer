@@ -93,7 +93,7 @@ describe "lib/tsdbexplorer.rb" do
     returned_data = TSDBExplorer.cif_parse_line(sample_data, sample_data_format)
 
     expected_data = { :one => "AA", :two => "BB", :three => "CCC", :four => "DDDD", :five => "EEEEE", :six => "      ", :seven => "FFFFFFF", :eight => "88888888", :nine => "99  99  9" }
-    
+
     returned_data.should eql(expected_data)
 
   end
@@ -146,13 +146,13 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should permit a CIF file with only an HD and ZZ record" do
-    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/header_and_trailer.cif').should eql(expected_data)
   end
 
   it "should process TI records from a CIF file" do
     Tiploc.all.count.should eql(0)
-    expected_data = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}}
+    expected_data = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif').should eql(expected_data)
     Tiploc.all.count.should eql(1)
   end
@@ -161,7 +161,7 @@ describe "lib/tsdbexplorer.rb" do
 
   it "should process TD records from a CIF file" do
     Tiploc.all.count.should eql(0)
-    expected_data = {:tiploc=>{:insert=>2, :delete=>1, :amend=>0}}
+    expected_data = {:tiploc=>{:insert=>2, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td.cif').should eql(expected_data)
     Tiploc.all.count.should eql(1)
   end
@@ -170,6 +170,30 @@ describe "lib/tsdbexplorer.rb" do
     Tiploc.all.count.should eql(0)
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_unknown.cif').should have_key(:error)
     Tiploc.all.count.should eql(2)
+  end
+
+  it "should process new AA records from a CIF file" do
+    Association.all.count.should eql(0)
+    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>7, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_new.cif').should eql(expected_data)
+    Association.all.count.should eql(7)
+  end
+
+  it "should process delete AA records from a CIF file" do
+    Association.all.count.should eql(0)
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_delete_part1.cif')
+    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>1, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_delete_part2.cif').should eql(expected_data)
+    Association.all.count.should eql(6)
+  end
+
+  it "should process revise AA records from a CIF file" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part1.cif')
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part2.cif') }.should raise_error
+  end
+
+  it "should reject invalid AA record transaction types in a CIF file" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_invalid.cif') }.should raise_error
   end
 
 end

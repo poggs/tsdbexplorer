@@ -25,7 +25,7 @@ module TSDBExplorer
   # formatted correctly.
 
   def TSDBExplorer.validate_train_identity(train_identity)
-    
+
     if train_identity.nil? || !train_identity.match(/\d[A-Za-z]\d\d/)
       return false
     else
@@ -259,20 +259,32 @@ module TSDBExplorer
       end_of_data = 0
       line_number = 0
 
-      stats = { :tiploc => { :insert => 0, :amend => 0, :delete => 0 } }
+      pending_trans = Hash.new
+      pending_trans['Tiploc'] = Array.new
+      pending_trans['Association'] = Array.new
+
+      stats = { :tiploc => { :insert => 0, :amend => 0, :delete => 0 }, :association => { :insert => 0, :amend => 0, :delete => 0 } }
 
       cif_data.each do |record|
 
         next if end_of_data == 1 && record.blank?
+        raise "Data found after ZZ record" if end_of_data == 1
 
         line_number = line_number + 1
 
         record_identity = record.slice(0,2)
 
-        raise "Data found after ZZ record" if end_of_data == 1
-
         if record_identity == "ZZ"
+
+          # NOTE: If there are any TIPLOCs due to be created from TI records, these should be processed now
+
+          unless pending_trans['Tiploc'].blank?
+            Tiploc.import pending_trans['Tiploc']
+            pending_trans['Tiploc'] = Array.new
+          end
+
           end_of_data == 1
+
         elsif record_identity == "TI"
 
           # TI: TIPLOC Insert
@@ -283,12 +295,20 @@ module TSDBExplorer
           tiploc.delete :po_mcp_code
           tiploc.delete :spare
 
-          new_tiploc = Tiploc.create!(tiploc)
+          pending_trans['Tiploc'] << Tiploc.new(tiploc)
+
           stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
 
         elsif record_identity == "TD"
 
           # TD: TIPLOC Delete
+
+          # NOTE: If there are any TIPLOCs due to be created from TI records, these should be processed now
+
+          unless pending_trans['Tiploc'].blank?
+            Tiploc.import pending_trans['Tiploc']
+            pending_trans['Tiploc'] = Array.new
+          end
 
           tiploc = TSDBExplorer.cif_parse_line(record, [ [ :record_identity, 2 ], [ :tiploc_code, 7 ], [ :spare, 71 ] ])
 
@@ -299,6 +319,62 @@ module TSDBExplorer
           else
             model_object.delete
             stats[:tiploc][:delete] = stats[:tiploc][:delete] + 1
+          end
+
+        elsif record_identity == "AA"
+
+          # AA: Association
+
+          association = TSDBExplorer.cif_parse_line(record, [ [ :record_identity, 2 ], [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ])
+
+          association[:association_start_date] = TSDBExplorer.yymmdd_to_date(association[:association_start_date])
+          association[:association_end_date] = TSDBExplorer.yymmdd_to_date(association[:association_end_date])
+
+          if association[:transaction_type] == "N"
+
+            # New record
+
+            association.delete :record_identity
+            association.delete :transaction_type
+            association.delete :spare
+
+
+            # Expand the date range
+
+            raise if association[:association_end_date] == "999999"
+
+            date_range = TSDBExplorer.date_range_to_list(association[:association_start_date], association[:association_end_date], association[:association_days])
+            association.delete :association_start_date
+            association.delete :association_end_date
+            association.delete :association_days
+
+            date_range.each do |assoc_date|
+
+              association[:date] = assoc_date
+              pending_trans['Association'] << Association.new(association)
+              stats[:association][:insert] = stats[:association][:insert] + 1
+
+            end
+
+            Association.import pending_trans['Association']
+
+          elsif association[:transaction_type] == "D"
+
+            # Delete record
+
+            model_object = Association.find(:first, :conditions => { :main_train_uid => association[:main_train_uid], :assoc_train_uid => association[:assoc_train_uid], :date => association[:association_start_date] })
+            model_object.delete
+
+            stats[:association][:delete] = stats[:association][:delete] + 1
+
+          elsif association[:transaction_type] == "R"
+
+            raise "Transaction type 'R' for AA records is not yet supported"
+
+          else
+
+            raise "Invalid transaction type '#{association[:transaction_type]}' for AA record at line #{line_number}"
+
           end
 
         else
@@ -314,3 +390,4 @@ module TSDBExplorer
   end
 
 end
+  
