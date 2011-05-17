@@ -287,6 +287,20 @@ module TSDBExplorer
   end
 
 
+  # Calculate the next mainframe file reference, given the last processed
+
+  def TSDBExplorer.next_file_reference(last_file)
+
+    next_file = nil
+
+    if last_file[-1..-1] == "Z"
+      next_file = last_file[0..5] + "A"
+    else
+      next_file = last_file.next
+    end
+
+  end
+
 
   module CIF
 
@@ -330,7 +344,9 @@ module TSDBExplorer
       pending_trans['Tiploc'] = Array.new
       pending_trans['Association'] = Array.new
 
-      stats = { :tiploc => { :insert => 0, :amend => 0, :delete => 0 }, :association => { :insert => 0, :amend => 0, :delete => 0 } }
+      stats = { :tiploc => { :insert => 0, :amend => 0, :delete => 0 },
+                :association => { :insert => 0, :amend => 0, :delete => 0 },
+                :schedule => { :insert => 0, :amend => 0, :delete => 0 } }
 
       cif_data.each do |record|
 

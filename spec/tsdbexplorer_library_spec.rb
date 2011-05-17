@@ -140,6 +140,14 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should calculate the next CIF file reference for a user identity given the previous" do
+
+    TSDBExplorer.next_file_reference('DFTESTA').should eql('DFTESTB')
+    TSDBExplorer.next_file_reference('DFTESTB').should eql('DFTESTC')
+    TSDBExplorer.next_file_reference('DFTESTZ').should eql('DFTESTA')
+
+  end
+
   it "should validate a correctly formatted File Mainframe Identity in a CIF HD record" do
 
     file_mainframe_identity_1 = TSDBExplorer.cif_parse_file_mainframe_identity("TPS.UDFXXXX.PD700101")
@@ -178,6 +186,10 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should handle gracefully a nonexistant CIF file" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/DOES_NOT_EXIST.cif') }.should raise_error
+  end
+
   it "should reject an empty CIF file" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/blank_file.cif') }.should raise_error
   end
@@ -188,22 +200,20 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should permit a CIF file with only an HD and ZZ record" do
-    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}}
+    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/header_and_trailer.cif').should eql(expected_data)
   end
 
   it "should process TI records from a CIF file" do
     Tiploc.all.count.should eql(0)
-    expected_data = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}}
+    expected_data = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif').should eql(expected_data)
     Tiploc.all.count.should eql(1)
   end
 
-  it "should process TA records from a CIF file"
-
   it "should process TD records from a CIF file" do
     Tiploc.all.count.should eql(0)
-    expected_data = {:tiploc=>{:insert=>2, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}}
+    expected_data = {:tiploc=>{:insert=>2, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td.cif').should eql(expected_data)
     Tiploc.all.count.should eql(1)
   end
@@ -216,16 +226,17 @@ describe "lib/tsdbexplorer.rb" do
 
   it "should process new AA records from a CIF file" do
     Association.all.count.should eql(0)
-    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>7, :delete=>0, :amend=>0}}
+    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>7, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_new.cif').should eql(expected_data)
     Association.all.count.should eql(7)
   end
 
   it "should process delete AA records from a CIF file" do
     Association.all.count.should eql(0)
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_delete_part1.cif')
-    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>1, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_delete_part2.cif').should eql(expected_data)
+    expected_data_before = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>7, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_delete_part1.cif').should eql(expected_data_before)
+    expected_data_after = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>1, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_delete_part2.cif').should eql(expected_data_after)
     Association.all.count.should eql(6)
   end
 
