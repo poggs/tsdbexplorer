@@ -249,4 +249,16 @@ describe "lib/tsdbexplorer.rb" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_invalid.cif') }.should raise_error
   end
 
+  it "should raise an error if a TN record type is found in a CIF file" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_tn.cif').should have_key(:error)
+  end
+
+  it "should raise an error if a LN record type is found in a CIF file" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ln.cif').should have_key(:error)
+  end
+
+  it "should raise an error if an unknown record type is found in a CIF file" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/unknown_record_type.cif').should have_key(:error)
+  end
+
 end

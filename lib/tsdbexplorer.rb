@@ -460,6 +460,10 @@ module TSDBExplorer
 
           end
 
+        elsif record_identity == "TN" || record_identity == "LN"
+
+          return { :error => "Unimplemented record type '#{record_identity}' found at line #{line_number}" }
+
         else
           return { :error => "Unsupported record type #{record_identity} found at line #{line_number}" }
         end
