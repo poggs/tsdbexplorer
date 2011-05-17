@@ -76,12 +76,54 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should convert a date in DDMMYY format to YYMMDD" do
+
+    TSDBExplorer.ddmmyy_to_yymmdd("010160").should eql("600101")
+    TSDBExplorer.ddmmyy_to_yymmdd("311299").should eql("991231")
+    TSDBExplorer.ddmmyy_to_yymmdd("010100").should eql("000101")
+    TSDBExplorer.ddmmyy_to_yymmdd("311259").should eql("591231")
+
+  end
+
   it "should return a list of dates between two days matching a mask" do
 
     TSDBExplorer.date_range_to_list("2011-01-01", "2011-01-28", "1000000").should eql([ '2011-01-03', '2011-01-10', '2011-01-17', '2011-01-24' ])
     TSDBExplorer.date_range_to_list("2011-01-01", "2011-01-28", "0000011").should eql([ '2011-01-01', '2011-01-02', '2011-01-08', '2011-01-09', '2011-01-15', '2011-01-16', '2011-01-22', '2011-01-23' ])
     TSDBExplorer.date_range_to_list("2011-01-01", "2011-01-28", "0000000").should eql([])
     TSDBExplorer.date_range_to_list("2011-01-01", "2011-01-05", "0001100").should eql([])
+
+  end
+
+  it "should convert a time in HHMM to HH:MM" do
+
+    TSDBExplorer.normalise_time("0000").should eql("00:00")
+    TSDBExplorer.normalise_time("2359").should eql("23:59")
+
+  end
+
+  it "should convert a time in HHMM with an 'H' in to HH:MM:30" do
+
+    TSDBExplorer.normalise_time("0000H").should eql("00:00:30")
+    TSDBExplorer.normalise_time("2359H").should eql("23:59:30")
+
+  end
+
+  it "should convert an allowance time to an integer number of seconds" do
+
+    TSDBExplorer.normalise_allowance_time("0").should eql(0)
+    TSDBExplorer.normalise_allowance_time("H").should eql(30)
+    TSDBExplorer.normalise_allowance_time("1").should eql(60)
+    TSDBExplorer.normalise_allowance_time("1H").should eql(90)
+
+  end
+
+  it "should merge a date and a time in to a Time object" do
+
+    TSDBExplorer.normalise_datetime("2011-01-01 0800").should eql(Time.parse("2011-01-01 08:00"))
+    TSDBExplorer.normalise_datetime("2011-01-01 2000").should eql(Time.parse("2011-01-01 20:00"))
+
+    TSDBExplorer.normalise_datetime("2011-01-01 0800H").should eql(Time.parse("2011-01-01 08:00:30"))
+    TSDBExplorer.normalise_datetime("2011-01-01 2000H").should eql(Time.parse("2011-01-01 20:00:30"))
 
   end
 

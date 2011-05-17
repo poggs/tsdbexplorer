@@ -95,6 +95,73 @@ module TSDBExplorer
   end
 
 
+  # Converts a string in the format DDMMYY in to a string in the format
+  # YYMMDD.
+
+  def TSDBExplorer.ddmmyy_to_yymmdd(date)
+
+    dd = date.slice(0,2).to_i
+    mm = date.slice(2,2).to_i
+    yy = date.slice(4,2).to_i
+
+    return yy.to_s.rjust(2,"0") + mm.to_s.rjust(2,"0") + dd.to_s.rjust(2,"0")
+
+  end
+
+
+  # Convert a date in YYYY-MM-DD format, and a time in HHMM format
+  # (optionally with the letter H appended to indicate 30 seconds), to a
+  # Time object
+
+  def TSDBExplorer.normalise_datetime(datetime)
+
+    normal_datetime = nil
+
+    unless datetime.nil?
+      date,time = datetime.split(" ")
+      normal_datetime = Time.parse(date + " " + TSDBExplorer.normalise_time(time))
+    end
+    
+    return normal_datetime
+
+  end  
+
+
+  # Convert a time in HHMM format (optionally with the letter H appended to
+  # indicate 30 seconds), to HH:MM:SS format
+
+  def TSDBExplorer.normalise_time(time)
+
+    normal_time = nil
+
+    unless time.nil?
+      normal_time = time.slice(0,2) + ":" + time.slice(2,2)
+      normal_time = normal_time + ":30" if time.slice(4,1) == "H"
+    end
+
+    return normal_time
+
+  end
+
+
+  # Convert an allowance time in the format M (optionally with the letter H appended to indicate 30 seconds) in to an integer number of seconds
+
+  def TSDBExplorer.normalise_allowance_time(time)
+
+    normal_time = nil
+
+    unless time.nil?
+      normal_time = time.to_i * 60
+      if time.last == "H"
+        normal_time = normal_time + 30
+      end
+    end
+
+    return normal_time
+
+  end
+
+
   # Split a line in to fields based on the contents of field_array.  The contents
   # of each field is trimmed to remove whitespace, which may result in a field
   # being blank.  In this case, blank values are replaced with a nil value.
