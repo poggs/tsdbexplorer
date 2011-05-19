@@ -227,7 +227,9 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should process revise AA records from a CIF file" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part1.cif')
+    Association.all.count.should eql(0)
+    expected_data_before = {:tiploc=>{:insert=>0, :amend=>0, :delete=>0}, :schedule=>{:insert=>0, :amend=>0, :delete=>0}, :association=>{:insert=>115, :amend=>0, :delete=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part1.cif').should eql(expected_data_before)
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part2.cif')
   end
 

@@ -483,8 +483,18 @@ module TSDBExplorer
 
             # Revise record
 
-            model_object = Association.find(:first, :conditions => { :main_train_uid => data[:main_train_uid], :assoc_train_uid => data[:assoc_train_uid], :date => data[:association_start_date] })
+            date_range = TSDBExplorer.date_range_to_list(data[:association_start_date], data[:association_end_date], data[:association_days])
 
+            date_range.each do |assoc_date|
+
+              model_object = Association.find(:first, :conditions => { :main_train_uid => data[:main_train_uid], :assoc_train_uid => data[:assoc_train_uid], :date => assoc_date })
+
+              raise "Line #{line_number}: Failed to find association between #{data[:main_train_uid]} and #{data[:assoc_train_uid]} on #{assoc_date}" if model_object.nil?
+
+              model_object.delete
+              stats[:association][:amend] = stats[:association][:amend] + 1
+
+            end
 
           else
 
