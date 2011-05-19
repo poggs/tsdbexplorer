@@ -58,17 +58,25 @@ module TSDBExplorer
 
   def TSDBExplorer.yymmdd_to_date(date)
 
-    yy = date.slice(0,2).to_i
-    mm = date.slice(2,2).to_i
-    dd = date.slice(4,2).to_i
+    formatted_date = nil
 
-    if yy >= 60 && yy <= 99
-      century = 19
-    else
-      century = 20
+    unless date.nil? || date.blank?
+
+      yy = date.slice(0,2).to_i
+      mm = date.slice(2,2).to_i
+      dd = date.slice(4,2).to_i
+
+      if yy >= 60 && yy <= 99
+        century = 19
+      else
+        century = 20
+      end
+
+      formatted_date = century.to_s + yy.to_s.rjust(2,"0") + "-" + mm.to_s.rjust(2,"0") + "-" + dd.to_s.rjust(2,"0")
+
     end
 
-    return century.to_s + yy.to_s.rjust(2,"0") + "-" + mm.to_s.rjust(2,"0") + "-" + dd.to_s.rjust(2,"0")
+    return formatted_date
 
   end
 
@@ -158,37 +166,6 @@ module TSDBExplorer
     end
 
     return normal_time
-
-  end
-
-
-  # Split a line in to fields based on the contents of field_array.  The contents
-  # of each field is trimmed to remove whitespace, which may result in a field
-  # being blank.  In this case, blank values are replaced with a nil value.
-  #
-  # The field_array is an array comprised of one or more arrays with a field name
-  # and a field length, for example, [ :record_identity, 2 ].  Each field starts
-  # at the end of the previous field.
-
-  def TSDBExplorer.cif_parse_line(data, field_array)
-
-    raise "Field hash must be an array" unless field_array.is_a? Array
-
-    pos = 0
-    result_hash = Hash.new
-
-    field_array.each do |field|
-
-      field_name = field[0].to_sym
-
-      value = data.slice(pos, field[1])
-
-      result_hash[field_name] = value == '' ? nil : value
-      pos = pos + field[1]
-
-    end
-
-    return result_hash
 
   end
 
@@ -304,6 +281,68 @@ module TSDBExplorer
 
   module CIF
 
+    # Process a record from a CIF file and return the data as a Hash
+
+    def CIF.parse_record(record)
+
+      result = Hash.new
+      result[:record_identity] = record[0..1]
+
+      structure = case result[:record_identity]
+        when "HD"
+          { :delete => [ :spare ], :format => [ [ :file_mainframe_identity, 20 ], [ :date_of_extract, 6 ], [ :time_of_extract, 4 ], [ :current_file_ref, 7 ], [ :last_file_ref, 7 ], [ :update_indicator, 1 ], [ :version, 1 ], [ :user_extract_start_date, 6 ], [ :user_extract_end_date, 6], [ :spare, 20 ] ] }
+        when "TI"
+          { :delete => [ :po_mcp_code, :spare ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :spare, 8 ] ] }
+        when "TA"
+          { :delete => [ :spare ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :new_tiploc, 7 ], [ :spare, 1 ] ] }
+        when "TD"
+          { :delete => [ :spare ], :format => [ [ :tiploc_code, 7 ], [ :spare, 71 ] ] }
+        when "AA"
+          { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
+        when "BS"
+          { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :train_uid, 6 ], [ :runs_from, 6 ], [ :runs_to, 6 ], [ :days_run, 7 ], [ :bh_running, 1 ], [ :status, 1 ], [ :category, 2 ], [ :identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :spare, 1 ], [ :stp_indicator, 1 ] ] }
+        when "BX"
+          { :delete => [ :spare ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :applicable_timetable, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
+        when "LO"
+          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
+        when "LI"
+          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
+        when "CR"
+          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :category, 2 ], [ :identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
+        when "LT"
+          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :arrival, 5 ], [ :public_arrival, 4 ], [ :platform, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :spare, 43 ] ] }
+        when "ZZ"
+          { :delete => [], :format => [] }
+        else
+          raise "Unsupported record type '#{result[:record_identity]}'"
+      end
+
+
+      # Slice up the record in to its fields as defined above, starting at
+      # column 2, as we already have the record identity parsed
+
+      pos = 2
+
+      structure[:format].each do |field|
+        field_name = field[0].to_sym
+        value = record.slice(pos, field[1])
+        result[field_name] = value.blank? ? nil : value
+        pos = pos + field[1]
+      end
+
+
+      # Delete any unnecessary fields
+
+      structure[:delete].each do |field|
+        result.delete field
+      end
+
+      return result
+
+    end
+
+
+
     def CIF.process_cif_file(filename)
 
       cif_data = File.open(filename)
@@ -312,10 +351,9 @@ module TSDBExplorer
 
       # The first line of the CIF file must be an HD record
 
-      header_line = cif_data.first
-      header_data = TSDBExplorer.cif_parse_line(header_line, [ [ :record_identity, 2 ], [ :file_mainframe_identity, 20 ], [ :date_of_extract, 6 ], [ :time_of_extract, 4 ], [ :current_file_ref, 7 ], [ :last_file_ref, 7 ], [ :update_indicator, 1 ], [ :version, 1 ], [ :user_extract_start_date, 6 ], [ :user_extract_end_date, 6], [ :spare, 20 ] ])
+      header_data = TSDBExplorer::CIF::parse_record(cif_data.first)
 
-      raise "Expecting an HD record at the start of #{cif_filename} - found a '#{header_data[:record_identity]}' record" unless header_data[:record_identity] == "HD"
+      raise "Expecting an HD record at the start of #{filename} - found a '#{header_data[:record_identity]}' record" unless header_data[:record_identity] == "HD"
 
 
       # Validate the HD record
@@ -355,9 +393,9 @@ module TSDBExplorer
 
         line_number = line_number + 1
 
-        record_identity = record.slice(0,2)
+        data = TSDBExplorer::CIF::parse_record(record)
 
-        if record_identity == "ZZ"
+        if data[:record_identity] == "ZZ"
 
           # NOTE: If there are any TIPLOCs due to be created from TI records, these should be processed now
 
@@ -368,21 +406,17 @@ module TSDBExplorer
 
           end_of_data == 1
 
-        elsif record_identity == "TI"
+        elsif data[:record_identity] == "TI"
 
           # TI: TIPLOC Insert
 
-          tiploc = TSDBExplorer.cif_parse_line(record, [ [ :record_identity, 2 ], [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :spare, 8 ] ])
+          data.delete :record_identity
 
-          tiploc.delete :record_identity
-          tiploc.delete :po_mcp_code
-          tiploc.delete :spare
-
-          pending_trans['Tiploc'] << Tiploc.new(tiploc)
+          pending_trans['Tiploc'] << Tiploc.new(data)
 
           stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
 
-        elsif record_identity == "TD"
+        elsif data[:record_identity] == "TD"
 
           # TD: TIPLOC Delete
 
@@ -393,79 +427,71 @@ module TSDBExplorer
             pending_trans['Tiploc'] = Array.new
           end
 
-          tiploc = TSDBExplorer.cif_parse_line(record, [ [ :record_identity, 2 ], [ :tiploc_code, 7 ], [ :spare, 71 ] ])
-
-          model_object = Tiploc.find_by_tiploc_code(tiploc[:tiploc_code].strip)
+          model_object = Tiploc.find_by_tiploc_code(data[:tiploc_code].strip)
 
           if model_object.nil?
-            return { :error => "TIPLOC #{tiploc[:tiploc_code]} not found in TD record at line #{line_number}" }
+            return { :error => "TIPLOC #{data[:tiploc_code]} not found in TD record at line #{line_number}" }
           else
             model_object.delete
             stats[:tiploc][:delete] = stats[:tiploc][:delete] + 1
           end
 
-        elsif record_identity == "AA"
+        elsif data[:record_identity] == "AA"
 
           # AA: Association
 
-          association = TSDBExplorer.cif_parse_line(record, [ [ :record_identity, 2 ], [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ])
+          data[:association_start_date] = TSDBExplorer.yymmdd_to_date(data[:association_start_date])
+          data[:association_end_date] = TSDBExplorer.yymmdd_to_date(data[:association_end_date]) unless data[:transaction_type] == "D"
 
-          association[:association_start_date] = TSDBExplorer.yymmdd_to_date(association[:association_start_date])
-          association[:association_end_date] = TSDBExplorer.yymmdd_to_date(association[:association_end_date])
-
-          if association[:transaction_type] == "N"
+          if data[:transaction_type] == "N"
 
             # New record
 
-            association.delete :record_identity
-            association.delete :transaction_type
-            association.delete :spare
+            data.delete :record_identity
+            data.delete :transaction_type
 
 
             # Expand the date range
 
-            raise if association[:association_end_date] == "999999"
+            raise if data[:association_end_date] == "999999"
 
-            date_range = TSDBExplorer.date_range_to_list(association[:association_start_date], association[:association_end_date], association[:association_days])
-            association.delete :association_start_date
-            association.delete :association_end_date
-            association.delete :association_days
+            date_range = TSDBExplorer.date_range_to_list(data[:association_start_date], data[:association_end_date], data[:association_days])
+            data.delete :association_start_date
+            data.delete :association_end_date
+            data.delete :association_days
 
             date_range.each do |assoc_date|
 
-              association[:date] = assoc_date
-              pending_trans['Association'] << Association.new(association)
+              data[:date] = assoc_date
+              pending_trans['Association'] << Association.new(data)
               stats[:association][:insert] = stats[:association][:insert] + 1
 
             end
 
             Association.import pending_trans['Association']
 
-          elsif association[:transaction_type] == "D"
+          elsif data[:transaction_type] == "D"
 
             # Delete record
 
-            model_object = Association.find(:first, :conditions => { :main_train_uid => association[:main_train_uid], :assoc_train_uid => association[:assoc_train_uid], :date => association[:association_start_date] })
+            model_object = Association.find(:first, :conditions => { :main_train_uid => data[:main_train_uid], :assoc_train_uid => data[:assoc_train_uid], :date => data[:association_start_date] })
             model_object.delete
 
             stats[:association][:delete] = stats[:association][:delete] + 1
 
-          elsif association[:transaction_type] == "R"
+          elsif data[:transaction_type] == "R"
 
-            raise "Transaction type 'R' for AA records is not yet supported"
+            # Revise record
+
+            model_object = Association.find(:first, :conditions => { :main_train_uid => data[:main_train_uid], :assoc_train_uid => data[:assoc_train_uid], :date => data[:association_start_date] })
+
 
           else
 
-            raise "Invalid transaction type '#{association[:transaction_type]}' for AA record at line #{line_number}"
+            raise "Invalid transaction type '#{data[:transaction_type]}' for AA record at line #{line_number}"
 
           end
 
-        elsif record_identity == "TN" || record_identity == "LN"
-
-          return { :error => "Unimplemented record type '#{record_identity}' found at line #{line_number}" }
-
-        else
-          return { :error => "Unsupported record type #{record_identity} found at line #{line_number}" }
         end
 
       end

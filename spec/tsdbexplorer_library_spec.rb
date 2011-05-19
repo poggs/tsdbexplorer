@@ -127,19 +127,6 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
-  it "should be able to split a line in to fields based on an array" do
-
-    sample_data = "AABBCCCDDDDEEEEE      FFFFFFF8888888899  99  9"
-    sample_data_format = [ [ :one, 2 ], [ :two, 2 ], [ :three, 3], [ :four, 4 ], [ :five, 5 ], [ :six, 6], [ :seven, 7 ], [ :eight, 8], [ :nine, 9] ]
-
-    returned_data = TSDBExplorer.cif_parse_line(sample_data, sample_data_format)
-
-    expected_data = { :one => "AA", :two => "BB", :three => "CCC", :four => "DDDD", :five => "EEEEE", :six => "      ", :seven => "FFFFFFF", :eight => "88888888", :nine => "99  99  9" }
-
-    returned_data.should eql(expected_data)
-
-  end
-
   it "should calculate the next CIF file reference for a user identity given the previous" do
 
     TSDBExplorer.next_file_reference('DFTESTA').should eql('DFTESTB')
@@ -195,8 +182,7 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should reject a CIF file with an unknown record" do
-    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/unknown_record_type.cif')
-    result.should have_key(:error)
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/unknown_record_type.cif') }.should raise_error
   end
 
   it "should permit a CIF file with only an HD and ZZ record" do
@@ -242,7 +228,7 @@ describe "lib/tsdbexplorer.rb" do
 
   it "should process revise AA records from a CIF file" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part1.cif')
-    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part2.cif') }.should raise_error
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part2.cif')
   end
 
   it "should reject invalid AA record transaction types in a CIF file" do
@@ -250,15 +236,11 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should raise an error if a TN record type is found in a CIF file" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_tn.cif').should have_key(:error)
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_tn.cif') }.should raise_error
   end
 
   it "should raise an error if a LN record type is found in a CIF file" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ln.cif').should have_key(:error)
-  end
-
-  it "should raise an error if an unknown record type is found in a CIF file" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/unknown_record_type.cif').should have_key(:error)
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ln.cif') }.should raise_error
   end
 
 end
