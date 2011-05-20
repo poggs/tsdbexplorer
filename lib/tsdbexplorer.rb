@@ -388,6 +388,15 @@ module TSDBExplorer
 
       cif_data.each do |record|
 
+        # Process any pending transactions
+
+        pending_trans.keys.each do |model|
+          unless pending_trans[model].blank?
+            eval(model).import pending_trans[model]
+            pending_trans[model] = Array.new
+          end
+        end
+
         next if end_of_data == 1 && record.blank?
         raise "Data found after ZZ record" if end_of_data == 1
 
@@ -396,13 +405,6 @@ module TSDBExplorer
         data = TSDBExplorer::CIF::parse_record(record)
 
         if data[:record_identity] == "ZZ"
-
-          # NOTE: If there are any TIPLOCs due to be created from TI records, these should be processed now
-
-          unless pending_trans['Tiploc'].blank?
-            Tiploc.import pending_trans['Tiploc']
-            pending_trans['Tiploc'] = Array.new
-          end
 
           end_of_data == 1
 
@@ -446,13 +448,6 @@ module TSDBExplorer
 
           # TD: TIPLOC Delete
 
-          # NOTE: If there are any TIPLOCs due to be created from TI records, these should be processed now
-
-          unless pending_trans['Tiploc'].blank?
-            Tiploc.import pending_trans['Tiploc']
-            pending_trans['Tiploc'] = Array.new
-          end
-
           model_object = Tiploc.find_by_tiploc_code(data[:tiploc_code].strip)
 
           if model_object.nil?
@@ -493,8 +488,6 @@ module TSDBExplorer
               stats[:association][:insert] = stats[:association][:insert] + 1
 
             end
-
-            Association.import pending_trans['Association']
 
           elsif data[:transaction_type] == "D"
 
