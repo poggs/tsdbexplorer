@@ -197,6 +197,31 @@ describe "lib/tsdbexplorer.rb" do
     Tiploc.all.count.should eql(1)
   end
 
+  it "should process TA records from a CIF file" do
+    Tiploc.all.count.should eql(0)
+    expected_data_before = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_part1.cif').should eql(expected_data_before)
+    Tiploc.all.count.should eql(1)
+    expected_data_after = {:tiploc=>{:insert=>0, :delete=>0, :amend=>1}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_part2.cif').should eql(expected_data_after)
+    Tiploc.all.count.should eql(1)
+  end
+
+  it "should process TA records with a TIPLOC code change from a CIF file" do
+    Tiploc.all.count.should eql(0)
+    expected_data_before = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_tiploc_change_part1.cif').should eql(expected_data_before)
+    Tiploc.all.count.should eql(1)
+    expected_data_after = {:tiploc=>{:insert=>0, :delete=>0, :amend=>1}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_tiploc_change_part2.cif').should eql(expected_data_after)
+    Tiploc.all.count.should eql(1)
+  end
+
+  it "should raise an error if a TA record contains an unknown TIPLOC" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_unknown_tiploc.cif').should raise_error
+  end
+
+
   it "should process TD records from a CIF file" do
     Tiploc.all.count.should eql(0)
     expected_data = {:tiploc=>{:insert=>2, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
@@ -230,7 +255,8 @@ describe "lib/tsdbexplorer.rb" do
     Association.all.count.should eql(0)
     expected_data_before = {:tiploc=>{:insert=>0, :amend=>0, :delete=>0}, :schedule=>{:insert=>0, :amend=>0, :delete=>0}, :association=>{:insert=>115, :amend=>0, :delete=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part1.cif').should eql(expected_data_before)
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part2.cif')
+    expected_data_after = {:tiploc=>{:insert=>0, :amend=>0, :delete=>0}, :schedule=>{:insert=>0, :amend=>0, :delete=>0}, :association=>{:insert=>0, :amend=>2, :delete=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_aa_revise_part2.cif').should eql(expected_data_after)
   end
 
   it "should reject invalid AA record transaction types in a CIF file" do

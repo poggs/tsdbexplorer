@@ -294,7 +294,7 @@ module TSDBExplorer
         when "TI"
           { :delete => [ :po_mcp_code, :spare ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :spare, 8 ] ] }
         when "TA"
-          { :delete => [ :spare ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :new_tiploc, 7 ], [ :spare, 1 ] ] }
+          { :delete => [ :po_mcp_code, :spare ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :new_tiploc, 7 ], [ :spare, 1 ] ] }
         when "TD"
           { :delete => [ :spare ], :format => [ [ :tiploc_code, 7 ], [ :spare, 71 ] ] }
         when "AA"
@@ -415,6 +415,32 @@ module TSDBExplorer
           pending_trans['Tiploc'] << Tiploc.new(data)
 
           stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
+
+        elsif data[:record_identity] == "TA"
+
+          # TA: TIPLOC Amend
+
+          data.delete :record_identity
+
+          model_object = Tiploc.find_by_tiploc_code(data[:tiploc_code])
+
+          if model_object.nil?
+            return { :error => "TIPLOC #{data[:tiploc_code]} not found in TA record at line #{line_number}"}
+          else
+
+            # Check if the TIPLOC has changed
+
+            unless data[:new_tiploc].nil?
+              data[:tiploc_code] = data[:new_tiploc]
+            end
+
+            data.delete :new_tiploc
+
+            model_object.attributes = data
+            model_object.save
+            stats[:tiploc][:amend] = stats[:tiploc][:amend] + 1
+
+          end
 
         elsif data[:record_identity] == "TD"
 
