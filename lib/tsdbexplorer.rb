@@ -422,6 +422,8 @@ module TSDBExplorer
 
           # TA: TIPLOC Amend
 
+          raise "Line #{line_number}: TIPLOC Amend (TA) record found in a full extract" if header_data[:update_indicator] == "F"
+
           data.delete :record_identity
 
           model_object = Tiploc.find_by_tiploc_code(data[:tiploc_code])
@@ -447,6 +449,8 @@ module TSDBExplorer
         elsif data[:record_identity] == "TD"
 
           # TD: TIPLOC Delete
+
+          raise "Line #{line_number}: TIPLOC Delete (TD) record found in a full extract" if header_data[:update_indicator] == "F"
 
           model_object = Tiploc.find_by_tiploc_code(data[:tiploc_code].strip)
 

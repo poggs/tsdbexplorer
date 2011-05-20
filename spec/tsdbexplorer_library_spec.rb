@@ -207,6 +207,10 @@ describe "lib/tsdbexplorer.rb" do
     Tiploc.all.count.should eql(1)
   end
 
+  it "should not allow TA records in a CIF full extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_full.cif') }.should raise_error
+  end
+
   it "should process TA records with a TIPLOC code change from a CIF file" do
     Tiploc.all.count.should eql(0)
     expected_data_before = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
@@ -218,15 +222,18 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should raise an error if a TA record contains an unknown TIPLOC" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_unknown_tiploc.cif').should raise_error
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_unknown_tiploc.cif').should have_key(:error)
   end
-
 
   it "should process TD records from a CIF file" do
     Tiploc.all.count.should eql(0)
     expected_data = {:tiploc=>{:insert=>2, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td.cif').should eql(expected_data)
     Tiploc.all.count.should eql(1)
+  end
+
+  it "should not allow TD records in a CIF full extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_full.cif') }.should raise_error
   end
 
   it "should return an error when processing a TD record for an unknown location from a CIF file" do
