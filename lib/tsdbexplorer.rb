@@ -386,6 +386,8 @@ module TSDBExplorer
                 :association => { :insert => 0, :amend => 0, :delete => 0 },
                 :schedule => { :insert => 0, :amend => 0, :delete => 0 } }
 
+      schedule = nil
+
       cif_data.each do |record|
 
         # Process any pending transactions
@@ -524,6 +526,71 @@ module TSDBExplorer
             raise "Invalid transaction type '#{data[:transaction_type]}' for AA record at line #{line_number}"
 
           end
+
+        elsif data[:record_identity] == "BS"
+
+          # BS: Basic Schedule
+
+          if data[:transaction_type] == "N"
+
+            data.delete :transaction_type
+
+            raise "Line #{line_number}: Basic Schedule (BS) record found without a prior Location Terminate (LT) record" unless schedule.nil?
+
+            schedule = Hash.new
+            data.delete :record_type
+            data.delete :transaction_type
+            schedule[:basic] = data
+
+          else
+
+            raise "Line #{line_number}: Invalid transaction type '#{data[:transaction_type]}' for BS record"
+
+          end
+
+        elsif data[:record_identity] == "BX"
+
+          # BX: Basic Schedule Extended
+
+          raise "Line #{line_number}: More than one Basic Schedule Extended (BX) found for this schedule" if schedule.has_key? :basic_schedule_extended
+
+          data.delete :record_type
+          schedule[:basic_schedule_extended] = data
+
+        elsif data[:record_identity] == "LO"
+
+          # LO: Location Origin
+
+          raise "Line #{line_number}: More than one Location Origin (LO) found for this schedule" if schedule.has_key? :origin
+
+          data.delete :record_type
+          schedule[:origin] = data
+
+        elsif data[:record_identity] == "LI"
+
+          # LI: Location Intermediate
+
+          data.delete :record_type
+
+          schedule[:intermediate] = Array.new unless schedule.has_key? :intermediate
+          schedule[:intermediate] << data
+
+        elsif data[:record_identity] == "CR"
+
+          # CR: Change-en-Route
+
+          data.delete :record_type
+
+        elsif data[:record_identity] == "LT"
+
+          # LT: Location Teminate
+
+          raise "Line #{line_number}: More than one Location Terminate (LT) found for this schedule" if schedule.has_key? :terminuate
+
+          data.delete :record_type
+          schedule[:terminate] = data
+
+          schedule = nil
 
         end
 

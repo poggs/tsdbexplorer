@@ -278,4 +278,8 @@ describe "lib/tsdbexplorer.rb" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ln.cif') }.should raise_error
   end
 
+  it "should process a set of BS/BX/LO/LI/LT records in a CIF file" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
+  end
+
 end

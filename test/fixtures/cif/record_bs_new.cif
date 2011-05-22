@@ -1,0 +1,22 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+BSNC433911012121105150000001 POO2N53    122209000 EMU321 100      B S          P
+BX         LMY                                                                  
+LOEUSTON  1834 183410 C      TB                                                 
+LICMDNSTH           1837 00000000                                               
+LICMDNJN            1837H00000000   SL                                          
+LIWLSDWLJ           1841 00000000   SL SL                                       
+LIWMBY              1843 00000000                                               
+LIHROW              1845H00000000   SL                                          
+LIWATFDJ  1850 1851      185018518     SL T                                     
+LIHEMLHMP 1858 1858H     185818583  SL    T                                     
+LIBONENDJ           1900 00000000                                               
+LIBERKHMD 1902H1903      19031903         T           2                         
+LITRING             1909 000000003  SL SL                                       
+LILEDBRNJ           1913H00000000   SL SL                                       
+LILTNBZRD 1915H1916      19161916         T                                     
+LIBLTCHLY 1922 1923H     192219233  SL SL T                                     
+LIMKNSCEN 1927H1928H     192819283  SL SL T           1                         
+LIWLVR    1932H1933      19331933         T                                     
+LIHANSLPJ           1937 00000000      SL             1                         
+LTNMPTN   1946 19463     TF                                                     
+ZZ
