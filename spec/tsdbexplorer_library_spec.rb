@@ -173,6 +173,17 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should correctly parse a CIF 'BS' record" do
+    expected_data = {:timing_load=>"321 ", :status=>"P", :train_uid=>"C43391", :transaction_type=>"N", :connection_indicator=>nil, :category=>"OO", :bh_running=>nil, :stp_indicator=>"P", :speed=>"100", :catering_code=>nil, :headcode=>nil, :operating_characteristics=>nil, :record_identity=>"BS", :service_branding=>nil, :service_code=>"22209000", :train_class=>"B", :runs_from=>"2010-12-12", :portion_id=>nil, :train_identity=>"2N53", :sleepers=>nil, :runs_to=>"2011-05-15", :power_type=>"EMU", :reservations=>"S", :days_run=>"0000001"}
+    parsed_record = TSDBExplorer::CIF::parse_record('BSNC433911012121105150000001 POO2N53    122209000 EMU321 100      B S          P')
+    expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
+  end
+
+  it "should correctly parse a CIF 'BX' record"
+  it "should correctly parse a CIF 'LO' record"
+  it "should correctly parse a CIF 'LI' record"
+  it "should correctly parse a CIF 'LT' record"
+
   it "should handle gracefully a nonexistant CIF file" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/DOES_NOT_EXIST.cif') }.should raise_error
   end
@@ -280,6 +291,9 @@ describe "lib/tsdbexplorer.rb" do
 
   it "should process a set of BS/BX/LO/LI/LT records in a CIF file" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
+    schedule_expected_data = {:timing_load=>"321 ", :status=>"P", :train_uid=>"C43391", :connection_indicator=>nil, :headcode=>nil, :category=>"OO", :speed=>"100", :catering_code=>nil, :operating_characteristics=>nil, :run_date=>Date.parse("2010-12-12").to_date, :service_branding=>nil, :service_code=>"22209000", :train_class=>"B", :portion_id=>nil, :sleepers=>nil, :power_type=>"EMU", :reservations=>"S", :train_identity=>"2N53"}
+    schedule = BasicSchedule.first
+    schedule_expected_data.collect.each { |k,v| schedule[k].should eql(v) }
   end
 
   it "should reject invalid BS record transaction types in a CIF file" do

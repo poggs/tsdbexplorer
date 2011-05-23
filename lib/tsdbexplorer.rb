@@ -300,7 +300,7 @@ module TSDBExplorer
         when "AA"
           { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
         when "BS"
-          { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :train_uid, 6 ], [ :runs_from, 6 ], [ :runs_to, 6 ], [ :days_run, 7 ], [ :bh_running, 1 ], [ :status, 1 ], [ :category, 2 ], [ :identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :spare, 1 ], [ :stp_indicator, 1 ] ] }
+          { :delete => [ :spare, :course_indicator ], :convert_yymmdd => [ :runs_from, :runs_to ], :format => [ [ :transaction_type, 1 ], [ :train_uid, 6 ], [ :runs_from, 6 ], [ :runs_to, 6 ], [ :days_run, 7 ], [ :bh_running, 1 ], [ :status, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :spare, 1 ], [ :stp_indicator, 1 ] ] }
         when "BX"
           { :delete => [ :spare ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :applicable_timetable, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
         when "LO"
@@ -308,7 +308,7 @@ module TSDBExplorer
         when "LI"
           { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
         when "CR"
-          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :category, 2 ], [ :identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
+          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
         when "LT"
           { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :arrival, 5 ], [ :public_arrival, 4 ], [ :platform, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :spare, 43 ] ] }
         when "ZZ"
@@ -335,6 +335,15 @@ module TSDBExplorer
 
       structure[:delete].each do |field|
         result.delete field
+      end
+
+
+      # Reformat certain fields if required
+
+      if structure.has_key? :convert_yymmdd
+        structure[:convert_yymmdd].each do |field|
+          result[field] = TSDBExplorer::yymmdd_to_date(result[field])
+        end
       end
 
       return result
@@ -531,22 +540,11 @@ module TSDBExplorer
 
           # BS: Basic Schedule
 
-          if data[:transaction_type] == "N"
+          raise "Line #{line_number}: Basic Schedule (BS) record found without a prior Location Terminate (LT) record" unless schedule.nil?
 
-            data.delete :transaction_type
-
-            raise "Line #{line_number}: Basic Schedule (BS) record found without a prior Location Terminate (LT) record" unless schedule.nil?
-
-            schedule = Hash.new
-            data.delete :record_type
-            data.delete :transaction_type
-            schedule[:basic] = data
-
-          else
-
-            raise "Line #{line_number}: Invalid transaction type '#{data[:transaction_type]}' for BS record"
-
-          end
+          schedule = Hash.new
+          data.delete :record_identity
+          schedule[:basic] = data
 
         elsif data[:record_identity] == "BX"
 
@@ -590,7 +588,41 @@ module TSDBExplorer
           data.delete :record_type
           schedule[:terminate] = data
 
-          schedule = nil
+
+          # Verify we have the minimum set of records for this schedule
+
+          raise "Line #{line_number}: Schedule invalid - expected a minimum of one BS, one LO and one LT record" unless ((schedule.has_key? :basic) && (schedule.has_key? :origin) && (schedule.has_key? :terminate))
+
+          if schedule[:basic][:transaction_type] == "N"
+
+            # Process the schedule
+
+            schedule[:basic].delete :transaction_type
+
+            date_range = TSDBExplorer.date_range_to_list(schedule[:basic][:runs_from], schedule[:basic][:runs_to], schedule[:basic][:days_run])
+            schedule[:basic].delete :runs_from
+            schedule[:basic].delete :runs_to
+            schedule[:basic].delete :days_run
+
+            # TODO: Integrate Bank Holiday logic in to date_range_to_list
+            schedule[:basic].delete :bh_running
+
+            schedule[:basic].delete :stp_indicator
+
+            date_range.each do |run_date|
+
+              schedule[:basic][:run_date] = run_date
+              pending_trans['BasicSchedule'] = Array.new unless pending_trans.has_key? 'BasicSchedule'
+              pending_trans['BasicSchedule'] << BasicSchedule.new(schedule[:basic])
+              stats[:schedule][:insert] = stats[:schedule][:insert] + 1
+
+            end
+            
+          else
+
+            raise "Invalid transaction type '#{schedule[:basic][:transaction_type]}' for BS record at line #{line_number}"
+
+          end
 
         end
 
