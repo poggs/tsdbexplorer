@@ -282,4 +282,8 @@ describe "lib/tsdbexplorer.rb" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
   end
 
+  it "should reject invalid BS record transaction types in a CIF file" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_invalid.cif') }.should raise_error
+  end
+
 end
