@@ -304,13 +304,13 @@ module TSDBExplorer
         when "BX"
           { :delete => [ :spare ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :applicable_timetable, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
         when "LO"
-          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
+          { :delete => [ :spare ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
         when "LI"
-          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
+          { :delete => [ :spare ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
         when "CR"
-          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
+          { :delete => [ :spare ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
         when "LT"
-          { :delete => [ :spare ], :format => [ [ :location, 8 ], [ :arrival, 5 ], [ :public_arrival, 4 ], [ :platform, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :spare, 43 ] ] }
+          { :delete => [ :spare ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :public_arrival, 4 ], [ :platform, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :spare, 43 ] ] }
         when "ZZ"
           { :delete => [], :format => [] }
         else
@@ -395,7 +395,7 @@ module TSDBExplorer
                 :association => { :insert => 0, :amend => 0, :delete => 0 },
                 :schedule => { :insert => 0, :amend => 0, :delete => 0 } }
 
-      schedule = nil
+      schedule = Array.new
 
       cif_data.each do |record|
 
@@ -540,7 +540,7 @@ module TSDBExplorer
 
           # BS: Basic Schedule
 
-          raise "Line #{line_number}: Basic Schedule (BS) record found without a prior Location Terminate (LT) record" unless schedule.nil?
+          raise "Line #{line_number}: Basic Schedule (BS) record found without a prior Location Terminate (LT) record" if schedule.nil?
 
           schedule = Hash.new
           data.delete :record_identity
@@ -561,14 +561,16 @@ module TSDBExplorer
 
           raise "Line #{line_number}: More than one Location Origin (LO) found for this schedule" if schedule.has_key? :origin
 
-          data.delete :record_type
+          data[:location_type] = data[:record_identity]
+          data.delete :record_identity
           schedule[:origin] = data
 
         elsif data[:record_identity] == "LI"
 
           # LI: Location Intermediate
 
-          data.delete :record_type
+          data[:location_type] = data[:record_identity]
+          data.delete :record_identity
 
           schedule[:intermediate] = Array.new unless schedule.has_key? :intermediate
           schedule[:intermediate] << data
@@ -577,17 +579,18 @@ module TSDBExplorer
 
           # CR: Change-en-Route
 
-          data.delete :record_type
+          data[:location_type] = data[:record_identity]
+          data.delete :record_identity
 
         elsif data[:record_identity] == "LT"
 
           # LT: Location Teminate
 
-          raise "Line #{line_number}: More than one Location Terminate (LT) found for this schedule" if schedule.has_key? :terminuate
+          raise "Line #{line_number}: More than one Location Terminate (LT) found for this schedule" if schedule.has_key? :terminate
 
-          data.delete :record_type
+          data[:location_type] = data[:record_identity]
+          data.delete :record_identity
           schedule[:terminate] = data
-
 
           # Verify we have the minimum set of records for this schedule
 
@@ -611,13 +614,61 @@ module TSDBExplorer
 
             date_range.each do |run_date|
 
+              # Add a BasicSchedule for each date in the date range
+
               schedule[:basic][:run_date] = run_date
               pending_trans['BasicSchedule'] = Array.new unless pending_trans.has_key? 'BasicSchedule'
               pending_trans['BasicSchedule'] << BasicSchedule.new(schedule[:basic])
               stats[:schedule][:insert] = stats[:schedule][:insert] + 1
 
+              # Add an originating location
+
+              origin_clone = schedule[:origin].clone
+              origin_clone[:departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:departure])
+              origin_clone[:public_departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:public_departure])
+
+              Location.create!(origin_clone)
+
+
+              # Add an intermediate location
+
+              intermediate_clone = schedule[:intermediate].clone
+
+              intermediate_clone.each do |template_location|
+
+                location = template_location.clone
+
+
+                # If this location has the public arrival and public departure set to 0000, it contains a passing time only
+
+                location[:public_arrival] = nil if location[:public_arrival].nil? || location[:public_arrival] == "0000"
+                location[:public_departure] = nil if location[:public_departure].nil? || location[:public_departure] == "0000"
+
+
+                location[:arrival] = TSDBExplorer::normalise_datetime(run_date + " " + location[:arrival]) unless location[:arrival].nil?
+                location[:public_arrival] = TSDBExplorer::normalise_datetime(run_date + " " + location[:public_arrival]) unless location[:public_arrival].nil?
+
+                location[:pass] = TSDBExplorer::normalise_datetime(run_date + " " + location[:pass]) unless location[:pass].nil?
+
+                location[:departure] = TSDBExplorer::normalise_datetime(run_date + " " + location[:departure]) unless location[:departure].nil?
+                location[:public_departure] = TSDBExplorer::normalise_datetime(run_date + " " + location[:public_departure]) unless location[:public_departure].nil?
+
+                Location.create!(location)
+
+              end
+
+
+              # Add a terminating location
+
+              terminate_clone = schedule[:terminate].clone
+
+              terminate_clone[:arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:arrival])
+              terminate_clone[:public_arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:public_arrival])
+
+              Location.create!(terminate_clone)
+
             end
-            
+
           else
 
             raise "Invalid transaction type '#{schedule[:basic][:transaction_type]}' for BS record at line #{line_number}"
