@@ -179,10 +179,29 @@ describe "lib/tsdbexplorer.rb" do
     expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
   end
 
-  it "should correctly parse a CIF 'BX' record"
-  it "should correctly parse a CIF 'LO' record"
-  it "should correctly parse a CIF 'LI' record"
-  it "should correctly parse a CIF 'LT' record"
+  it "should correctly parse a CIF 'BX' record" do
+    expected_data = {:uic_code=>"48488", :atoc_code=>"ZZ", :applicable_timetable=>"Y", :record_identity=>"BX", :rsid=>nil, :data_source=>nil, :traction_class=>nil}
+    parsed_record = TSDBExplorer::CIF::parse_record('BX    48488ZZY                                                                  ')
+    expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
+  end
+
+  it "should correctly parse a CIF 'LO' record" do
+    expected_data = {:performance_allowance=>nil, :platform=>"3  ", :departure=>"0910 ", :public_departure=>"0000", :record_identity=>"LO", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"PENZNCE", :pathing_allowance=>nil, :activity=>"TBRMA -D    ", :tiploc_instance=>nil}
+    parsed_record = TSDBExplorer::CIF::parse_record('LOPENZNCE 0910 00003         TBRMA -D                                           ')
+    expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
+  end
+
+  it "should correctly parse a CIF 'LI' record" do
+    expected_data = {:performance_allowance=>nil, :platform=>"15 ", :pass=>nil, :path=>nil, :departure=>"1532H", :arrival=>"1429H", :public_departure=>"0000", :public_arrival=>"0000", :record_identity=>"LI", :engineering_allowance=>nil, :line=>"E  ", :tiploc_code=>"EUSTON ", :pathing_allowance=>nil, :activity=>"RMOP        ", :tiploc_instance=>nil}
+    parsed_record = TSDBExplorer::CIF::parse_record('LIEUSTON  1429H1532H     0000000015 E     RMOP                                  ')
+    expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
+  end
+
+  it "should correctly parse a CIF 'LT' record" do
+    expected_data = {:platform=>nil, :path=>nil, :arrival=>"0417 ", :public_arrival=>"0000", :record_identity=>"LT", :tiploc_code=>"DITTFLR", :activity=>"TFPR        ", :tiploc_instance=>nil}
+    parsed_record = TSDBExplorer::CIF::parse_record('LTDITTFLR 0417 0000      TFPR                                                   ')
+    expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
+  end
 
   it "should handle gracefully a nonexistant CIF file" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/DOES_NOT_EXIST.cif') }.should raise_error
@@ -354,12 +373,39 @@ describe "lib/tsdbexplorer.rb" do
     lambda { TSDBExplorer::TDnet::parse_message('<ZZ_MSG>foobarbazqux</ZZ_MSG>') }.should raise_error
   end
 
-  it "should parse a compact Train Describer CA message"
-  it "should parse a compact Train Describer CB message"
-  it "should parse a compact Train Describer CC message"
-  it "should parse a compact Train Describer CT message"
-  it "should parse a compact Train Describer SF message"
-  it "should parse a compact Train Describer SG message"
-  it "should parse a compact Train Describer SH message"
+  it "should parse a compact Train Describer CA message" do
+    expected_data = { :message_type => 'CA', :td_identity => 'SU', :timestamp => '07:59:30Z', :from_berth => 'FROM', :to_berth => 'TOBH', :train_description => 'TDSC' }
+    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="CA" TDIdentity="SU" timestamp="07:59:30Z" fromBerthAddress="FROM" toBerthAddress="TOBH" trainIdentity="TDSC" />').should eql(expected_data)
+  end
+
+  it "should parse a compact Train Describer CB message" do
+    expected_data = { :message_type => 'CB', :td_identity => 'SU', :timestamp => '07:59:30Z', :from_berth => 'FROM', :train_description => 'TDSC' }
+    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="CB" TDIdentity="SU" timestamp="07:59:30Z" fromBerthAddress="FROM" trainIdentity="TDSC" />').should eql(expected_data)
+  end
+
+  it "should parse a compact Train Describer CC message" do
+    expected_data = { :message_type => 'CC', :td_identity => 'SU', :timestamp => '07:59:30Z', :to_berth => 'TOBH', :train_description => 'TDSC' }
+    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="CC" TDIdentity="SU" timestamp="07:59:30Z" toBerthAddress="TOBH" trainIdentity="TDSC" />').should eql(expected_data)
+  end
+
+  it "should parse a compact Train Describer CT message" do
+    expected_data = { :message_type => 'CT', :td_identity => 'SU', :timestamp => '07:59:30Z', :timestamp_four => '0759' }
+    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="CT" TDIdentity="SU" timestamp="07:59:30Z" TDReportTime="0759" />').should eql(expected_data)
+  end
+
+  it "should parse a compact Train Describer SF message" do
+    expected_data = { :message_type => 'SF', :td_identity => 'SU', :timestamp => '07:59:30Z', :address => '0C', :data => '66' }
+    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="SF" TDIdentity="SU" timestamp="07:59:30Z" equipmentStatusAddress="0C" equipmentStatus="66" />').should eql(expected_data)
+  end
+
+  it "should parse a compact Train Describer SG message" do
+    expected_data = { :message_type => 'SG', :td_identity => 'SU', :timestamp => '07:59:30Z', :address => '0C', :data => '66666666' }
+    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="SG" TDIdentity="SU" timestamp="07:59:30Z" equipmentBaseScanAddress="0C" equipmentBaseScan="66666666" />').should eql(expected_data)
+  end
+
+  it "should parse a compact Train Describer SH message" do
+    expected_data = { :message_type => 'SH', :td_identity => 'SU', :timestamp => '07:59:30Z', :address => '0C', :data => '66666666' }
+    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="SH" TDIdentity="SU" timestamp="07:59:30Z" equipmentBaseScanAddress="0C" equipmentBaseScan="66666666" />').should eql(expected_data)
+  end
 
 end
