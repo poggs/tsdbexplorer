@@ -18,4 +18,9 @@
 #
 
 class Location < ActiveRecord::Base
+
+  validates_presence_of :tiploc_code
+
+  validates_inclusion_of :location_type, :in => ['LO', 'LI', 'LT']
+
 end
