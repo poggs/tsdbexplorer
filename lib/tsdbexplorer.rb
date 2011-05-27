@@ -624,6 +624,7 @@ module TSDBExplorer
               # Add an originating location
 
               origin_clone = schedule[:origin].clone
+              origin_clone[:train_uid] = schedule[:basic][:train_uid]
               origin_clone[:departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:departure])
               origin_clone[:public_departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:public_departure])
 
@@ -653,6 +654,10 @@ module TSDBExplorer
                 location[:departure] = TSDBExplorer::normalise_datetime(run_date + " " + location[:departure]) unless location[:departure].nil?
                 location[:public_departure] = TSDBExplorer::normalise_datetime(run_date + " " + location[:public_departure]) unless location[:public_departure].nil?
 
+                # Set the Train UID
+
+                location[:train_uid] = schedule[:basic][:train_uid]
+
                 Location.create!(location)
 
               end
@@ -661,6 +666,7 @@ module TSDBExplorer
               # Add a terminating location
 
               terminate_clone = schedule[:terminate].clone
+              terminate_clone[:train_uid] = schedule[:basic][:train_uid]
 
               terminate_clone[:arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:arrival])
               terminate_clone[:public_arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:public_arrival])
