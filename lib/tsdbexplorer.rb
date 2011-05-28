@@ -540,11 +540,32 @@ module TSDBExplorer
 
           # BS: Basic Schedule
 
+          raise "Line #{line_number}: Basic Schedule (BS) revise record found in a full extract" if header_data[:update_indicator] == "F" && data[:transaction_type] == "R"
+          raise "Line #{line_number}: Basic Schedule (BS) delete record found in a full extract" if header_data[:update_indicator] == "F" && data[:transaction_type] == "D"
           raise "Line #{line_number}: Basic Schedule (BS) record found without a prior Location Terminate (LT) record" if schedule.nil?
 
           schedule = Hash.new
           data.delete :record_identity
           schedule[:basic] = data
+
+          if schedule[:basic][:transaction_type] == "D"
+
+            # Delete record
+
+            if schedule[:basic][:runs_to].nil?
+              date_range = Array.new
+              date_range << schedule[:basic][:runs_from]
+            else
+              date_range = TSDBExplorer.date_range_to_list(schedule[:basic][:runs_from], schedule[:basic][:runs_to], schedule[:basic][:days_run])
+            end
+
+            date_range.each do |run_date|
+              schedule = BasicSchedule.find_by_run_date(run_date)
+              schedule.delete
+              stats[:schedule][:delete] = stats[:schedule][:delete] + 1
+            end
+
+          end
 
         elsif data[:record_identity] == "BX"
 

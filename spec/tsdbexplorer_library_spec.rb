@@ -314,6 +314,14 @@ describe "lib/tsdbexplorer.rb" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ln.cif') }.should raise_error
   end
 
+  it "should not allow BS revise records in a CIF full extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_fullextract.cif') }.should raise_error
+  end
+
+  it "should not allow BS delete records in a CIF full extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_fullextract.cif') }.should raise_error
+  end
+
   it "should process a set of BS/BX/LO/LI/LT records in a CIF file" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
     schedule_expected_data = {:timing_load=>"321 ", :status=>"P", :train_uid=>"C43391", :connection_indicator=>nil, :headcode=>nil, :category=>"OO", :speed=>"100", :catering_code=>nil, :operating_characteristics=>nil, :run_date=>Date.parse("2010-12-12").to_date, :service_branding=>nil, :service_code=>"22209000", :train_class=>"B", :portion_id=>nil, :sleepers=>nil, :power_type=>"EMU", :reservations=>"S", :train_identity=>"2N53"}
@@ -335,6 +343,13 @@ describe "lib/tsdbexplorer.rb" do
 
   it "should reject invalid BS record transaction types in a CIF file" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_invalid.cif') }.should raise_error
+  end
+
+  it "should process delete BS records from a CIF file" do
+    expected_data_before = {:schedule=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part1.cif').should eql(expected_data_before)
+    expected_data_after = {:schedule=>{:insert=>0, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part2.cif').should eql(expected_data_after)
   end
 
 
