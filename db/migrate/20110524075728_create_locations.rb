@@ -21,7 +21,7 @@ class CreateLocations < ActiveRecord::Migration
 
   def self.up
     create_table :locations do |t|
-      t.string     :train_uid, :limit => 6
+      t.string     :basic_schedule_uuid, :limit => 36
       t.string     :location_type, :limit => 2
       t.string     :tiploc_code, :limit => 7
       t.integer    :tiploc_instance

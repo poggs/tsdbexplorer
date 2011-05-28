@@ -2,7 +2,9 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.7'
 gem 'sqlite3'
-gem 'mysql'
+gem 'ruby-mysql'
+gem 'nokogiri', '>= 1.1.4'
+gem 'uuid', '>= 2.3.2'
 
 gem 'activerecord-import', '>= 0.2.6'
 

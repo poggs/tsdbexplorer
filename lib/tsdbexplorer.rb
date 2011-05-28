@@ -617,6 +617,7 @@ module TSDBExplorer
               # Add a BasicSchedule for each date in the date range
 
               schedule[:basic][:run_date] = run_date
+              schedule[:basic][:uuid] = UUID.generate
               pending_trans['BasicSchedule'] = Array.new unless pending_trans.has_key? 'BasicSchedule'
               pending_trans['BasicSchedule'] << BasicSchedule.new(schedule[:basic])
               stats[:schedule][:insert] = stats[:schedule][:insert] + 1
@@ -624,7 +625,7 @@ module TSDBExplorer
               # Add an originating location
 
               origin_clone = schedule[:origin].clone
-              origin_clone[:train_uid] = schedule[:basic][:train_uid]
+              origin_clone[:basic_schedule_uuid] = schedule[:basic][:uuid]
               origin_clone[:departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:departure])
               origin_clone[:public_departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:public_departure])
 
@@ -654,9 +655,9 @@ module TSDBExplorer
                 location[:departure] = TSDBExplorer::normalise_datetime(run_date + " " + location[:departure]) unless location[:departure].nil?
                 location[:public_departure] = TSDBExplorer::normalise_datetime(run_date + " " + location[:public_departure]) unless location[:public_departure].nil?
 
-                # Set the Train UID
+                # Set the Train UUID
 
-                location[:train_uid] = schedule[:basic][:train_uid]
+                location[:basic_schedule_uuid] = schedule[:basic][:uuid]
 
                 Location.create!(location)
 
@@ -666,7 +667,7 @@ module TSDBExplorer
               # Add a terminating location
 
               terminate_clone = schedule[:terminate].clone
-              terminate_clone[:train_uid] = schedule[:basic][:train_uid]
+              terminate_clone[:basic_schedule_uuid] = schedule[:basic][:uuid]
 
               terminate_clone[:arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:arrival])
               terminate_clone[:public_arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:public_arrival])

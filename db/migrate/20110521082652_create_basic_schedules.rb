@@ -21,6 +21,7 @@ class CreateBasicSchedules < ActiveRecord::Migration
 
   def self.up
     create_table :basic_schedules do |t|
+      t.string     :uuid, :limit => 36
       t.string     :train_uid, :limit => 6
       t.string     :status, :limit => 1
       t.date       :run_date

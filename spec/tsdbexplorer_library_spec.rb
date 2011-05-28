@@ -320,15 +320,15 @@ describe "lib/tsdbexplorer.rb" do
     schedule = BasicSchedule.first
     schedule_expected_data.collect.each { |k,v| schedule[k].should eql(v) }
 
-    origin_expected_data = {:train_uid=>"C43391", :platform=>"10 ", :public_departure=>Time.parse('2010-12-12 18:34:00'), :engineering_allowance=>nil, :location_type=>"LO", :pathing_allowance=>nil, :tiploc_code =>"EUSTON ", :line=>"C  ", :activity=>"TB          ", :performance_allowance=>nil, :departure=>Time.parse('2010-12-12 18:34:00')}
+    origin_expected_data = {:platform=>"10 ", :public_departure=>Time.parse('2010-12-12 18:34:00'), :engineering_allowance=>nil, :location_type=>"LO", :pathing_allowance=>nil, :tiploc_code =>"EUSTON ", :line=>"C  ", :activity=>"TB          ", :performance_allowance=>nil, :departure=>Time.parse('2010-12-12 18:34:00')}
     origin = Location.find(:first, :conditions => { :location_type => 'LO' })
     origin_expected_data.collect.each { |k,v| origin[k].should eql(v) }
 
-    intermediate_expected_data = {:train_uid=>"C43391", :performance_allowance=>nil, :platform=>nil, :pass=>Time.parse('2010-12-12 18:37:00'), :path=>nil, :departure=>nil, :arrival=>nil, :public_departure=>nil, :public_arrival=>nil, :location_type=>"LI", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"CMDNSTH", :pathing_allowance=>nil, :activity=>nil, :tiploc_instance=>nil}
+    intermediate_expected_data = {:performance_allowance=>nil, :platform=>nil, :pass=>Time.parse('2010-12-12 18:37:00'), :path=>nil, :departure=>nil, :arrival=>nil, :public_departure=>nil, :public_arrival=>nil, :location_type=>"LI", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"CMDNSTH", :pathing_allowance=>nil, :activity=>nil, :tiploc_instance=>nil}
     intermediate = Location.find(:first, :conditions => { :location_type => 'LI' })
     intermediate_expected_data.collect.each { |k,v| intermediate[k].should eql(v) }
 
-    terminate_expected_data = {:train_uid=>"C43391", :platform=>"3  ", :arrival=>Time.parse('2010-12-12 19:46:00'), :path=>nil, :public_arrival=>Time.parse('2010-12-12 19:46:00'), :location_type=>"LT", :tiploc_code=>"NMPTN  ", :activity=>"TF          "}
+    terminate_expected_data = {:platform=>"3  ", :arrival=>Time.parse('2010-12-12 19:46:00'), :path=>nil, :public_arrival=>Time.parse('2010-12-12 19:46:00'), :location_type=>"LT", :tiploc_code=>"NMPTN  ", :activity=>"TF          "}
     terminate = Location.find(:first, :conditions => { :location_type => 'LT' })
     terminate_expected_data.collect.each { |k,v| terminate[k].should eql(v) }
   end

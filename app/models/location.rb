@@ -23,4 +23,6 @@ class Location < ActiveRecord::Base
 
   validates_inclusion_of :location_type, :in => ['LO', 'LI', 'LT']
 
+  belongs_to :basic_schedule, :primary_key => :uuid
+
 end

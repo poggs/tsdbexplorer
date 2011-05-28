@@ -228,4 +228,10 @@ describe BasicSchedule do
 
   end
 
+  it "should have a relationship with all calling points for this journey" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
+    BasicSchedule.first.should respond_to (:locations)
+    BasicSchedule.first.locations.count.should eql(18)
+  end
+
 end
