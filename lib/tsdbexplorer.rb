@@ -618,14 +618,19 @@ module TSDBExplorer
 
             # Process the schedule
 
-            action_type = case schedule[:basic][:transaction_type]
-              when "N"
-                :insert
-              when "R"
-                :amend
+            action_type = :insert
+
+            if schedule[:basic][:transaction_type] == "R" || schedule[:basic][:stp_indicator] == "O"
+              action_type = :amend
             end
 
             schedule[:basic].delete :transaction_type
+
+            # If this is an STP Overlay to the permanent schedule, delete the old records before adding new ones
+
+            if schedule[:basic][:stp_indicator] == "O"
+              stats = TSDBExplorer::CIF::delete_bs_record(schedule[:basic], stats)
+            end
 
             date_range = TSDBExplorer.date_range_to_list(schedule[:basic][:runs_from], schedule[:basic][:runs_to], schedule[:basic][:days_run])
             schedule[:basic].delete :runs_from

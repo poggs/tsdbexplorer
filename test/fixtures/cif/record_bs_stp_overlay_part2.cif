@@ -1,0 +1,41 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTBDFTESTAFU010170010170                    
+BSNC431581105081105080000001 PXX1U302130122330000 EMU350 100      B            O
+BX         LMY                                                                  
+LOCREWE   1138 11383         TB                                                 
+LICREWSJN           1140H00000000UDP                                            
+LIBTHLYJN           1143H00000000                                               
+LIALSAGER 1146 1146H     11461146         T           1                         
+LIKIDSGRV 1151 1152      11511152         T                                     
+LISTOKEOT 1158H1159H     115911591        T                                     
+LISTOKOTJ           1200H00000000                                               
+LISTONE   1207 1208      12071208         T                                     
+LINTNB              1212H00000000   FL                                          
+LISTAFFRD 1217H1218H     121812181  FL FL T                                     
+LICOLWICH           1224 00000000   FL FL                                       
+LIRUGLYNJ           1225H00000000   SL                                          
+LIRUGL    1227H1228      12281228         T                                     
+LILCHTNJ            1233 00000000                                               
+LILCHTTVL 1234 1235      123412352        T                                     
+LITMWTHLL 1241 1242      12411242         T                                     
+LIAMNGTNJ           1244 00000000                                               
+LIATHRSTN 1250H1251H     12511251         T                                     
+LINNTN    1257H1258H     125812585     SL T           5                         
+LIRUGBTVJ           1316 00000000   UNL                                         
+LIRUGBY   1317H1327      131713266  UNLUNLT                                     
+LIHMTNJ             1330 00000000   FL                                          
+LIWEEDON            1337H00000000   FL FL                                       
+LIHANSLPJ           1345H00000000   SL FL                                       
+LIMKNSCEN 1351 1405      135114051  SL SL T                                     
+LIBLTCHLY           1408 000000004  SL SL             1                         
+LILTNBZRD 1414 1415      14141415         T                                     
+LILEDBRNJ           1417H00000000   SL SL             1                         
+LITRING             1423H000000005  SL SL                                       
+LIBONENDJ           1428H00000000   FL                                          
+LIWATFDJ  1434H1435H     143314337     FL T                                     
+LIHROW              1440H00000000   FL                                          
+LIWMBY              1442H00000000                     2                         
+LIWLSDWLJ           1446 00000000   FL                                          
+LICMDNJN            1449 00000000   A                                           
+LICMDNSTH           1449H00000000                                               
+LTEUSTON  1453 14536     TF                                                     
+ZZ

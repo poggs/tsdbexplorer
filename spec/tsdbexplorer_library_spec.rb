@@ -322,7 +322,7 @@ describe "lib/tsdbexplorer.rb" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_fullextract.cif') }.should raise_error
   end
 
-  it "should process a set of BS/BX/LO/LI/LT records in a CIF file" do
+  it "should process a set of permanent schedule BS/BX/LO/LI/LT records in a CIF file" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
     schedule_expected_data = {:timing_load=>"321 ", :status=>"P", :train_uid=>"C43391", :connection_indicator=>nil, :headcode=>nil, :category=>"OO", :speed=>"100", :catering_code=>nil, :operating_characteristics=>nil, :run_date=>Date.parse("2010-12-12").to_date, :service_branding=>nil, :service_code=>"22209000", :train_class=>"B", :portion_id=>nil, :sleepers=>nil, :power_type=>"EMU", :reservations=>"S", :train_identity=>"2N53"}
     schedule = BasicSchedule.first
@@ -339,6 +339,14 @@ describe "lib/tsdbexplorer.rb" do
     terminate_expected_data = {:platform=>"3  ", :arrival=>Time.parse('2010-12-12 19:46:00'), :path=>nil, :public_arrival=>Time.parse('2010-12-12 19:46:00'), :location_type=>"LT", :tiploc_code=>"NMPTN  ", :activity=>"TF          "}
     terminate = Location.find(:first, :conditions => { :location_type => 'LT' })
     terminate_expected_data.collect.each { |k,v| terminate[k].should eql(v) }
+  end
+
+  it "should process a set of STP Overlay BS/BX/LO/LI/LT records in a CIF file" do
+    expected_data_before = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part1.cif').should eql(expected_data_before)
+    
+    expected_data_after = {:schedule=>{:insert=>0, :delete=>1, :amend=>1}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part2.cif').should eql(expected_data_after)
   end
 
   it "should reject invalid BS record transaction types in a CIF file" do
