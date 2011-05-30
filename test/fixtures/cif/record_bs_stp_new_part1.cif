@@ -1,0 +1,38 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+BSNR662491012131105161000000 2E04Z04    157620170 D  715 075                   N
+BX         ZZY                                                                  
+LOCREWBHM 0502 0000          TB                                                 
+LICREWSSN           0507 00000000                                               
+LICREWEGL           0509 00000000                                               
+LINANTWCH           0514 00000000                       2                       
+LIWRENBRY           0521 00000000                                               
+LIPREES             0531 00000000                                               
+LIWEMM              0534 00000000                                               
+LIHRLSCTX           0542 00000000                       1                       
+LISHRWBY            0546 000000007                      1                       
+LISHRWSBJ           0550 00000000                       2                       
+LIDORNGTN           0600 00000000                                               
+LIMSHBRKX           0613 00000000                                               
+LICRAVENA           0618 000000002                                              
+LIBRFLD             0623 00000000                                               
+LIWOFERTN           0630 00000000                                               
+LILEOMNST           0637 00000000                                               
+LIMRTNONL           0646 00000000                     2                         
+LISHIP              0651 00000000                        H                      
+LIHEREFRD           0653H000000002                                              
+LITRAMINN           0700H00000000                       1H                      
+LIPONTRLS           0708 00000000                                               
+LIABRGVNY           0722 00000000                                               
+LILTTLMLJ           0731 00000000                     1                         
+LIMAINDNJ           0743 00000000                       5                       
+LIMAINDEJ           0750 00000000   ML                  4                       
+LIMAGOR             0757 00000000                       1                       
+LISEVTNLJ           0801 000000004                    2                         
+LISEVTNLW           0804 00000000                                               
+LISEVTNLE           0810 00000000                                               
+LIPILNING           0813 000000001                    1                         
+LIPATCHWY           0817 000000001                                              
+LIFILTNWJ           0820 00000000                                               
+LIHLNMJN            0827 00000000                                               
+LTAVONWFH 0844 0000      TF                                                     
+ZZ
