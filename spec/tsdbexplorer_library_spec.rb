@@ -352,6 +352,13 @@ describe "lib/tsdbexplorer.rb" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part2.cif').should eql(expected_data_after)
   end
 
+  it "should process revise BS records from a CIF file" do
+    expected_data_before = {:association=>{:amend=>0, :insert=>0, :delete=>0}, :schedule=>{:amend=>0, :insert=>69, :delete=>0}, :tiploc=>{:amend=>0, :insert=>0, :delete=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bs_revise_1.cif').should eql(expected_data_before)
+    expected_data_after = {:association=>{:amend=>0, :insert=>0, :delete=>0}, :schedule=>{:amend=>69, :insert=>0, :delete=>69}, :tiploc=>{:amend=>0, :insert=>0, :delete=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bs_revise_2.cif').should eql(expected_data_after)
+  end
+
 
   # Network Rail TD.net message parsing
 

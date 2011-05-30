@@ -1,0 +1,17 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTBDFTESTAUA010170010170                    
+BSRC819021012141105190111000 POO2B01    125434000 DMUA   075      S            P
+BX         AWY                                                                  
+LOCRDFCEN 0030 00301  RL   2 TB                                                 
+LIMSHFILD           0041 00000000                       1                       
+LIEBBWJ             0046 00000000URLML                                          
+LINWPTRTG 0049 0059      004800594        T           1                         
+LIMAINDWJ           0101 00000000                                               
+LIMAINDNJ           0102 00000000                                               
+LICWMBRAN 0109H0110H     01100110         T                                     
+LIPONTYPL 0115H0116H     01160116         T                                     
+LILTTLMLJ           0118H00000000                                               
+LIABRGVNY 0126 0127      01260127         T                                     
+LIPONTRLS           0139H00000000                                               
+LITRAMINN           0144H00000000                     2                         
+LTHEREFRD 0154 01553     TF                                                     
+ZZ                                                                              

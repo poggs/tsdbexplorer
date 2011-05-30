@@ -552,18 +552,15 @@ module TSDBExplorer
 
             # Delete record
 
-            if schedule[:basic][:runs_to].nil?
-              date_range = Array.new
-              date_range << schedule[:basic][:runs_from]
-            else
-              date_range = TSDBExplorer.date_range_to_list(schedule[:basic][:runs_from], schedule[:basic][:runs_to], schedule[:basic][:days_run])
-            end
+            TSDBExplorer::CIF::delete_bs_record(schedule[:basic], stats)
 
-            date_range.each do |run_date|
-              schedule = BasicSchedule.find_by_run_date(run_date)
-              schedule.delete
-              stats[:schedule][:delete] = stats[:schedule][:delete] + 1
-            end
+          elsif schedule[:basic][:transaction_type] == "R"
+
+            # Revise record
+
+            TSDBExplorer::CIF::delete_bs_record(schedule[:basic], stats)
+
+            # NOTE: The new schedule is processed later alongside BS New record processing.
 
           end
 
@@ -617,9 +614,16 @@ module TSDBExplorer
 
           raise "Line #{line_number}: Schedule invalid - expected a minimum of one BS, one LO and one LT record" unless ((schedule.has_key? :basic) && (schedule.has_key? :origin) && (schedule.has_key? :terminate))
 
-          if schedule[:basic][:transaction_type] == "N"
+          if schedule[:basic][:transaction_type] == "N" || schedule[:basic][:transaction_type] == "R"
 
             # Process the schedule
+
+            action_type = case schedule[:basic][:transaction_type]
+              when "N"
+                :insert
+              when "R"
+                :amend
+            end
 
             schedule[:basic].delete :transaction_type
 
@@ -641,7 +645,9 @@ module TSDBExplorer
               schedule[:basic][:uuid] = UUID.generate
               pending_trans['BasicSchedule'] = Array.new unless pending_trans.has_key? 'BasicSchedule'
               pending_trans['BasicSchedule'] << BasicSchedule.new(schedule[:basic])
-              stats[:schedule][:insert] = stats[:schedule][:insert] + 1
+
+              stats[:schedule][action_type] = stats[:schedule][action_type] + 1
+
 
               # Add an originating location
 
@@ -710,6 +716,30 @@ module TSDBExplorer
       return stats
 
     end
+
+
+    # Process a Basic Schedule deletion record
+
+    def CIF.delete_bs_record(bs_record, stats)
+
+      if bs_record[:runs_to].nil?
+        date_range = Array.new
+        date_range << bs_record[:runs_from]
+      else
+        date_range = TSDBExplorer.date_range_to_list(bs_record[:runs_from], bs_record[:runs_to], bs_record[:days_run])
+      end
+
+      date_range.each do |run_date|
+        schedule = BasicSchedule.find_by_run_date(run_date)
+        schedule.delete
+        stats[:schedule][:delete] = stats[:schedule][:delete] + 1
+      end
+
+      return stats
+
+    end
+
+
 
   end
 
