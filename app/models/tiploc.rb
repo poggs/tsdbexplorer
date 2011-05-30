@@ -40,7 +40,7 @@ class Tiploc < ActiveRecord::Base
   end
 
   def tps_description=(value)
-    write_attribute(:tps_description, value.strip)
+    write_attribute(:tps_description, value.strip) unless value.nil?
   end
 
   def crs_code=(value)
