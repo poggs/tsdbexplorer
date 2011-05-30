@@ -1,0 +1,6 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       UA010170010170                    
+BSNL915591012121105150000001 PEE5J34    122216001 DMUS   075D                  P
+BX         LOY                                                                  
+LOEHMEMUD 0848 0000          TB                                                 
+LTBARKING 0851 00008     TF                                                     
+ZZ

@@ -666,7 +666,7 @@ module TSDBExplorer
 
               # Add an intermediate location
 
-              intermediate_clone = schedule[:intermediate].clone
+              intermediate_clone = schedule[:intermediate].nil? ? [] : schedule[:intermediate].clone
 
               intermediate_clone.each do |template_location|
 

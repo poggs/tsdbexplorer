@@ -354,6 +354,11 @@ describe "lib/tsdbexplorer.rb" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_new_part1.cif').should eql(expected_data)
   end
 
+  it "should process a schedule without LI records in a CIF file" do
+    expected_data = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_process_lolt.cif').should eql(expected_data)    
+  end
+
   it "should reject invalid BS record transaction types in a CIF file" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_invalid.cif') }.should raise_error
   end
