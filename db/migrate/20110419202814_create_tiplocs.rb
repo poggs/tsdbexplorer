@@ -29,9 +29,7 @@ class CreateTiplocs < ActiveRecord::Migration
 
     create_table :tiplocs do |t|
       t.string     :tiploc_code, :limit => 7
-      t.string     :capitals_identification, :limit => 2
       t.string     :nalco, :limit => 6
-      t.string     :nlc_check_character, :limit => 1
       t.string     :tps_description, :limit => 26
       t.string     :stanox, :limit => 5
       t.string     :crs_code, :limit => 3
