@@ -51,4 +51,12 @@ describe Location do
 
   it "should allow only valid activities to occur at a location"
 
+  it "should have a relationship with a Tiploc model" do
+    expected_data = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>19, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/location_model_relation_tiploc.cif').should eql(expected_data)
+    Location.all.each do |loc|
+      loc.tiploc should_not be_nil
+    end
+  end
+
 end

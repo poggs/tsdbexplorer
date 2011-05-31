@@ -31,6 +31,8 @@ class Tiploc < ActiveRecord::Base
   validates_presence_of     :tps_description
   validates_format_of       :crs_code, :with => /[A-Z][A-Z][A-Z]/, :allow_blank => true
 
+  belongs_to :location, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
+
   def tiploc_code=(value)
     write_attribute(:tiploc_code, value.strip)
   end
