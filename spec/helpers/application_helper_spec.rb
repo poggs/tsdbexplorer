@@ -17,10 +17,18 @@
 #  $Id$
 #
 
-module ApplicationHelper
+require 'spec_helper'
 
-  def time_only(date_obj)
-    date_obj.sec == 30 ? date_obj.strftime('%H%M')+"H" : date_obj.strftime('%H%M') if date_obj.is_a? Time
+describe ApplicationHelper do
+
+  it "should convert a Time object representing a whole minute to HHMM format using the 24 hour clock" do    
+    time_only(Time.parse('2011-01-01 09:00:00')).should eql('0900')
+    time_only(Time.parse('2011-01-01 19:00:00')).should eql('1900')
+  end
+
+  it "should convert a Time object representing a half minute to HHMM format using the 24 hour clock" do
+    time_only(Time.parse('2011-01-01 09:00:30')).should eql('0900H')
+    time_only(Time.parse('2011-01-01 19:00:30')).should eql('1900H')
   end
 
 end
