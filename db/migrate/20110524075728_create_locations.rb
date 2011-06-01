@@ -39,12 +39,11 @@ class CreateLocations < ActiveRecord::Migration
       t.string     :activity, :limit => 12
       t.timestamps
     end
+    add_index(:locations, :basic_schedule_uuid)
   end
 
   def self.down
     drop_table :locations
   end
-
-  add_index(:locations, :basic_schedule_uuid)
 
 end
