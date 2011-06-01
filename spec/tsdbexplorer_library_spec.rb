@@ -355,9 +355,13 @@ describe "lib/tsdbexplorer.rb" do
   it "should process a set of STP Overlay BS/BX/LO/LI/LT records in a CIF file" do
     expected_data_before = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part1.cif').should eql(expected_data_before)
-    
+    expected_locations_before = ["CREWE", "CREWSJN", "BTHLYJN", "ALSAGER", "KIDSGRV", "STOKEOT", "STOKOTJ", "STONE", "NTNB", "STAFFRD", "COLWICH", "RUGLYNJ", "RUGL", "LCHTNJ", "LCHTTVL", "TMWTHLL", "AMNGTNJ", "ATHRSTN", "NNTN", "RUGBTVJ", "RUGBY", "HMTNJ", "LNGBKBY", "NMPTN", "HANSLPJ", "MKNSCEN", "BLTCHLY", "LTNBZRD", "LEDBRNJ", "TRING", "BONENDJ", "WATFDJ", "HROW", "WMBY", "WLSDWLJ", "CMDNJN", "CMDNSTH", "EUSTON"]
+    BasicSchedule.find_by_run_date('2011-05-08').locations.collect { |location| location.tiploc_code }.should eql(expected_locations_before)
+
     expected_data_after = {:schedule=>{:insert=>0, :delete=>1, :amend=>1}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part2.cif').should eql(expected_data_after)
+    expected_locations_after = ["CREWE", "CREWSJN", "BTHLYJN", "ALSAGER", "KIDSGRV", "STOKEOT", "STOKOTJ", "STONE", "NTNB", "STAFFRD", "COLWICH", "RUGLYNJ", "RUGL", "LCHTNJ", "LCHTTVL", "TMWTHLL", "AMNGTNJ", "ATHRSTN", "NNTN", "RUGBTVJ", "RUGBY", "HMTNJ", "WEEDON", "HANSLPJ", "MKNSCEN", "BLTCHLY", "LTNBZRD", "LEDBRNJ", "TRING", "BONENDJ", "WATFDJ", "HROW", "WMBY", "WLSDWLJ", "CMDNJN", "CMDNSTH", "EUSTON"]
+    BasicSchedule.find_by_run_date('2011-05-08').locations.collect { |location| location.tiploc_code }.should eql(expected_locations_after)
   end
 
   it "shoud process a set of STP New Schedule BS/BX/LO/LI/LT records in a CIF file" do
