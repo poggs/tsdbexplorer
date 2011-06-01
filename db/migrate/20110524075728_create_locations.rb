@@ -45,4 +45,6 @@ class CreateLocations < ActiveRecord::Migration
     drop_table :locations
   end
 
+  add_index(:locations, :basic_schedule_uuid)
+
 end
