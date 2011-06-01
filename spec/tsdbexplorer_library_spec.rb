@@ -378,6 +378,41 @@ describe "lib/tsdbexplorer.rb" do
   end
 
 
+  # Miscellaneous functions
+
+  it "should sort a list of Locations by their arrival, passing and departure times" do
+
+    # Sort trains by passing time
+
+    loc_p1 = Location.new(:tiploc_code => '1', :location_type => 'LI', :pass => '2011-01-01 12:00:00')
+    loc_p2 = Location.new(:tiploc_code => '2', :location_type => 'LI', :pass => '2011-01-01 12:05:00')
+    loc_p3 = Location.new(:tiploc_code => '3', :location_type => 'LI', :pass => '2011-01-01 12:10:00')
+
+    [ loc_p3, loc_p1, loc_p2 ].sort { |a,b| TSDBExplorer::train_sort(a,b) }.should eql([ loc_p1, loc_p2, loc_p3 ])
+
+    # Sort trains by departure time
+
+    loc_d1 = Location.new(:tiploc_code => '1', :location_type => 'LO', :departure => '2011-01-01 12:01:00')
+    loc_d2 = Location.new(:tiploc_code => '2', :location_type => 'LO', :departure => '2011-01-01 12:06:30')
+    loc_d3 = Location.new(:tiploc_code => '3', :location_type => 'LO', :departure => '2011-01-01 12:11:00')
+
+    [ loc_d3, loc_d1, loc_d2 ].sort { |a,b| TSDBExplorer::train_sort(a,b) }.should eql([ loc_d1, loc_d2, loc_d3 ])
+
+    # Sort trains by arrival time
+
+    loc_a1 = Location.new(:tiploc_code => '1', :location_type => 'LT', :arrival => '2011-01-01 12:02:00')
+    loc_a2 = Location.new(:tiploc_code => '2', :location_type => 'LT', :arrival => '2011-01-01 12:07:30')
+    loc_a3 = Location.new(:tiploc_code => '3', :location_type => 'LT', :arrival => '2011-01-01 12:12:00')
+
+    [ loc_a3, loc_a1, loc_a2 ].sort { |a,b| TSDBExplorer::train_sort(a,b) }.should eql([ loc_a1, loc_a2, loc_a3 ])
+
+    # Sort trains by all three
+
+    [ loc_p1, loc_p2, loc_p3, loc_d1, loc_d2, loc_d3, loc_a1, loc_a2, loc_a3 ].sort { |a,b| TSDBExplorer::train_sort(a,b) }.should eql([ loc_p1, loc_d1, loc_a1, loc_p2, loc_d2, loc_a2, loc_p3, loc_d3, loc_a3 ])
+
+  end
+
+
   # Network Rail TD.net message parsing
 
   it "should parse a raw Train Describer CA message" do

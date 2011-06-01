@@ -279,6 +279,35 @@ module TSDBExplorer
   end
 
 
+  # Sort a list of trains on arrival, pass and departure times
+
+  def TSDBExplorer.train_sort(a, b)
+
+    if !a[:arrival].nil? && !a[:departure].nil?
+      cmp_a = :departure  # CALL
+    elsif !a[:arrival].nil? && a[:departure].nil?
+      cmp_a = :arrival    # TERM
+    elsif a[:arrival].nil? && !a[:departure].nil?
+      cmp_a = :departure  # ORIG
+    else
+      cmp_a = :pass
+    end
+
+    if !b[:arrival].nil? && !b[:departure].nil?
+      cmp_b = :departure  # CALL
+    elsif !b[:arrival].nil? && b[:departure].nil?
+      cmp_b = :arrival    # TERM
+    elsif b[:arrival].nil? && !b[:departure].nil?
+      cmp_b = :departure  # ORIG
+    else
+      cmp_b = :pass
+    end 
+
+    return a[cmp_a] <=> b[cmp_b]
+
+  end
+
+
   module CIF
 
     # Process a record from a CIF file and return the data as a Hash
