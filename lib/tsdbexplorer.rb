@@ -333,13 +333,13 @@ module TSDBExplorer
         when "BX"
           { :delete => [ :spare ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :applicable_timetable, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
         when "LO"
-          { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
+          { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
         when "LI"
-          { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
+          { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
         when "CR"
           { :delete => [ :spare ], :strip => [ :tiploc_code, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
         when "LT"
-          { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :public_arrival, 4 ], [ :platform, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :spare, 43 ] ] }
+          { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :public_arrival, 4 ], [ :platform, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :spare, 43 ] ] }
         when "ZZ"
           { :delete => [], :format => [] }
         else

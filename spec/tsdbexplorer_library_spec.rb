@@ -186,19 +186,19 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should correctly parse a CIF 'LO' record" do
-    expected_data = {:performance_allowance=>nil, :platform=>"3", :departure=>"0910 ", :public_departure=>"0000", :record_identity=>"LO", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"PENZNCE", :pathing_allowance=>nil, :activity=>"TBRMA -D    ", :tiploc_instance=>nil}
+    expected_data = {:performance_allowance=>nil, :platform=>"3", :departure=>"0910 ", :public_departure=>"0000", :record_identity=>"LO", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"PENZNCE", :pathing_allowance=>nil, :activity=>"TBRMA -D", :tiploc_instance=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('LOPENZNCE 0910 00003         TBRMA -D                                           ')
     expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
   end
 
   it "should correctly parse a CIF 'LI' record" do
-    expected_data = {:performance_allowance=>nil, :platform=>"15", :pass=>nil, :path=>nil, :departure=>"1532H", :arrival=>"1429H", :public_departure=>"0000", :public_arrival=>"0000", :record_identity=>"LI", :engineering_allowance=>nil, :line=>"E", :tiploc_code=>"EUSTON", :pathing_allowance=>nil, :activity=>"RMOP        ", :tiploc_instance=>nil}
+    expected_data = {:performance_allowance=>nil, :platform=>"15", :pass=>nil, :path=>nil, :departure=>"1532H", :arrival=>"1429H", :public_departure=>"0000", :public_arrival=>"0000", :record_identity=>"LI", :engineering_allowance=>nil, :line=>"E", :tiploc_code=>"EUSTON", :pathing_allowance=>nil, :activity=>"RMOP", :tiploc_instance=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('LIEUSTON  1429H1532H     0000000015 E     RMOP                                  ')
     expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
   end
 
   it "should correctly parse a CIF 'LT' record" do
-    expected_data = {:platform=>nil, :path=>nil, :arrival=>"0417 ", :public_arrival=>"0000", :record_identity=>"LT", :tiploc_code=>"DITTFLR", :activity=>"TFPR        ", :tiploc_instance=>nil}
+    expected_data = {:platform=>nil, :path=>nil, :arrival=>"0417 ", :public_arrival=>"0000", :record_identity=>"LT", :tiploc_code=>"DITTFLR", :activity=>"TFPR", :tiploc_instance=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('LTDITTFLR 0417 0000      TFPR                                                   ')
     expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
   end
@@ -328,7 +328,7 @@ describe "lib/tsdbexplorer.rb" do
     schedule = BasicSchedule.first
     schedule_expected_data.collect.each { |k,v| schedule[k].should eql(v) }
 
-    origin_expected_data = {:platform=>"10", :public_departure=>Time.parse('2010-12-12 18:34:00'), :engineering_allowance=>nil, :location_type=>"LO", :pathing_allowance=>nil, :tiploc_code =>"EUSTON", :line=>"C", :activity=>"TB          ", :performance_allowance=>nil, :departure=>Time.parse('2010-12-12 18:34:00')}
+    origin_expected_data = {:platform=>"10", :public_departure=>Time.parse('2010-12-12 18:34:00'), :engineering_allowance=>nil, :location_type=>"LO", :pathing_allowance=>nil, :tiploc_code =>"EUSTON", :line=>"C", :activity=>"TB", :performance_allowance=>nil, :departure=>Time.parse('2010-12-12 18:34:00')}
     origin = Location.find(:first, :conditions => { :location_type => 'LO' })
     origin_expected_data.collect.each { |k,v| origin[k].should eql(v) }
 
@@ -336,9 +336,20 @@ describe "lib/tsdbexplorer.rb" do
     intermediate = Location.find(:first, :conditions => { :location_type => 'LI' })
     intermediate_expected_data.collect.each { |k,v| intermediate[k].should eql(v) }
 
-    terminate_expected_data = {:platform=>"3", :arrival=>Time.parse('2010-12-12 19:46:00'), :path=>nil, :public_arrival=>Time.parse('2010-12-12 19:46:00'), :location_type=>"LT", :tiploc_code=>"NMPTN", :activity=>"TF          "}
+    terminate_expected_data = {:platform=>"3", :arrival=>Time.parse('2010-12-12 19:46:00'), :path=>nil, :public_arrival=>Time.parse('2010-12-12 19:46:00'), :location_type=>"LT", :tiploc_code=>"NMPTN", :activity=>"TF"}
     terminate = Location.find(:first, :conditions => { :location_type => 'LT' })
     terminate_expected_data.collect.each { |k,v| terminate[k].should eql(v) }
+  end
+
+  it "should generate and maintain a UUID between a BasicSchedule and each Location in that schedule for each date the train runs" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
+    first_schedule = BasicSchedule.find(1)
+    first_location = Location.find_by_departure(Time.parse('2010-12-12 18:34:00'))
+    second_schedule = BasicSchedule.find(2)
+    second_location = Location.find_by_departure(Time.parse('2010-12-19 18:34:00'))
+
+    first_schedule.uuid.should eql(first_location.basic_schedule_uuid)
+    second_schedule.uuid.should eql(second_location.basic_schedule_uuid)
   end
 
   it "should process a set of STP Overlay BS/BX/LO/LI/LT records in a CIF file" do
