@@ -140,7 +140,7 @@ module ApplicationHelper
 
 
   def decode_reservations(reservations)
-    
+
     reservation_hash = {
       "A" => "Reservations compulsory",
       "E" => "Reservations essential for bicycles",
@@ -148,13 +148,15 @@ module ApplicationHelper
       "S" => "Reservations possible"
     }
 
-    if reservation_hash.has_key? reservations
-      decoded_reservations = reservation_hash[reservations]
+    if reservations == " " || reservations.nil?
+      decoded_reservations = "Not available"
+    elsif reservation_hash.has_key? reservations
+      decoded_reservations = "#{reservations}: #{reservation_hash[reservations]}"
     else
-      decoded_reservations = "Unknown"
+      decoded_reservations = "#{reservations}: Unknown"
     end
 
-    return "#{reservations}: #{decoded_reservations}"
+    return decoded_reservations
 
   end
 
