@@ -25,6 +25,8 @@ describe BasicSchedule do
     @valid_record = { :train_uid => 'A00000', :status => 'P', :run_date => '2011-01-01', :category => 'OO', :train_identity => '2A00', :headcode => '0000', :service_code => '00000000', :portion_id => '0', :power_type => 'EMU', :timing_load => '321', :speed => '100', :operating_characteristics => 'C', :train_class => 'B', :sleepers => 'B', :reservations => 'S', :connection_indicator => 'X', :catering_code => 'T', :service_branding => 'E'}
   end
 
+  it "should auto-generate a UUID"
+
   it "should be valid with all required fields" do
 
     basic_schedule = BasicSchedule.new(@valid_record)
@@ -232,6 +234,21 @@ describe BasicSchedule do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
     BasicSchedule.first.should respond_to (:locations)
     BasicSchedule.first.locations.count.should eql(18)
+  end
+
+  it "should have a relationship with all associations for this journey"
+
+  it "should delete all associated Locations when it is deleted" do
+    BasicSchedule.count.should eql(0)
+    Location.count.should eql(0)
+    expected_data_before = {:tiploc=>{:insert=>0, :amend=>0, :delete=>0}, :schedule=>{:insert=>1, :amend=>0, :delete=>0}, :association=>{:insert=>0, :amend=>0, :delete=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_dependent_part1.cif').should eql(expected_data_before)
+    BasicSchedule.count.should eql(1)
+    Location.count.should eql(2)
+    expected_data_after = {:tiploc=>{:insert=>0, :amend=>0, :delete=>0}, :schedule=>{:insert=>0, :amend=>0, :delete=>1}, :association=>{:insert=>0, :amend=>0, :delete=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_dependent_part2.cif').should eql(expected_data_after)
+    BasicSchedule.count.should eql(0)
+    Location.count.should eql(0)
   end
 
 end

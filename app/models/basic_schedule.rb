@@ -34,6 +34,6 @@ class BasicSchedule < ActiveRecord::Base
   validates_format_of :catering_code, :with => /[CFHMRT]{0,2}/, :allow_blank => true
   validates_inclusion_of :service_branding, :in => ['E', 'U'], :allow_blank => true
 
-  has_many :locations, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid
+  has_many :locations, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid, :dependent => :delete_all
 
 end

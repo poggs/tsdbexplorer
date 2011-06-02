@@ -329,7 +329,7 @@ module TSDBExplorer
         when "AA"
           { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
         when "BS"
-          { :delete => [ :spare, :course_indicator ], :convert_yymmdd => [ :runs_from, :runs_to ], :format => [ [ :transaction_type, 1 ], [ :train_uid, 6 ], [ :runs_from, 6 ], [ :runs_to, 6 ], [ :days_run, 7 ], [ :bh_running, 1 ], [ :status, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :spare, 1 ], [ :stp_indicator, 1 ] ] }
+          { :delete => [ :spare, :course_indicator ], :strip => [ :operating_characteristics ], :convert_yymmdd => [ :runs_from, :runs_to ], :format => [ [ :transaction_type, 1 ], [ :train_uid, 6 ], [ :runs_from, 6 ], [ :runs_to, 6 ], [ :days_run, 7 ], [ :bh_running, 1 ], [ :status, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :spare, 1 ], [ :stp_indicator, 1 ] ] }
         when "BX"
           { :delete => [ :spare ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :applicable_timetable, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
         when "LO"
@@ -425,6 +425,7 @@ module TSDBExplorer
       pending_trans = Hash.new
       pending_trans['Tiploc'] = Array.new
       pending_trans['Association'] = Array.new
+      pending_trans['BasicSchedule'] = Array.new
 
       stats = { :tiploc => { :insert => 0, :amend => 0, :delete => 0 },
                 :association => { :insert => 0, :amend => 0, :delete => 0 },
@@ -434,13 +435,26 @@ module TSDBExplorer
 
       cif_data.each do |record|
 
-        # Process any pending transactions
-
         pending_trans.keys.each do |model|
+
           unless pending_trans[model].blank?
-            eval(model).import pending_trans[model]
+
+            bulk_result = eval(model).import pending_trans[model]
+
+            # Check if any new objects failed to insert, and bail out if so
+
+            unless bulk_result.failed_instances.count == 0
+              bulk_result.failed_instances.each do |failed_instance|
+                puts "Errors encounted whilst processing pending #{model} creation:"
+                puts failed_instance.errors.collect { |k,v| " - #{k} (#{failed_instance.send(k)}): #{v}" }.join ", "
+              end
+              raise "#{bulk_result.failed_instances.count} errors inserting a #{model} object"
+            end
+
             pending_trans[model] = Array.new
+
           end
+
         end
 
         next if end_of_data == 1 && record.blank?
@@ -683,7 +697,6 @@ module TSDBExplorer
 
               schedule[:basic][:run_date] = run_date
               schedule[:basic][:uuid] = UUID.generate
-              pending_trans['BasicSchedule'] = Array.new unless pending_trans.has_key? 'BasicSchedule'
               pending_trans['BasicSchedule'] << BasicSchedule.new(schedule[:basic])
 
               stats[:schedule][action_type] = stats[:schedule][action_type] + 1
@@ -771,7 +784,7 @@ module TSDBExplorer
 
       date_range.each do |run_date|
         schedule = BasicSchedule.find_by_run_date(run_date)
-        schedule.delete
+        schedule.destroy
         stats[:schedule][:delete] = stats[:schedule][:delete] + 1
       end
 

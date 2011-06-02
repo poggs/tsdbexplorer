@@ -23,7 +23,7 @@ class Location < ActiveRecord::Base
 
   validates_inclusion_of :location_type, :in => ['LO', 'LI', 'LT']
 
-  belongs_to :basic_schedule, :primary_key => :uuid
+  belongs_to :basic_schedule, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid
   has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
 end
