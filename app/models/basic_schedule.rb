@@ -31,7 +31,7 @@ class BasicSchedule < ActiveRecord::Base
   validates_inclusion_of :sleepers, :in => ['B', 'F', 'S'], :allow_blank => true
   validates_inclusion_of :reservations, :in => ['A', 'E', 'R', 'S'], :allow_blank => true
   validates_inclusion_of :connection_indicator, :in => ['C', 'S', 'X'], :allow_blank => true, :allow_nil => true
-  validates_format_of :catering_code, :with => /[CFHMRT]{0,2}/, :allow_blank => true
+  validates_format_of :catering_code, :with => /^[CFHMPRT]{0,2}$/, :allow_blank => true
   validates_inclusion_of :service_branding, :in => ['E', 'U'], :allow_blank => true
 
   has_many :locations, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid, :dependent => :delete_all

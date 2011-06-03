@@ -209,10 +209,10 @@ describe BasicSchedule do
       BasicSchedule.new(@valid_record).should be_valid
     end
 
-#    [ 'Z', '3' ].each do |catering_code|
-#      @valid_record[:catering_code] = catering_code
-#      BasicSchedule.new(@valid_record).should_not be_valid
-#    end
+    [ 'Z', '3' ].each do |catering_code|
+      @valid_record[:catering_code] = catering_code
+      BasicSchedule.new(@valid_record).should_not be_valid
+    end
 
   end
 
