@@ -1,0 +1,15 @@
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $().ready(function() {
+   $("#location").autocomplete({ source: "/search/location", minLength: 3 });
+   });
+ </script>
+<% end %>
+<%= content_for :head do %>
+ <%= stylesheet_link_tag 'autocomplete' %>
+<% end %>
+
+<form id="search">
+ <p>Show me trains at <input name="location" id="location"> <input type="submit" value="&gt;" /></p>
+ <input type="hidden" name="target_time" size="20" value="<%= @time.strftime('%Y-%m-%d %H:%M') %>"/></td>
+</form>

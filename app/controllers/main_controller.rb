@@ -19,7 +19,53 @@
 
 class MainController < ApplicationController
 
+  # Handle the front page
+
   def index
+
+    if params[:target_time]
+      @time = Time.parse(params[:target_time])
+    else
+      @time = Time.now
+    end
+
+    range_from = (@time - 2.hours).strftime('%Y-%m-%d %H:%M:00')
+    range_to = (@time + 2.hours).strftime('%Y-%m-%d %H:%M:00')
+
+    @location = Tiploc.find_by_tiploc_code(params[:location])
+
+    unless @location.nil?
+      @schedule = Location.where("tiploc_code = ? and ((departure BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (arrival BETWEEN ? AND ?))", @location.tiploc_code, range_from, range_to, range_from, range_to, range_from, range_to)
+    end
+
+  end
+
+
+  # Display a single schedule
+
+  def schedule
+
+    @schedule = BasicSchedule.find_by_uuid(params[:uuid])
+
+    render 'common/_schedule.erb'
+
+  end
+
+
+  # Search the TIPLOC records for a value
+
+  def search
+
+    if params[:term].length == 3
+      conditions = [ 'crs_code = ?', params[:term] ]
+    else
+      conditions = [ 'tiploc_code LIKE ? OR tps_description LIKE ?', '%' + params[:term].upcase + '%', '%' + params[:term].upcase + '%' ]
+    end
+
+    matches = Tiploc.find(:all, :conditions => conditions, :limit => 25).collect { |m| { :id => m.tiploc_code, :label => m.tps_description + " (" + (m.crs_code.blank? ? m.tiploc_code : m.crs_code) + ")", :value => m.tiploc_code } }
+
+    render :json => matches
+
   end
 
 end

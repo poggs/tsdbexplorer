@@ -19,6 +19,8 @@
 
 Tsdbexplorer::Application.routes.draw do
 
+  match ':controller(/:action(/:id(.:format)))'
+  match '/search/location', :controller => 'main', :action => 'search'
   root :to => "main#index"
 
 end

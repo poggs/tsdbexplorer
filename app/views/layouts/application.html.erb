@@ -4,22 +4,25 @@
   <title>TSDB Explorer<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
   <%= stylesheet_link_tag :all %>
   <%= yield(:head) %>
-  <%= javascript_include_tag "tsdbexplorer", "jquery.min" %>
+  <%= javascript_include_tag "tsdbexplorer", "jquery.min", "jquery-ui-1.8.12.custom.min" %>
   <%= csrf_meta_tag %>
+  <%= yield(:script) %>
  </head>
  <body>
+  <div id="page">
 
-  <h1>TSDB Explorer</h1>
+   <div id="header">
+    TSDB Explorer
+   </div>
 
-  <div id="disclaimer">
-   <p>Data contained within this system is not real-time and <u>must not</u> be used for safety-critical activities.</p>
+   <div id="body"> 
+    <%= yield %>
+   </div>
+
+   <div id="footer">
+    TSDB Explorer is &copy;2011 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a>. Data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>.
+   </div>
+
   </div>
-
-  <%= yield %>
-
-  <div id="footer">
-   <p>TSDBExplorer is &copy;2011 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a>.  Data supplied by <a href="http://www.networkrail.co.uk/">Network Rail</a>.</p>
-  </div>
-
  </body>
 </html>

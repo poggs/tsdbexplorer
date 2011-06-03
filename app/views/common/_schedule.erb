@@ -1,0 +1,50 @@
+
+<% if @schedule.nil? %>
+
+ <p>Schedule not found.</p>
+
+<% else %>
+
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $(document).ready( function() {
+   $("tr:nth-child(odd)").addClass("odd");
+  });
+ </script>
+<% end %>
+
+<table>
+ <tr>
+  <th>Runs on</th>
+  <th>Identity</th>
+  <th>UID</th>
+  <th>Category</th>
+  <th>Train type</th>
+  <th>Service Code</th>
+  <th>Reservations</th>
+ </tr>
+ <tr>
+  <td><%= @schedule.run_date %></td>
+  <td><%= @schedule.train_identity %></td>
+  <td><%= @schedule.train_uid %></td>
+  <td><%= decode_train_category(@schedule.category) %></td>
+  <td><%= @schedule.power_type %><%= @schedule.timing_load %> at <%= @schedule.speed %>mph</td>
+  <td><%= @schedule.service_code %></td>
+  <td><%= decode_reservations(@schedule.reservations) %></td>
+ </tr>
+</table>
+
+<table>
+ <tr><th>Location</th><th>Platform</th><th>Arrival</th><th>Pass</th><th>Departure</th></tr>
+ <% @schedule.locations.each do |location| %>
+  <tr>
+   <td><%= location.tiploc.tps_description %></td>
+   <td><%= location.platform %></td>
+   <td><%= time_only(location.arrival) %></td>
+   <td><%= time_only(location.pass) %></td>
+   <td><%= time_only(location.departure) %></td>
+  </tr>
+ <% end %>
+</table>
+
+<% end %>

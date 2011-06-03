@@ -1,2 +1,5 @@
+<%= render :partial => 'common/service_search' %>
 
-foo
+<% if @schedule.is_a? ActiveRecord::Relation %>
+ <%= render :partial => 'common/location' %>
+<% end %>
