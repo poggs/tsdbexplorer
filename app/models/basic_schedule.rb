@@ -26,7 +26,7 @@ class BasicSchedule < ActiveRecord::Base
   validates_format_of :service_code, :with => /\d{4}/, :allow_nil => true, :allow_blank => true
   validates_inclusion_of :portion_id, :in => ['0', '1', '2', '4', '8', 'Z'], :allow_nil => true, :allow_blank => true
   validates_format_of :speed, :with => /\d+/, :allow_nil => true, :allow_blank => true
-  validates_inclusion_of :operating_characteristics, :in => ['B', 'C', 'D', 'E', 'G', 'M', 'P', 'Q', 'R', 'S', 'Y', 'Z', ' '], :allow_nil => true, :allow_blank => true
+  validates_format_of :operating_characteristics, :with => /^[BCDEGMPQRSYZ]{1,6}$/, :allow_blank => true
   validates_inclusion_of :train_class, :in => ['B', 'S'], :allow_blank => true, :allow_nil => true
   validates_inclusion_of :sleepers, :in => ['B', 'F', 'S'], :allow_blank => true
   validates_inclusion_of :reservations, :in => ['A', 'E', 'R', 'S'], :allow_blank => true

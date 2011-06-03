@@ -134,7 +134,7 @@ describe BasicSchedule do
 
   it "should enforce the format of the Operating Characteristics" do
 
-    [ nil, '', 'B', 'C', 'D', 'E', 'G', 'M', 'P', 'Q', 'R', 'S', 'Y', 'Z' ].each do |operating_characteristics|
+    [ nil, '', 'B', 'C', 'D', 'E', 'G', 'M', 'P', 'Q', 'R', 'S', 'Y', 'Z', 'BC', 'BCD', 'BCDE', 'BCDEG', 'BCDEGM' ].each do |operating_characteristics|
       @valid_record[:operating_characteristics] = operating_characteristics
       BasicSchedule.new(@valid_record).should be_valid
     end
