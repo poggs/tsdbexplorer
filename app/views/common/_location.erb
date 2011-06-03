@@ -23,7 +23,7 @@
  <tr>
   <td><%= link_to train.basic_schedule.train_identity, { :action => 'schedule', :uuid => train.basic_schedule_uuid } %></td>
   <td><%= time_only(train.arrival) %></td>
-  <td><%= time_only(train.platform) %></td>
+  <td><%= train.platform %></td>
   <td><%= train.basic_schedule.locations.first.tiploc.tps_description %></td>
   <td><%= time_only(train.pass) %></td>
   <td><%= train.basic_schedule.locations.last.tiploc.tps_description %></td>
