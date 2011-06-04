@@ -331,7 +331,7 @@ module TSDBExplorer
         when "BS"
           { :delete => [ :spare, :course_indicator ], :strip => [ :operating_characteristics, :catering_code ], :convert_yymmdd => [ :runs_from, :runs_to ], :format => [ [ :transaction_type, 1 ], [ :train_uid, 6 ], [ :runs_from, 6 ], [ :runs_to, 6 ], [ :days_run, 7 ], [ :bh_running, 1 ], [ :status, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :spare, 1 ], [ :stp_indicator, 1 ] ] }
         when "BX"
-          { :delete => [ :spare ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :applicable_timetable, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
+          { :delete => [ :spare, :traction_class ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :ats_code, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
         when "LO"
           { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
         when "LI"
@@ -680,6 +680,11 @@ module TSDBExplorer
             if schedule[:basic][:stp_indicator] == "O"
               stats = TSDBExplorer::CIF::delete_bs_record(schedule[:basic], stats)
             end
+
+            # Merge the data from the BX record
+
+            schedule[:basic_schedule_extended].delete :record_identity
+            schedule[:basic].merge! schedule[:basic_schedule_extended]
 
             date_range = TSDBExplorer.date_range_to_list(schedule[:basic][:runs_from], schedule[:basic][:runs_to], schedule[:basic][:days_run])
             schedule[:basic].delete :runs_from

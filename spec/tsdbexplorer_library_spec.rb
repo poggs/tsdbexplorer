@@ -180,7 +180,7 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should correctly parse a CIF 'BX' record" do
-    expected_data = {:uic_code=>"48488", :atoc_code=>"ZZ", :applicable_timetable=>"Y", :record_identity=>"BX", :rsid=>nil, :data_source=>nil, :traction_class=>nil}
+    expected_data = {:uic_code=>"48488", :atoc_code=>"ZZ", :ats_code=>"Y", :record_identity=>"BX", :rsid=>nil, :data_source=>nil, :traction_class=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('BX    48488ZZY                                                                  ')
     expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
   end
@@ -350,6 +350,11 @@ describe "lib/tsdbexplorer.rb" do
 
     first_schedule.uuid.should eql(first_location.basic_schedule_uuid)
     second_schedule.uuid.should eql(second_location.basic_schedule_uuid)
+  end
+
+  it "should record the fields from a BX record in a BasicSchedule object" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
+    BasicSchedule.first.atoc_code.should eql('LM')
   end
 
   it "should process a set of STP Overlay BS/BX/LO/LI/LT records in a CIF file" do
