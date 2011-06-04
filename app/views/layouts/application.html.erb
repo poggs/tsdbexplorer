@@ -12,7 +12,7 @@
   <div id="page">
 
    <div id="header">
-    TSDB Explorer
+    TSDB Explorer<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %>
    </div>
 
    <div id="body"> 
