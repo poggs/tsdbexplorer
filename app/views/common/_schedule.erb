@@ -16,28 +16,46 @@
 <table>
  <tr>
   <th>Runs on</th>
-  <th>Operator</th>
   <th>Identity</th>
   <th>UID</th>
   <th>Category</th>
   <th>Train type</th>
   <th>Service Code</th>
-  <th>Reservations</th>
+  <th>Status</th>
  </tr>
  <tr>
   <td><%= @schedule.run_date %></td>
-  <td><%= @schedule.atoc_code %></td>
   <td><%= @schedule.train_identity %></td>
   <td><%= @schedule.train_uid %></td>
   <td><%= decode_train_category(@schedule.category) %></td>
   <td><%= @schedule.power_type %><%= @schedule.timing_load %> at <%= @schedule.speed %>mph</td>
   <td><%= @schedule.service_code %></td>
+  <td><%= decode_train_status(@schedule.status) %></td>
+ </tr>
+</table>
+
+<table>
+ <tr>
+  <th>Operator</th>
+  <th>Seating</th>
+  <th>Catering</th>
+  <th>Reservations</th>
+ </tr>
+ <tr>
+  <td><%= @schedule.atoc_code %></td>
+  <td><%= decode_train_class(@schedule.train_class) %></td>
+  <td><%= decode_catering(@schedule.catering_code) %></td>
   <td><%= decode_reservations(@schedule.reservations) %></td>
  </tr>
 </table>
 
 <table>
- <tr><th>Location</th><thPlatform</th><th>Arrival</th><th>Pass</th><th>Departure</th></tr>
+ <tr><th>Location</th>
+ <th>Platform</th>
+ <th>Arrival</th>
+ <th>Pass</th>
+ <th>Departure</th>
+ </tr>
  <% @schedule.locations.each do |location| %>
   <tr>
    <td><%= location.tiploc.tps_description %></td>
