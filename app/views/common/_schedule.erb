@@ -16,6 +16,7 @@
 <table>
  <tr>
   <th>Runs on</th>
+  <th>Operator</th>
   <th>Identity</th>
   <th>UID</th>
   <th>Category</th>
@@ -25,6 +26,7 @@
  </tr>
  <tr>
   <td><%= @schedule.run_date %></td>
+  <td><%= @schedule.atoc_code %></td>
   <td><%= @schedule.train_identity %></td>
   <td><%= @schedule.train_uid %></td>
   <td><%= decode_train_category(@schedule.category) %></td>
@@ -35,7 +37,7 @@
 </table>
 
 <table>
- <tr><th>Location</th><th>Platform</th><th>Arrival</th><th>Pass</th><th>Departure</th></tr>
+ <tr><th>Location</th><thPlatform</th><th>Arrival</th><th>Pass</th><th>Departure</th></tr>
  <% @schedule.locations.each do |location| %>
   <tr>
    <td><%= location.tiploc.tps_description %></td>
