@@ -23,6 +23,8 @@ class MainController < ApplicationController
 
   def index
 
+    redirect_to :action => 'setup' if BasicSchedule.count == 0
+
     if params[:target_time]
       @time = Time.parse(params[:target_time])
     else
@@ -37,6 +39,15 @@ class MainController < ApplicationController
     unless @location.nil?
       @schedule = Location.where("tiploc_code = ? and ((departure BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (arrival BETWEEN ? AND ?))", @location.tiploc_code, range_from, range_to, range_from, range_to, range_from, range_to)
     end
+
+  end
+
+
+  # Present a setup/welcome page if there are no BasicSchedules, otherwise redirect back to the main page
+
+  def setup
+
+    redirect_to :action => 'index' if BasicSchedule.count > 0
 
   end
 
