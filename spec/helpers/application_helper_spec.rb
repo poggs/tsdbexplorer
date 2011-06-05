@@ -46,6 +46,8 @@ describe ApplicationHelper do
   end
 
   it "should gracefully handle an unknown train class" do
+    decode_train_class(nil).should eql('Unknown')
+    decode_train_class('').should eql('Unknown')
     decode_train_class('$').should eql('$: Unknown')
   end
 
@@ -78,6 +80,18 @@ describe ApplicationHelper do
 
   it "should gracefully handle an unknown catering code" do
     decode_catering('R$').should eql('Restaurant, Unknown facility $')
+  end
+
+  it "should convert operating characteristics in to text" do
+    decode_operating_characteristics('B').should eql('B: Vacuum Braked')
+    decode_operating_characteristics('Q').should eql('Q: Runs as required')
+    decode_operating_characteristics('BQ').should eql('B: Vacuum Braked, Q: Runs as required')
+  end
+
+  it "should gracefully handle an unknown operatic characteristic" do
+    decode_operating_characteristics(nil).should eql('None')
+    decode_operating_characteristics('').should eql('None')
+    decode_operating_characteristics('$').should eql('$: Unknown')
   end
 
 end

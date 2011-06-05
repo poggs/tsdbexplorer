@@ -22,6 +22,7 @@
   <th>Train type</th>
   <th>Service Code</th>
   <th>Status</th>
+  <th>Characteristics</th>
  </tr>
  <tr>
   <td><%= @schedule.run_date %></td>
@@ -31,6 +32,7 @@
   <td><%= @schedule.power_type %><%= @schedule.timing_load %> at <%= @schedule.speed %>mph</td>
   <td><%= @schedule.service_code %></td>
   <td><%= decode_train_status(@schedule.status) %></td>
+  <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
  </tr>
 </table>
 
