@@ -6,7 +6,22 @@
  </script>
 <% end %>
 
-<p>Showing <%= @schedule.count %> trains at <%= @location.tps_description %><%= @location.crs_code? ? " (" + @location.crs_code + ")" : "" %></p>
+<table>
+ <tr>
+  <th>TIPLOC</th>
+  <th>Location</th>
+  <th>CRS code</th>
+  <th>NALCO</th>
+  <th>STANOX</th>
+ </tr>
+ <tr>
+  <td><%= @location.tiploc_code %></td>
+  <td><%= @location.tps_description %></td>
+  <td><%= @location.crs_code %></td>
+  <td><%= @location.nalco %></td>
+  <td><%= @location.stanox %></td>
+ </tr>
+</table>
 
 <table>
  <tr>

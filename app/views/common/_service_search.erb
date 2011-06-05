@@ -10,6 +10,9 @@
 <% end %>
 
 <form id="search">
- Show me trains at <input name="location" id="location"> <input type="submit" value="&gt;" />
- <input type="hidden" name="target_time" size="20" value="<%= @time.strftime('%Y-%m-%d %H:%M') %>"/></td>
+ <p>
+  Show me trains at <input name="location" id="location" value="<%= params[:location] %>">
+  on <input name="target_time" size="20" value="<%= @time.strftime('%Y-%m-%d %H:%M') %>"/>
+  <input type="submit" value="&gt;" />
+ </p>
 </form>
