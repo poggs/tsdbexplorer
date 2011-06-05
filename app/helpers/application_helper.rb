@@ -234,4 +234,18 @@ module ApplicationHelper
 
   end
 
+  def decode_tiploc(obj)
+
+    decoded_tiploc = nil
+
+    if obj.is_a? Tiploc
+      decoded_tiploc = (obj.tps_description.blank? || obj.tps_description.nil?) ? obj.tiploc_code : obj.tps_description
+    elsif obj.is_a? Location
+      decoded_tiploc = obj.tiploc.nil? ? obj.tiploc_code : obj.tiploc.tps_description
+    end
+
+    return decoded_tiploc
+
+  end
+
 end

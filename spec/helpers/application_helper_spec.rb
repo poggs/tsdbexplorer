@@ -94,4 +94,22 @@ describe ApplicationHelper do
     decode_operating_characteristics('$').should eql('$: Unknown')
   end
 
+  it "should convert a Tiploc object in to text" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
+    decode_tiploc(Tiploc.first).should eql('LONDON EUSTON')
+  end
+
+  it "should convert a Tiploc object in to text" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
+    decode_tiploc(Tiploc.first).should eql('LONDON EUSTON')
+  end
+
+  it "should return the description for a Location object referencing a known TIPLOC"
+
+  it "should return the Tiploc code for a Location object referring to an unknown TIPLOC" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
+    location = Location.first
+    decode_tiploc(location).should eql('EUSTON')
+  end
+
 end
