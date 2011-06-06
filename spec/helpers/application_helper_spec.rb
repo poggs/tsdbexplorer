@@ -112,4 +112,12 @@ describe ApplicationHelper do
     decode_tiploc(location).should eql('EUSTON')
   end
 
+  it "should tidy up text with railway jargon and abbreviations" do
+    tidy_text("JUNCTION ROAD JN.").should eql('Junction Road Junction')
+    tidy_text("LONDN RD SDGS").should eql('London Road Sidings')
+    tidy_text(nil).should eql("")
+    tidy_text("").should eql("")
+    tidy_text("FOOINGHAM").should eql("Fooingham")
+  end
+
 end

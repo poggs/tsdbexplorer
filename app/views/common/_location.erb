@@ -16,7 +16,7 @@
  </tr>
  <tr>
   <td><%= @location.tiploc_code %></td>
-  <td><%= @location.tps_description %></td>
+  <td><%= tidy_text(@location.tps_description) %></td>
   <td><%= @location.crs_code %></td>
   <td><%= @location.nalco %></td>
   <td><%= @location.stanox %></td>

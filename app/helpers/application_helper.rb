@@ -244,7 +244,69 @@ module ApplicationHelper
       decoded_tiploc = obj.tiploc.nil? ? obj.tiploc_code : obj.tiploc.tps_description
     end
 
-    return decoded_tiploc
+    return tidy_text(decoded_tiploc)
+
+  end
+
+
+  # Replace railway jargon and abbreviations in text with more accessible
+  # words, e.g.  "JN." becomes "Junction", "SDGS" becomes "Sidings".
+
+  def tidy_text(tiploc)
+
+    words = Array.new
+
+    words = tiploc.split(' ') unless tiploc.nil?
+
+    abbreviations = { 'JN.' => 'Junction',
+                      'JN' => 'Junction',
+                      'J' => 'Junction',
+                      'INTL' => 'International',
+                      'D.M.U.D.' => 'DMUD',
+                      'E.M.U.D.' => 'EMUD',
+                      'RD' => 'Road',
+                      'RD.' => 'Road',
+                      'N' => 'North',
+                      'N.' => 'North',
+                      'NTH' => 'North',
+                      'S' => 'South',
+                      'S.' => 'South',
+                      'STH' => 'South',
+                      'ST' => 'St.',
+                      'W' => 'West',
+                      'E' => 'East',
+                      'S.B.' => 'Signal Box',
+                      'LONDN' => 'London',
+                      'SDGS' => 'Sidings',
+                      'L.U.L.' => '(LUL)' }
+
+    new_words = Array.new
+
+    words.each do |part|
+
+      # Check if this word is in the abbreviations hash, and if so, use the long version of the abbreviation
+
+      if abbreviations.has_key? part
+
+        new_words.push abbreviations[part]
+
+      else
+
+        # Some locations are in brackets - these require special treatment
+
+        brackets = part.match(/^\((.+)\)/)
+
+        if brackets.nil?
+          new_words.push part.capitalize
+        else
+          new_words.push "(" + brackets[1].capitalize + ")"
+        end
+
+      end
+
+    end
+
+    return new_words.join(' ')
 
   end
 
