@@ -258,7 +258,8 @@ module ApplicationHelper
 
     words = tiploc.split(' ') unless tiploc.nil?
 
-    abbreviations = { 'JN.' => 'Junction',
+    abbreviations = { 'HL' => 'High Level'
+                      'JN.' => 'Junction',
                       'JN' => 'Junction',
                       'J' => 'Junction',
                       'INTL' => 'International',
@@ -271,6 +272,7 @@ module ApplicationHelper
                       'NTH' => 'North',
                       'S' => 'South',
                       'S.' => 'South',
+                      'SDG' => 'Siding',
                       'STH' => 'South',
                       'ST' => 'St.',
                       'W' => 'West',
