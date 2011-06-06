@@ -96,12 +96,12 @@ describe ApplicationHelper do
 
   it "should convert a Tiploc object in to text" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
-    decode_tiploc(Tiploc.first).should eql('LONDON EUSTON')
+    decode_tiploc(Tiploc.first).should eql('London Euston')
   end
 
   it "should convert a Tiploc object in to text" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
-    decode_tiploc(Tiploc.first).should eql('LONDON EUSTON')
+    decode_tiploc(Tiploc.first).should eql('London Euston')
   end
 
   it "should return the description for a Location object referencing a known TIPLOC"

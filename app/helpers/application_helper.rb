@@ -239,12 +239,12 @@ module ApplicationHelper
     decoded_tiploc = nil
 
     if obj.is_a? Tiploc
-      decoded_tiploc = (obj.tps_description.blank? || obj.tps_description.nil?) ? obj.tiploc_code : obj.tps_description
+      decoded_tiploc = tidy_text((obj.tps_description.blank? || obj.tps_description.nil?) ? obj.tiploc_code : obj.tps_description)
     elsif obj.is_a? Location
       decoded_tiploc = obj.tiploc.nil? ? obj.tiploc_code : obj.tiploc.tps_description
     end
 
-    return tidy_text(decoded_tiploc)
+    return decoded_tiploc
 
   end
 
