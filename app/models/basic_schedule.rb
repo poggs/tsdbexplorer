@@ -22,7 +22,6 @@ class BasicSchedule < ActiveRecord::Base
   validates_format_of :train_uid, :with => /[A-Z]\d{5}/
   validates_inclusion_of :status, :in => ['B', 'F', 'P', 'S', 'T', '1', '2', '3', '4', '5']
   validates_format_of :train_identity, :with => /\d[A-Z]\d{2}/
-  validates_format_of :headcode, :with => /\d{4}/, :allow_nil => true, :allow_blank => true
   validates_format_of :service_code, :with => /\d{4}/, :allow_nil => true, :allow_blank => true
   validates_inclusion_of :portion_id, :in => ['0', '1', '2', '4', '8', 'Z'], :allow_nil => true, :allow_blank => true
   validates_format_of :speed, :with => /\d+/, :allow_nil => true, :allow_blank => true

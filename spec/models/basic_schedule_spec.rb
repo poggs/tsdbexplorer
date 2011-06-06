@@ -76,20 +76,6 @@ describe BasicSchedule do
 
   end
 
-  it "should enforce the format of a Headcode" do
-
-    [ nil, '', '    ', '0000', '9999' ].each do |headcode|
-      @valid_record[:headcode] = headcode
-      BasicSchedule.new(@valid_record).should be_valid
-    end
-
-    [ '0', 'AAAAA' ].each do |headcode|
-      @valid_record[:headcode] = headcode
-      BasicSchedule.new(@valid_record).should_not be_valid
-    end
-
-  end
-
   it "should enforce the format of a Service Code" do
 
     [ nil, '', '    ', '00000000', '99999999' ].each do |service_code|
