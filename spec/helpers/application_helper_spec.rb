@@ -118,6 +118,7 @@ describe ApplicationHelper do
     tidy_text(nil).should eql("")
     tidy_text("").should eql("")
     tidy_text("FOOINGHAM").should eql("Fooingham")
+    tidy_text("BARVILLE (BAZCESTER)").should eql('Barville (Bazcester)')
   end
 
 end
