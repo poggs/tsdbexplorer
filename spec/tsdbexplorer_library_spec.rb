@@ -58,12 +58,18 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
-  it "should convert a date in YYMMDD format to YYYY-MM-DD" do
+  it "should convert a date in YYYYMMDDHHMMSS format to YYYY-MM-DD HH:MM:SS" do
 
-    TSDBExplorer.ddmmyy_to_date("010160").should eql("1960-01-01")
-    TSDBExplorer.ddmmyy_to_date("311299").should eql("1999-12-31")
-    TSDBExplorer.ddmmyy_to_date("010100").should eql("2000-01-01")
-    TSDBExplorer.ddmmyy_to_date("311259").should eql("2059-12-31")
+    TSDBExplorer.yyyymmddhhmmss_to_time("19600101120000").should eql(Time.parse("1960-01-01 12:00:00"))
+    TSDBExplorer.yyyymmddhhmmss_to_time("19991231235959").should eql(Time.parse("1999-12-31 23:59:59"))
+    TSDBExplorer.yyyymmddhhmmss_to_time("20000101000000").should eql(Time.parse("2000-01-01 00:00:00"))
+    TSDBExplorer.yyyymmddhhmmss_to_time("20591231235959").should eql(Time.parse("2059-12-31 23:59:59"))
+
+  end
+
+  it "should return nil for an invalid date to be converted to YYYYMMDDHHMMSS format" do
+
+    TSDBExplorer.yyyymmddhhmmss_to_time('00000000000000').should be_nil
 
   end
 

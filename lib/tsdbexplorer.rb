@@ -119,6 +119,21 @@ module TSDBExplorer
   end
 
 
+  # Convert a date/time in YYYYMMDDHHMMSS format to a Time object
+
+  def TSDBExplorer.yyyymmddhhmmss_to_time(datetime)
+
+    begin
+      parsed_time = Time.parse(datetime)
+    rescue
+      parsed_time = nil
+    end
+
+    return parsed_time
+
+  end
+
+
   # Convert a date in YYYY-MM-DD format, and a time in HHMM format
   # (optionally with the letter H appended to indicate 30 seconds), to a
   # Time object
