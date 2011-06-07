@@ -73,6 +73,16 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should convert a date in DDMMYY format to YYYY-MM-DD" do
+
+    TSDBExplorer.ddmmyy_to_date("010160").should eql("1960-01-01")
+    TSDBExplorer.ddmmyy_to_date("311299").should eql("1999-12-31")
+    TSDBExplorer.ddmmyy_to_date("010100").should eql("2000-01-01")
+    TSDBExplorer.ddmmyy_to_date("311259").should eql("2059-12-31")
+
+  end
+
+
   it "should convert a date in YYMMDD format to YYYY-MM-DD" do
 
     TSDBExplorer.yymmdd_to_date("600101").should eql("1960-01-01")
