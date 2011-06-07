@@ -446,6 +446,20 @@ describe "lib/tsdbexplorer.rb" do
 
     [ loc_p1, loc_p2, loc_p3, loc_d1, loc_d2, loc_d3, loc_a1, loc_a2, loc_a3 ].sort { |a,b| TSDBExplorer::train_sort(a,b) }.should eql([ loc_p1, loc_d1, loc_a1, loc_p2, loc_d2, loc_a2, loc_p3, loc_d3, loc_a3 ])
 
+    # Sort trains where one has an arrival and departure time, and the other has a departure time
+
+    loc_ad1 = Location.new(:tiploc_code => '1', :location_type => 'LT', :arrival => '2011-01-01 12:02:00', :departure => '2011-01-01 12:08:00')
+    loc_ad2 = Location.new(:tiploc_code => '2', :location_type => 'LT', :departure => '2011-01-01 12:07:30')
+
+    [ loc_ad1, loc_ad2 ].sort { |a,b| TSDBExplorer::train_sort(a,b) }.should eql([ loc_ad2, loc_ad1 ])
+
+    # Sort trains where both have an arrival and departure time, but one leaves before the other
+
+    loc_ad1 = Location.new(:tiploc_code => '1', :location_type => 'LT', :arrival => '2011-01-01 12:02:00', :departure => '2011-01-01 12:08:00')
+    loc_ad2 = Location.new(:tiploc_code => '2', :location_type => 'LT', :arrival => '2011-01-01 12:01:30', :departure => '2011-01-01 12:07:30')
+
+    [ loc_ad1, loc_ad2 ].sort { |a,b| TSDBExplorer::train_sort(a,b) }.should eql([ loc_ad2, loc_ad1 ])
+
   end
 
 end
