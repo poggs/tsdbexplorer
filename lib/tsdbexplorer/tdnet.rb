@@ -83,6 +83,76 @@ module TSDBExplorer
 
     end
 
+
+    # Parse a TD.net raw message and return the content as a hash
+
+   def TDnet.parse_raw_message(message)
+
+     result = Hash.new
+     result[:message_type] = message[0..3]
+
+     structure = case result[:message_type]
+       when "0001"
+         { :convert_yyyymmddhhmmss => [ :train_creation_timestamp, :schedule_origin_depart_timestamp, :schedule_start_date, :schedule_end_date, :tp_origin_timestamp ], :format => [ [ :train_id, 10 ], [ :train_creation_timestamp, 14 ], [ :schedule_origin_stanox, 5 ], [ :schedule_origin_depart_timestamp, 14 ], [ :train_uid, 6 ], [ :schedule_start_date, 14 ], [ :schedule_end_date, 14 ], [ :schedule_source, 1 ], [ :schedule_type, 1 ], [ :schedule_wtt_id, 5 ], [ :d1266_record_number, 5 ], [ :tp_origin_location, 5 ], [ :tp_origin_timestamp, 14 ], [ :train_call_type, 1 ], [ :train_call_mode, 1 ], [ :toc_id, 2 ], [ :train_service_code, 8 ], [ :train_file_address, 3 ] ] }
+       when "0104"
+         { :format => [ [ :train_id, 10 ], [ :train_cancellation_timestamp, 14 ], [ :location_stanox, 5 ], [ :departure_timestamp, 14 ], [ :original_location, 5 ], [ :original_location_timestamp, 14 ], [ :cancellation_type, 1 ], [ :current_train_id, 10 ], [ :train_service_code, 8 ], [ :cancellation_reason, 2 ], [ :division_code, 2 ], [ :toc_id, 2 ], [ :variation_status, 1 ], [ :train_file_address, 3 ] ] }
+       when "0003"
+         { :convert_yyyymmddhhmmss => [ :actual_timestamp, :gbtt_event_timestamp, :planned_event_timestamp, :original_location_timestamp,  ], :format => [ [ :train_id, 10 ], [ :actual_timestamp, 14 ], [ :location_stanox, 5 ], [ :gbtt_event_timestamp, 14 ], [ :planned_event_timestamp, 14 ], [ :original_location, 5 ], [ :original_location_timestamp, 14 ], [ :planned_event_type, 1 ], [ :event_type, 1 ], [ :planned_event_source, 1 ], [ :correction_indicator, 1 ], [ :offroute_indicator, 1 ], [ :direction_indicator, 1 ], [ :line_indicator, 1 ], [ :platform, 2 ], [ :route, 1 ], [ :current_train_id, 10 ], [ :train_service_code, 8 ], [ :division_code, 2 ], [ :toc_id, 2 ], [ :timetable_variation, 3 ], [ :variation_status, 1 ], [ :next_report, 5 ], [ :next_report_run_time, 3 ], [ :train_terminated, 1 ], [ :delay_monitoring_point, 1 ], [ :train_file_address, 3 ], [ :reporting_stanox, 5 ], [ :auto_expected, 1 ] ] }
+       when "0004"
+         { :convert_yyyymmddhhmmss => [ :actual_timestamp ], :format => [ [ :wtt_id, 4 ], [ :actual_timestamp, 14 ], [ :location_stanox, 5 ], [ :event_type, 1 ], [ :direction_indicator, 1 ], [ :line_indicator, 1 ], [ :platform, 2 ], [ :route, 1 ], [ :division_code, 2 ], [ :variation_status, 1 ] ] }
+       when "0005"
+         { :convert_yyyymmddhhmmss => [ :reinstatement_timestamp, :departure_timestamp, :original_location_timestamp ], :format => [ [ :train_id, 10 ], [ :reinstatement_timestamp, 14 ], [ :location_stanox, 5 ], [ :departure_timestamp, 14 ], [ :original_location, 5 ], [ :original_location_timestamp, 14 ], [ :current_train_id, 10 ], [ :train_service_code, 8 ], [ :division_code, 2 ], [ :toc_id, 2 ], [ :variation_status, 1 ], [ :train_file_address, 3 ] ] }
+       when "0006"
+         { :convert_yyyymmddhhmmss => [ :change_of_origin_timestamp, :departure_timestamp, :original_location_timestamp ], :format => [ [ :train_id, 10 ], [ :change_of_origin_timestamp, 14 ], [ :location_stanox, 5 ], [ :departure_timestamp, 14 ], [ :original_location, 5 ], [ :original_location_timestamp, 14 ], [ :current_train_id, 10 ], [ :train_service_code, 8 ], [ :reason_code, 2 ], [ :division_code, 2 ], [ :toc_id, 2 ], [ :variation_status, 1 ], [ :train_file_address, 3 ] ] }
+       when "0007"
+         { :convert_yyyymmddhhmmss => [ :event_timestamp ], :format => [ [ :train_id, 10 ], [ :event_timestamp, 14 ], [ :revised_train_id, 10 ], [ :current_train_id, 10 ], [ :train_service_code, 8 ], [ :train_file_address, 3 ] ] }
+       when "0008"
+         { :convert_yyyymmddhhmmss => [ :event_timestamp, :planned_timestamp, :original_timestamp ], :format => [ [ :train_id, 10 ], [ :event_timestamp, 14 ], [ :revised_location, 5 ], [ :planned_timestamp, 14 ], [ :original_location, 5 ], [ :original_timestamp, 14 ], [ :current_train_id, 10 ], [ :train_service_code, 8 ], [ :train_file_address, 3 ] ] }
+     end
+
+      structure[:format] = [ [ :message_type, 4 ], [ :message_queue_timestamp, 14 ], [ :source_system_id, 20 ], [ :original_data_source, 20 ], [ :user_id, 8 ], [ :source_dev_id, 8 ] ] + structure[:format]
+      structure[:strip] = [ :source_system_id, :original_data_source, :user_id, :source_dev_id ]
+      structure[:convert_yyyymmddhhmmss] = [ :message_queue_timestamp ] + ( structure[:convert_yyyymmddhhmmss] || [] )
+
+      # Slice up the record in to its fields as defined above
+
+      pos = 0
+
+      structure[:format].each do |field|
+        field_name = field[0].to_sym
+        value = message.slice(pos, field[1])
+        result[field_name] = value.blank? ? nil : value
+        pos = pos + field[1]
+      end
+
+
+      # Delete any unnecessary fields
+
+      if structure.has_key? :delete
+        structure[:delete].each do |field|
+          result.delete field
+        end
+      end
+
+
+      # Reformat certain fields if required
+
+      if structure.has_key? :convert_yyyymmddhhmmss
+        structure[:convert_yyyymmddhhmmss].each do |field|
+          result[field] = TSDBExplorer::yyyymmddhhmmss_to_time(result[field])
+        end
+      end
+
+      if structure.has_key? :strip
+        structure[:strip].each do |field|
+          result[field].strip! unless result[field].nil?
+        end
+      end
+
+      return result
+
+    end
+
   end
 
 end
