@@ -443,6 +443,7 @@ module TSDBExplorer
       pending_trans['Tiploc'] = Array.new
       pending_trans['Association'] = Array.new
       pending_trans['BasicSchedule'] = Array.new
+      pending_trans['Location'] = Array.new
 
       stats = { :tiploc => { :insert => 0, :amend => 0, :delete => 0 },
                 :association => { :insert => 0, :amend => 0, :delete => 0 },
@@ -731,7 +732,7 @@ module TSDBExplorer
               origin_clone[:departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:departure])
               origin_clone[:public_departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:public_departure])
 
-              Location.create!(origin_clone)
+              pending_trans['Location'] << Location.new(origin_clone)
 
 
               # Add an intermediate location
@@ -761,7 +762,7 @@ module TSDBExplorer
 
                 location[:basic_schedule_uuid] = schedule[:basic][:uuid]
 
-                Location.create!(location)
+                pending_trans['Location'] << Location.new(location)
 
               end
 
@@ -774,7 +775,7 @@ module TSDBExplorer
               terminate_clone[:arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:arrival])
               terminate_clone[:public_arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:public_arrival])
 
-              Location.create!(terminate_clone)
+              pending_trans['Location'] << Location.new(terminate_clone)
 
             end
 
