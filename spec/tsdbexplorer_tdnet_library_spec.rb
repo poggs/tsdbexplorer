@@ -106,12 +106,11 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     TSDBExplorer::TDnet::parse_raw_message(data).should eql(expected_data)
   end
 
-  # TODO: Verify the format of the TRUST Cancellation message
-  #it "should process a TRUST Train Cancellation message" do
-  #  data = "010420080418100404TRUST               SMART               USERID  SOURCE  ZAA12345678AE0803311640362K38MS3136050                  44CStanme-A ReasonDescN 362K38MS31                                                                                                          "
-  #  expected_data = { :message_type => '0104', :message_queue_timestamp => Time.parse('2008-04-18 10:04:04'), :source_system_id => 'TRUST', :original_data_source => 'SMART', :user_id => 'USERID', :source_dev_id => 'SOURCE', :train_id => '362K38MS31', :train_cancellation_timestamp => '', :location_stanox => '36050', :departure_timestamp => '', :original_location => nil, :original_location_timestamp => '', :cancellation_type => '', :current_train_id => '', :train_service_code => '', :cancellation_reason => '44', :division_code => 'K3', :toc_id => '8M', :variation_status => 'S', :train_file_address => '' }
-  #  TSDBExplorer::TDnet::parse_raw_message(data).should eql(expected_data)
-  #end
+  it "should process a TRUST Train Cancellation message" do
+    data = "010420080418100404TRUST               SMART               USERID  SOURCE  ZAA12345678AE0803311640362K38MS3136050                  44CStanme-A ReasonDescN 362K38MS31                                                                                                          "
+    expected_data = { :message_type => '0104', :message_queue_timestamp => Time.parse('2008-04-18- 10:04:04'), :source_system_id => 'TRUST', :original_data_source => 'SMART', :user_id => 'USERID', :source_dev_id => 'SOURCE', :zone => 'Z', :area_code => 'AA', :alert_number => '12345678', :record_type => 'AE', :message_date => '080331', :message_timestamp => '1640', :current_train_id => '362K38MS31', :stanox_a => '36050', :cancel_reason_code => '44', :cancel_type => 'C', :stanme_a => 'Stanme-A ', :reason_description => 'ReasonDesc', :attributed_flag => 'N', :rolled_up_flag => nil, :original_train_id => '362K38MS31' }
+    TSDBExplorer::TDnet::parse_raw_message(data).should eql(expected_data)
+  end
 
   it "should process a TRUST Train Movement message" do
     data = "000320060105100109TRUST               SDR                 #CF1CV26VDVF    121456789020070104101525421402007010410152620060104101527     00000000000000TAM    AA01214567890223400007171000      000YY7JK42140Y"
