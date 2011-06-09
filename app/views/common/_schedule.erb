@@ -60,7 +60,7 @@
  </tr>
  <% @schedule.locations.each do |location| %>
   <tr>
-   <td><%= decode_tiploc(location) %></td>
+   <td><%= tidy_text(decode_tiploc(location)) %></td>
    <td><%= location.platform %></td>
    <td><%= time_only(location.arrival) %></td>
    <td><%= time_only(location.pass) %></td>

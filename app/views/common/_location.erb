@@ -44,9 +44,9 @@
     <td><%= link_to train.basic_schedule.train_identity, { :action => 'schedule', :uuid => train.basic_schedule_uuid } %></td>
     <td><%= time_only(train.arrival) %></td>
     <td><%= train.platform %></td>
-    <td><%= decode_tiploc(train.basic_schedule.locations.first) %></td>
+    <td><%= tidy_text(decode_tiploc(train.basic_schedule.locations.first)) %></td>
     <td><%= time_only(train.pass) %></td>
-    <td><%= decode_tiploc(train.basic_schedule.locations.last) %></td>
+    <td><%= tidy_text(decode_tiploc(train.basic_schedule.locations.last)) %></td>
     <td><%= time_only(train.departure) %></td>
     <td>
      <% if train.activity == "TB" %>Starts here<% end %>
