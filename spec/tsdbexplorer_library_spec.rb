@@ -399,6 +399,10 @@ describe "lib/tsdbexplorer.rb" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_invalid.cif') }.should raise_error
   end
 
+  it "should handle train schedules which pass over midnight"
+
+  it "should treat all times in the CIF file as the local timezone"
+
   it "should process delete BS records from a CIF file" do
     expected_data_before = {:schedule=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part1.cif').should eql(expected_data_before)
