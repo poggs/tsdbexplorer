@@ -370,9 +370,8 @@ module TSDBExplorer
       pos = 2
 
       structure[:format].each do |field|
-        field_name = field[0].to_sym
         value = record.slice(pos, field[1])
-        result[field_name] = value.blank? ? nil : value
+        result[field[0]] = value.blank? ? nil : value
         pos = pos + field[1]
       end
 
