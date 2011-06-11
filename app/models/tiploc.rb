@@ -33,20 +33,4 @@ class Tiploc < ActiveRecord::Base
 
   belongs_to :location, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
-  def tiploc_code=(value)
-    write_attribute(:tiploc_code, value.strip)
-  end
-
-  def description=(value)
-    write_attribute(:description, value.strip) unless value.nil?
-  end
-
-  def tps_description=(value)
-    write_attribute(:tps_description, value.strip) unless value.nil?
-  end
-
-  def crs_code=(value)
-    write_attribute(:crs_code, value.strip) unless value.nil?
-  end
-
 end
