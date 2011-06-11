@@ -456,7 +456,7 @@ module TSDBExplorer
 
           unless pending_trans[model].blank?
 
-            bulk_result = eval(model).import pending_trans[model]
+            bulk_result = eval(model).import pending_trans[model], :validate => false
 
             # Check if any new objects failed to insert, and bail out if so
 
