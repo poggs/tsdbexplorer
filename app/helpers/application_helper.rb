@@ -282,6 +282,7 @@ module ApplicationHelper
                       'STH' => 'South',
                       'ST' => 'St.',
                       'STN' => 'Station',
+                      'T.M.D' => 'TMD',
                       'W' => 'West',
                       'E' => 'East',
                       'S.B.' => 'Signal Box',
