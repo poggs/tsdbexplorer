@@ -22,8 +22,12 @@ require 'spec_helper'
 describe Location do
 
   before(:each) do
-    @origin = Location.new({:location_type=>"LO", :tiploc_code=>"EUSTON ", :activity=>"TB          ", :departure=>Time.parse('2011-01-01 15:02:00'), :platform=>"13 ", :line=>"E  ", :public_departure=>Time.parse('2011-01-01 15:02:00'), :engineering_allowance=>nil, :pathing_allowance=>nil, :tiploc_instance=>nil, :performance_allowance=>nil})
+    @origin = Location.new({:location_type=>"LO", :tiploc_code=>"EUSTON", :activity=>"TB", :departure=>Time.parse('2011-01-01 15:02:00'), :platform=>"13", :line=>"E  ", :public_departure=>Time.parse('2011-01-01 15:02:00'), :engineering_allowance=>nil, :pathing_allowance=>nil, :tiploc_instance=>nil, :performance_allowance=>nil})
+    @terminate = Location.new({:location_type=>"LT", :tiploc_code=>"EUSTON", :activity=>"TF", :arrival=>Time.parse('2011-01-01 13:37:00'), :platform=>"9", :path=>nil})
   end
+
+
+  # Origin location tests
 
   it "should require a valid set of fields for an origin location" do
     @origin.should be_valid
@@ -36,18 +40,66 @@ describe Location do
     end
   end
 
-  it "should require a valid departure time in an origin record"
-  it "should require a valid public departure time in an origin record"
-  it "should not allow an arrival time in an origin record"
-  it "should not allow a public arrival time in an origin record"
+  it "should require a valid departure time in an origin record" do
+    @origin.departure = nil
+    @origin.should_not be_valid
+  end
+
+  it "should not allow an arrival time for an origin location" do
+    @origin.arrival = Time.parse('2011-01-01 15:00:0')
+    @origin.should_not be_valid
+  end
+
+  it "should not allow a public arrival time in an origin record" do
+    @origin.public_arrival = Time.parse('2011-01-01 15:00:00')
+    @origin.should_not be_valid
+  end
+
+  it "should not allow a path for an origin location" do
+    @origin.path = "XX"
+    @origin.should_not be_valid
+  end
+
+
+  # Intermediate location tests
+
   it "should require a valid set of fields for an intermediate location"
   it "should require a valid set of fields for a terminating location"
 
-  it "should not allow an arrival time for an origin location"
-  it "should not allow a departure time for a terminating location"
 
-  it "should not allow a path for an origin location"
-  it "should not allow a line for a terminating location"
+  # Terminating location tests
+
+  it "should require a valid set of fields for an terminating location record" do
+    @terminate.should be_valid
+  end
+
+  it "should require a location in a terminating location record" do
+    [ nil, '', '       ' ].each do |invalid_data|
+      @terminate.tiploc_code = invalid_data
+      @terminate.should_not be_valid
+    end
+  end
+
+  it "should require a valid arrival time in a terminating location record" do
+    @terminate.arrival = nil
+    @terminate.should_not be_valid
+  end
+
+  it "should not allow a departure time for a terminating location" do
+    @terminate.departure = Time.parse('2011-01-01 15:05:00')
+    @terminate.should_not be_valid
+  end
+
+  it "should not allow a public departure time for a terminating location" do
+    @terminate.public_departure = Time.parse('2011-01-01 15:05:00')
+    @terminate.should_not be_valid
+  end
+
+  it "should not allow a line for a terminating location" do
+    @terminate.line = "XX"
+    @terminate.should_not be_valid
+  end
+
 
   it "should allow only valid activities to occur at a location"
 
