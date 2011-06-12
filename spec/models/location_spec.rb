@@ -23,6 +23,7 @@ describe Location do
 
   before(:each) do
     @origin = Location.new({:location_type=>"LO", :tiploc_code=>"EUSTON", :activity=>"TB", :departure=>Time.parse('2011-01-01 15:02:00'), :platform=>"13", :line=>"E  ", :public_departure=>Time.parse('2011-01-01 15:02:00'), :engineering_allowance=>nil, :pathing_allowance=>nil, :tiploc_instance=>nil, :performance_allowance=>nil})
+    @intermediate = Location.new({:location_type=>"LI", :tiploc_code=>"EUSTON", :arrival=>Time.parse('2011-01-01 15:02:00'), :departure=>Time.parse('2011-01-01 15:05:00'), :platform=>"2", :line=>"C"})
     @terminate = Location.new({:location_type=>"LT", :tiploc_code=>"EUSTON", :activity=>"TF", :arrival=>Time.parse('2011-01-01 13:37:00'), :platform=>"9", :path=>nil})
   end
 
@@ -63,8 +64,49 @@ describe Location do
 
   # Intermediate location tests
 
-  it "should require a valid set of fields for an intermediate location"
-  it "should require a valid set of fields for a terminating location"
+  it "should require a valid set of fields for an intermediate location" do
+    @intermediate.should be_valid
+  end
+
+  it "should require a location in an intermediate location record" do
+    [ nil, '', '       ' ].each do |invalid_data|
+      @intermediate.tiploc_code = invalid_data
+      @intermediate.should_not be_valid
+    end
+  end
+
+  it "should be valid with an departure and arrival time" do
+
+    original_arrival = @intermediate.arrival
+    @intermediate.arrival = nil
+    @intermediate.should_not be_valid
+    @intermediate.arrival = original_arrival
+
+    original_departure = @intermediate.departure
+    @intermediate.departure = nil
+    @intermediate.should_not be_valid
+
+  end
+
+  it "should be valid with a passing time" do
+    @intermediate.arrival = nil
+    @intermediate.departure = nil
+    @intermediate.pass = Time.parse("2011-01-01 15:05:00")
+    @intermediate.should be_valid
+  end
+
+  it "should not be valid without an arrival/departure time, or a passing time" do
+    @intermediate.arrival = nil
+    @intermediate.departure = nil
+    @intermediate.pass = nil
+    @intermediate.should_not be_valid
+  end
+
+  it "should not be valid with both an arrival/departure time and a passing time" do
+    @intermediate.pass = Time.parse("2011-01-01 15:05:00")
+    @intermediate.should_not be_valid
+  end
+
 
 
   # Terminating location tests
