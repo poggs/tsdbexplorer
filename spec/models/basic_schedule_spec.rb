@@ -22,7 +22,7 @@ require 'spec_helper'
 describe BasicSchedule do
 
   before(:each) do
-    @valid_record = { :train_uid => 'A00000', :status => 'P', :run_date => '2011-01-01', :category => 'OO', :train_identity => '2A00', :headcode => '0000', :service_code => '00000000', :portion_id => '0', :power_type => 'EMU', :timing_load => '321', :speed => '100', :operating_characteristics => 'C', :train_class => 'B', :sleepers => 'B', :reservations => 'S', :connection_indicator => 'X', :catering_code => 'T', :service_branding => 'E'}
+    @valid_record = { :train_uid => 'A00000', :status => 'P', :run_date => '2011-01-01', :category => 'OO', :train_identity => '2A00', :headcode => '0000', :service_code => '00000000', :portion_id => '0', :power_type => 'EMU', :timing_load => '321', :speed => '100', :operating_characteristics => 'C', :train_class => 'B', :sleepers => 'B', :reservations => 'S', :catering_code => 'T', :service_branding => 'E'}
   end
 
   it "should auto-generate a UUID"
@@ -169,20 +169,6 @@ describe BasicSchedule do
 
     [ 'Z', '3' ].each do |reservations|
       @valid_record[:reservations] = reservations
-      BasicSchedule.new(@valid_record).should_not be_valid
-    end
-
-  end
-
-  it "should require a valid Connection Indicator" do
-
-    [ nil, ' ', 'C', 'S', 'X' ].each do |connection_indicator|
-      @valid_record[:connection_indicator] = connection_indicator
-      BasicSchedule.new(@valid_record).should be_valid
-    end
-
-    [ 'Z', '3' ].each do |connection_indicator|
-      @valid_record[:connection_indicator] = connection_indicator
       BasicSchedule.new(@valid_record).should_not be_valid
     end
 

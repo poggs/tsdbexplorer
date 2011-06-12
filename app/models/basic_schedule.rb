@@ -29,7 +29,6 @@ class BasicSchedule < ActiveRecord::Base
   validates_inclusion_of :train_class, :in => ['B', 'S'], :allow_blank => true, :allow_nil => true
   validates_inclusion_of :sleepers, :in => ['B', 'F', 'S'], :allow_blank => true
   validates_inclusion_of :reservations, :in => ['A', 'E', 'R', 'S'], :allow_blank => true
-  validates_inclusion_of :connection_indicator, :in => ['C', 'S', 'X'], :allow_blank => true, :allow_nil => true
   validates_format_of :catering_code, :with => /^[CFHMPRT]{0,2}$/, :allow_blank => true
   validates_inclusion_of :service_branding, :in => ['E', 'U'], :allow_blank => true
 

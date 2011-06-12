@@ -37,7 +37,6 @@ class CreateBasicSchedules < ActiveRecord::Migration
       t.string     :train_class, :limit => 1
       t.string     :sleepers, :limit => 1
       t.string     :reservations, :limit => 1
-      t.string     :connection_indicator, :limit => 1
       t.string     :catering_code, :limit => 1
       t.string     :service_branding, :limit => 1
       t.timestamps
