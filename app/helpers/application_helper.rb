@@ -258,7 +258,8 @@ module ApplicationHelper
 
     words = tiploc.split(' ') unless tiploc.nil?
 
-    abbreviations = { 'ELL' => '(ELL)',
+    abbreviations = { 'C.S.D' => 'Carriage Sidings',
+                      'ELL' => '(ELL)',
                       'H.S.T.D.' => 'HST Depot',
                       'RECP' => 'Reception',
                       'DN' => 'Down',
