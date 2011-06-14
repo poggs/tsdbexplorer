@@ -5,7 +5,7 @@
 <p>Once you have timetable data, place it in your Rails <tt>data/</tt> subdirectory, and type the following:</p>
 
 <div class="monospace">
- <p>RAILS_ENV=<%= RAILS_ENV %> rails console<br />
+ <p>RAILS_ENV=<%= ::Rails.env %> rails console<br />
  <p>TSDBExplorer::CIF::process_cif_file('data/&lt;filename&gt;')</p>
 </div>
 
