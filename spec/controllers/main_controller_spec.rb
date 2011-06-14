@@ -21,4 +21,17 @@ require 'spec_helper'
 
 describe MainController do
 
+  render_views
+
+  it "should redirect to a setup page when called with an empty database" do
+    get :index
+    response.should redirect_to :action => :setup
+  end
+
+  it "should show an informational page when called with an empty database" do
+    get :setup
+    response.code.should eql("200")
+    response.body.should =~ /You will need some CIF timetable data/
+  end
+
 end
