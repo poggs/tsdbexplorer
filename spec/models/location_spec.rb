@@ -22,9 +22,9 @@ require 'spec_helper'
 describe Location do
 
   before(:each) do
-    @origin = Location.new({:location_type=>"LO", :tiploc_code=>"EUSTON", :activity=>"TB", :departure=>Time.parse('2011-01-01 15:02:00'), :platform=>"13", :line=>"E  ", :public_departure=>Time.parse('2011-01-01 15:02:00'), :engineering_allowance=>nil, :pathing_allowance=>nil, :tiploc_instance=>nil, :performance_allowance=>nil})
-    @intermediate = Location.new({:location_type=>"LI", :tiploc_code=>"EUSTON", :arrival=>Time.parse('2011-01-01 15:02:00'), :departure=>Time.parse('2011-01-01 15:05:00'), :platform=>"2", :line=>"C"})
-    @terminate = Location.new({:location_type=>"LT", :tiploc_code=>"EUSTON", :activity=>"TF", :arrival=>Time.parse('2011-01-01 13:37:00'), :platform=>"9", :path=>nil})
+    @origin = Location.new({:location_type=>"LO", :tiploc_code=>"EUSTON", :activity=>"TB", :departure=>DateTime.parse('2011-01-01 15:02:00'), :platform=>"13", :line=>"E  ", :public_departure=>DateTime.parse('2011-01-01 15:02:00'), :engineering_allowance=>nil, :pathing_allowance=>nil, :tiploc_instance=>nil, :performance_allowance=>nil})
+    @intermediate = Location.new({:location_type=>"LI", :tiploc_code=>"EUSTON", :arrival=>DateTime.parse('2011-01-01 15:02:00'), :departure=>DateTime.parse('2011-01-01 15:05:00'), :platform=>"2", :line=>"C"})
+    @terminate = Location.new({:location_type=>"LT", :tiploc_code=>"EUSTON", :activity=>"TF", :arrival=>DateTime.parse('2011-01-01 13:37:00'), :platform=>"9", :path=>nil})
   end
 
 
@@ -47,12 +47,12 @@ describe Location do
   end
 
   it "should not allow an arrival time for an origin location" do
-    @origin.arrival = Time.parse('2011-01-01 15:00:0')
+    @origin.arrival = DateTime.parse('2011-01-01 15:00:0')
     @origin.should_not be_valid
   end
 
   it "should not allow a public arrival time in an origin record" do
-    @origin.public_arrival = Time.parse('2011-01-01 15:00:00')
+    @origin.public_arrival = DateTime.parse('2011-01-01 15:00:00')
     @origin.should_not be_valid
   end
 
@@ -91,7 +91,7 @@ describe Location do
   it "should be valid with a passing time" do
     @intermediate.arrival = nil
     @intermediate.departure = nil
-    @intermediate.pass = Time.parse("2011-01-01 15:05:00")
+    @intermediate.pass = DateTime.parse("2011-01-01 15:05:00")
     @intermediate.should be_valid
   end
 
@@ -103,7 +103,7 @@ describe Location do
   end
 
   it "should not be valid with both an arrival/departure time and a passing time" do
-    @intermediate.pass = Time.parse("2011-01-01 15:05:00")
+    @intermediate.pass = DateTime.parse("2011-01-01 15:05:00")
     @intermediate.should_not be_valid
   end
 
@@ -128,12 +128,12 @@ describe Location do
   end
 
   it "should not allow a departure time for a terminating location" do
-    @terminate.departure = Time.parse('2011-01-01 15:05:00')
+    @terminate.departure = DateTime.parse('2011-01-01 15:05:00')
     @terminate.should_not be_valid
   end
 
   it "should not allow a public departure time for a terminating location" do
-    @terminate.public_departure = Time.parse('2011-01-01 15:05:00')
+    @terminate.public_departure = DateTime.parse('2011-01-01 15:05:00')
     @terminate.should_not be_valid
   end
 
