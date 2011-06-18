@@ -47,7 +47,7 @@ describe Location do
   end
 
   it "should not allow an arrival time for an origin location" do
-    @origin.arrival = DateTime.parse('2011-01-01 15:00:0')
+    @origin.arrival = DateTime.parse('2011-01-01 15:00:00')
     @origin.should_not be_valid
   end
 
