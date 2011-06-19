@@ -20,7 +20,7 @@
 module ApplicationHelper
 
   def time_only(date_obj)
-    date_obj.sec == 30 ? date_obj.strftime('%H%M')+"H" : date_obj.strftime('%H%M') if date_obj.is_a? Time
+    date_obj.sec == 30 ? date_obj.localtime.strftime('%H%M')+"H" : date_obj.localtime.strftime('%H%M') if date_obj.is_a? Time
   end
 
   def decode_train_category(category)
