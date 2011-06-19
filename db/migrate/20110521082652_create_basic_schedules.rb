@@ -42,6 +42,7 @@ class CreateBasicSchedules < ActiveRecord::Migration
       t.timestamps
     end
 
+    add_index(:basic_schedules, :uuid)
     add_index(:basic_schedules, :train_uid)
     add_index(:basic_schedules, :run_date)
 
