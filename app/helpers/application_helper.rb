@@ -262,6 +262,8 @@ module ApplicationHelper
                       'ELL' => '(ELL)',
                       'H.S.T.D.' => 'HST Depot',
                       'RECP' => 'Reception',
+                      'DC' => 'D.C.',
+                      'D.C.' => 'D.C.',
                       'DN' => 'Down',
                       'HL' => 'High Level',
                       'JN.' => 'Junction',
