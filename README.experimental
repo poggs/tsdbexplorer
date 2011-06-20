@@ -1,0 +1,7 @@
+
+                         ********** NOTE **********
+
+This is an experimental branch of TSDBExplorer.  It contains test code which
+is not guaranteed to work at all, and may harm a production environment.
+
+Ensure you back up any production data before using this branch.
