@@ -266,6 +266,7 @@ module ApplicationHelper
                       'D.C.' => 'D.C.',
                       'DN' => 'Down',
                       'HL' => 'High Level',
+                      'JCN' => 'Junction',
                       'JN.' => 'Junction',
                       'JN' => 'Junction',
                       'J' => 'Junction',
