@@ -148,4 +148,12 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     TSDBExplorer::TDnet::parse_raw_message(data).should eql(expected_data)
   end
 
+
+  # MQ Interface
+
+  it "should receive a message from the TD_DATA queue and process it"
+  it "should receive a message from the TR_DATA queue and process it"
+  it "should receive a message from the VSTP_DATA queue and process it"
+  it "should receive a message form the TSR_DATA queue and process it"
+
 end
