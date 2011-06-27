@@ -124,6 +124,26 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should convert a time in HHMM to a number of seconds since midnight" do
+
+    TSDBExplorer.time_to_secs("0000").should eql(0)
+    TSDBExplorer.time_to_secs("0000H").should eql(30)
+    TSDBExplorer.time_to_secs("1200").should eql(43200)
+    TSDBExplorer.time_to_secs("2359").should eql(86340)
+
+    TSDBExplorer.time_to_secs(nil).should eql(nil)
+
+  end
+
+  it "should convert a number of seconds since midnight in to a time in HHMM" do
+
+    TSDBExplorer.secs_to_time(0).should eql("0000")
+    TSDBExplorer.secs_to_time(30).should eql("0000H")
+    TSDBExplorer.secs_to_time(43200).should eql("1200")
+    TSDBExplorer.secs_to_time(86340).should eql("2359")
+
+  end
+
   it "should convert an allowance time to an integer number of seconds" do
 
     TSDBExplorer.normalise_allowance_time("0").should eql(0)
@@ -344,28 +364,24 @@ describe "lib/tsdbexplorer.rb" do
     schedule = BasicSchedule.first
     schedule_expected_data.collect.each { |k,v| schedule[k].should eql(v) }
 
-    origin_expected_data = {:platform=>"10", :public_departure=>Time.parse('2010-12-12 18:34:00'), :engineering_allowance=>nil, :location_type=>"LO", :pathing_allowance=>nil, :tiploc_code =>"EUSTON", :line=>"C", :activity=>"TB", :performance_allowance=>nil, :departure=>Time.parse('2010-12-12 18:34:00')}
+    origin_expected_data = {:platform=>"10", :public_departure=>"1834", :engineering_allowance=>nil, :location_type=>"LO", :pathing_allowance=>nil, :tiploc_code =>"EUSTON", :line=>"C", :activity=>"TB", :performance_allowance=>nil, :departure=>"1834"}
     origin = Location.find(:first, :conditions => { :location_type => 'LO' })
     origin_expected_data.collect.each { |k,v| origin[k].should eql(v) }
 
-    intermediate_expected_data = {:performance_allowance=>nil, :platform=>nil, :pass=>Time.parse('2010-12-12 18:37:00'), :path=>nil, :departure=>nil, :arrival=>nil, :public_departure=>nil, :public_arrival=>nil, :location_type=>"LI", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"CMDNSTH", :pathing_allowance=>nil, :activity=>nil, :tiploc_instance=>nil}
+    intermediate_expected_data = {:performance_allowance=>nil, :platform=>nil, :pass=>"1837", :path=>nil, :departure=>nil, :arrival=>nil, :public_departure=>nil, :public_arrival=>nil, :location_type=>"LI", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"CMDNSTH", :pathing_allowance=>nil, :activity=>nil, :tiploc_instance=>nil}
     intermediate = Location.find(:first, :conditions => { :location_type => 'LI' })
     intermediate_expected_data.collect.each { |k,v| intermediate[k].should eql(v) }
 
-    terminate_expected_data = {:platform=>"3", :arrival=>Time.parse('2010-12-12 19:46:00'), :path=>nil, :public_arrival=>Time.parse('2010-12-12 19:46:00'), :location_type=>"LT", :tiploc_code=>"NMPTN", :activity=>"TF"}
+    terminate_expected_data = {:platform=>"3", :arrival=>"1946", :path=>nil, :public_arrival=>"1946", :location_type=>"LT", :tiploc_code=>"NMPTN", :activity=>"TF"}
     terminate = Location.find(:first, :conditions => { :location_type => 'LT' })
     terminate_expected_data.collect.each { |k,v| terminate[k].should eql(v) }
   end
 
   it "should generate and maintain a UUID between a BasicSchedule and each Location in that schedule for each date the train runs" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
-    first_schedule = BasicSchedule.find(1)
-    first_location = Location.find_by_departure(Time.parse('2010-12-12 18:34:00'))
-    second_schedule = BasicSchedule.find(2)
-    second_location = Location.find_by_departure(Time.parse('2010-12-19 18:34:00'))
-
-    first_schedule.uuid.should eql(first_location.basic_schedule_uuid)
-    second_schedule.uuid.should eql(second_location.basic_schedule_uuid)
+    schedule = BasicSchedule.find(1)
+    location = Location.first
+    schedule.uuid.should eql(location.basic_schedule_uuid)
   end
 
   it "should record the fields from a BX record in a BasicSchedule object" do

@@ -187,6 +187,32 @@ module TSDBExplorer
   end
 
 
+  # Convert a time in HHMM(H) format to a number of seconds since midnight
+
+  def TSDBExplorer.time_to_secs(time)
+
+    time.nil? ? nil : Time.parse(TSDBExplorer::normalise_time(time)).to_i - Time.now.midnight.to_i
+
+  end
+
+
+  # Convert a number of seconds since midnight to a time in HHMM(H) format
+
+  def TSDBExplorer.secs_to_time(secs)
+
+    time = nil
+
+    unless secs.nil?
+      intermediate_time = Time.now.midnight + secs.seconds
+      time = intermediate_time.strftime('%H%M')
+      time = time + "H" if intermediate_time.sec == 30
+    end
+
+    return time
+
+  end
+
+
   # Parse and validate a File Mainframe Identity field from a CIF 'HD'
   # record.  If the data is valid, it returns a hash with :username and
   # :extract_date keys.  If the data is not valid, it returns a hash with a
@@ -656,6 +682,11 @@ module TSDBExplorer
           data[:location_type] = data[:record_identity]
           data.delete :record_identity
 
+          # If this location has the public arrival and public departure set to 0000, it contains a passing time only
+
+          data[:public_arrival] = nil if data[:public_arrival].nil? || data[:public_arrival] == "0000"
+          data[:public_departure] = nil if data[:public_departure].nil? || data[:public_departure] == "0000"
+
           schedule[:intermediate] = Array.new unless schedule.has_key? :intermediate
           schedule[:intermediate] << data
 
@@ -703,80 +734,48 @@ module TSDBExplorer
             schedule[:basic_schedule_extended].delete :record_identity
             schedule[:basic].merge! schedule[:basic_schedule_extended]
 
-            date_range = TSDBExplorer.date_range_to_list(schedule[:basic][:runs_from], schedule[:basic][:runs_to], schedule[:basic][:days_run])
-            schedule[:basic].delete :runs_from
-            schedule[:basic].delete :runs_to
-            schedule[:basic].delete :days_run
-
             # TODO: Integrate Bank Holiday logic in to date_range_to_list
             schedule[:basic].delete :bh_running
 
             schedule[:basic].delete :stp_indicator
 
+
+            # Add a BasicSchedule for each date in the date range
+
+            schedule[:basic][:uuid] = UUID.generate
+
+            date_range = TSDBExplorer.date_range_to_list(schedule[:basic][:runs_from], schedule[:basic][:runs_to], schedule[:basic][:days_run])
+            schedule[:basic].delete :runs_from
+            schedule[:basic].delete :runs_to
+            schedule[:basic].delete :days_run
+
             date_range.each do |run_date|
-
-              # Add a BasicSchedule for each date in the date range
-
               schedule[:basic][:run_date] = run_date
-              schedule[:basic][:uuid] = UUID.generate
               pending_trans['BasicSchedule'] << BasicSchedule.new(schedule[:basic])
-
               stats[:schedule][action_type] = stats[:schedule][action_type] + 1
-
-
-              # Add an originating location
-
-              origin_clone = schedule[:origin].clone
-              origin_clone[:basic_schedule_uuid] = schedule[:basic][:uuid]
-              origin_clone[:departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:departure])
-              origin_clone[:public_departure] = TSDBExplorer::normalise_datetime(run_date + " " + origin_clone[:public_departure])
-
-              pending_trans['Location'] << Location.new(origin_clone)
-
-
-              # Add an intermediate location
-
-              intermediate_clone = schedule[:intermediate].nil? ? [] : schedule[:intermediate].clone
-
-              intermediate_clone.each do |template_location|
-
-                location = template_location.clone
-
-
-                # If this location has the public arrival and public departure set to 0000, it contains a passing time only
-
-                location[:public_arrival] = nil if location[:public_arrival].nil? || location[:public_arrival] == "0000"
-                location[:public_departure] = nil if location[:public_departure].nil? || location[:public_departure] == "0000"
-
-
-                location[:arrival] = TSDBExplorer::normalise_datetime(run_date + " " + location[:arrival]) unless location[:arrival].nil?
-                location[:public_arrival] = TSDBExplorer::normalise_datetime(run_date + " " + location[:public_arrival]) unless location[:public_arrival].nil?
-
-                location[:pass] = TSDBExplorer::normalise_datetime(run_date + " " + location[:pass]) unless location[:pass].nil?
-
-                location[:departure] = TSDBExplorer::normalise_datetime(run_date + " " + location[:departure]) unless location[:departure].nil?
-                location[:public_departure] = TSDBExplorer::normalise_datetime(run_date + " " + location[:public_departure]) unless location[:public_departure].nil?
-
-                # Set the Train UUID
-
-                location[:basic_schedule_uuid] = schedule[:basic][:uuid]
-
-                pending_trans['Location'] << Location.new(location)
-
-              end
-
-
-              # Add a terminating location
-
-              terminate_clone = schedule[:terminate].clone
-              terminate_clone[:basic_schedule_uuid] = schedule[:basic][:uuid]
-
-              terminate_clone[:arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:arrival])
-              terminate_clone[:public_arrival] = TSDBExplorer::normalise_datetime(run_date + " " + terminate_clone[:public_arrival])
-
-              pending_trans['Location'] << Location.new(terminate_clone)
-
             end
+
+
+            # Add an originating location
+
+            schedule[:origin][:basic_schedule_uuid] = schedule[:basic][:uuid]
+            pending_trans['Location'] << Location.new(schedule[:origin])
+
+
+            # Add an intermediate location
+
+            unless schedule[:intermediate].nil?
+              schedule[:intermediate].each do |location|
+                location[:basic_schedule_uuid] = schedule[:basic][:uuid]
+                pending_trans['Location'] << Location.new(location)
+              end
+            end
+
+
+            # Add a terminating location
+
+            schedule[:terminate][:basic_schedule_uuid] = schedule[:basic][:uuid]
+            pending_trans['Location'] << Location.new(schedule[:terminate])
 
           else
 
