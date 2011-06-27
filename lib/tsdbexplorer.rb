@@ -673,6 +673,11 @@ module TSDBExplorer
 
           data[:location_type] = data[:record_identity]
           data.delete :record_identity
+
+          # If this location has the public departure set to 0000, it is not a passenger service, so set the public departure to nil
+
+          data[:public_departure] = nil if data[:public_departure].nil? || data[:public_departure] == "0000"
+
           schedule[:origin] = data
 
         elsif data[:record_identity] == "LI"
@@ -705,6 +710,11 @@ module TSDBExplorer
 
           data[:location_type] = data[:record_identity]
           data.delete :record_identity
+
+          # If this location has the public arrival set to 0000, it is not a passenger service, so set the public arrival to nil
+
+          data[:public_arrival] = nil if data[:public_arrival].nil? || data[:public_arrival] == "0000"
+
           schedule[:terminate] = data
 
           # Verify we have the minimum set of records for this schedule
