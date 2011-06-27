@@ -65,11 +65,11 @@ ActiveRecord::Schema.define(:version => 20110626161616) do
     t.string   "location_type",         :limit => 2
     t.string   "tiploc_code",           :limit => 7
     t.integer  "tiploc_instance"
-    t.datetime "arrival"
-    t.datetime "public_arrival"
-    t.datetime "pass"
-    t.datetime "departure"
-    t.datetime "public_departure"
+    t.string   "arrival",               :limit => 5
+    t.string   "public_arrival",        :limit => 5
+    t.string   "pass",                  :limit => 5
+    t.string   "departure",             :limit => 5
+    t.string   "public_departure",      :limit => 5
     t.string   "platform",              :limit => 3
     t.string   "line",                  :limit => 3
     t.string   "path",                  :limit => 3

@@ -47,4 +47,25 @@ class Location < ActiveRecord::Base
   belongs_to :basic_schedule, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid
   has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
+
+  def arrival=(value)
+    write_attribute(:arrival, value.nil? ? nil : value.strip)
+  end
+
+  def public_arrival=(value)
+    write_attribute(:public_arrival, value.nil? ? nil : value.strip)
+  end
+
+  def pass=(value)
+    write_attribute(:pass, value.nil? ? nil : value.strip)
+  end
+
+  def departure=(value)
+    write_attribute(:departure, value.nil? ? nil : value.strip)
+  end
+
+  def public_departure=(value)
+    write_attribute(:public_departure, value.nil? ? nil : value.strip)
+  end
+
 end
