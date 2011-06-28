@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110626161616) do
+ActiveRecord::Schema.define(:version => 20110628101228) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -85,6 +85,45 @@ ActiveRecord::Schema.define(:version => 20110626161616) do
   add_index "locations", ["basic_schedule_uuid"], :name => "index_locations_on_basic_schedule_uuid"
   add_index "locations", ["departure"], :name => "index_locations_on_departure"
   add_index "locations", ["pass"], :name => "index_locations_on_pass"
+
+  create_table "queued_messages", :force => true do |t|
+    t.string   "queue_name"
+    t.string   "message"
+    t.integer  "state",      :limit => 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "temporary_speed_restrictions", :force => true do |t|
+    t.string   "tsr_id"
+    t.string   "route_group_name"
+    t.string   "route_code"
+    t.string   "route_order"
+    t.string   "tsr_reference"
+    t.string   "from_location"
+    t.string   "to_location"
+    t.string   "line_name"
+    t.string   "subunit_type"
+    t.integer  "mileage_from"
+    t.integer  "subunit_from"
+    t.integer  "mileage_to"
+    t.integer  "subunit_to"
+    t.string   "moving_mileage"
+    t.integer  "passenger_speed"
+    t.integer  "freight_speed"
+    t.datetime "valid_from"
+    t.datetime "valid_to"
+    t.string   "reason"
+    t.string   "requestor"
+    t.string   "comments"
+    t.string   "direction"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "temporary_speed_restrictions", ["route_code"], :name => "index_temporary_speed_restrictions_on_route_code"
+  add_index "temporary_speed_restrictions", ["route_order"], :name => "index_temporary_speed_restrictions_on_route_order"
+  add_index "temporary_speed_restrictions", ["tsr_id"], :name => "index_temporary_speed_restrictions_on_tsr_id"
 
   create_table "tiplocs", :force => true do |t|
     t.string   "tiploc_code",     :limit => 7
