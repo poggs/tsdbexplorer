@@ -39,6 +39,7 @@ class CreateTiplocs < ActiveRecord::Migration
 
     add_index(:tiplocs, :tiploc_code, :unique => :true)
     add_index(:tiplocs, :crs_code)
+    add_index(:tiplocs, :stanox, :unique => :true)
 
   end
 
