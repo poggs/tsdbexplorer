@@ -123,10 +123,14 @@ module TSDBExplorer
 
   def TSDBExplorer.yyyymmddhhmmss_to_time(datetime)
 
-    begin
-      parsed_time = Time.parse(datetime)
-    rescue
-      parsed_time = nil
+    parsed_time = nil
+
+    unless datetime == "00000000000000"
+      begin
+        parsed_time = Time.parse(datetime)
+      rescue
+        parsed_time = nil
+      end
     end
 
     return parsed_time
