@@ -27,6 +27,7 @@ class CreateBasicSchedules < ActiveRecord::Migration
       t.date       :run_date
       t.string     :category, :limit => 2
       t.string     :train_identity, :limit => 4
+      t.string     :train_identity_unique, :limit => 10
       t.string     :headcode, :limit => 4
       t.string     :service_code, :limit => 8
       t.string     :portion_id, :limit => 1
@@ -50,6 +51,8 @@ class CreateBasicSchedules < ActiveRecord::Migration
     add_index(:basic_schedules, :uuid)
     add_index(:basic_schedules, :train_uid)
     add_index(:basic_schedules, :run_date)
+    add_index(:basic_schedules, :train_identity)
+    add_index(:basic_schedules, :train_identity_unique)
 
   end
 
