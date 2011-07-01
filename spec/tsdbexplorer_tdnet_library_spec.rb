@@ -107,8 +107,8 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   end
 
   it "should process a TRUST Train Cancellation message" do
-    data = "010420080418100404TRUST               SMART               USERID  SOURCE  ZAA12345678AE0803311640362K38MS3136050                  44CStanme-A ReasonDescN 362K38MS31                                                                                                          "
-    expected_data = { :message_type => '0104', :message_queue_timestamp => Time.parse('2008-04-18- 10:04:04'), :source_system_id => 'TRUST', :original_data_source => 'SMART', :user_id => 'USERID', :source_dev_id => 'SOURCE', :zone => 'Z', :area_code => 'AA', :alert_number => '12345678', :record_type => 'AE', :message_date => '080331', :message_timestamp => '1640', :current_train_id => '362K38MS31', :stanox_a => '36050', :cancel_reason_code => '44', :cancel_type => 'C', :stanme_a => 'Stanme-A ', :reason_description => 'ReasonDesc', :attributed_flag => 'N', :rolled_up_flag => nil, :original_train_id => '362K38MS31' }
+    data = "000220110701065918TRUST               TRUST DA            #QHPA004LWED    522W10M601201107010659005274120110701063000     00000000000000C522W10M60121940001M52121C   "
+    expected_data = { :message_type => '0002', :message_queue_timestamp => Time.parse('2011-07-01 06:59:18'), :source_system_id => 'TRUST', :original_data_source => 'TRUST DA', :user_id => '#QHPA004', :source_dev_id => 'LWED', :train_id => '522W10M601', :train_cancellation_timestamp => Time.parse('2011-07-01 06:59:00'), :location => '52741', :departure_timestamp => Time.parse('2011-07-01 06:30:00'), :original_location => nil, :original_location_timestamp => nil, :cancellation_type => 'C', :current_train_id => '522W10M601', :train_service_code => '21940001', :cancellation_reason_code => 'M5', :division_code => '21', :toc => '21', :variation_status => 'C', :train_file_address => nil }
     TSDBExplorer::TDnet::parse_raw_message(data).should eql(expected_data)
   end
 
