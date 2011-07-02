@@ -426,6 +426,13 @@ describe "lib/tsdbexplorer.rb" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part2.cif').should eql(expected_data_after)
   end
 
+  it "should process delete BS records for only part of a schedule" do
+    expected_data_before = {:schedule=>{:insert=>4, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_range_part1.cif').should eql(expected_data_before)
+    expected_data_after = {:schedule=>{:insert=>0, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_range_part2.cif').should eql(expected_data_after)
+  end
+
   it "should process revise BS records from a CIF file" do
     expected_data_before = {:association=>{:amend=>0, :insert=>0, :delete=>0}, :schedule=>{:amend=>0, :insert=>69, :delete=>0}, :tiploc=>{:amend=>0, :insert=>0, :delete=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bs_revise_1.cif').should eql(expected_data_before)

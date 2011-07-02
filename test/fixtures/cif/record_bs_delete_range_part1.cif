@@ -1,0 +1,9 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+BSNA688021105151106050000001 1EE5S10    124604004 EMU    100                   N
+BX         SEY                                                                  
+LORCHT    0655 00004         TB                                                 
+LIGLNGHMK           0658H000000003                                              
+LIEJSTNGB           0705H00000000                                               
+LISTNGBRN           0706H000000002                     H                        
+LTFAVRSHM 0714 00002     TF                                                     
+ZZ
