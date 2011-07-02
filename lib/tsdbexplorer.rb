@@ -521,6 +521,8 @@ module TSDBExplorer
 
           data.delete :record_identity
 
+          data[:stanox] = nil if data[:stanox] == "00000"
+
           pending_trans['Tiploc'] << Tiploc.new(data)
 
           stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
