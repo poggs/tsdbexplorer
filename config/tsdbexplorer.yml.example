@@ -1,0 +1,36 @@
+#
+#  This file is part of TSDBExplorer.
+#
+#  TSDBExplorer is free software: you can redistribute it and/or modify it
+#  under the terms of the GNU General Public License as published by the
+#  Free Software Foundation, either version 3 of the License, or (at your
+#  option) any later version.
+#
+#  TSDBExplorer is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+#  Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with TSDBExplorer.  If not, see <http://www.gnu.org/licenses/>.
+#
+#  $Id$
+#
+
+# If you are receiving TD.net data, supply the queue manager name and
+# channel name here.  Leave the connection_name: set to 'localhost(1414)' if
+# you are running MQIPT locally.
+
+TDNET_MQ_MANAGER:
+  q_mgr_name:      'EXAMPLE_QMGR'
+  channel_name:    'EXAMPLE.SVRCONN'
+  connection_name: 'localhost(1414)'
+
+
+# Specify the names of the TD.net queues here
+
+TDNET_QUEUES:
+  td:              'EXAMPLE_TD_QUEUE'
+  trust:           'EXAMPLE_TRUST_QUEUE'
+  tsr:             'EXAMPLE_TSR_QUEUE'
+  vstp:            'EXAMPLE_VSTP_QUEUE'
