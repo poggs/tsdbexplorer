@@ -763,8 +763,28 @@ module TSDBExplorer
             schedule[:basic].delete :runs_to
             schedule[:basic].delete :days_run
 
+
+            # Calculate the base part of the 10-character Train Identity,
+            # calculated from the first two digits of the originating
+            # location STANOX, the 4-character Train Identity, the train
+            # status, the train's originating time, and two digits
+            # indicating the day the train runs
+
+            origin_location_record = Tiploc.find_by_tiploc_code(schedule[:origin][:tiploc_code])
+
+            if origin_location_record.nil?
+              raise "Train #{schedule[:basic][:train_uid]} originates at #{schedule[:origin][:tiploc_code]}, but no STANOX code was found"
+            else
+              unique_train_id_base = origin_location_record.stanox[0..1] + schedule[:basic][:train_identity] + "M" + TSDBExplorer::CIF::origin_code(schedule[:origin][:departure])
+            end
+
             date_range.each do |run_date|
               schedule[:basic][:run_date] = run_date
+
+              # Update the 10-character Train Identity, as it changes for each day this schedule applies
+
+              schedule[:basic][:train_identity_unique] = unique_train_id_base + schedule[:basic][:run_date][8..9]
+
               pending_trans['BasicSchedule'] << BasicSchedule.new(schedule[:basic])
               stats[:schedule][action_type] = stats[:schedule][action_type] + 1
             end
@@ -824,6 +844,15 @@ module TSDBExplorer
       end
 
       return stats
+
+    end
+
+
+    # Convert an origin time to an origin code, used to construct a 10-character Unique Train Identity
+
+    def CIF.origin_code(departure_time)
+
+      return "M"
 
     end
 

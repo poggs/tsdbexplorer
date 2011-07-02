@@ -1,4 +1,9 @@
 HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIEJSTNGB01518766HEASTERN JN (SITTINGBOURNE)89139   0                           
+TIFAVRSHM00516700PFAVERSHAM                 89501   0FAVFAVERSHAM               
+TIGLNGHMK32516900CGILLINGHAM (KENT)         89011   0GLMGILLINGHAM KENT         
+TIRCHT   00520300KROCHESTER                 89004   0RTRROCHESTER               
+TISTNGBRN00518700GSITTINGBOURNE             89144   0SITSITTINGBOURNE           
 BSNA688021105151106050000001 1EE5S10    124604004 EMU    100                   N
 BX         SEY                                                                  
 LORCHT    0655 00004         TB                                                 

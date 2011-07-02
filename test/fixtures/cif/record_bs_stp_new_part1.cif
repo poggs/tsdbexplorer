@@ -1,4 +1,38 @@
 HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIABRGVNY00360200AABERGAVENNY               762513002AGVABERGAVENNY             
+TIAVONWFH00320004ZAVONMOUTH WEST WARF (FHH) 81227   0                           
+TIBRFLD  00417000TBROMFIELD                 76376   0                           
+TICRAVENA32363400WCRAVEN ARMS               76379   0CRVCRAVEN ARMS             
+TICREWBHM56123902LCREWE BAS HALL S.S.M.     42159   0XXM                        
+TICREWEGL48123905XCREWE GRESTY LANE         42166   0                           
+TICREWSSN00124371WCREWE SSN SIGNAL BOX      42139   0                           
+TIDORNGTN00436501PDORRINGTON                64237   0                           
+TIFILTNWJ48323562MFILTON WEST JN            81302   0                           
+TIHEREFRD00360700CHEREFORD                  763572867HFDHEREFORD                
+TIHLNMJN 12320025DHALLEN MARSH JN           81221   0                           
+TIHRLSCTX32439302EHARLESCOTT X              64219   0                           
+TILEOMNST00362000ELEOMINSTER                76373   0LEOLEOMINSTER              
+TILTTLMLJ40374469HLITTLE MILL JN            76247   0                           
+TIMAGOR  00366900WMAGOR                     76093   0                           
+TIMAINDEJ48367440CMAINDEE EAST JN           76399   0                           
+TIMAINDNJ48367438HMAINDEE NORTH JN          76400   0                           
+TIMRTNONL40361700JMORETON-ON-LUGG           76371   0                           
+TIMSHBRKX36436512ZMARSH BROOK LEVEL CROSSING76382   0                           
+TINANTWCH00124700GNANTWICH                  42172   0NANNANTWICH                
+TIPATCHWY00321300XPATCHWAY                  81116   0PWYPATCHWAY                
+TIPILNING00321400ZPILNING                   81118   0PILPILNING                 
+TIPONTRLS00361300MPONTRILAS                 76354   0                           
+TIPREES  00134600MPREES                     42226   0PRSPREES                   
+TISEVTNLE36367959QSEVERN TUNNEL EAST        76091   0                           
+TISEVTNLJ36367900PSEVERN TUNNEL JN          76090   0STJSEVERN TUNNEL JN        
+TISEVTNLW32367978USEVERN TUNNEL WEST        76089   0                           
+TISHIP   00360771BSHELWICK JN               76370   0                           
+TISHRWBY 00438700PSHREWSBURY                642242965SHRSHREWSBURY              
+TISHRWSBJ48439101QSUTTON BRIDGE JN          64231   0                           
+TITRAMINN00361400RTRAM INN                  76355   0                           
+TIWEMM   00134700RWEM                       42231   0WEMWEM                     
+TIWOFERTN00363600YWOOFFERTON                76374   0                           
+TIWRENBRY00135000MWRENBURY                  42211   0WREWRENBURY                
 BSNR662491012131105161000000 2E04Z04    157620170 D  715 075                   N
 BX         ZZY                                                                  
 LOCREWBHM 0502 0000          TB                                                 

@@ -227,7 +227,7 @@ describe BasicSchedule do
   it "should delete all associated Locations when it is deleted" do
     BasicSchedule.count.should eql(0)
     Location.count.should eql(0)
-    expected_data_before = {:tiploc=>{:insert=>0, :amend=>0, :delete=>0}, :schedule=>{:insert=>1, :amend=>0, :delete=>0}, :association=>{:insert=>0, :amend=>0, :delete=>0}}
+    expected_data_before = {:tiploc=>{:insert=>2, :amend=>0, :delete=>0}, :schedule=>{:insert=>1, :amend=>0, :delete=>0}, :association=>{:insert=>0, :amend=>0, :delete=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_dependent_part1.cif').should eql(expected_data_before)
     BasicSchedule.count.should eql(1)
     Location.count.should eql(2)

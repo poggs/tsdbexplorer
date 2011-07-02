@@ -390,7 +390,7 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "should process a set of STP Overlay BS/BX/LO/LI/LT records in a CIF file" do
-    expected_data_before = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    expected_data_before = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>38, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part1.cif').should eql(expected_data_before)
     schedule_before = BasicSchedule.find_by_run_date('2011-05-08')
     expected_locations_before = ["CREWE", "CREWSJN", "BTHLYJN", "ALSAGER", "KIDSGRV", "STOKEOT", "STOKOTJ", "STONE", "NTNB", "STAFFRD", "COLWICH", "RUGLYNJ", "RUGL", "LCHTNJ", "LCHTTVL", "TMWTHLL", "AMNGTNJ", "ATHRSTN", "NNTN", "RUGBTVJ", "RUGBY", "HMTNJ", "LNGBKBY", "NMPTN", "HANSLPJ", "MKNSCEN", "BLTCHLY", "LTNBZRD", "LEDBRNJ", "TRING", "BONENDJ", "WATFDJ", "HROW", "WMBY", "WLSDWLJ", "CMDNJN", "CMDNSTH", "EUSTON"]
@@ -406,12 +406,12 @@ describe "lib/tsdbexplorer.rb" do
   end
 
   it "shoud process a set of STP New Schedule BS/BX/LO/LI/LT records in a CIF file" do
-    expected_data = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    expected_data = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>34, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_new_part1.cif').should eql(expected_data)
   end
 
   it "should process a schedule without LI records in a CIF file" do
-    expected_data = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    expected_data = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>2, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_process_lolt.cif').should eql(expected_data)    
   end
 
@@ -424,21 +424,21 @@ describe "lib/tsdbexplorer.rb" do
   it "should treat all times in the CIF file as the local timezone"
 
   it "should process delete BS records from a CIF file" do
-    expected_data_before = {:schedule=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    expected_data_before = {:schedule=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>5, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part1.cif').should eql(expected_data_before)
     expected_data_after = {:schedule=>{:insert=>0, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part2.cif').should eql(expected_data_after)
   end
 
   it "should process delete BS records for only part of a schedule" do
-    expected_data_before = {:schedule=>{:insert=>4, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
+    expected_data_before = {:schedule=>{:insert=>4, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>5, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_range_part1.cif').should eql(expected_data_before)
     expected_data_after = {:schedule=>{:insert=>0, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_range_part2.cif').should eql(expected_data_after)
   end
 
   it "should process revise BS records from a CIF file" do
-    expected_data_before = {:association=>{:amend=>0, :insert=>0, :delete=>0}, :schedule=>{:amend=>0, :insert=>69, :delete=>0}, :tiploc=>{:amend=>0, :insert=>0, :delete=>0}}
+    expected_data_before = {:association=>{:amend=>0, :insert=>0, :delete=>0}, :schedule=>{:amend=>0, :insert=>69, :delete=>0}, :tiploc=>{:amend=>0, :insert=>13, :delete=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bs_revise_1.cif').should eql(expected_data_before)
     expected_data_after = {:association=>{:amend=>0, :insert=>0, :delete=>0}, :schedule=>{:amend=>69, :insert=>0, :delete=>69}, :tiploc=>{:amend=>0, :insert=>0, :delete=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bs_revise_2.cif').should eql(expected_data_after)

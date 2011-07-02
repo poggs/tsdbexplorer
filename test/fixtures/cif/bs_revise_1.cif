@@ -1,4 +1,17 @@
 HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIABRGVNY00360200AABERGAVENNY               762513002AGVABERGAVENNY             
+TICRDFCEN08389900FCARDIFF CENTRAL           773012826CDFCARDIFF CENTRAL         
+TICWMBRAN00373800QCWMBRAN                   76239   0CWMCWMBRAN                 
+TIEBBWJ  08367756DEBBW JN                   76481   0                           
+TIHEREFRD00360700CHEREFORD                  763572867HFDHEREFORD                
+TILTTLMLJ40374469HLITTLE MILL JN            76247   0                           
+TIMAINDNJ48367438HMAINDEE NORTH JN          76400   0                           
+TIMAINDWJ48367439WMAINDEE WEST JN           76398   0                           
+TIMSHFILD00367711JMARSHFIELD                77086   0                           
+TINWPTRTG00367400NNEWPORT (SOUTH WALES)     764012939NWPNEWPORT GWENT           
+TIPONTRLS00361300MPONTRILAS                 76354   0                           
+TIPONTYPL00374400DPONTYPOOL AND NEW INN     76245 126PPLPONTYPOOL NEWINN        
+TITRAMINN00361400RTRAM INN                  76355   0                           
 BSNC819021012141105190111000 POO2B01    125434000 DMUA   075      S            P
 BX         AWY                                                                  
 LOCRDFCEN 0030 00301  RL   2 TB                                                 
