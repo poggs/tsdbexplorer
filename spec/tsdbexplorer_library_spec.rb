@@ -360,7 +360,7 @@ describe "lib/tsdbexplorer.rb" do
 
   it "should process a set of permanent schedule BS/BX/LO/LI/LT records in a CIF file" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif')
-    schedule_expected_data = {:timing_load=>"321 ", :status=>"P", :train_uid=>"C43391", :connection_indicator=>nil, :headcode=>nil, :category=>"OO", :speed=>"100", :catering_code=>nil, :operating_characteristics=>nil, :run_date=>Date.parse("2010-12-12").to_date, :service_branding=>nil, :service_code=>"22209000", :train_class=>"B", :portion_id=>nil, :sleepers=>nil, :power_type=>"EMU", :reservations=>"S", :train_identity=>"2N53"}
+    schedule_expected_data = {:timing_load=>"321 ", :status=>"P", :train_uid=>"C43391", :connection_indicator=>nil, :headcode=>nil, :category=>"OO", :speed=>"100", :catering_code=>nil, :operating_characteristics=>nil, :run_date=>Date.parse("2010-12-12").to_date, :service_branding=>nil, :service_code=>"22209000", :train_class=>"B", :portion_id=>nil, :sleepers=>nil, :power_type=>"EMU", :reservations=>"S", :train_identity=>"2N53", :stp_indicator=>"P"}
     schedule = BasicSchedule.first
     schedule_expected_data.collect.each { |k,v| schedule[k].should eql(v) }
 
@@ -392,13 +392,17 @@ describe "lib/tsdbexplorer.rb" do
   it "should process a set of STP Overlay BS/BX/LO/LI/LT records in a CIF file" do
     expected_data_before = {:schedule=>{:insert=>23, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part1.cif').should eql(expected_data_before)
+    schedule_before = BasicSchedule.find_by_run_date('2011-05-08')
     expected_locations_before = ["CREWE", "CREWSJN", "BTHLYJN", "ALSAGER", "KIDSGRV", "STOKEOT", "STOKOTJ", "STONE", "NTNB", "STAFFRD", "COLWICH", "RUGLYNJ", "RUGL", "LCHTNJ", "LCHTTVL", "TMWTHLL", "AMNGTNJ", "ATHRSTN", "NNTN", "RUGBTVJ", "RUGBY", "HMTNJ", "LNGBKBY", "NMPTN", "HANSLPJ", "MKNSCEN", "BLTCHLY", "LTNBZRD", "LEDBRNJ", "TRING", "BONENDJ", "WATFDJ", "HROW", "WMBY", "WLSDWLJ", "CMDNJN", "CMDNSTH", "EUSTON"]
-    BasicSchedule.find_by_run_date('2011-05-08').locations.collect { |location| location.tiploc_code }.should eql(expected_locations_before)
+    schedule_before.stp_indicator.should eql('P')
+    schedule_before.locations.collect { |location| location.tiploc_code }.should eql(expected_locations_before)
 
     expected_data_after = {:schedule=>{:insert=>0, :delete=>1, :amend=>1}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :tiploc=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part2.cif').should eql(expected_data_after)
     expected_locations_after = ["CREWE", "CREWSJN", "BTHLYJN", "ALSAGER", "KIDSGRV", "STOKEOT", "STOKOTJ", "STONE", "NTNB", "STAFFRD", "COLWICH", "RUGLYNJ", "RUGL", "LCHTNJ", "LCHTTVL", "TMWTHLL", "AMNGTNJ", "ATHRSTN", "NNTN", "RUGBTVJ", "RUGBY", "HMTNJ", "WEEDON", "HANSLPJ", "MKNSCEN", "BLTCHLY", "LTNBZRD", "LEDBRNJ", "TRING", "BONENDJ", "WATFDJ", "HROW", "WMBY", "WLSDWLJ", "CMDNJN", "CMDNSTH", "EUSTON"]
-    BasicSchedule.find_by_run_date('2011-05-08').locations.collect { |location| location.tiploc_code }.should eql(expected_locations_after)
+    schedule_after = BasicSchedule.find_by_run_date('2011-05-08')
+    schedule_after.stp_indicator.should eql('O')
+    schedule_after.locations.collect { |location| location.tiploc_code }.should eql(expected_locations_after)
   end
 
   it "shoud process a set of STP New Schedule BS/BX/LO/LI/LT records in a CIF file" do

@@ -753,8 +753,6 @@ module TSDBExplorer
             # TODO: Integrate Bank Holiday logic in to date_range_to_list
             schedule[:basic].delete :bh_running
 
-            schedule[:basic].delete :stp_indicator
-
 
             # Add a BasicSchedule for each date in the date range
 
