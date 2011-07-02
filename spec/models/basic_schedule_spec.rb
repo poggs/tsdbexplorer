@@ -22,7 +22,7 @@ require 'spec_helper'
 describe BasicSchedule do
 
   before(:each) do
-    @valid_record = { :train_uid => 'A00000', :status => 'P', :run_date => '2011-01-01', :category => 'OO', :train_identity => '2A00', :headcode => '0000', :service_code => '00000000', :portion_id => '0', :power_type => 'EMU', :timing_load => '321', :speed => '100', :operating_characteristics => 'C', :train_class => 'B', :sleepers => 'B', :reservations => 'S', :catering_code => 'T', :service_branding => 'E'}
+    @valid_record = { :train_uid => 'A00000', :status => 'P', :run_date => '2011-01-01', :category => 'OO', :train_identity => '2A00', :headcode => '0000', :service_code => '00000000', :portion_id => '0', :power_type => 'EMU', :timing_load => '321', :speed => '100', :operating_characteristics => 'C', :train_class => 'B', :sleepers => 'B', :reservations => 'S', :catering_code => 'T', :service_branding => 'E', :stp_indicator => 'P' }
   end
 
   it "should auto-generate a UUID"
@@ -197,6 +197,20 @@ describe BasicSchedule do
 
     [ 'Z', '3' ].each do |service_branding|
       @valid_record[:service_branding] = service_branding
+      BasicSchedule.new(@valid_record).should_not be_valid
+    end
+
+  end
+
+  it "should require a valid STP Indicator" do
+
+    [ 'C', 'N', 'O', 'P' ].each do |stp_indicator|
+      @valid_record[:stp_indicator] = stp_indicator
+      BasicSchedule.new(@valid_record).should be_valid
+    end
+
+    [ nil, '', '0', 'Z', '$' ].each do |stp_indicator|
+      @valid_record[:stp_indicator] = stp_indicator
       BasicSchedule.new(@valid_record).should_not be_valid
     end
 
