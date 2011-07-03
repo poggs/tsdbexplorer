@@ -447,6 +447,16 @@ describe "lib/tsdbexplorer.rb" do
 
   # Miscellaneous functions
 
+  it "should convert a departure time in to a coded letter for a 10-character Unique Train Identity" do
+
+    expected_data = { "0000" => "0", "0001" => "0", "0059" => "0", "0100" => "1", "0159" => "1", "0200" => "2", "0659" => "6", "0700" => "A", "0729" => "A", "0730" => "B", "0759" => "B", "0800" => "C" }
+
+    expected_data.each do |k,v|
+      TSDBExplorer::CIF::departure_to_code(k).should eql(v)
+    end
+
+  end
+
   it "should sort a list of Locations by their arrival, passing and departure times" do
 
     # Sort trains by passing time

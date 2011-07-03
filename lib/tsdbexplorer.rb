@@ -775,7 +775,7 @@ module TSDBExplorer
             if origin_location_record.nil?
               raise "Train #{schedule[:basic][:train_uid]} originates at #{schedule[:origin][:tiploc_code]}, but no STANOX code was found"
             else
-              unique_train_id_base = origin_location_record.stanox[0..1] + schedule[:basic][:train_identity] + "M" + TSDBExplorer::CIF::origin_code(schedule[:origin][:departure])
+              unique_train_id_base = origin_location_record.stanox[0..1] + schedule[:basic][:train_identity] + "M" + TSDBExplorer::CIF::departure_to_code(schedule[:origin][:departure])
             end
 
             date_range.each do |run_date|
@@ -848,11 +848,18 @@ module TSDBExplorer
     end
 
 
-    # Convert an origin time to an origin code, used to construct a 10-character Unique Train Identity
+    # Convert an origin time to an origin code, used to construct a
+    # 10-character Unique Train Identity
 
-    def CIF.origin_code(departure_time)
+    def CIF.departure_to_code(time)
 
-      return "M"
+      hour = time[0..1].to_i
+      minute = time[2..3].to_i
+      offset = hour * 2 + (minute / 30)
+
+      xlate = "00112233445566ABCDEFGHIJKLMNOPQRSTUVWXYYZZ778899".split(//)
+
+      return xlate[offset]
 
     end
 
