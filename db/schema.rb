@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20110628101228) do
     t.date     "run_date"
     t.string   "category",                  :limit => 2
     t.string   "train_identity",            :limit => 4
+    t.string   "train_identity_unique",     :limit => 10
     t.string   "headcode",                  :limit => 4
     t.string   "service_code",              :limit => 8
     t.string   "portion_id",                :limit => 1
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20110628101228) do
     t.string   "reservations",              :limit => 1
     t.string   "catering_code",             :limit => 1
     t.string   "service_branding",          :limit => 1
+    t.string   "stp_indicator",             :limit => 1
     t.string   "uic_code",                  :limit => 5
     t.string   "atoc_code",                 :limit => 2
     t.string   "ats_code",                  :limit => 1
@@ -57,6 +59,8 @@ ActiveRecord::Schema.define(:version => 20110628101228) do
   end
 
   add_index "basic_schedules", ["run_date"], :name => "index_basic_schedules_on_run_date"
+  add_index "basic_schedules", ["train_identity"], :name => "index_basic_schedules_on_train_identity"
+  add_index "basic_schedules", ["train_identity_unique"], :name => "index_basic_schedules_on_train_identity_unique"
   add_index "basic_schedules", ["train_uid"], :name => "index_basic_schedules_on_train_uid"
   add_index "basic_schedules", ["uuid"], :name => "index_basic_schedules_on_uuid"
 
@@ -137,6 +141,7 @@ ActiveRecord::Schema.define(:version => 20110628101228) do
   end
 
   add_index "tiplocs", ["crs_code"], :name => "index_tiplocs_on_crs_code"
+  add_index "tiplocs", ["stanox"], :name => "index_tiplocs_on_stanox"
   add_index "tiplocs", ["tiploc_code"], :name => "index_tiplocs_on_tiploc_code", :unique => true
 
 end
