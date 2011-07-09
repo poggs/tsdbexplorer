@@ -19,20 +19,17 @@
 
 class BasicSchedule < ActiveRecord::Base
 
-  validates_format_of :train_uid, :with => /[A-Z]\d{5}/
-  validates_inclusion_of :status, :in => ['B', 'F', 'P', 'S', 'T', '1', '2', '3', '4', '5']
-  validates_format_of :train_identity, :with => /\d[A-Z]\d{2}/
-  validates_format_of :service_code, :with => /\d{4}/, :allow_nil => true, :allow_blank => true
-  validates_inclusion_of :portion_id, :in => ['0', '1', '2', '4', '8', 'Z'], :allow_nil => true, :allow_blank => true
-  validates_format_of :speed, :with => /\d+/, :allow_nil => true, :allow_blank => true
-  validates_format_of :operating_characteristics, :with => /^[BCDEGMPQRSYZ]{1,6}$/, :allow_blank => true
-  validates_inclusion_of :train_class, :in => ['B', 'S'], :allow_blank => true, :allow_nil => true
-  validates_inclusion_of :sleepers, :in => ['B', 'F', 'S'], :allow_blank => true
-  validates_inclusion_of :reservations, :in => ['A', 'E', 'R', 'S'], :allow_blank => true
-  validates_format_of :catering_code, :with => /^[CFHMPRT]{0,2}$/, :allow_blank => true
-  validates_inclusion_of :service_branding, :in => ['E', 'U'], :allow_blank => true
-  validates_inclusion_of :stp_indicator, :in => ['C', 'N', 'O', 'P']
-
   has_many :locations, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid, :dependent => :delete_all
+
+  scope :runs_on_by_uid, lambda { |uid,date| where('train_uid = ? AND ? BETWEEN runs_from AND runs_to', uid, date).order("runs_to - runs_from").limit(1) }
+  scope :runs_on_by_train_identity, lambda { |identity,date| where('train_identity_unique = ? AND ? BETWEEN runs_from AND runs_to', uid, date).order("runs_to - runs_from").limit(1) }
+
+  def origin
+    self.locations.first
+  end
+
+  def terminate
+    self.locations.last
+  end
 
 end

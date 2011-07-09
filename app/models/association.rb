@@ -18,16 +18,4 @@
 #
 
 class Association < ActiveRecord::Base
-
-  validates_format_of :main_train_uid, :with => /^[A-Z]\d{5}$/
-  validates_format_of :assoc_train_uid, :with => /^[A-Z]\d{5}$/
-  validates_presence_of :date
-  validates_inclusion_of :category, :in => [ 'JJ', 'VV', 'NP', '  ' ]
-  validates_inclusion_of :date_indicator, :in => [ 'S', 'N', 'P', ' ' ]
-  validates_presence_of :location
-  validates_numericality_of :base_location_suffix, :greater_than => 0, :allow_blank => true
-  validates_numericality_of :assoc_location_suffix, :greater_than => 0, :allow_blank => true
-  validates_inclusion_of :diagram_type, :in => [ 'T' ]
-  validates_inclusion_of :assoc_type, :in => [ 'P', 'O', ' ' ]
-
 end

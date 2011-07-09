@@ -23,7 +23,9 @@ class CreateAssociations < ActiveRecord::Migration
     create_table :associations do |t|
       t.string     :main_train_uid, :length => 6
       t.string     :assoc_train_uid, :length => 6
-      t.date       :date
+      t.date       :association_start_date
+      t.date       :association_end_date
+      t.string     :association_days, :length => 7
       t.string     :category, :length => 2
       t.string     :date_indicator, :length => 1
       t.string     :location, :length => 7

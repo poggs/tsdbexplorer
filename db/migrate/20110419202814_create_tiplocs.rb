@@ -34,10 +34,9 @@ class CreateTiplocs < ActiveRecord::Migration
       t.string     :stanox, :limit => 5
       t.string     :crs_code, :limit => 3
       t.string     :description, :limit => 16
-      t.timestamps
     end
 
-    add_index(:tiplocs, :tiploc_code, :unique => :true)
+    add_index(:tiplocs, :tiploc_code, :unique => true)
     add_index(:tiplocs, :crs_code)
     add_index(:tiplocs, :stanox)
 
