@@ -130,3 +130,18 @@ div.monospace {
   font-family: monospace;
   padding: 0.5em 1em 0.5em 1em;
 }
+
+.early {
+  font-weight: bold;
+  color: blue;
+}
+
+.ontime {
+  font-weight: bold;
+  color: green;
+}
+
+.late {
+  font-weight: bold;
+  color: red;
+}

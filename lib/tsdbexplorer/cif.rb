@@ -183,8 +183,10 @@ module TSDBExplorer
       stats = {:schedule=>{:insert=>0, :amend=>0, :delete=>0}, :tiploc=>{:insert=>0, :amend=>0, :delete=>0}, :association=>{:insert=>0, :amend=>0, :delete=>0}}
 
       pending = { 'Tiploc' => { :cols => [ :tiploc_code, :nalco, :tps_description, :stanox, :crs_code, :description ], :rows => [] },
-                  'BasicSchedule' => { :cols => [ :uuid, :train_uid, :runs_from, :runs_to, :days_run, :bh_running, :status, :category, :train_identity, :headcode, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source ], :rows => [] },
+                  'BasicSchedule' => { :cols => [ :uuid, :train_uid, :train_identity_unique, :runs_from, :runs_to, :days_run, :bh_running, :status, :category, :train_identity, :headcode, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source ], :rows => [] },
                   'Location' => { :cols => [ :basic_schedule_uuid, :location_type, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity ], :rows => [] } }
+
+      start_time = Time.now
 
 
       # Iterate through the CIF file and process each record
@@ -199,6 +201,8 @@ module TSDBExplorer
 
           record.delete :record_identity
 
+          record[:stanox] = nil if record[:stanox] == "00000"
+
           data = []
           pending['Tiploc'][:cols].each do |column|
             data << record[column]
@@ -208,6 +212,11 @@ module TSDBExplorer
           stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
 
         elsif record[:record_identity] == "BS"
+
+          # Check if we have any pending TIPLOCs to insert, and if so,
+          # process them now
+
+          pending = process_pending(pending) if pending['Tiploc'][:rows].count > 0
 
           # Schedule cancellations (BS records with the STP indicator set to
           # 'C') have no locations, so must be processed separately
@@ -221,11 +230,12 @@ module TSDBExplorer
             uuid = UUID.generate
             bs_record[:uuid] = uuid
 
+
             # Read in all records up to and including the next LT record
 
             bx_record = TSDBExplorer::CIF::parse_record(cif_data.gets)
             bx_record[:locaion_type] = bx_record[:record_identity]
-
+next unless bx_record[:atoc_code] == "LO" || bx_record[:atoc_code] == "LM" || bx_record[:atoc_code] == "VT" || bx_record[:atoc_code] == "LE"
             while(record[:record_identity] != "LT")
               record = TSDBExplorer::CIF::parse_record(cif_data.gets)
               record[:basic_schedule_uuid] = uuid
@@ -243,18 +253,23 @@ module TSDBExplorer
           end
 
 
-          # Push all the schedules on to the pending INSERT queue
 
-          data = []
-          pending['BasicSchedule'][:cols].each do |column|
-            data << bs_record[column]
-          end
-          pending['BasicSchedule'][:rows] << data
+          # If location records exist for this schedule (as they might not
+          # if this is a cancellation), push them on to the pending INSERT
+          # queue
 
+          unless loc_records == []
 
-          # If location records exist for this schedule, push them on to the pending INSERT queue
+            origin_location = Tiploc.find_by_tiploc_code(loc_records.first[:tiploc_code])
+            origin_departure = loc_records.first[:departure]
 
-          unless loc_records.nil?
+            if origin_location.nil?
+              puts "WARNING: No location record found for TIPLOC '#{loc_records.first[:tiploc_code]}'"
+            elsif ['P', 'F', 'T', '1', '2'].include? bs_record[:status] 
+              bs_record[:train_identity_unique] = origin_location[:stanox][0..1] + bs_record[:train_identity] + "M" + TSDBExplorer::CIF::departure_to_code(origin_departure)
+            else
+              puts "INFO: Skipping unique ID generation - status = #{bs_record[:status]}"
+            end
 
             loc_records.each do |r|
               data = []
@@ -262,17 +277,29 @@ module TSDBExplorer
                 data << r[column]
               end
               pending['Location'][:rows] << data
-
             end
 
           end
 
-          if pending['BasicSchedule'][:rows].count > 500
-            puts "#{((cif_data.pos / file_size) * 100).to_i}% processed"
+
+          # Push all the schedules on to the pending INSERT queue
+
+          data = []
+          pending['BasicSchedule'][:cols].each do |column|
+            data << bs_record[column]
+          end
+
+          pending['BasicSchedule'][:rows] << data
+
+
+          if pending['BasicSchedule'][:rows].count > 1000
+            pct_processed = (cif_data.pos.to_f / file_size) * 100
+            puts "#{pct_processed.to_i}% imported"
             pending = process_pending(pending)
           end
 
         end
+
 
       end
 

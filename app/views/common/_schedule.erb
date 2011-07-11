@@ -25,7 +25,7 @@
   <th>Characteristics</th>
  </tr>
  <tr>
-  <td><%= @schedule.run_date %></td>
+  <td><%= @schedule.runs_on %></td>
   <td><%= @schedule.train_identity %></td>
   <td><%= @schedule.train_uid %></td>
   <td><%= decode_train_category(@schedule.category) %></td>
@@ -58,13 +58,13 @@
  <th>Pass</th>
  <th>Departure</th>
  </tr>
- <% @schedule.locations.each do |location| %>
+ <% @schedule.daily_schedule_locations.each do |location| %>
   <tr>
    <td><%= tidy_text(decode_tiploc(location)) %></td>
    <td><%= location.platform %></td>
-   <td><%= time_only(location.arrival) %></td>
-   <td><%= time_only(location.pass) %></td>
-   <td><%= time_only(location.departure) %></td>
+   <td><%= raw(schedule_or_actual(location.arrival, location.actual_arrival)) %></td>
+   <td><%= raw(schedule_or_actual(location.pass, location.actual_pass)) %></td>
+   <td><%= raw(schedule_or_actual(location.departure, location.actual_departure)) %></td>
   </tr>
  <% end %>
 </table>

@@ -17,17 +17,8 @@
 #  $Id$
 #
 
-# Set the hostname, username and password for the AMQP server here.  Leave
-# the queue names at their default unless it's necessary to change them.
+require 'spec_helper'
 
-AMQP_SERVER:
-  hostname:    'localhost'
-  username:    'dummy_user'
-  password:    'dummy_password'
-  vhost:       'vhost_name'
-
-TDNET_QUEUES:
-  td:          'example.td'
-  trust:       'example.trust'
-  tsr:         'example.tsr'
-  vstp:        'example.vstp'
+describe DailyScheduleLocations do
+  pending "add some examples to (or delete) #{__FILE__}"
+end

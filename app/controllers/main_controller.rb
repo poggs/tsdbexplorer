@@ -31,13 +31,13 @@ class MainController < ApplicationController
       @time = Time.now
     end
 
-    range_from = (@time - 2.hours).strftime('%Y-%m-%d %H:%M:00')
-    range_to = (@time + 2.hours).strftime('%Y-%m-%d %H:%M:00')
+    range_from = (@time - 1.hour - 30.minutes).strftime('%Y-%m-%d %H:%M:00')
+    range_to = (@time).strftime('%Y-%m-%d %H:%M:00')
 
     @location = Tiploc.find_by_tiploc_code(params[:location])
 
     unless @location.nil?
-      @schedule = Location.where("tiploc_code = ? and ((departure BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (arrival BETWEEN ? AND ?))", @location.tiploc_code, range_from, range_to, range_from, range_to, range_from, range_to)
+      @schedule = DailyScheduleLocation.where("tiploc_code = ? and ((departure BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (arrival BETWEEN ? AND ?))", @location.tiploc_code, range_from, range_to, range_from, range_to, range_from, range_to)
     end
 
   end
@@ -56,7 +56,7 @@ class MainController < ApplicationController
 
   def schedule
 
-    @schedule = BasicSchedule.find_by_uuid(params[:uuid])
+    @schedule = DailySchedule.find(params[:uuid])
 
     render 'common/_schedule.erb'
 

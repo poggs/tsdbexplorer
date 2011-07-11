@@ -17,17 +17,9 @@
 #  $Id$
 #
 
-# Set the hostname, username and password for the AMQP server here.  Leave
-# the queue names at their default unless it's necessary to change them.
+class DailyScheduleLocation < ActiveRecord::Base
 
-AMQP_SERVER:
-  hostname:    'localhost'
-  username:    'dummy_user'
-  password:    'dummy_password'
-  vhost:       'vhost_name'
+  belongs_to :daily_schedule, :primary_key => :train_uid, :foreign_key => :train_uid
+  has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
-TDNET_QUEUES:
-  td:          'example.td'
-  trust:       'example.trust'
-  tsr:         'example.tsr'
-  vstp:        'example.vstp'
+end

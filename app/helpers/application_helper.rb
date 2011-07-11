@@ -23,6 +23,32 @@ module ApplicationHelper
     date_obj.sec == 30 ? date_obj.localtime.strftime('%H%M')+"H" : date_obj.localtime.strftime('%H%M') if date_obj.is_a? Time
   end
 
+  def schedule_or_actual(sch, act)
+
+    if act.nil?
+      return time_only(sch)
+    else
+
+      varn = 0
+
+      if sch.nil?
+        delay = ""
+      elsif act < sch
+        delay = "early"
+        varn = act - sch
+      elsif act == sch
+        delay = "ontime"
+      elsif act > sch
+        delay = "late"
+        varn = act - sch
+      end
+
+      return "<div class=\"#{delay}\">#{time_only(act)} (#{varn / 60} min)</div>"
+
+    end
+
+  end
+
   def decode_train_category(category)
   
     category_hash = {
@@ -241,6 +267,8 @@ module ApplicationHelper
     if obj.is_a? Tiploc
       decoded_tiploc = tidy_text((obj.tps_description.blank? || obj.tps_description.nil?) ? obj.tiploc_code : obj.tps_description)
     elsif obj.is_a? Location
+      decoded_tiploc = obj.tiploc.nil? ? obj.tiploc_code : obj.tiploc.tps_description
+    elsif obj.is_a? DailyScheduleLocation
       decoded_tiploc = obj.tiploc.nil? ? obj.tiploc_code : obj.tiploc.tps_description
     end
 

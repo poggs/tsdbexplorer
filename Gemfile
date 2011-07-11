@@ -5,6 +5,7 @@ gem 'sqlite3'
 gem 'ruby-mysql', '2.9.3'
 gem 'nokogiri', '>= 1.1.4'
 gem 'uuid', '>= 2.3.2'
+gem 'amqp'
 
 gem 'activerecord-import', '>= 0.2.6'
 

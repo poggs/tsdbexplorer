@@ -35,19 +35,19 @@
   <th>Activity</th>
  </tr>
  <% @schedule.sort { |a,b| TSDBExplorer::train_sort(a,b) }.each do |train| %>
-  <% if train.basic_schedule.nil? %>
+  <% if train.daily_schedule.nil? %>
    <tr>
-    <td colspan="8" style="background: #c44; color: white; font-weight: bold; text-align: center;">ERROR: Schedule <%= train.basic_schedule_uuid %> not found</td>
+    <td colspan="8" style="background: #c44; color: white; font-weight: bold; text-align: center;">ERROR: Schedule <%= train.daily_schedule_uuid %> not found</td>
    </tr>
   <% else %>
    <tr>
-    <td><%= link_to train.basic_schedule.train_identity, { :action => 'schedule', :uuid => train.basic_schedule_uuid } %></td>
-    <td><%= time_only(train.arrival) %></td>
+    <td><%= link_to train.daily_schedule.train_identity, { :action => 'schedule', :uuid => train.daily_schedule.id } %></td>
+    <td><%= raw(schedule_or_actual(train.arrival, train.actual_arrival)) %></td>
     <td><%= train.platform %></td>
-    <td><%= tidy_text(decode_tiploc(train.basic_schedule.locations.first)) %></td>
+    <td><%= tidy_text(decode_tiploc(train.daily_schedule.daily_schedule_locations.first)) %></td>
     <td><%= time_only(train.pass) %></td>
-    <td><%= tidy_text(decode_tiploc(train.basic_schedule.locations.last)) %></td>
-    <td><%= time_only(train.departure) %></td>
+    <td><%= tidy_text(decode_tiploc(train.daily_schedule.daily_schedule_locations.last)) %></td>
+    <td><%= raw(schedule_or_actual(train.departure, train.actual_departure)) %></td>
     <td>
      <% if train.activity == "TB" %>Starts here<% end %>
      <% if train.activity == "TF" %>Terminates here<% end %>
