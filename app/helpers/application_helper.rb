@@ -23,6 +23,16 @@ module ApplicationHelper
     date_obj.sec == 30 ? date_obj.localtime.strftime('%H%M')+"H" : date_obj.localtime.strftime('%H%M') if date_obj.is_a? Time
   end
 
+  def platform_or_actual(sch, act)
+
+    if act.nil?
+      return sch
+    else
+      return "<strong>#{act}</strong>"
+    end
+
+  end
+
   def schedule_or_actual(sch, act)
 
     if act.nil?
@@ -33,17 +43,20 @@ module ApplicationHelper
 
       if sch.nil?
         delay = ""
-      elsif act < sch
-        delay = "early"
-        varn = act - sch
-      elsif act == sch
-        delay = "ontime"
-      elsif act > sch
-        delay = "late"
-        varn = act - sch
+      else
+        varn = (act - sch) / 60
+
+        if varn > 5
+          delay = "late"
+        elsif varn < 0
+          delay = "early"
+        else
+          delay = "ontime"
+        end
+
       end
 
-      return "<div class=\"#{delay}\">#{time_only(act)} (#{varn / 60} min)</div>"
+      return "<div class=\"#{delay}\">#{time_only(act)}</div>"
 
     end
 

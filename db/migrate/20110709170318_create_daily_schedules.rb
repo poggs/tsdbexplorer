@@ -21,10 +21,11 @@ class CreateDailySchedules < ActiveRecord::Migration
 
   def self.up
     create_table :daily_schedules do |t|
-      t.string     :train_uid, :limit => 6
+      t.string     :uuid, :limit => 36
       t.date       :runs_on
       t.timestamp  :activated
       t.string     :status, :limit => 1
+      t.string     :train_uid, :limit => 6
       t.string     :category, :limit => 2
       t.string     :train_identity, :limit => 4
       t.string     :train_identity_unique, :limit => 10

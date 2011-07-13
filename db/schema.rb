@@ -74,10 +74,13 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
     t.string   "tiploc_code",           :limit => 7
     t.integer  "tiploc_instance"
     t.datetime "arrival"
+    t.datetime "expected_arrival"
     t.datetime "actual_arrival"
     t.datetime "public_arrival"
+    t.datetime "expected_pass"
     t.datetime "pass"
     t.datetime "actual_pass"
+    t.datetime "expected_departure"
     t.datetime "departure"
     t.datetime "actual_departure"
     t.datetime "public_departure"
@@ -101,10 +104,11 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
   add_index "daily_schedule_locations", ["pass"], :name => "index_daily_schedule_locations_on_pass"
 
   create_table "daily_schedules", :force => true do |t|
-    t.string   "train_uid",                 :limit => 6
+    t.string   "uuid",                      :limit => 36
     t.date     "runs_on"
     t.datetime "activated"
     t.string   "status",                    :limit => 1
+    t.string   "train_uid",                 :limit => 6
     t.string   "category",                  :limit => 2
     t.string   "train_identity",            :limit => 4
     t.string   "train_identity_unique",     :limit => 10

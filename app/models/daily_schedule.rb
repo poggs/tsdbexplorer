@@ -19,6 +19,6 @@
 
 class DailySchedule < ActiveRecord::Base
 
-  has_many :daily_schedule_locations, :primary_key => :train_uid, :foreign_key => :train_uid
+  has_many :daily_schedule_locations, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
 
 end

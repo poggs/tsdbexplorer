@@ -56,7 +56,7 @@ class MainController < ApplicationController
 
   def schedule
 
-    @schedule = DailySchedule.find(params[:uuid])
+    @schedule = DailySchedule.find_by_uuid(params[:uuid])
 
     render 'common/_schedule.erb'
 

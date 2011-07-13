@@ -41,6 +41,9 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
       puts "#{Time.now} TRUST Activation for #{msg[:train_id]} *** NOT YET SUPPORTED ***"
 
+      puts msg.inspect
+      puts payload
+
       daily_schedule = DailySchedule.find_by_train_identity_unique(msg[:train_id])
 
       if daily_schedule.nil?
@@ -57,6 +60,7 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
       puts "#{Time.now} TRUST Cancellation"
 
       puts msg.inspect
+      puts payload
 
     elsif msg[:message_type] == "0003"
 
@@ -96,11 +100,30 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
         puts "#{Time.now}   Train #{event_type} #{msg[:timetable_variation].to_i} minutes early"
       end
 
-      point = daily_schedule.daily_schedule_locations.where(:tiploc_code => location.tiploc_code).first
+      if msg[:offroute_indicator]
+        puts "#{Time.now}   *** WARNING: Train is reported as off-route ***"
+      else
+        point = daily_schedule.daily_schedule_locations.where(:tiploc_code => location.tiploc_code).first
+      end
 
       if point
-        point.actual_arrival = msg[:actual_timestamp] if msg[:event_type] == "A"
-        point.actual_departure = msg[:actual_timestamp] if msg[:event_type] == "D"
+
+        if msg[:event_type] == "A"
+          if point.pass.nil?
+            point.actual_arrival = msg[:actual_timestamp]
+          else
+            point.actual_pass = msg[:actual_timestamp]
+          end
+        elsif msg[:event_type] == "D"
+          if point.pass.nil?
+            point.actual_departure = msg[:actual_timestamp]
+          else
+            point.actual_pass = msg[:actual_timestamp]
+          end
+        end
+
+        point.actual_platform = msg[:platform] unless msg[:platform].nil?
+        point.actual_line = msg[:route] unless msg[:route].nil?
         point.save
       else
         puts "#{Time.now}   Location #{location.tiploc_code} not found in schedule"

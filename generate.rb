@@ -19,11 +19,12 @@
 #
 
 require 'config/environment'
+Rails.logger.level = 1
 
 
 # Ensure we have two days of schedules
 
-run_date = Date.today # + 1.days
+run_date = Date.today + 1.days
 
 puts "Generating schedules for #{run_date}"
 
@@ -33,11 +34,18 @@ cif_day_pos = run_date.wday
 cif_day_pos = 7 if cif_day_pos == 0
 
 runs_today = BasicSchedule.where("? BETWEEN runs_from AND runs_to", run_date).where("MID(days_run,#{cif_day_pos},1) = '1'").order('runs_to - runs_from').group('train_uid')
+num_schedules = runs_today.length
+
+puts "Generating daily schedules for #{num_schedules} schedules"
 
 daily_attributes = DailySchedule.new.attributes.keys
 loc_attributes = DailyScheduleLocation.new.attributes.keys
 
+count = 0
+
 runs_today.each do |schedule|
+
+  count = count + 1
 
 
   # If this schedule has been cancelled, skip it
@@ -54,6 +62,8 @@ runs_today.each do |schedule|
   end
 
   ds_attr[:runs_on] = run_date
+  uuid = UUID.generate
+  ds_attr[:uuid] = uuid
 
 
   # Exclude non-trains (e.g. ships, buses)
@@ -74,7 +84,7 @@ runs_today.each do |schedule|
       loc_attr[attr] = location[attr]
     end
 
-    loc_attr[:train_uid] = schedule[:train_uid]
+    loc_attr[:daily_schedule_uuid] = uuid
 
     [ :arrival, :public_arrival, :pass, :departure, :public_departure ].each do |time_attr|
       loc_attr[time_attr] = Time.parse(run_date.to_s + " " + TSDBExplorer::normalise_time(location[time_attr])) unless location[time_attr].nil?
@@ -88,5 +98,7 @@ runs_today.each do |schedule|
 
   DailySchedule.create!(ds_attr)
   DailyScheduleLocation.import(location_list)
+
+  puts "#{num_schedules - count} schedules remaining"
 
 end

@@ -27,10 +27,13 @@ class CreateDailyScheduleLocations < ActiveRecord::Migration
       t.string     :tiploc_code, :limit => 7
       t.integer    :tiploc_instance
       t.datetime   :arrival
+      t.datetime   :expected_arrival
       t.datetime   :actual_arrival
       t.datetime   :public_arrival
+      t.datetime   :expected_pass
       t.datetime   :pass
       t.datetime   :actual_pass
+      t.datetime   :expected_departure
       t.datetime   :departure
       t.datetime   :actual_departure
       t.datetime   :public_departure

@@ -41,7 +41,7 @@
    </tr>
   <% else %>
    <tr>
-    <td><%= link_to train.daily_schedule.train_identity, { :action => 'schedule', :uuid => train.daily_schedule.id } %></td>
+    <td><%= link_to train.daily_schedule.train_identity, { :action => 'schedule', :uuid => train.daily_schedule.uuid } %></td>
     <td><%= raw(schedule_or_actual(train.arrival, train.actual_arrival)) %></td>
     <td><%= train.platform %></td>
     <td><%= tidy_text(decode_tiploc(train.daily_schedule.daily_schedule_locations.first)) %></td>
