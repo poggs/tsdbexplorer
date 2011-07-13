@@ -62,6 +62,23 @@ module ApplicationHelper
 
   end
 
+  def decode_toc(toc)
+
+    toc_hash = {
+      "LM" => "London Midland",
+      "LO" => "London Overground",
+      "VT" => "Virgin Trains",
+      "LE" => "National Express East Anglia"
+    }
+
+    if toc_hash.has_key? toc
+      return toc_hash[toc]
+    else
+      return toc
+    end
+
+  end
+
   def decode_train_category(category)
   
     category_hash = {

@@ -21,4 +21,12 @@ class DailySchedule < ActiveRecord::Base
 
   has_many :daily_schedule_locations, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
 
+  def origin
+    self.daily_schedule_locations.first
+  end
+
+  def terminate
+    self.daily_schedule_locations.last
+  end
+
 end

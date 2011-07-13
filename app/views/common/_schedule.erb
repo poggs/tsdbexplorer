@@ -9,48 +9,47 @@
  <script type="text/javascript">
   $(document).ready( function() {
    $("tr:nth-child(odd)").addClass("odd");
+   $("tr#pass").hide();
   });
+
+  function toggle_pass() {
+   $("tr#pass").fadeToggle();
+  };
+
  </script>
 <% end %>
 
-<table>
- <tr>
-  <th>Runs on</th>
-  <th>Identity</th>
-  <th>UID</th>
-  <th>Category</th>
-  <th>Train type</th>
-  <th>Service Code</th>
-  <th>Status</th>
-  <th>Characteristics</th>
- </tr>
- <tr>
-  <td><%= @schedule.runs_on %></td>
-  <td><%= @schedule.train_identity %></td>
-  <td><%= @schedule.train_uid %></td>
-  <td><%= decode_train_category(@schedule.category) %></td>
-  <td><%= @schedule.power_type %><%= @schedule.timing_load %> at <%= @schedule.speed %>mph</td>
-  <td><%= @schedule.service_code %></td>
-  <td><%= decode_train_status(@schedule.status) %></td>
-  <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
- </tr>
-</table>
+<div id="service_detail">
+  <div id="headline"><%= time_only(@schedule.origin.departure) %> <%= tidy_text(decode_tiploc(@schedule.origin.tiploc)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate.tiploc)) %></div>
+  <div id="operator">Operated by <%= decode_toc(@schedule.atoc_code) %></div>
+</div>
 
-<table>
- <tr>
-  <th>Operator</th>
-  <th>Seating</th>
-  <th>Catering</th>
-  <th>Reservations</th>
- </tr>
- <tr>
-  <td><%= @schedule.atoc_code %></td>
-  <td><%= decode_train_class(@schedule.train_class) %></td>
-  <td><%= decode_catering(@schedule.catering_code) %></td>
-  <td><%= decode_reservations(@schedule.reservations) %></td>
- </tr>
-</table>
+<div id="technical" style="display: none;">
+ <table>
+  <tr>
+   <th>Runs on</th>
+   <th>Identity</th>
+   <th>UID</th>
+   <th>Category</th>
+   <th>Train type</th>
+   <th>Service Code</th>
+   <th>Status</th>
+   <th>Characteristics</th>
+  </tr>
+  <tr>
+   <td><%= @schedule.runs_on %></td>
+   <td><%= @schedule.train_identity %></td>
+   <td><%= @schedule.train_uid %></td>
+   <td><%= decode_train_category(@schedule.category) %></td>
+   <td><%= @schedule.power_type %><%= @schedule.timing_load %> at <%= @schedule.speed %>mph</td>
+   <td><%= @schedule.service_code %></td>
+   <td><%= decode_train_status(@schedule.status) %></td>
+   <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
+  </tr>
+ </table>
+</div>
 
+<a href="#" onclick="toggle_pass();">Show/hide passing times</a>
 <table>
  <tr><th>Location</th>
  <th>Platform</th>
@@ -59,7 +58,11 @@
  <th>Departure</th>
  </tr>
  <% @schedule.daily_schedule_locations.each do |location| %>
+  <% if location.pass %>
+  <tr id="pass">
+  <% else %>
   <tr>
+  <% end %>
    <td><%= tidy_text(decode_tiploc(location)) %></td>
    <td><%= raw(platform_or_actual(location.platform, location.actual_platform)) %></td>
    <td><%= raw(schedule_or_actual(location.arrival, location.actual_arrival)) %></td>
