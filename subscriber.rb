@@ -23,15 +23,22 @@ require File.expand_path(File.dirname(__FILE__) + "/config/environment")
 require 'rubygems'
 require 'amqp'
 
-puts "#{Time.now} TSDBExplorer subscriber starting"
+log = Logger.new(STDOUT)
+log.formatter = proc { |severity,datetime,progname,msg| "#{datetime} #{severity}\t#{msg}\n" }
+
+log.info "TSDBExplorer TRUST subscriber starting"
+
+log.info "Connecting to AMQP server #{$CONFIG['AMQP_SERVER']['hostname']} as user $CONFIG['AMQP_SERVER']['username']"
 
 AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AMQP_SERVER']['username'], :password => $CONFIG['AMQP_SERVER']['password'], :vhost => $CONFIG['AMQP_SERVER']['vhost']) do |connection|
+
+  log.debug "Connected to AMQP server"
 
   channel = AMQP::Channel.new(connection)
   queue = channel.queue($CONFIG['AMQP_SERVER']['username'] + ".trust", :durable => true)
   exchange = channel.fanout("tdnet.exch.trust", :durable => true)
 
-  puts "#{Time.now} Polling for TRUST messages"
+  log.debug "Polling for TRUST messages"
 
   queue.bind(exchange).subscribe do |metadata, payload|
 
@@ -39,48 +46,51 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
     if msg[:message_type] == "0001"
 
-      puts "#{Time.now} TRUST Activation for #{msg[:train_id]} *** NOT YET SUPPORTED ***"
-
-      puts msg.inspect
-      puts payload
+      log.debug "TRUST activation for #{msg[:train_id]}"
 
       daily_schedule = DailySchedule.find_by_train_identity_unique(msg[:train_id])
 
       if daily_schedule.nil?
-        puts "#{Time.now}   Schedule not found"
+        log.warn "  Schedule not found for activation of train #{msg[:train_id]}"
         next
       end
 
       daily_schedule.activated = msg[:train_creation_timestamp]
 
-      puts "#{Time.now}   Schedule found - operated by #{daily_schedule[:atoc_code]}"
+      log.debug "Activated train operated by TOC #{daily_schedule[:atoc_code]}"
 
     elsif msg[:message_type] == "0002"
 
-      puts "#{Time.now} TRUST Cancellation"
+      log.debug "TRUST cancellation for #{msg[:train_id]}"
 
-      puts msg.inspect
-      puts payload
+      daily_schedule = DailySchedule.find_by_train_identity_unique(msg[:train_id])
+
+      if daily_schedule.nil?
+        log.warn "  Schedule not found for cancellation of train #{msg[:train_id]}"
+        next
+      end
+
+      log.warn "   *** Cancellation not supported"
 
     elsif msg[:message_type] == "0003"
 
-      puts "#{Time.now} TRUST Movement message for train #{msg[:current_train_id]}"
+      log.debug "TRUST movement message for train #{msg[:current_train_id]}"
 
       daily_schedule = DailySchedule.find_by_train_identity_unique(msg[:current_train_id])
 
       if daily_schedule.nil?
-        puts "#{Time.now}   Schedule not found"
+        log.warn "  Schedule not found for movement of train #{msg[:current_train_id]}"
         next
       end
 
-      puts "#{Time.now}   Found train #{daily_schedule[:train_identity]} operated by TOC #{msg[:toc_id]}"
+      log.debug "  Found train #{msg[:current_train_id]} operated by TOC #{daily_schedule[:atoc_code]}"
 
       location = Tiploc.find_by_stanox(msg[:location_stanox])
 
       if location
-        puts "#{Time.now}   Report for #{location.tps_description}"
+        log.debug "  Report for #{location.tps_description}"
       else
-        puts "#{Time.now}   Report for unknonwn STANOX #{msg[:reporting_stanox]}"
+        log.warn "  Movement report for unknonwn STANOX #{msg[:reporting_stanox]}"
         next
       end
       
@@ -93,15 +103,15 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
       end
 
       if msg[:variation_status].blank?
-        puts "#{Time.now}   Train #{event_type} on-time"
+        log.debug "  Train #{event_type} on-time"
       elsif msg[:variation_status] == "L"
-        puts "#{Time.now}   Train #{event_type} #{msg[:timetable_variation].to_i} minutes late"
+        log.debug "  Train #{event_type} #{msg[:timetable_variation].to_i} minutes late"
       elsif msg[:variation_status] == "E"
-        puts "#{Time.now}   Train #{event_type} #{msg[:timetable_variation].to_i} minutes early"
+        log.debug "  Train #{event_type} #{msg[:timetable_variation].to_i} minutes early"
       end
 
       if msg[:offroute_indicator]
-        puts "#{Time.now}   *** WARNING: Train is reported as off-route ***"
+        log.warn "  Train is off-route"
       else
         point = daily_schedule.daily_schedule_locations.where(:tiploc_code => location.tiploc_code).first
       end
@@ -126,21 +136,38 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
         point.actual_line = msg[:route] unless msg[:route].nil?
         point.save
       else
-        puts "#{Time.now}   Location #{location.tiploc_code} not found in schedule"
+        log.warn "  Location #{location.tiploc_code} not found for train #{msg[:current_train_id]}"
       end
 
     elsif msg[:message_type] == "0004"
-      puts "TRUST Undefined Train"
+
+      log.debug "TRUST unidentified train report"
+      log.debug msg.inspect
+
     elsif msg[:message_type] == "0005"
-      puts "TRUST Train Reinstatement"
+
+      log.debug "TRUST train reinstatement report"
+      log.debug msg.inspect
+
     elsif msg[:message_type] == "0006"
-      puts "TRUST Change Of Origin"
+
+      log.debug "TRUST change of origin report"
+      log.debug msg.inspect
+
     elsif msg[:message_type] == "0007"
-      puts "TRUST Change of Identity"
+
+      log.debug "TRUST change of identity report"
+      log.debug msg.inspect
+
     elsif msg[:message_type] == "0008"
-      puts "TRUST Change of Location"
+
+      log.debug "TRUST change of location report"
+      log.debug msg.inspect
+
     else
-      puts "Unknown message type #{msg[:message_type]}"
+
+      log.warn "Unknown TRUST report type #{msg[:message_type]}"
+
     end
 
   end
