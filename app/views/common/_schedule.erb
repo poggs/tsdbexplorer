@@ -23,7 +23,6 @@
 
 <ul>
  <li><a href="#" onclick="$('#technical').slideToggle();">Show/Hide technical information</a></li>
- <li><a href="#" onclick="$('tr#pass').fadeToggle();">Show/hide passing times</a></li>
 </ul>
 
 <div id="technical" style="display: none;">
@@ -55,7 +54,7 @@
  <tr><th>Location</th>
  <th>Platform</th>
  <th>Arrival</th>
- <th>Pass</th>
+ <th><abbr title="Click to show or hide passing times"><span onclick="$('tr#pass').fadeToggle();">Pass</span></abbr></th>
  <th>Departure</th>
  </tr>
  <% @schedule.daily_schedule_locations.each do |location| %>
