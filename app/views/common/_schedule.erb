@@ -9,13 +9,7 @@
  <script type="text/javascript">
   $(document).ready( function() {
    $("tr:nth-child(odd)").addClass("odd");
-   $("tr#pass").hide();
   });
-
-  function toggle_pass() {
-   $("tr#pass").fadeToggle();
-  };
-
  </script>
 <% end %>
 
@@ -23,6 +17,11 @@
   <div id="headline"><%= time_only(@schedule.origin.departure) %> <%= tidy_text(decode_tiploc(@schedule.origin.tiploc)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate.tiploc)) %></div>
   <div id="operator">Operated by <%= decode_toc(@schedule.atoc_code) %></div>
 </div>
+
+<ul>
+ <li><a href="#" onclick="$('#technical').slideToggle();">Show/Hide technical information</a></li>
+ <li><a href="#" onclick="$('tr#pass').fadeToggle();">Show/hide passing times</a></li>
+</ul>
 
 <div id="technical" style="display: none;">
  <table>
@@ -49,7 +48,13 @@
  </table>
 </div>
 
-<a href="#" onclick="toggle_pass();">Show/hide passing times</a>
+<ul>
+ <li>Scheduled times appear in <em>italics</em>, e.g. <em>0718</em>.  Actual times appear in <strong>bold</strong>, e.g. <strong>0719</strong>.</li>
+ <li>Times in <span class="early">blue</span>, e.g. <span class="early">0718</span> indicate an arrival 3 or more minutes early.</li>
+ <li>Times in <span class="ontime">green</span>, e.g. <span class="ontime">0718</span> indicate an arrival or departure time between 3 minutes early and 5 minutes late.</li>
+ <li>Times in <span class="late">red</span>, e.g. <span class="late">0718</span> indivate an arrival or departure time over 5 minutes late.</li>
+</ul>
+
 <table>
  <tr><th>Location</th>
  <th>Platform</th>
@@ -59,7 +64,7 @@
  </tr>
  <% @schedule.daily_schedule_locations.each do |location| %>
   <% if location.pass %>
-  <tr id="pass">
+  <tr id="pass" style="display: none;">
   <% else %>
   <tr>
   <% end %>
