@@ -75,6 +75,11 @@ a:hover {
   text-decoration: underline;
 }
 
+h1 {
+  margin: 0;
+  font-size: 2em;
+}
+
 #footer a {
   color: #008;
 }
