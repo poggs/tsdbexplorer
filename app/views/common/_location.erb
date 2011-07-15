@@ -49,8 +49,12 @@
     <td><%= tidy_text(decode_tiploc(train.daily_schedule.daily_schedule_locations.last)) %></td>
     <td><%= raw(schedule_or_actual(train.departure, train.actual_departure)) %></td>
     <td>
-     <% if train.activity == "TB" %>Starts here<% end %>
-     <% if train.activity == "TF" %>Terminates here<% end %>
+     <% if train.daily_schedule.cancelled %>
+      <span class="late">CANCELLED</span>
+     <% else %>
+      <% if train.activity == "TB" %>Starts here<% end %>
+      <% if train.activity == "TF" %>Terminates here<% end %>
+     <% end %>
     </td>
    </tr>
   <% end %>

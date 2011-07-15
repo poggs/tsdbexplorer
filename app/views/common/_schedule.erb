@@ -65,10 +65,10 @@
   <tr>
   <% end %>
    <td><%= tidy_text(decode_tiploc(location)) %></td>
-   <td><%= raw(platform_or_actual(location.platform, location.actual_platform)) %></td>
-   <td><%= raw(schedule_or_actual(location.arrival, location.actual_arrival)) %></td>
-   <td><%= raw(schedule_or_actual(location.pass, location.actual_pass)) %></td>
-   <td><%= raw(schedule_or_actual(location.departure, location.actual_departure)) %></td>
+   <td><%= raw(@schedule.cancelled? ? "" : platform_or_actual(location.platform, location.actual_platform)) %></td>
+   <td><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.arrival, location.actual_arrival)) %></td>
+   <td><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.pass, location.actual_pass)) %></td>
+   <td><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.departure, location.actual_departure)) %></td>
   </tr>
  <% end %>
 </table>
