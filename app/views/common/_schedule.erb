@@ -13,6 +13,7 @@
  </script>
 <% end %>
 
+
 <div id="service_detail">
   <div id="headline"><%= time_only(@schedule.origin.departure) %> <%= tidy_text(decode_tiploc(@schedule.origin.tiploc)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate.tiploc)) %></div>
   <div id="operator">Operated by <%= decode_toc(@schedule.atoc_code) %></div>
@@ -48,12 +49,6 @@
  </table>
 </div>
 
-<ul>
- <li>Scheduled times appear in <em>italics</em>, e.g. <em>0718</em>.  Actual times appear in <strong>bold</strong>, e.g. <strong>0719</strong>.</li>
- <li>Times in <span class="early">blue</span>, e.g. <span class="early">0718</span> indicate an arrival 3 or more minutes early.</li>
- <li>Times in <span class="ontime">green</span>, e.g. <span class="ontime">0718</span> indicate an arrival or departure time between 3 minutes early and 5 minutes late.</li>
- <li>Times in <span class="late">red</span>, e.g. <span class="late">0718</span> indivate an arrival or departure time over 5 minutes late.</li>
-</ul>
 
 <table>
  <tr><th>Location</th>
@@ -76,5 +71,9 @@
   </tr>
  <% end %>
 </table>
+
+<div id="key">
+ Scheduled times are in <em>italics</em>, and actual times are in <strong>bold</strong>.  Actual times may be in <span class="early">blue</span> if they are earlier than scheduled, <span class="ontime">green</span> if they are between -3 and +5 minutes of the schedule, and <span class="late">red</span> if they are later than 5 minutes.
+</div>
 
 <% end %>

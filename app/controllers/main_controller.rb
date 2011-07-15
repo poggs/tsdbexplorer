@@ -63,6 +63,12 @@ class MainController < ApplicationController
   end
 
 
+  # Display the disclaimer
+
+  def disclaimer
+  end
+
+
   # Search the TIPLOC records for a value
 
   def search

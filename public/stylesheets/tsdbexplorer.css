@@ -91,6 +91,13 @@ a:hover {
   font-weight: bold;
 }
 
+#key {
+  font-size: 0.9em;
+  background: #eee;
+  padding: 0.5em;
+  border: 1px solid #ddd;
+}
+
 #service_detail {
   padding-bottom: 1.25em;
 }
