@@ -24,6 +24,8 @@ class CreateDailySchedules < ActiveRecord::Migration
       t.string     :uuid, :limit => 36
       t.date       :runs_on
       t.timestamp  :activated
+      t.timestamp  :cancelled
+      t.string     :cancellation_reason, :limit => 2
       t.string     :status, :limit => 1
       t.string     :train_uid, :limit => 6
       t.string     :category, :limit => 2

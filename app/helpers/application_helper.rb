@@ -384,4 +384,92 @@ module ApplicationHelper
 
   end
 
+
+  # Translate a TRUST cancellation code to text.  The codes here are taken
+  # from the Delay Attribution Guide, Appendix A
+
+  def da_to_text(da_code)
+
+    map = { "IA" => "a signal failure",
+            "IB" => "a points failure",
+            "IC" => "a track circuit failure",
+            "ID" => "a level crossing failure",
+            "IE" => "a power failure",
+            "IF" => "a failure of part of the signalling system",
+            "IG" => "a signalling block failure" ,
+            "II" => "a power cable fault",
+            "IJ" => "a trackside safety equipment failure",
+            "IK" => "a lineside telephone failure",
+            "IL" => "failure of token-based signalling equipment",
+            "IM" => "bailse failure",
+            "IN" => "a fault with trackside train verification equipment",
+            "IO" => "a suspected fault with trackside train verification equipment",
+            "IP" => "a points failure due to faulty point heaters",
+            "IQ" => "a damaged trackside sign",
+            "IR" => "a rail flaw",
+            "IS" => "a track defect",
+            "IT" => "a reported bump",
+            "IU" => "an engineering train affecting maintenance work",
+            "IV" => "a landslide or sea defence failure",
+            "IW" => "the effects of cold weather on trackside infrastructure",
+            "IY" => "a mishap",
+            "IZ" => "an infrastructure problem",
+            "I0" => "a telecommunications failure",
+            "I1" => "an overhead line or third-rail defect",
+            "I2" => "a power supply tripping",
+            "I3" => "an obstruction on the overhead power lines",
+            "I4" => "a power supply failure or reduction",
+            "I5" => "overrunning planned engineering works",
+            "I6" => "track patrolling",
+            "I7" => "a late or failed engineer's train within a possession",
+            "I8" => "a train striking an animal",
+            "I9" => "a fire on the railway",
+            "TA" => "a crew or train diagram error",
+            "TB" => "a request from the train operator",
+            "TC" => "the train crew being used to operate another train",
+            "TD" => "the train being used for another service",
+            "TE" => "an injured passenger",
+            "TF" => "a problem with seat reservations",
+            "TG" => "a problem with the driver",
+            "TH" => "a problem with the conductor",
+            "TI" => "a problem with train crew rostering",
+            "TJ" => "a problem with the train's headlamp or tail lamp",
+            "TK" => "a problem with catering staff",
+            "TL" => "a door not properly closed",
+            "TM" => "awaiting a connecting service",
+            "TN" => "the train arriving late from the continent",
+            "TO" => "a problem with the train operating company",
+            "TP" => "a special stop order",
+            "TR" => "the instructions of the operating company",
+            "TS" => "a delay due to a train safety system",
+            "TT" => "seasonal operating difficulties",
+            "TU" => "a problem under investigation",
+            "TW" => "the driver adhering to professional driving standards",
+            "TX" => "delays incurred outside the railway",
+            "TY" => "an accident",
+            "TZ" => "an unknown problem",
+            "T1" => "a delay to the driver-only operated train at an unstaffed station",
+            "T2" => "a delay to the train at an unstaffed station",
+            "T3" => "awaiting a connection from a non-rail service",
+            "T4" => "loading supplies",
+            "VA" => "passenger disorder",
+            "VB" => "vandalism or theft",
+            "VC" => "an accident",
+            "VD" => "a passenger taken ill on the train",
+            "VE" => "a revenue protection problem",
+            "VF" => "a fire caused by vandalism",
+            "VG" => "police searching the train",
+            "VH" => "the passenger alarm being operated on the train",
+            "VI" => "a security alert",
+            "VR" => "the driver adhering to professional driving standards during severe weather",
+            "VW" => "severe weather",
+            "VX" => "a problem on the London Underground network",
+            "VZ" => "a problem which is the responsibility of the train operator",
+            "V8" => "a bird strike"
+             }
+
+    return (map.has_key? da_code) ? map[da_code] : "delay causation code #{da_code}"
+
+  end
+
 end

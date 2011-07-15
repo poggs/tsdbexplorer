@@ -111,6 +111,15 @@ a:hover {
   font-weight: bold;
 }
 
+#service_detail #alert {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-top: 0.5em;
+  padding: 0.5em;
+  background-color: #d00;
+  color: #fff;
+}
+
 form {
   width: 95%;
   border: 1px solid #333;
