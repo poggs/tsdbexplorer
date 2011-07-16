@@ -6,22 +6,27 @@
  </script>
 <% end %>
 
-<table>
- <tr>
-  <th>TIPLOC</th>
-  <th>Location</th>
-  <th>CRS code</th>
-  <th>NALCO</th>
-  <th>STANOX</th>
- </tr>
- <tr>
-  <td><%= @location.tiploc_code %></td>
-  <td><%= tidy_text(@location.tps_description) %></td>
-  <td><%= @location.crs_code %></td>
-  <td><%= @location.nalco %></td>
-  <td><%= @location.stanox %></td>
- </tr>
-</table>
+<h1>Trains at <%= tidy_text(@location.tps_description) %></h1>
+
+<a onclick="$('#technical').slideToggle();">Click to show or hide technical information about this location</a>
+
+<div id="technical" style="display: none;">
+ <table>
+  <tr>
+   <th>TIPLOC</th>
+   <th>Location</th>
+   <th>CRS code</th>
+   <th>NALCO</th>
+   <th>STANOX</th>
+  </tr>
+  <tr>
+   <td><%= @location.tiploc_code %></td>
+   <td><%= @location.crs_code %></td>
+   <td><%= @location.nalco %></td>
+   <td><%= @location.stanox %></td>
+  </tr>
+ </table>
+</div>
 
 <table>
  <tr>
