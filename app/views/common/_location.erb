@@ -30,6 +30,7 @@
 
 <table>
  <tr>
+  <th>&nbsp;</th>
   <th>ID</th>
   <th>Arrival</th>
   <th>Pfm</th>
@@ -46,6 +47,15 @@
    </tr>
   <% else %>
    <tr>
+    <td>
+     <% if train.daily_schedule.cancelled? %>
+      <abbr title="Cancelled at <%= time_only(train.daily_schedule.cancelled) %>"><%= image_tag('cross.png') %></abbr>
+     <% elsif train.daily_schedule.activated? %>
+      <abbr title="Activated at <%= time_only(train.daily_schedule.activated) %>"><%= image_tag('tick.png') %></abbr>
+     <% else %>
+      <abbr title="Not infomration"><%= image_tag('question.png') %></abbr>
+     <% end %>
+    </td>
     <td><%= link_to train.daily_schedule.train_identity, { :action => 'schedule', :uuid => train.daily_schedule.uuid } %></td>
     <td><%= raw(schedule_or_actual(train.arrival, train.actual_arrival)) %></td>
     <td><%= train.platform %></td>
