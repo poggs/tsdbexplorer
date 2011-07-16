@@ -46,18 +46,24 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
     if msg[:message_type] == "0001"
 
-      log.debug "TRUST activation for #{msg[:train_id]}"
+      log.debug "TRUST activation for #{msg[:train_uid]} running as #{msg[:train_id]}"
 
-      daily_schedule = DailySchedule.find_by_train_identity_unique(msg[:train_id])
+      daily_schedule = DailySchedule.find_by_train_uid(msg[:train_uid])
 
       if daily_schedule.nil?
-        log.warn "  Schedule not found for activation of train #{msg[:train_id]}"
+        log.warn "  Schedule not found for activation of train #{msg[:train_uid]}"
         next
       end
 
       daily_schedule.activated = msg[:train_creation_timestamp]
 
-      log.debug "Activated train operated by TOC #{daily_schedule[:atoc_code]}"
+      if daily_schedule[:train_identity_unique] != msg[:train_id]
+        log.warn "  Updating unique train ID of #{msg[:train_uid]} from #{daily_schedule[:train_identity_unique]} to #{msg[:train_id]}"
+        daily_schedule[:train_identity_unique] = msg[:train_id]
+      end
+
+      daily_schedule.save
+      log.debug "  Activated train operated by TOC #{daily_schedule[:atoc_code]}"
 
     elsif msg[:message_type] == "0002"
 
@@ -70,7 +76,9 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
         next
       end
 
-      log.warn "   *** Cancellation not supported"
+      daily_schedule.cancelled = Time.now
+      daily_schedule.cancellation_reason = msg[:cancellation_reason_code]
+      daily_schedule.save
 
     elsif msg[:message_type] == "0003"
 
