@@ -35,30 +35,26 @@ module ApplicationHelper
 
   def schedule_or_actual(sch, act)
 
-    if act.nil?
-      return time_only(sch)
+    return time_only(sch) if act.nil?
+
+    varn = 0
+
+    if sch.nil?
+      delay = ""
     else
+      varn = (act - sch) / 60
 
-      varn = 0
-
-      if sch.nil?
-        delay = ""
-      else
-        varn = (act - sch) / 60
-
-        if varn > 5
-          delay = "late"
-        elsif varn < 0
-          delay = "early"
-        else
-          delay = "ontime"
-        end
-
+      if varn >= 5
+        delay = "late"
+      elsif varn >= -3 && varn < 5
+        delay = "ontime"
+      elsif varn < -3
+        delay = "early"
       end
 
-      return "<div class=\"#{delay}\">#{time_only(act)}</div>"
-
     end
+
+    return "<div class=\"#{delay}\">#{time_only(act)}</div>"
 
   end
 
