@@ -26,7 +26,7 @@ class MainController < ApplicationController
     redirect_to :action => 'setup' if BasicSchedule.count == 0
 
     if params[:target_time]
-      @time = Time.parse(params[:target_time])
+      @time = Time.parse(params[:target_date] + " " + params[:target_time])
     else
       @time = Time.now
     end

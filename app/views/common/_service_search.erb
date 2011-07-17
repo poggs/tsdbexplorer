@@ -11,8 +11,9 @@
 
 <form id="search">
  <p>
-  Show me trains at <input name="location" id="location" value="<%= params[:location] %>">
-  on <input name="target_time" size="20" value="<%= @time.strftime('%Y-%m-%d %H:%M') %>"/>
+  Show me trains at <input type="text" id="location" name="location" value="<%= params[:location] %>">
+  around <input type="text" name="target_time" size="5" value="<%= @time.strftime('%H:%M') %>"/>
+  on <input type="text" name="target_date" size="10" value="<%= @time.strftime('%Y-%m-%d') %>"/>
   <input type="submit" value="&gt;" />
  </p>
 </form>
