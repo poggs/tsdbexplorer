@@ -52,7 +52,7 @@
      <% elsif train.daily_schedule.activated? %>
       <abbr title="Activated at <%= time_only(train.daily_schedule.activated) %>"><%= image_tag('tick.png') %></abbr>
      <% else %>
-      <abbr title="Not infomration"><%= image_tag('question.png') %></abbr>
+      <abbr title="No information"><%= image_tag('question.png') %></abbr>
      <% end %>
     </td>
     <td><%= link_to train.daily_schedule.train_identity, { :action => 'schedule', :uuid => train.daily_schedule.uuid } %></td>
