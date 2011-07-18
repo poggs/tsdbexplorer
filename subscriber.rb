@@ -28,7 +28,7 @@ log.formatter = proc { |severity,datetime,progname,msg| "#{datetime} #{severity}
 
 log.info "TSDBExplorer TRUST subscriber starting"
 
-log.info "Connecting to AMQP server #{$CONFIG['AMQP_SERVER']['hostname']} as user $CONFIG['AMQP_SERVER']['username']"
+log.info "Connecting to AMQP server #{$CONFIG['AMQP_SERVER']['hostname']} as user #{$CONFIG['AMQP_SERVER']['username']}"
 
 AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AMQP_SERVER']['username'], :password => $CONFIG['AMQP_SERVER']['password'], :vhost => $CONFIG['AMQP_SERVER']['vhost']) do |connection|
 
@@ -53,6 +53,8 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
       if daily_schedule.nil?
         log.warn "  Schedule not found for activation of train #{msg[:train_uid]}"
         next
+      elsif daily_schedule.daily_schedule_locations == []
+        log.warn "  Schedule for train #{msg[:train_uid]} is empty!"
       end
 
       daily_schedule.activated = msg[:train_creation_timestamp]
@@ -88,6 +90,9 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
       if daily_schedule.nil?
         log.warn "  Schedule not found for movement of train #{msg[:current_train_id]}"
+        next
+      elsif daily_schedule.daily_schedule_locations == []
+        log.warn "  Schedule for train #{msg[:train_uid]} is empty!"
         next
       end
 
