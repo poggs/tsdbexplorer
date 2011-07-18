@@ -51,6 +51,9 @@ class CreateDailySchedules < ActiveRecord::Migration
       t.string     :data_source, :limit => 1
       t.timestamps
     end
+
+    add_index(:daily_schedules, :train_identity_unique)
+
   end
 
   def self.down
