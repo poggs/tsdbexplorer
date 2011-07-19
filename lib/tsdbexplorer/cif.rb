@@ -83,7 +83,7 @@ module TSDBExplorer
         when "TA"
           { :delete => [ :capitals_identification, :nlc_check_character, :po_mcp_code, :spare ], :strip => [ :tiploc_code, :tps_description, :description ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :new_tiploc, 7 ], [ :spare, 1 ] ] }
         when "TD"
-          { :delete => [ :spare ], :format => [ [ :tiploc_code, 7 ], [ :spare, 71 ] ] }
+          { :delete => [ :spare ], :strip => [ :tiploc_code ], :format => [ [ :tiploc_code, 7 ], [ :spare, 71 ] ] }
         when "AA"
           { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
         when "BS"
@@ -218,6 +218,12 @@ module TSDBExplorer
         elsif record[:record_identity] == "TD"
 
           raise "TIPLOC Delete record not allowed in a full extract" if header_data[:update_indicator] == "F"
+
+          deletion_record = Tiploc.find_by_tiploc_code(record[:tiploc_code])
+          raise "Unknown TIPLOC '#{record[:tiploc_code]}' found in TD record" if deletion_record.nil?
+          deletion_record.destroy
+
+          stats[:tiploc][:delete] = stats[:tiploc][:delete] + 1
 
         elsif record[:record_identity] == "BS"
 

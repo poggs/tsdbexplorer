@@ -107,8 +107,14 @@ describe "lib/tsdbexplorer/cif.rb" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_full.cif') }.should raise_error
   end
 
-  it "should process TD records from a CIF file"
-
+  it "should process TD records from a CIF file" do
+    expected_data_part_1 = {:tiploc=>{:insert=>2, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_part1.cif').should eql(expected_data_part_1)
+    expected_data_part_2 = {:tiploc=>{:insert=>0, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_part2.cif').should eql(expected_data_part_2)
+    Tiploc.count.should eql(1)
+    Tiploc.find_by_tiploc_code('WATFDJ').should_not be_nil
+  end
 
 
   # Schedule processing
