@@ -211,6 +211,14 @@ module TSDBExplorer
 
           stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
 
+        elsif record[:record_identity] == "TA"
+
+          raise "TIPLOC Amend record not allowed in a full extract" if header_data[:update_indicator] == "F"
+
+        elsif record[:record_identity] == "TD"
+
+          raise "TIPLOC Delete record not allowed in a full extract" if header_data[:update_indicator] == "F"
+
         elsif record[:record_identity] == "BS"
 
           # Check if we have any pending TIPLOCs to insert, and if so,

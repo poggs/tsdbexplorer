@@ -87,7 +87,28 @@ describe "lib/tsdbexplorer/cif.rb" do
     expected_data = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif').should eql(expected_data)
     Tiploc.all.count.should eql(1)
+    
+    expected_record = {:crs_code=>"EUS", :tps_description=>"LONDON EUSTON", :stanox=>"72410", :nalco=>"144400", :tiploc_code=>"EUSTON", :description=>"LONDON EUSTON"}
+    actual_record = Tiploc.find_by_stanox('72410').attributes
+
+    expected_record.each do |k,v|
+      actual_record[k.to_s].should eql(v)
+    end
+
   end
+
+  it "should not allow TA records in a CIF full extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_full.cif') }.should raise_error
+  end
+
+  it "should process TA records from a CIF file"
+
+  it "should not allow TD records in a CIF full extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_full.cif') }.should raise_error
+  end
+
+  it "should process TD records from a CIF file"
+
 
 
   # Schedule processing
