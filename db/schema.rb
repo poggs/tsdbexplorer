@@ -107,6 +107,8 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
     t.string   "uuid",                      :limit => 36
     t.date     "runs_on"
     t.datetime "activated"
+    t.datetime "cancelled"
+    t.string   "cancellation_reason",       :limit => 2
     t.string   "status",                    :limit => 1
     t.string   "train_uid",                 :limit => 6
     t.string   "category",                  :limit => 2
@@ -133,6 +135,8 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "daily_schedules", ["train_identity_unique"], :name => "index_daily_schedules_on_train_identity_unique"
 
   create_table "locations", :force => true do |t|
     t.string   "basic_schedule_uuid",   :limit => 36
