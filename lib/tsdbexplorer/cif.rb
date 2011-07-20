@@ -213,9 +213,26 @@ module TSDBExplorer
 
         elsif record[:record_identity] == "TA"
 
+          # TIPLOC Amend
+
+          record.delete :record_identity
+
           raise "TIPLOC Amend record not allowed in a full extract" if header_data[:update_indicator] == "F"
 
+          amend_record = Tiploc.find_by_tiploc_code(record[:tiploc_code])
+          raise "Unknown TIPLOC '#{record[:tiploc_code]}' found in TA record" if amend_record.nil?
+
+          record.each do |k,v|
+            amend_record[k] = v
+          end
+
+          amend_record.save
+
+          stats[:tiploc][:amend] = stats[:tiploc][:amend] + 1
+
         elsif record[:record_identity] == "TD"
+
+          # TIPLOC Delete
 
           raise "TIPLOC Delete record not allowed in a full extract" if header_data[:update_indicator] == "F"
 

@@ -101,7 +101,21 @@ describe "lib/tsdbexplorer/cif.rb" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_full.cif') }.should raise_error
   end
 
-  it "should process TA records from a CIF file"
+  it "should process TA records from a CIF file" do
+    expected_data_part_1 = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_part1.cif').should eql(expected_data_part_1)
+    expected_data_part_2 = {:tiploc=>{:insert=>0, :delete=>0, :amend=>1}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_part2.cif').should eql(expected_data_part_2)
+    Tiploc.count.should eql(1)
+
+    expected_record = {:description=>"SMITHAM", :stanox=>"87705", :crs_code=>"SMI", :tiploc_code=>"SMITHAM", :tps_description=>"SMITHAM", :nalco=>"638600"}
+    actual_record = Tiploc.find_by_crs_code('SMI').attributes
+
+    expected_record.each do |k,v|
+      actual_record[k.to_s].should eql(v)
+    end
+
+  end
 
   it "should not allow TD records in a CIF full extract" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_full.cif') }.should raise_error
