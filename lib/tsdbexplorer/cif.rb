@@ -249,13 +249,12 @@ module TSDBExplorer
 
           pending = process_pending(pending) if pending['Tiploc'][:rows].count > 0
 
+          loc_records = Array.new
 
           if record[:transaction_type] == "N"
 
             # Schedule cancellations (BS records with the STP indicator set to
             # 'C') have no locations, so must be processed separately
-
-            loc_records = Array.new
 
             bs_record = record
 
@@ -269,7 +268,7 @@ module TSDBExplorer
 
               bx_record = TSDBExplorer::CIF::parse_record(cif_data.gets)
               bx_record[:locaion_type] = bx_record[:record_identity]
-  next unless bx_record[:atoc_code] == "LO" || bx_record[:atoc_code] == "LM" || bx_record[:atoc_code] == "VT" || bx_record[:atoc_code] == "LE"
+
               while(record[:record_identity] != "LT")
                 record = TSDBExplorer::CIF::parse_record(cif_data.gets)
                 record[:basic_schedule_uuid] = uuid
@@ -291,6 +290,13 @@ module TSDBExplorer
           elsif record[:transaction_type] == "D"
 
             raise "Basic Schedule 'delete' record not allowed in a full extract" if header_data[:update_indicator] == "F"
+
+            deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record[:train_uid], :runs_from => record[:runs_from] })
+            raise "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}" if deletion_record.nil?
+
+            deletion_record.destroy
+
+            stats[:schedule][:delete] = stats[:schedule][:delete] + 1
 
           elsif record[:transaction_type] == "R"
 
@@ -332,20 +338,23 @@ module TSDBExplorer
           end
 
 
-          # Push all the schedules on to the pending INSERT queue
+          # Push any the schedules on to the pending INSERT queue
 
-          data = []
-          pending['BasicSchedule'][:cols].each do |column|
-            data << bs_record[column]
-          end
+          if bs_record
 
-          pending['BasicSchedule'][:rows] << data
+            data = []
+            pending['BasicSchedule'][:cols].each do |column|
+              data << bs_record[column]
+            end
 
+            pending['BasicSchedule'][:rows] << data
 
-          if pending['BasicSchedule'][:rows].count > 1000
-            pct_processed = (cif_data.pos.to_f / file_size) * 100
-            puts "#{pct_processed.to_i}% imported"
-            pending = process_pending(pending)
+            if pending['BasicSchedule'][:rows].count > 1000
+              pct_processed = (cif_data.pos.to_f / file_size) * 100
+              puts "#{pct_processed.to_i}% imported"
+              pending = process_pending(pending)
+            end
+
           end
 
         end

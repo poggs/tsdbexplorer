@@ -4,7 +4,7 @@ TIFAVRSHM00516700PFAVERSHAM                 89501   0FAVFAVERSHAM
 TIGLNGHMK32516900CGILLINGHAM (KENT)         89011   0GLMGILLINGHAM KENT         
 TIRCHT   00520300KROCHESTER                 89004   0RTRROCHESTER               
 TISTNGBRN00518700GSITTINGBOURNE             89144   0SITSITTINGBOURNE           
-BSNA688021105151105150000001 1EE5S10    124604004 EMU    100                   N
+BSNA688021105151105150000001 1EE5S10    124604004 EMU    100                   P
 BX         SEY                                                                  
 LORCHT    0655 00004         TB                                                 
 LIGLNGHMK           0658H000000003                                              
