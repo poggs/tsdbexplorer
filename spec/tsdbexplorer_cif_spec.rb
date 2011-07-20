@@ -131,6 +131,24 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
 
+  # Basic Schedule (New) record processing
+
+  it "should process BS 'new' records in a CIF full extract"
+  it "should process BS 'new' records in a CIF update extract"
+
+  it "should not allow BS 'delete' records in a CIF full extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_fullextract.cif') }.should raise_error
+  end
+
+  it "should process BS 'delete' records in a CIF update extract"
+
+  it "should not allow BS 'revise' records in a CIF full extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_fullextract.cif') }.should raise_error
+  end
+
+  it "should process BS 'revise' records in a CIF update extract"
+
+
   # Schedule processing
 
   it "should process a complete schedule from a CIF file"

@@ -249,37 +249,54 @@ module TSDBExplorer
 
           pending = process_pending(pending) if pending['Tiploc'][:rows].count > 0
 
-          # Schedule cancellations (BS records with the STP indicator set to
-          # 'C') have no locations, so must be processed separately
 
-          loc_records = Array.new
+          if record[:transaction_type] == "N"
 
-          bs_record = record
+            # Schedule cancellations (BS records with the STP indicator set to
+            # 'C') have no locations, so must be processed separately
 
-          if record[:stp_indicator] != "C"
+            loc_records = Array.new
 
-            uuid = UUID.generate
-            bs_record[:uuid] = uuid
+            bs_record = record
+
+            if record[:stp_indicator] != "C"
+
+              uuid = UUID.generate
+              bs_record[:uuid] = uuid
 
 
-            # Read in all records up to and including the next LT record
+              # Read in all records up to and including the next LT record
 
-            bx_record = TSDBExplorer::CIF::parse_record(cif_data.gets)
-            bx_record[:locaion_type] = bx_record[:record_identity]
-next unless bx_record[:atoc_code] == "LO" || bx_record[:atoc_code] == "LM" || bx_record[:atoc_code] == "VT" || bx_record[:atoc_code] == "LE"
-            while(record[:record_identity] != "LT")
-              record = TSDBExplorer::CIF::parse_record(cif_data.gets)
-              record[:basic_schedule_uuid] = uuid
-              record[:location_type] = record[:record_identity]
-              record[:public_arrival] = nil if record[:public_arrival] == "0000"
-              record[:public_departure] = nil if record[:public_arrival] == "0000"
-              loc_records << record
+              bx_record = TSDBExplorer::CIF::parse_record(cif_data.gets)
+              bx_record[:locaion_type] = bx_record[:record_identity]
+  next unless bx_record[:atoc_code] == "LO" || bx_record[:atoc_code] == "LM" || bx_record[:atoc_code] == "VT" || bx_record[:atoc_code] == "LE"
+              while(record[:record_identity] != "LT")
+                record = TSDBExplorer::CIF::parse_record(cif_data.gets)
+                record[:basic_schedule_uuid] = uuid
+                record[:location_type] = record[:record_identity]
+                record[:public_arrival] = nil if record[:public_arrival] == "0000"
+                record[:public_departure] = nil if record[:public_arrival] == "0000"
+                loc_records << record
+              end
+
+
+              # Merge the BS and BX records to create a BasicSchedule
+
+              bs_record.merge!(bx_record)
+
             end
 
+          elsif record[:transaction_type] == "D"
 
-            # Merge the BS and BX records to create a BasicSchedule
+            raise "Basic Schedule 'delete' record not allowed in a full extract" if header_data[:update_indicator] == "F"
 
-            bs_record.merge!(bx_record)
+          elsif record[:transaction_type] == "R"
+
+            raise "Basic Schedule 'revise' record not allowed in a full extract" if header_data[:update_indicator] == "F"
+
+          else
+
+            raise "Unknown BS transaction type #{record[:transaction_type]}"
 
           end
 
