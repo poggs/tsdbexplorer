@@ -135,20 +135,29 @@ describe "lib/tsdbexplorer/cif.rb" do
 
   it "should process BS 'new' records in a CIF full extract" do
     expected_data_part_1 = {:tiploc=>{:insert=>18, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new.cif').should eql(expected_data_part_1)
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif').should eql(expected_data_part_1)
     BasicSchedule.count.should eql(1)
     Location.count.should eql(18)
     Location.first.tiploc_code.should eql('EUSTON')
     Location.last.tiploc_code.should eql('NMPTN')
   end
 
-  it "should process BS 'new' records in a CIF update extract"
+  it "should process BS 'new' records in a CIF update extract" do
+    expected_data_part_1 = {:tiploc=>{:insert=>18, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_updateextract.cif').should eql(expected_data_part_1)
+    BasicSchedule.count.should eql(1)
+    Location.count.should eql(18)
+    Location.first.tiploc_code.should eql('EUSTON')
+    Location.last.tiploc_code.should eql('NMPTN')    
+  end
 
   it "should not allow BS 'delete' records in a CIF full extract" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_fullextract.cif') }.should raise_error
   end
 
-  it "should process BS 'delete' records in a CIF update extract"
+  it "should process BS 'delete' records in a CIF update extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_updateextract.cif') }.should raise_error
+  end
 
   it "should not allow BS 'revise' records in a CIF full extract" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_fullextract.cif') }.should raise_error
