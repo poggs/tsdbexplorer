@@ -284,6 +284,8 @@ module TSDBExplorer
 
               bs_record.merge!(bx_record)
 
+              stats[:schedule][:insert] = stats[:schedule][:insert] + 1
+
             end
 
           elsif record[:transaction_type] == "D"
