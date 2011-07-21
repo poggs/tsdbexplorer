@@ -341,7 +341,11 @@ module TSDBExplorer
 
             if origin_location.nil?
               puts "WARNING: No location record found for TIPLOC '#{loc_records.first[:tiploc_code]}'"
-            elsif ['P', 'F', 'T', '1', '2'].include? bs_record[:status] 
+            elsif ['P', 'F', 'T', '1', '2'].include? bs_record[:status]
+              if origin_location[:stanox].nil?
+                puts "WARNING: No STANOX code found for TIPLOC '#{origin_location[:tiploc_code]}'"
+                next
+              end
               bs_record[:train_identity_unique] = origin_location[:stanox][0..1] + bs_record[:train_identity] + "M" + TSDBExplorer::CIF::departure_to_code(origin_departure)
             else
               puts "INFO: Skipping unique ID generation - status = #{bs_record[:status]}"
