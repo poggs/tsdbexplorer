@@ -171,6 +171,14 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should process BS 'revise' records in a CIF update extract" do
+    expected_data_part_1 = {:tiploc=>{:insert=>13, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_part1.cif').should eql(expected_data_part_1)
+    BasicSchedule.count.should eql(1)
+    Location.count.should eql(13)
+    expected_data_part_2 = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>1}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_part2.cif').should eql(expected_data_part_2)
+    BasicSchedule.count.should eql(1)
+    Location.count.should eql(13)
   end
 
 

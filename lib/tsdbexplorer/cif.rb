@@ -249,9 +249,29 @@ module TSDBExplorer
 
           pending = process_pending(pending) if pending['Tiploc'][:rows].count > 0
 
+
+          # If we are processing a Revise record, delete the schedule to
+          # which the revision applies, change the transaction type to New
+          # and process normally
+
+          if record[:transaction_type] == "R"
+
+            raise "Basic Schedule 'revise' record not allowed in a full extract" if header_data[:update_indicator] == "F"
+
+            deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record[:train_uid], :runs_from => record[:runs_from] })
+            raise "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}" if deletion_record.nil?
+
+            deletion_record.destroy
+
+          end
+
+
+
           loc_records = Array.new
 
-          if record[:transaction_type] == "N"
+          if record[:transaction_type] == "N" || record[:transaction_type] == "R"
+
+            transaction = record[:transaction_type]
 
             # Schedule cancellations (BS records with the STP indicator set to
             # 'C') have no locations, so must be processed separately
@@ -283,7 +303,11 @@ module TSDBExplorer
 
               bs_record.merge!(bx_record)
 
-              stats[:schedule][:insert] = stats[:schedule][:insert] + 1
+              if transaction == "N"
+                stats[:schedule][:insert] = stats[:schedule][:insert] + 1
+              else
+                stats[:schedule][:amend] = stats[:schedule][:amend] + 1
+              end
 
             end
 
@@ -297,10 +321,6 @@ module TSDBExplorer
             deletion_record.destroy
 
             stats[:schedule][:delete] = stats[:schedule][:delete] + 1
-
-          elsif record[:transaction_type] == "R"
-
-            raise "Basic Schedule 'revise' record not allowed in a full extract" if header_data[:update_indicator] == "F"
 
           else
 
