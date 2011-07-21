@@ -151,6 +151,10 @@ describe "lib/tsdbexplorer/cif.rb" do
     Location.last.tiploc_code.should eql('NMPTN')    
   end
 
+  it "should generate a 10-character train identity for each train schedule"
+  it "should not attempt to generate a 10-character train identity for services that are not trains"
+  it "should warn if the origin TIPLOC for a train schedule is unknown and skip generating a 10-character train identity"
+
   it "should not allow BS 'delete' records in a CIF full extract" do
     lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_fullextract.cif') }.should raise_error
   end
@@ -179,6 +183,10 @@ describe "lib/tsdbexplorer/cif.rb" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_part2.cif').should eql(expected_data_part_2)
     BasicSchedule.count.should eql(1)
     Location.count.should eql(13)
+  end
+
+  it "should not allow unknown BS record transaction types in a CIF extract" do
+    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_invalid.cif') }.should raise_error
   end
 
 
