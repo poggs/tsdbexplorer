@@ -31,4 +31,15 @@ describe BasicSchedule do
     object.should respond_to(:terminate)
   end
 
+  it "should have a method which returns a train schedule for a specific date" do
+    BasicSchedule.should respond_to(:runs_on_by_uid_and_date)
+  end
+
+  it "should return a specific train schedule for a specific date" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    schedule.should_not be_nil
+    schedule[:train_uid].should eql('C43391')
+  end
+
 end

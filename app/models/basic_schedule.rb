@@ -21,7 +21,7 @@ class BasicSchedule < ActiveRecord::Base
 
   has_many :locations, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid, :dependent => :delete_all
 
-  scope :runs_on_by_uid, lambda { |uid,date| where('train_uid = ? AND ? BETWEEN runs_from AND runs_to', uid, date).order("runs_to - runs_from").limit(1) }
+  scope :runs_on_by_uid_and_date, lambda { |uid,date| where(:train_uid => uid).where('? BETWEEN runs_from AND runs_to', date).order("runs_to - runs_from").limit(1) }
   scope :runs_on_by_train_identity, lambda { |identity,date| where('train_identity_unique = ? AND ? BETWEEN runs_from AND runs_to', uid, date).order("runs_to - runs_from").limit(1) }
 
   def origin
