@@ -156,4 +156,32 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   it "should receive a message from the VSTP_DATA queue and process it"
   it "should receive a message form the TSR_DATA queue and process it"
 
+
+  # TRUST message handling
+
+  it "should process a train activation message" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
+    ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    ds.train_uid.should eql('C43391')
+  end
+
+  it "should not allow a train activation message for a date on which the schedule does not exist" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-13', '722N53MW13')
+    ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-13').first
+    ds.train_uid.should eql('C43391')
+  end
+
+  it "should not allow a train activation message for a date on which the schedule is cancelled"
+  it "should handle a train activation message for an unknown train"
+
+  it "should process a train cancellation message"
+  it "should process a train movement message"
+  it "should process an unidentified train report"
+  it "should process a train reinstatement report"
+  it "should process a train change-of-origin report"
+  it "should process a train change-of-identity report"
+  it "should process a train change-of-location report"
+
 end

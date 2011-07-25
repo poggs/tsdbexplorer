@@ -153,7 +153,57 @@ module TSDBExplorer
 
     end
 
+
+    # Process a TRUST train activation message.  This will search the
+    # scheduled services for the UID given and the date passed (normally be
+    # today), and if the schedule is found, a clone of it and the calling
+    # points will be created in the Daily tables.
+
+    def TDnet.process_trust_activation(uid, run_date, unique_train_id)
+
+      schedule = BasicSchedule.find_by_train_uid(uid, run_date)
+
+      if schedule.nil?
+        puts "  Schedule not found for activation of train #{msg[:train_uid]}"
+        next
+      end
+
+      ds_record = Hash.new
+
+      DailySchedule.new.attributes.keys.each do |attr|
+        ds_record[attr] = schedule[attr]
+      end
+
+      ds_record[:runs_on] = run_date
+      ds_record[:train_identity_unique] = unique_train_id
+      ds_record[:uuid] = UUID.generate
+
+      DailySchedule.create!(ds_record)
+puts DailySchedule.first.inspect
+      location_list = Array.new
+
+      schedule.locations.each do |location|
+
+        dsl_record = Hash.new
+
+        DailyScheduleLocation.new.attributes.keys.each do |attr|
+          dsl_record[attr] = location[attr]
+        end
+
+        dsl_record[:daily_schedule_uuid] = ds_record[:uuid]
+
+        [ :arrival, :public_arrival, :pass, :departure, :public_departure ].each do |time_attr|
+          dsl_record[time_attr] = Time.parse(run_date.to_s + " " + TSDBExplorer::normalise_time(location[time_attr])) unless location[time_attr].nil?
+        end
+
+        location_list << DailyScheduleLocation.new(dsl_record)
+
+      end
+
+      DailyScheduleLocation.import(location_list)
+
+    end
+
   end
 
 end
-  

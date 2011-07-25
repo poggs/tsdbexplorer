@@ -23,7 +23,6 @@ class CreateDailySchedules < ActiveRecord::Migration
     create_table :daily_schedules do |t|
       t.string     :uuid, :limit => 36
       t.date       :runs_on
-      t.timestamp  :activated
       t.timestamp  :cancelled
       t.string     :cancellation_reason, :limit => 2
       t.string     :status, :limit => 1

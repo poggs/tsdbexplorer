@@ -48,24 +48,11 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
       log.debug "TRUST activation for #{msg[:train_uid]} running as #{msg[:train_id]}"
 
-      daily_schedule = DailySchedule.find_by_train_uid(msg[:train_uid])
-
-      if daily_schedule.nil?
-        log.warn "  Schedule not found for activation of train #{msg[:train_uid]}"
-        next
-      elsif daily_schedule.daily_schedule_locations == []
-        log.warn "  Schedule for train #{msg[:train_uid]} is empty!"
+      if TSDBExplorer::TDnet::process_trust_activation(msg[:train_uid], msg[:schedule_start_date])
+        log.debug "  Activated train operated by TOC #{daily_schedule[:atoc_code]}"
+      else
+        log.debug "  Failed to activate train"
       end
-
-      daily_schedule.activated = msg[:train_creation_timestamp]
-
-      if daily_schedule[:train_identity_unique] != msg[:train_id]
-        log.warn "  Updating unique train ID of #{msg[:train_uid]} from #{daily_schedule[:train_identity_unique]} to #{msg[:train_id]}"
-        daily_schedule[:train_identity_unique] = msg[:train_id]
-      end
-
-      daily_schedule.save
-      log.debug "  Activated train operated by TOC #{daily_schedule[:atoc_code]}"
 
     elsif msg[:message_type] == "0002"
 

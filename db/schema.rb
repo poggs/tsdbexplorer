@@ -36,7 +36,13 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
     t.string   "status",                    :limit => 1
     t.date     "runs_from"
     t.date     "runs_to"
-    t.string   "days_run",                  :limit => 7
+    t.boolean  "runs_mo"
+    t.boolean  "runs_tu"
+    t.boolean  "runs_we"
+    t.boolean  "runs_th"
+    t.boolean  "runs_fr"
+    t.boolean  "runs_sa"
+    t.boolean  "runs_su"
     t.string   "bh_running",                :limit => 1
     t.string   "category",                  :limit => 2
     t.string   "train_identity",            :limit => 4
@@ -106,7 +112,6 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
   create_table "daily_schedules", :force => true do |t|
     t.string   "uuid",                      :limit => 36
     t.date     "runs_on"
-    t.datetime "activated"
     t.datetime "cancelled"
     t.string   "cancellation_reason",       :limit => 2
     t.string   "status",                    :limit => 1

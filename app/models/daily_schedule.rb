@@ -21,6 +21,8 @@ class DailySchedule < ActiveRecord::Base
 
   has_many :daily_schedule_locations, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
 
+  scope :runs_on_by_uid_and_date, lambda { |uid,date| where(:train_uid => uid).where(:runs_on => date) }
+
   def origin
     self.daily_schedule_locations.first
   end

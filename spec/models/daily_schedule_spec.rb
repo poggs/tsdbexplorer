@@ -20,5 +20,9 @@
 require 'spec_helper'
 
 describe DailySchedule do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  it "should have a method which returns a train schedule for a specific date" do
+    DailySchedule.should respond_to(:runs_on_by_uid_and_date)
+  end
+
 end

@@ -38,8 +38,15 @@ describe BasicSchedule do
   it "should return a specific train schedule for a specific date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+puts BasicSchedule.first.inspect
     schedule.should_not be_nil
     schedule[:train_uid].should eql('C43391')
+  end
+
+  it "should not return a schedule on a day for which it is not valid" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-13').first
+    schedule.should be_nil
   end
 
 end
