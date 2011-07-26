@@ -179,7 +179,7 @@ module TSDBExplorer
       ds_record[:uuid] = UUID.generate
 
       DailySchedule.create!(ds_record)
-puts DailySchedule.first.inspect
+
       location_list = Array.new
 
       schedule.locations.each do |location|
@@ -207,3 +207,4 @@ puts DailySchedule.first.inspect
   end
 
 end
+
