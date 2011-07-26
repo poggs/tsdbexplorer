@@ -2,10 +2,11 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.7'
 gem 'sqlite3'
-gem 'ruby-mysql', '2.9.3'
+gem 'ruby-mysql', '2.9.4', :require => false if RUBY_PLATFORM =~ /darwin/i
 gem 'nokogiri', '>= 1.1.4'
 gem 'uuid', '>= 2.3.2'
 gem 'amqp'
+gem 'rake', '0.8.7'
 
 gem 'activerecord-import', '>= 0.2.6'
 
