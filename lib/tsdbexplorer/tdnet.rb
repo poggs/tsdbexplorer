@@ -161,17 +161,17 @@ module TSDBExplorer
 
     def TDnet.process_trust_activation(uid, run_date, unique_train_id)
 
-      schedule = BasicSchedule.find_by_train_uid(uid, run_date)
+      schedule = BasicSchedule.runs_on_by_uid_and_date(uid, run_date).first
 
       if schedule.nil?
-        puts "  Schedule not found for activation of train #{msg[:train_uid]}"
-        next
+        puts "  Schedule not found for activation of train #{uid}"
+        return
       end
 
       ds_record = Hash.new
 
       DailySchedule.new.attributes.keys.each do |attr|
-        ds_record[attr] = schedule[attr]
+        ds_record[attr] = schedule[attr] if schedule.respond_to? attr.to_sym
       end
 
       ds_record[:runs_on] = run_date

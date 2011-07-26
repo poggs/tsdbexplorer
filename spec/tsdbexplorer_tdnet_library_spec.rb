@@ -164,17 +164,27 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     ds.train_uid.should eql('C43391')
+    ds.train_identity_unique.should eql('722N53MW12')
   end
 
   it "should not allow a train activation message for a date on which the schedule does not exist" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-13', '722N53MW13')
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-13').first
-    ds.train_uid.should eql('C43391')
+    ds.should be_nil
   end
 
-  it "should not allow a train activation message for a date on which the schedule is cancelled"
-  it "should handle a train activation message for an unknown train"
+  it "should not allow a train activation message for a date on which the schedule is cancelled" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_cancel.cif')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-19', '722N53MW19')
+    ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-19').first
+    ds.should be_nil
+  end
+
+  it "should handle a train activation message for an unknown train" do
+    TSDBExplorer::TDnet::process_trust_activation('Z12345', '2011-01-01', '009Z99MA01')
+    DailySchedule.all.count.should eql(0)
+  end
 
   it "should process a train cancellation message"
   it "should process a train movement message"
