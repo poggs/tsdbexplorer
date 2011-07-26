@@ -38,7 +38,6 @@ describe BasicSchedule do
   it "should return a specific train schedule for a specific date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
-puts BasicSchedule.first.inspect
     schedule.should_not be_nil
     schedule[:train_uid].should eql('C43391')
   end
@@ -47,6 +46,13 @@ puts BasicSchedule.first.inspect
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-13').first
     schedule.should be_nil
+  end
+
+  it "should return a cancellation record for a schedule which is cancelled" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_cancel.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2011-01-09').first
+    schedule.should_not be_nil
+    schedule.stp_indicator.should eql('C')
   end
 
 end
