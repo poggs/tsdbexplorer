@@ -33,4 +33,8 @@ class BasicSchedule < ActiveRecord::Base
     self.locations.last
   end
 
+  def is_stp_cancelled?
+    self.stp_indicator == "C"
+  end
+
 end

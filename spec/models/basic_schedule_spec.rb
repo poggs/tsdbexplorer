@@ -40,6 +40,7 @@ describe BasicSchedule do
     schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     schedule.should_not be_nil
     schedule[:train_uid].should eql('C43391')
+    schedule.is_stp_cancelled?.should_not be_true
   end
 
   it "should not return a schedule on a day for which it is not valid" do
@@ -52,7 +53,7 @@ describe BasicSchedule do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_cancel.cif')
     schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2011-01-09').first
     schedule.should_not be_nil
-    schedule.stp_indicator.should eql('C')
+    schedule.is_stp_cancelled?.should be_true
   end
 
 end
