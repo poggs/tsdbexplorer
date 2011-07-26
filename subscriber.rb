@@ -48,8 +48,8 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
       log.debug "TRUST activation for #{msg[:train_uid]} running as #{msg[:train_id]}"
 
-      if TSDBExplorer::TDnet::process_trust_activation(msg[:train_uid], msg[:schedule_start_date])
-        log.debug "  Activated train operated by TOC #{daily_schedule[:atoc_code]}"
+      if TSDBExplorer::TDnet::process_trust_activation(msg[:train_uid], msg[:schedule_origin_depart_timestamp].strftime("%Y-%m-%d"), msg[:train_id])
+        log.debug "  Activated train #{msg[:train_id]}"
       else
         log.debug "  Failed to activate train"
       end
