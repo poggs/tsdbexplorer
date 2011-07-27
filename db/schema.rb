@@ -112,7 +112,8 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
   create_table "daily_schedules", :force => true do |t|
     t.string   "uuid",                      :limit => 36
     t.date     "runs_on"
-    t.datetime "cancelled"
+    t.boolean  "cancelled"
+    t.datetime "cancellation_timestamp"
     t.string   "cancellation_reason",       :limit => 2
     t.string   "status",                    :limit => 1
     t.string   "train_uid",                 :limit => 6

@@ -58,16 +58,11 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
       log.debug "TRUST cancellation for #{msg[:train_id]}"
 
-      daily_schedule = DailySchedule.find_by_train_identity_unique(msg[:train_id])
-
-      if daily_schedule.nil?
-        log.warn "  Schedule not found for cancellation of train #{msg[:train_id]}"
-        next
+      if TSDBExplorer::TDnet::process_trust_cancellation(msg[:train_id], msg[:train_cancellation_timestamp], msg[:cancellation_reason_code])
+        log.debug "  Cancelled train #{msg[:train_id]}"
+      else
+        log.debug "  Failed to cancel train"
       end
-
-      daily_schedule.cancelled = Time.now
-      daily_schedule.cancellation_reason = msg[:cancellation_reason_code]
-      daily_schedule.save
 
     elsif msg[:message_type] == "0003"
 

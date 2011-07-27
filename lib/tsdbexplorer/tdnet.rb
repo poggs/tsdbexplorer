@@ -204,6 +204,25 @@ module TSDBExplorer
 
     end
 
+
+    # Process a TRUST cancellation.  Currently, only full-schedule cancellations are supported.
+
+    def TDnet.process_trust_cancellation(train_identity, timestamp, reason)
+
+      ds = DailySchedule.find_by_train_identity_unique(train_identity)
+
+      if ds.nil?
+        puts "  Schedule not found for cancellation of train #{train_identity}"
+        return
+      end
+
+      ds.cancelled = true
+      ds.cancellation_reason = reason
+      ds.cancellation_timestamp = timestamp
+      ds.save!
+
+    end
+
   end
 
 end

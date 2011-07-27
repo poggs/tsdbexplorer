@@ -186,7 +186,16 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     DailySchedule.all.count.should eql(0)
   end
 
-  it "should process a train cancellation message"
+  it "should process a train cancellation message" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
+    TSDBExplorer::TDnet::process_trust_cancellation('722N53MW12', Time.parse('2010-12-12 18:15:00'), 'M4')
+    ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    ds.cancelled?.should be_true
+    ds.cancellation_timestamp.should eql(Time.parse('2010-12-12 18:15:00'))
+    ds.cancellation_reason.should eql('M4')
+  end
+
   it "should process a train movement message"
   it "should process an unidentified train report"
   it "should process a train reinstatement report"
