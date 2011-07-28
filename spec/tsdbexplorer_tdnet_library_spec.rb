@@ -176,24 +176,34 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should not allow a train activation message for a date on which the schedule is cancelled" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_cancel.cif')
-    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-19', '722N53MW19')
+    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-19', '722N53MW19')
+    activation[:error].should match(/C43391/)
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-19').first
     ds.should be_nil
   end
 
   it "should handle a train activation message for an unknown train" do
-    TSDBExplorer::TDnet::process_trust_activation('Z12345', '2011-01-01', '009Z99MA01')
+    activation = TSDBExplorer::TDnet::process_trust_activation('Z12345', '2011-01-01', '009Z99MA01')
+    activation[:error].should match(/Z12345/)
     DailySchedule.all.count.should eql(0)
   end
 
   it "should process a train cancellation message" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
-    TSDBExplorer::TDnet::process_trust_cancellation('722N53MW12', Time.parse('2010-12-12 18:15:00'), 'M4')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12').should_not be_nil
+    TSDBExplorer::TDnet::process_trust_cancellation('722N53MW12', Time.parse('2010-12-12 18:15:00'), 'M4').should be_true
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     ds.cancelled?.should be_true
     ds.cancellation_timestamp.should eql(Time.parse('2010-12-12 18:15:00'))
     ds.cancellation_reason.should eql('M4')
+  end
+
+  it "should not allow a train cancellation for a train which has not been activated" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    cancellation = TSDBExplorer::TDnet::process_trust_cancellation('722N53MW12', Time.parse('2010-12-12 18:15:00'), 'M4')
+    cancellation[:error].should match(/722N53MW12/)
+    ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    ds.should be_nil
   end
 
   it "should process a train movement message"

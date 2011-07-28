@@ -164,8 +164,7 @@ module TSDBExplorer
       schedule = BasicSchedule.runs_on_by_uid_and_date(uid, run_date).first
 
       if schedule.nil?
-        puts "  Schedule not found for activation of train #{uid}"
-        return
+        return { :error => 'No schedule found for activation of train ' + uid }
       end
 
       ds_record = Hash.new
@@ -202,6 +201,8 @@ module TSDBExplorer
 
       DailyScheduleLocation.import(location_list)
 
+      return true
+
     end
 
 
@@ -212,8 +213,7 @@ module TSDBExplorer
       ds = DailySchedule.find_by_train_identity_unique(train_identity)
 
       if ds.nil?
-        puts "  Schedule not found for cancellation of train #{train_identity}"
-        return
+        return { :error => 'Failed to cancel train ' + train_identity + ' schedule not found'}
       end
 
       ds.cancelled = true

@@ -48,20 +48,24 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
       log.debug "TRUST activation for #{msg[:train_uid]} running as #{msg[:train_id]}"
 
-      if TSDBExplorer::TDnet::process_trust_activation(msg[:train_uid], msg[:schedule_origin_depart_timestamp].strftime("%Y-%m-%d"), msg[:train_id])
+      activation = TSDBExplorer::TDnet::process_trust_activation(msg[:train_uid], msg[:schedule_origin_depart_timestamp].strftime("%Y-%m-%d"), msg[:train_id])
+
+      if activation
         log.debug "  Activated train #{msg[:train_id]}"
       else
-        log.debug "  Failed to activate train"
+        log.debug activation[:error]
       end
 
     elsif msg[:message_type] == "0002"
 
       log.debug "TRUST cancellation for #{msg[:train_id]}"
 
-      if TSDBExplorer::TDnet::process_trust_cancellation(msg[:train_id], msg[:train_cancellation_timestamp], msg[:cancellation_reason_code])
+      cancellation = TSDBExplorer::TDnet::process_trust_cancellation(msg[:train_id], msg[:train_cancellation_timestamp], msg[:cancellation_reason_code])
+
+      if cancellation
         log.debug "  Cancelled train #{msg[:train_id]}"
       else
-        log.debug "  Failed to cancel train"
+        log.debug cancellation[:error]
       end
 
     elsif msg[:message_type] == "0003"
