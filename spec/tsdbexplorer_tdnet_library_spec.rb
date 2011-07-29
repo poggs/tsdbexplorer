@@ -206,7 +206,47 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     ds.should be_nil
   end
 
-  it "should process a train movement message"
+  it "should process a train movement message for a departure from an the originating station" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:34:00'), '72410', ' ')
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    originating_point = schedule.daily_schedule_locations.find_by_tiploc_code('EUSTON')
+    originating_point.actual_departure.should eql(Time.parse('2011-01-19 18:34:00'))
+  end
+
+  it "should process a train movement message for a passing point" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:34:00'), '72410', ' ')
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:37:00'), '72316', ' ')
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    passing_point = schedule.daily_schedule_locations.find_by_tiploc_code('CMDNSTH')
+    passing_point.actual_pass.should eql(Time.parse('2011-01-19 18:37:00'))
+  end
+
+  it "should process a train movement message for a calling point" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '71040', ' ')
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    calling_point_arrival = schedule.daily_schedule_locations.find_by_tiploc_code('WATFDJ')
+    calling_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:51:00'), '71040', ' ')
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    calling_point_departure = schedule.daily_schedule_locations.find_by_tiploc_code('WATFDJ')
+    calling_point_departure.actual_departure.should eql(Time.parse('2011-01-19 18:51:00'))
+  end
+
+  it "should process a train movement message for an arrival at the terminating station" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ')
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    terminating_point_arrival = schedule.daily_schedule_locations.find_by_tiploc_code('NMPTN')
+    terminating_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
+  end
+
   it "should process an unidentified train report"
   it "should process a train reinstatement report"
   it "should process a train change-of-origin report"

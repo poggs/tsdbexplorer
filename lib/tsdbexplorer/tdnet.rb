@@ -223,6 +223,39 @@ module TSDBExplorer
 
     end
 
+
+    # Process a TRUST movement message
+
+    def TDnet.process_trust_movement(train_identity, event_type, timestamp, location_stanox, offroute_indicator)
+
+      schedule = DailySchedule.find_by_train_identity_unique(train_identity)
+      return { :error => 'Failed to move train ' + train_identity + ': schedule not found' } if schedule.nil?
+
+      location = Tiploc.find_by_stanox(location_stanox)
+      return { :error => 'Failed to find STANOX location ' + location_stanox + ' for train ' + train_identity } if location.nil?
+
+      # TODO: Handle off-route movement messages
+
+      point = schedule.daily_schedule_locations.find_by_tiploc_code(location.tiploc_code)
+      return { :error => 'Failed to find schedule location ' + location.tiploc_code + ' for train ' + train_identity } if point.nil?
+
+      # Update the actual arrival, departure or passing time
+
+      if event_type == 'A'
+        point.actual_arrival = timestamp
+      elsif event_type == 'D'
+        if point.pass.nil?
+          point.actual_departure = timestamp
+        else
+          point.actual_pass = timestamp
+        end
+      end
+
+      point.save!
+      return
+
+    end
+
   end
 
 end

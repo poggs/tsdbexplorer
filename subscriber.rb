@@ -72,70 +72,12 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
       log.debug "TRUST movement message for train #{msg[:current_train_id]}"
 
-      daily_schedule = DailySchedule.find_by_train_identity_unique(msg[:current_train_id])
+      movement = TSDBExplorer::TDnet::process_trust_movement(msg[:train_id], msg[:event_type], msg[:actual_timestamp], msg[:location_stanox], msg[:offroute_indicator])
 
-      if daily_schedule.nil?
-        log.warn "  Schedule not found for movement of train #{msg[:current_train_id]}"
-        next
-      elsif daily_schedule.daily_schedule_locations == []
-        log.warn "  Schedule for train #{msg[:train_uid]} is empty!"
-        next
-      end
-
-      log.debug "  Found train #{msg[:current_train_id]} operated by TOC #{daily_schedule[:atoc_code]}"
-
-      location = Tiploc.find_by_stanox(msg[:location_stanox])
-
-      if location
-        log.debug "  Report for #{location.tps_description}"
+      if movement
+        log.debug "  Movement processed for #{msg[:train_id]}"
       else
-        log.warn "  Movement report for unknonwn STANOX #{msg[:reporting_stanox]}"
-        next
-      end
-      
-      event_type = "unknown"
-
-      if msg[:event_type] == "D"
-        event_type = "departed"
-      elsif msg[:event_type] == "A"
-        event_type = "arrived"
-      end
-
-      if msg[:variation_status].blank?
-        log.debug "  Train #{event_type} on-time"
-      elsif msg[:variation_status] == "L"
-        log.debug "  Train #{event_type} #{msg[:timetable_variation].to_i} minutes late"
-      elsif msg[:variation_status] == "E"
-        log.debug "  Train #{event_type} #{msg[:timetable_variation].to_i} minutes early"
-      end
-
-      if msg[:offroute_indicator]
-        log.warn "  Train is off-route"
-      else
-        point = daily_schedule.daily_schedule_locations.where(:tiploc_code => location.tiploc_code).first
-      end
-
-      if point
-
-        if msg[:event_type] == "A"
-          if point.pass.nil?
-            point.actual_arrival = msg[:actual_timestamp]
-          else
-            point.actual_pass = msg[:actual_timestamp]
-          end
-        elsif msg[:event_type] == "D"
-          if point.pass.nil?
-            point.actual_departure = msg[:actual_timestamp]
-          else
-            point.actual_pass = msg[:actual_timestamp]
-          end
-        end
-
-        point.actual_platform = msg[:platform] unless msg[:platform].nil?
-        point.actual_line = msg[:route] unless msg[:route].nil?
-        point.save
-      else
-        log.warn "  Location #{location.tiploc_code} not found for train #{msg[:current_train_id]}"
+        log.debug movement[:error]
       end
 
     elsif msg[:message_type] == "0004"
