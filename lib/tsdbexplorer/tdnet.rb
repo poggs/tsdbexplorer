@@ -233,12 +233,22 @@ module TSDBExplorer
       schedule = DailySchedule.find_by_train_identity_unique(train_identity)
       return Struct.new(:status, :message).new(:error, 'Failed to move train ' + train_identity + ': schedule not found') if schedule.nil?
 
-      location = Tiploc.find_by_stanox(location_stanox)
-      return Struct.new(:status, :message).new(:error, 'Failed to find STANOX location ' + location_stanox + ' for train ' + train_identity) if location.nil?
-
       # TODO: Handle off-route movement messages
 
-      point = schedule.daily_schedule_locations.find_by_tiploc_code(location.tiploc_code)
+      # More than one TIPLOC may exist for a particular STANOX, so we must
+      # retrieve all TIPLOCs for this STANOX and iterate through the list to
+      # find the one that matches a point in this train's schedule
+
+      location = Tiploc.find_all_by_stanox(location_stanox)
+      return Struct.new(:status, :message).new(:error, 'Failed to find STANOX location ' + location_stanox + ' for train ' + train_identity) if location.nil? || location == []
+
+      point = nil
+
+      location.each do |possible_location|
+        next unless point.nil?
+        point = schedule.daily_schedule_locations.find_by_tiploc_code(possible_location.tiploc_code)
+      end
+
       return Struct.new(:status, :message).new(:error, 'Failed to find schedule location ' + location.tiploc_code + ' for train ' + train_identity) if point.nil?
 
       # Update the actual arrival, departure or passing time
@@ -255,7 +265,7 @@ module TSDBExplorer
 
       point.save!
 
-      return Struct.new(:status, :message).new(:ok, 'Processed movement type ' + event_type + ' for train ' + train_identity + ' at ' + location.tps_description)
+      return Struct.new(:status, :message).new(:ok, 'Processed movement type ' + event_type + ' for train ' + train_identity + ' at ' + point.tiploc.tps_description)
 
     end
 

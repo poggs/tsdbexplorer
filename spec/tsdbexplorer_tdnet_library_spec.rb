@@ -279,6 +279,17 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     terminating_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
   end
 
+  it "should process a train movement message when the STANOX code identifies more than one TIPLOC" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_nonunique_stanox.cif')
+    activation = TSDBExplorer::TDnet::process_trust_activation('L02923', '2011-05-22', '521N08MA22')
+    activation.status.should eql(:ok)
+    movement = TSDBExplorer::TDnet::process_trust_movement('521N08MA22', 'D', Time.parse('2011-05-22 10:43:00'), '50423', ' ')
+    movement.status.should eql(:ok)
+    schedule = DailySchedule.runs_on_by_uid_and_date('L02923', '2011-05-22').first
+    terminating_point_arrival = schedule.daily_schedule_locations.find_by_tiploc_code('ILFORD')
+    terminating_point_arrival.actual_pass.should eql(Time.parse('2011-05-22 10:43:00'))
+  end
+
   it "should process an unidentified train report"
   it "should process a train reinstatement report"
   it "should process a train change-of-origin report"
