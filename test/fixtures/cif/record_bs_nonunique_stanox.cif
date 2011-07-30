@@ -1,0 +1,44 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIALRESFD00684700VALRESFORD (ESSEX)         50027   0ALRALRESFORD ESSEX         
+TIBOWJ   04696914YBOW JUNCTION              52701   0XOW                        
+TIBTHNLGR16696100RBETHNAL GREEN             52739   0BETBETHNAL GREEN           
+TICHLMSFD00683600KCHELMSFORD                50223   0CHMCHELMSFORD ESSEX        
+TICLACTON00685000RCLACTON-ON-SEA            50021   0CLTCLACTON                 
+TICLCHEGJ00686122XCOLCHESTER EAST GATE JN   50036   0                           
+TICLCHHYT00685100VHYTHE                     50030   0HYHHYTHE ESSEX             
+TICLCHSTR00686100GCOLCHESTER                50049   0COLCOLCHESTER              
+TIFRSTGTJ40687611ZFOREST GATE JN            50434   0                           
+TIGIDEAPK16687700TGIDEA PARK                50334   0GDPGIDEA PARK              
+TIGTBNTLY02685500ZGREAT BENTLEY             50026   0GRBGREAT BENTLEY           
+TIILFERDB00068400EREDBRIDGE LT STATION      50423   0ZREREDBRIDGE UND           
+TIILFORD 00688100TILFORD                    50423   0IFDILFORD                  
+TILIVST  00696500XLONDON LIVERPOOL STREET   527412904LSTLONDON LIVRPL ST        
+TIMRKSTEY08686300QMARKS TEY                 50105   0MKTMARKS TEY               
+TISHENFLD00688800JSHENFIELD                 50328   0SNFSHENFIELD               
+TISTFD   00696900LSTRATFORD                 52226   0SRASTRATFORD LONDON        
+TITHPLESK00685700GTHORPE-LE-SOKEN           50024   0TLSTHORPE LE SOKEN         
+TIWITHAME32684400HWITHAM                    50211   0WTMWITHAM                  
+TIWIVENHO00686000BWIVENHOE                  50028   0WIVWIVENHOE                
+BSNL029231105221112040000001 PXX1N08    121939001 EMU360 100D     B            P
+BX         LEY                                                                  
+LOLIVST   1032 103213 ML     TB                                                 
+LIBTHNLGR           1035 00000000   ML ML                                       
+LIBOWJ              1037 00000000   ML ML                                       
+LISTFD    1038H1039      1039103910 ML ML T                                     
+LIFRSTGTJ           1041H00000000   ML ML                                       
+LIILFORD            1043H00000000   ML ML             1                         
+LIGIDEAPK           1051 00000000   ML ML             1                         
+LISHENFLD 1100 1101      110011013        T                                     
+LICHLMSFD 1109H1110H     111011102        T           1                         
+LIWITHAME 1120 1121      112011213        T                                     
+LIMRKSTEY 1128 1128H     112811282        T           1                         
+CRCLCHSTR XX1N08    121939001 EMU360 100      B                                 
+LICLCHSTR 1135H1136H     113611361  DA    T                                     
+LICLCHEGJ           1139H00000000                                               
+LICLCHHYT           1140 00000000                                               
+LIWIVENHO 1143H1144      11441144         T                                     
+LIALRESFD 1147 1147H     11471147         T                                     
+LIGTBNTLY 1151 1151H     11511151         T           1                         
+LITHPLESK 1158 1158H     115811581        T           1                         
+LTCLACTON 1207 12071     TF                                                     
+ZZ
