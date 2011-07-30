@@ -201,7 +201,7 @@ module TSDBExplorer
 
       DailyScheduleLocation.import(location_list)
 
-      return Struct.new(:status).new(:ok)
+      return Struct.new(:status, :message).new(:ok, 'Activated train UID ' + uid + ' on ' + run_date + ' as train identity ' + unique_train_id)
 
     end
 
@@ -221,7 +221,7 @@ module TSDBExplorer
       ds.cancellation_timestamp = timestamp
       ds.save!
 
-      return Struct.new(:status).new(:ok)
+      return Struct.new(:status, :message).new(:ok, 'Cancelled train ' + train_identity + ' due to reason ' + reason)
 
     end
 
@@ -255,7 +255,7 @@ module TSDBExplorer
 
       point.save!
 
-      return Struct.new(:status).new(:ok)
+      return Struct.new(:status, :message).new(:ok, 'Processed movement type ' + event_type + ' for train ' + train_identity + ' at ' + location.tps_description)
 
     end
 
