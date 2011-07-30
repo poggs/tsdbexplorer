@@ -25,6 +25,7 @@ require 'amqp'
 
 log = Logger.new(STDOUT)
 log.formatter = proc { |severity,datetime,progname,msg| "#{datetime} #{severity}\t#{msg}\n" }
+log.level = 1
 
 log.info "TSDBExplorer TRUST subscriber starting"
 
@@ -46,38 +47,32 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
     if msg[:message_type] == "0001"
 
-      log.debug "TRUST activation for #{msg[:train_uid]} running as #{msg[:train_id]}"
-
       activation = TSDBExplorer::TDnet::process_trust_activation(msg[:train_uid], msg[:schedule_origin_depart_timestamp].strftime("%Y-%m-%d"), msg[:train_id])
 
-      if activation
-        log.debug "  Activated train #{msg[:train_id]}"
+      if activation.status == :ok
+        log.debug activation.message
       else
-        log.debug activation[:error]
+        log.warn activation.message
       end
 
     elsif msg[:message_type] == "0002"
 
-      log.debug "TRUST cancellation for #{msg[:train_id]}"
-
       cancellation = TSDBExplorer::TDnet::process_trust_cancellation(msg[:train_id], msg[:train_cancellation_timestamp], msg[:cancellation_reason_code])
 
-      if cancellation
-        log.debug "  Cancelled train #{msg[:train_id]}"
+      if cancellation.status == :ok
+        log.debug cancellation.message
       else
-        log.debug cancellation[:error]
+        log.warn cancellation.message
       end
 
     elsif msg[:message_type] == "0003"
 
-      log.debug "TRUST movement message for train #{msg[:current_train_id]}"
-
       movement = TSDBExplorer::TDnet::process_trust_movement(msg[:train_id], msg[:event_type], msg[:actual_timestamp], msg[:location_stanox], msg[:offroute_indicator])
 
-      if movement
-        log.debug "  Movement processed for #{msg[:train_id]}"
+      if movement.status == :ok
+        log.debug movement.message
       else
-        log.debug movement[:error]
+        log.warn movement.message
       end
 
     elsif msg[:message_type] == "0004"

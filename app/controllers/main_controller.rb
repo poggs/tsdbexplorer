@@ -31,13 +31,17 @@ class MainController < ApplicationController
       @time = Time.now
     end
 
-    range_from = (@time - 1.hour - 30.minutes).strftime('%Y-%m-%d %H:%M:00')
-    range_to = (@time).strftime('%Y-%m-%d %H:%M:00')
+    @range = Hash.new
+    @range[:from] = @time - 30.minutes
+    @range[:to] = @time + 1.hour
+
+    sql_range_from = @range[:from].to_s(:iso)
+    sql_range_to = @range[:to].to_s(:iso)
 
     @location = Tiploc.find_by_tiploc_code(params[:location])
 
     unless @location.nil?
-      @schedule = DailyScheduleLocation.where("tiploc_code = ? and ((departure BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (arrival BETWEEN ? AND ?))", @location.tiploc_code, range_from, range_to, range_from, range_to, range_from, range_to)
+      @schedule = DailyScheduleLocation.where("tiploc_code = ? and ((departure BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (arrival BETWEEN ? AND ?))", @location.tiploc_code, sql_range_from, sql_range_to, sql_range_from, sql_range_to, sql_range_from, sql_range_to)
     end
 
   end

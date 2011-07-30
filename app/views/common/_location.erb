@@ -7,8 +7,11 @@
 <% end %>
 
 <h1>Trains at <%= tidy_text(@location.tps_description) %></h1>
+<h2>Between <%= @range[:from].to_s(:iso) %> and <%= @range[:to].to_s(:iso) %></h2>
 
-<a onclick="$('#technical').slideToggle();">Click to show or hide technical information about this location</a>
+<div id="options">
+ <a onclick="$('#technical').slideToggle();"><%= image_tag('information.png') %>&nbsp;Show/hide technical information</a>
+</div>
 
 <div id="technical" style="display: none;">
  <table>
@@ -39,8 +42,9 @@
   <th>Departure</th>
   <th>Activity</th>
  </tr>
+
  <% @schedule.sort { |a,b| TSDBExplorer::train_sort(a,b) }.each do |train| %>
-  <% if train.daily_schedule.nil? %>
+  <% if train.nil? %>
    <tr>
     <td colspan="8" style="background: #c44; color: white; font-weight: bold; text-align: center;">ERROR: Schedule <%= train.daily_schedule_uuid %> not found</td>
    </tr>
@@ -49,10 +53,6 @@
     <td>
      <% if train.daily_schedule.cancelled? %>
       <abbr title="Cancelled at <%= time_only(train.daily_schedule.cancelled) %>"><%= image_tag('cross.png') %></abbr>
-     <% elsif train.daily_schedule.activated? %>
-      <abbr title="Activated at <%= time_only(train.daily_schedule.activated) %>"><%= image_tag('tick.png') %></abbr>
-     <% else %>
-      <abbr title="No information"><%= image_tag('question.png') %></abbr>
      <% end %>
     </td>
     <td><%= link_to train.daily_schedule.train_identity, { :action => 'schedule', :uuid => train.daily_schedule.uuid } %></td>

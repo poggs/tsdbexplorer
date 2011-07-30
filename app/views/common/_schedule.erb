@@ -21,7 +21,9 @@
   <% end %>
 </div>
 
-<a onclick="$('#technical').slideToggle();">Click to show or hide technical information about this service</a>
+<div id="options">
+ <a onclick="$('#technical').slideToggle();"><%= image_tag('information.png') %>&nbsp;Show/hide technical information</a>
+</div>
 
 <div id="technical" style="display: none;">
  <table>
@@ -49,23 +51,36 @@
 </div>
 
 <table>
- <tr><th>Location</th>
- <th>Platform</th>
- <th>Arrival</th>
- <th><abbr title="Click to show or hide passing times"><span onclick="$('tr#pass').fadeToggle();">Pass</span></abbr></th>
- <th>Departure</th>
+ <tr>
+  <th>&nbsp;</th>
+  <th colspan="2" style="text-align: center;">Platform</th>
+  <th colspan="2" style="text-align: center;">Arrival</th>
+  <th colspan="2" style="text-align: center;">Pass</th>
+  <th colspan="2" style="text-align: center;">Departure</th>
  </tr>
+ <tr>
+  <th>Location</th>
+  <th style="text-align: center;">Sch</th>
+  <th style="text-align: center;">Act</th>
+  <th style="text-align: center;">Sch</th>
+  <th style="text-align: center;">Act</th>
+  <th style="text-align: center;">Sch</th>
+  <th style="text-align: center;">Act</th>
+  <th style="text-align: center;">Sch</th>
+  <th style="text-align: center;">Act</th>
+ </tr>
+
  <% @schedule.daily_schedule_locations.each do |location| %>
-  <% if location.pass %>
-  <tr id="pass" style="display: none;">
-  <% else %>
   <tr>
-  <% end %>
    <td><%= tidy_text(decode_tiploc(location)) %></td>
-   <td><%= raw(@schedule.cancelled? ? "" : platform_or_actual(location.platform, location.actual_platform)) %></td>
-   <td><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.arrival, location.actual_arrival)) %></td>
-   <td><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.pass, location.actual_pass)) %></td>
-   <td><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.departure, location.actual_departure)) %></td>
+   <td style="text-align: center;"><%= location.platform %></td>
+   <td style="text-align: center;"><%= location.actual_platform %></td>
+   <td style="text-align: center;"><%= time_only(location.arrival) %></td>
+   <td style="text-align: center;"><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.public_arrival, location.actual_arrival)) %></td>
+   <td style="text-align: center;"><%= time_only(location.pass) %></td>
+   <td style="text-align: center;"><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.pass, location.actual_pass)) %></td>
+   <td style="text-align: center;"><%= time_only(location.departure) %></td>
+   <td style="text-align: center;"><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.public_departure, location.actual_departure)) %></td>
   </tr>
  <% end %>
 </table>
