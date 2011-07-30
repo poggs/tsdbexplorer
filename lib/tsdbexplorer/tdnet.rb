@@ -164,7 +164,7 @@ module TSDBExplorer
       schedule = BasicSchedule.runs_on_by_uid_and_date(uid, run_date).first
 
       if schedule.nil?
-        return { :error => 'No schedule found for activation of train ' + uid }
+        return Struct.new(:status, :message).new(:error, 'No schedule found for activation of train ' + uid)
       end
 
       ds_record = Hash.new
@@ -201,7 +201,7 @@ module TSDBExplorer
 
       DailyScheduleLocation.import(location_list)
 
-      return true
+      return Struct.new(:status).new(:ok)
 
     end
 
@@ -213,13 +213,15 @@ module TSDBExplorer
       ds = DailySchedule.find_by_train_identity_unique(train_identity)
 
       if ds.nil?
-        return { :error => 'Failed to cancel train ' + train_identity + ' schedule not found'}
+        return Struct.new(:status, :message).new(:error, 'Failed to cancel train ' + train_identity + ' schedule not found')
       end
 
       ds.cancelled = true
       ds.cancellation_reason = reason
       ds.cancellation_timestamp = timestamp
       ds.save!
+
+      return Struct.new(:status).new(:ok)
 
     end
 
@@ -229,15 +231,15 @@ module TSDBExplorer
     def TDnet.process_trust_movement(train_identity, event_type, timestamp, location_stanox, offroute_indicator)
 
       schedule = DailySchedule.find_by_train_identity_unique(train_identity)
-      return { :error => 'Failed to move train ' + train_identity + ': schedule not found' } if schedule.nil?
+      return Struct.new(:status, :message).new(:error, 'Failed to move train ' + train_identity + ': schedule not found') if schedule.nil?
 
       location = Tiploc.find_by_stanox(location_stanox)
-      return { :error => 'Failed to find STANOX location ' + location_stanox + ' for train ' + train_identity } if location.nil?
+      return Struct.new(:status, :message).new(:error, 'Failed to find STANOX location ' + location_stanox + ' for train ' + train_identity) if location.nil?
 
       # TODO: Handle off-route movement messages
 
       point = schedule.daily_schedule_locations.find_by_tiploc_code(location.tiploc_code)
-      return { :error => 'Failed to find schedule location ' + location.tiploc_code + ' for train ' + train_identity } if point.nil?
+      return Struct.new(:status, :message).new(:error, 'Failed to find schedule location ' + location.tiploc_code + ' for train ' + train_identity) if point.nil?
 
       # Update the actual arrival, departure or passing time
 
@@ -252,7 +254,8 @@ module TSDBExplorer
       end
 
       point.save!
-      return
+
+      return Struct.new(:status).new(:ok)
 
     end
 

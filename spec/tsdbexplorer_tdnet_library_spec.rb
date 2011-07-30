@@ -161,7 +161,8 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process a train activation message" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
+    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
+    activation.status.should eql(:ok)
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     ds.train_uid.should eql('C43391')
     ds.train_identity_unique.should eql('722N53MW12')
@@ -169,7 +170,8 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should not allow a train activation message for a date on which the schedule does not exist" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-13', '722N53MW13')
+    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-13', '722N53MW13')
+    activation.status.should eql(:error)
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-13').first
     ds.should be_nil
   end
@@ -177,21 +179,23 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   it "should not allow a train activation message for a date on which the schedule is cancelled" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_cancel.cif')
     activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-19', '722N53MW19')
-    activation[:error].should match(/C43391/)
+    activation.status.should eql(:error)
+    activation.message.should match(/C43391/)
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-19').first
     ds.should be_nil
   end
 
   it "should handle a train activation message for an unknown train" do
     activation = TSDBExplorer::TDnet::process_trust_activation('Z12345', '2011-01-01', '009Z99MA01')
-    activation[:error].should match(/Z12345/)
+    activation.status.should eql(:error)
+    activation.message.should match(/Z12345/)
     DailySchedule.all.count.should eql(0)
   end
 
   it "should process a train cancellation message" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12').should_not be_nil
-    TSDBExplorer::TDnet::process_trust_cancellation('722N53MW12', Time.parse('2010-12-12 18:15:00'), 'M4').should be_true
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12').status.should eql(:ok)
+    TSDBExplorer::TDnet::process_trust_cancellation('722N53MW12', Time.parse('2010-12-12 18:15:00'), 'M4').status.should eql(:ok)
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     ds.cancelled?.should be_true
     ds.cancellation_timestamp.should eql(Time.parse('2010-12-12 18:15:00'))
@@ -201,15 +205,16 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   it "should not allow a train cancellation for a train which has not been activated" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     cancellation = TSDBExplorer::TDnet::process_trust_cancellation('722N53MW12', Time.parse('2010-12-12 18:15:00'), 'M4')
-    cancellation[:error].should match(/722N53MW12/)
+    cancellation.status.should eql(:error)
+    cancellation.message.should match(/722N53MW12/)
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     ds.should be_nil
   end
 
   it "should process a train movement message for a departure from an the originating station" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
-    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:34:00'), '72410', ' ')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16').status.should eql(:ok)
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:34:00'), '72410', ' ').status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
     originating_point = schedule.daily_schedule_locations.find_by_tiploc_code('EUSTON')
     originating_point.actual_departure.should eql(Time.parse('2011-01-19 18:34:00'))
@@ -227,12 +232,12 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process a train movement message for a calling point" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
-    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '71040', ' ')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16').status.should eql(:ok)
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '71040', ' ').status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
     calling_point_arrival = schedule.daily_schedule_locations.find_by_tiploc_code('WATFDJ')
     calling_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
-    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:51:00'), '71040', ' ')
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:51:00'), '71040', ' ').status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
     calling_point_departure = schedule.daily_schedule_locations.find_by_tiploc_code('WATFDJ')
     calling_point_departure.actual_departure.should eql(Time.parse('2011-01-19 18:51:00'))
@@ -240,8 +245,8 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process a train movement message for an arrival at the terminating station" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
-    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ')
+    TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16').status.should eql(:ok)
+    TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ').status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
     terminating_point_arrival = schedule.daily_schedule_locations.find_by_tiploc_code('NMPTN')
     terminating_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
