@@ -249,7 +249,7 @@ module TSDBExplorer
         point = schedule.daily_schedule_locations.find_by_tiploc_code(possible_location.tiploc_code)
       end
 
-      return Struct.new(:status, :message).new(:error, 'Failed to find schedule location ' + location.tiploc_code + ' for train ' + train_identity) if point.nil?
+      return Struct.new(:status, :message).new(:error, 'Failed to find the following schedule location(s) ' + location.collect { |x| x.tiploc_code }.join(", ") + ' for train ' + train_identity) if point.nil?
 
       # Update the actual arrival, departure or passing time
 
