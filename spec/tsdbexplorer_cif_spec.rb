@@ -223,6 +223,30 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
 
+  # Bus and Ship processing
+
+  it "should handle schedules for buses" do
+    expected_data = {:tiploc=>{:insert=>3, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_bus.cif').should eql(expected_data)
+    basic_schedule = BasicSchedule.first
+    basic_schedule.train_identity.should eql('0B00')
+    basic_schedule.status.should eql('B')
+    locations = basic_schedule.locations
+    basic_schedule.locations.count.should eql(3)
+    locations.first.line.should eql('BUS')
+  end
+
+  it "should handle schedules for ships" do
+    expected_data = {:tiploc=>{:insert=>2, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_ship.cif').should eql(expected_data)
+    basic_schedule = BasicSchedule.first
+    basic_schedule.train_identity.should eql('0S00')
+    basic_schedule.status.should eql('S')
+    locations = basic_schedule.locations
+    basic_schedule.locations.count.should eql(2)
+  end
+
+
   # Schedule processing
 
   it "should process a complete schedule from a CIF file"

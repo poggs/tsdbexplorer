@@ -1,0 +1,8 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIHLYH   00243700LHOLYHEAD                  40001   0HHDHOLYHEAD                
+TIDUBLINF32035000VDUBLIN FERRYPORT          00000   0DFP                        
+BSNP870651105221112040000001 S  0S000051122340000                   A          P
+BX         AWY                                                                  
+LOHLYH    0240 0240          TB                                                 
+LTDUBLINF 0555 0555      TF                                                     
+ZZ

@@ -1,0 +1,10 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIPBROKLB56711300JKINGS LYNN BUS STATION    00000   0KLB                        
+TIWISBBUS08718800XWISBECH BUS STATION       00000   0WIS                        
+TIPBRO   00613300KPETERBOROUGH              451062950PBOPETERBOROUGH            
+BSNG391521105221112040000001 BBS0B00    121702001                              P
+BX         GRY                                                                  
+LOPBROKLB 0650 0650   BUS    TB                                                 
+LIWISBBUS 0722 0722      07220722         T                                     
+LTPBRO    0801 0801      TF                                                     
+ZZ
