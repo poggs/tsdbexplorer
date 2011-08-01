@@ -120,4 +120,22 @@ describe ApplicationHelper do
     tidy_text("BARVILLE (BAZCESTER)").should eql('Barville (Bazcester)')
   end
 
+  it "should convert a known TOC code to text" do
+    decode_toc('LM').should eql('London Midland')
+    decode_toc('LO').should eql('London Overground')
+  end
+
+  it "should return the TOC code when asked to decode an unknown TOC" do
+    decode_toc('11').should eql('11')
+  end
+
+  it "should decode a Delay Attribution code in to text" do
+    da_to_text('IA').should eql('a signal failure')
+    da_to_text('V8').should eql('a bird strike')
+  end
+
+  it "should return the DA code when asked to decode an unknown DA code" do
+    da_to_text('99').should eql('delay causation code 99')
+  end
+
 end
