@@ -107,15 +107,6 @@ module TSDBExplorer
       end
 
 
-      # Delete any unnecessary fields
-
-      if structure.has_key? :delete
-        structure[:delete].each do |field|
-          result.delete field
-        end
-      end
-
-
       # Reformat certain fields if required
 
       if structure.has_key? :convert_yyyymmddhhmmss
