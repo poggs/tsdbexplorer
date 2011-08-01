@@ -17,28 +17,8 @@
 #  $Id$
 #
 
-module TSDBExplorer
+require 'spec_helper'
 
-  module Geography
-
-    # Import non-redistributable static data
-
-    def Geography.import_static_data
-
-      elr_data = File.open('data/static/elr_list.csv')
-      elr_records = Array.new
-
-      elr_data.each do |elr_line|
-        record = elr_line.chop.split(/,/)
-        elr_records << GeoElr.new(:elr_code => record[0], :line_name => record[1])
-      end
-
-      result = GeoElr.import(elr_records)
-
-      return Struct.new(:status, :message).new(:status => :ok, :message => result.num_inserts.to_s + ' records processed')
-
-    end
-
-  end
-
+describe GeoHelper do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
