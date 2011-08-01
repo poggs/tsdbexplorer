@@ -19,6 +19,7 @@
 
 require 'tsdbexplorer/tdnet.rb'
 require 'tsdbexplorer/cif.rb'
+require 'tsdbexplorer/geography.rb'
 
 module TSDBExplorer
 

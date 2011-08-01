@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110709170322) do
+ActiveRecord::Schema.define(:version => 20110801171803) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -75,10 +75,13 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
   add_index "basic_schedules", ["uuid"], :name => "index_basic_schedules_on_uuid"
 
   create_table "daily_schedule_locations", :force => true do |t|
-    t.string   "daily_schedule_uuid",   :limit => 36
-    t.string   "location_type",         :limit => 2
-    t.string   "tiploc_code",           :limit => 7
+    t.string   "daily_schedule_uuid",    :limit => 36
+    t.string   "location_type",          :limit => 2
+    t.string   "tiploc_code",            :limit => 7
     t.integer  "tiploc_instance"
+    t.boolean  "cancelled"
+    t.datetime "cancellation_timestamp"
+    t.string   "cancellation_reason",    :limit => 2
     t.datetime "arrival"
     t.datetime "expected_arrival"
     t.datetime "actual_arrival"
@@ -90,16 +93,16 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
     t.datetime "departure"
     t.datetime "actual_departure"
     t.datetime "public_departure"
-    t.string   "platform",              :limit => 3
-    t.string   "actual_platform",       :limit => 3
-    t.string   "line",                  :limit => 3
-    t.string   "actual_line",           :limit => 3
-    t.string   "path",                  :limit => 3
-    t.string   "actual_path",           :limit => 3
+    t.string   "platform",               :limit => 3
+    t.string   "actual_platform",        :limit => 3
+    t.string   "line",                   :limit => 3
+    t.string   "actual_line",            :limit => 3
+    t.string   "path",                   :limit => 3
+    t.string   "actual_path",            :limit => 3
     t.integer  "engineering_allowance"
     t.integer  "pathing_allowance"
     t.integer  "performance_allowance"
-    t.string   "activity",              :limit => 12
+    t.string   "activity",               :limit => 12
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -143,6 +146,13 @@ ActiveRecord::Schema.define(:version => 20110709170322) do
   end
 
   add_index "daily_schedules", ["train_identity_unique"], :name => "index_daily_schedules_on_train_identity_unique"
+
+  create_table "geo_elrs", :force => true do |t|
+    t.string   "elr_code",   :limit => 4
+    t.text     "line_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "locations", :force => true do |t|
     t.string   "basic_schedule_uuid",   :limit => 36
