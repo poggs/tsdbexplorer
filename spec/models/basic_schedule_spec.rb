@@ -21,9 +21,11 @@ require 'spec_helper'
 
 describe BasicSchedule do
 
-  it "should have an 'origin' method which returns the Location object of the originating location" do
-    object = BasicSchedule.new
-    object.should respond_to(:origin)
+  it "should return the origin and termating locations of a BasicSchedule" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    schedule.origin.tiploc.tiploc_code.should eql('EUSTON')
+    schedule.terminate.tiploc.tiploc_code.should eql('NMPTN')
   end
 
   it "should have a 'terminate' method which returns the Location object of the terminating location" do
