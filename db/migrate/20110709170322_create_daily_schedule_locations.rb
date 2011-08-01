@@ -26,6 +26,9 @@ class CreateDailyScheduleLocations < ActiveRecord::Migration
       t.string     :location_type, :limit => 2
       t.string     :tiploc_code, :limit => 7
       t.integer    :tiploc_instance
+      t.boolean    :cancelled
+      t.datetime   :cancellation_timestamp
+      t.string     :cancellation_reason, :limit => 2
       t.datetime   :arrival
       t.datetime   :expected_arrival
       t.datetime   :actual_arrival
