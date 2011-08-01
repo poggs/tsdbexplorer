@@ -186,6 +186,43 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
 
+  # Time procesing
+
+  it "should process Basic Schedule arrival, public arrival, passing, departure and public departure times correctly" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    basic_schedule = BasicSchedule.first
+    locations = basic_schedule.locations
+
+    # Originating locations must have only a departure time
+    locations.first.arrival.should be_nil
+    locations.first.public_arrival.should be_nil
+    locations.first.pass.should be_nil
+    locations.first.departure.should eql('1834 ')
+    locations.first.public_departure.should eql('1834')
+
+    # Passing points must have only a passing time
+    locations[2].arrival.should be_nil
+    locations[2].public_arrival.should be_nil
+    locations[2].pass.should eql('1837H')
+    locations[2].departure.should be_nil
+    locations[2].public_departure.should be_nil    
+
+    # Calling points must have only an arrival, public arrival, departure and public departure time only
+    locations[6].arrival.should eql('1850 ')
+    locations[6].public_arrival.should eql('1850')
+    locations[6].pass.should be_nil
+    locations[6].departure.should eql('1851 ')
+    locations[6].public_departure.should eql('1851')
+
+    # Terminating locations must have only an arrival and public arrival time
+    locations.last.arrival.should eql('1946 ')
+    locations.last.public_arrival.should eql('1946')
+    locations.last.pass.should be_nil
+    locations.last.departure.should be_nil
+    locations.last.public_departure.should be_nil
+  end
+
+
   # Schedule processing
 
   it "should process a complete schedule from a CIF file"

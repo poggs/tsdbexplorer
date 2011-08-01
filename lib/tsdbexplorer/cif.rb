@@ -294,7 +294,7 @@ module TSDBExplorer
                 record[:basic_schedule_uuid] = uuid
                 record[:location_type] = record[:record_identity]
                 record[:public_arrival] = nil if record[:public_arrival] == "0000"
-                record[:public_departure] = nil if record[:public_arrival] == "0000"
+                record[:public_departure] = nil if record[:public_departure] == "0000"
                 loc_records << record
               end
 
