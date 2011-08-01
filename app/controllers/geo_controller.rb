@@ -20,6 +20,9 @@
 class GeoController < ApplicationController
 
   def index
+
+    redirect_to :action => 'setup' if GeoElr.count == 0
+
   end
 
 end
