@@ -21,6 +21,25 @@ require 'tsdbexplorer/tdnet.rb'
 
 module TSDBExplorer
 
+  module Constants
+
+    $CIF_RECORD_FORMAT = Hash.new
+    $CIF_RECORD_FORMAT['HD'] = { :delete => [ :spare ], :format => [ [ :file_mainframe_identity, 20 ], [ :date_of_extract, 6 ], [ :time_of_extract, 4 ], [ :current_file_ref, 7 ], [ :last_file_ref, 7 ], [ :update_indicator, 1 ], [ :version, 1 ], [ :user_extract_start_date, 6 ], [ :user_extract_end_date, 6], [ :spare, 20 ] ] }
+    $CIF_RECORD_FORMAT['TI'] = { :delete => [ :capitals_identification, :nlc_check_character, :po_mcp_code, :spare ], :strip => [ :tiploc_code, :tps_description, :description ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :spare, 8 ] ] }
+    $CIF_RECORD_FORMAT['TA'] = { :delete => [ :capitals_identification, :nlc_check_character, :po_mcp_code, :spare ], :strip => [ :tiploc_code, :tps_description, :description ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :new_tiploc, 7 ], [ :spare, 1 ] ] }
+    $CIF_RECORD_FORMAT['TD'] = { :delete => [ :spare ], :strip => [ :tiploc_code ], :format => [ [ :tiploc_code, 7 ], [ :spare, 71 ] ] }
+    $CIF_RECORD_FORMAT['AA'] = { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
+    $CIF_RECORD_FORMAT['BS'] = { :delete => [ :spare, :course_indicator, :connection_indicator ], :strip => [ :operating_characteristics, :catering_code ], :convert_yymmdd => [ :runs_from, :runs_to ], :format => [ [ :transaction_type, 1 ], [ :train_uid, 6 ], [ :runs_from, 6 ], [ :runs_to, 6 ], [ :runs_mo, 1 ], [ :runs_tu, 1 ], [ :runs_we, 1 ], [ :runs_th, 1 ], [ :runs_fr, 1 ], [ :runs_sa, 1 ], [ :runs_su, 1 ], [ :bh_running, 1 ], [ :status, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :spare, 1 ], [ :stp_indicator, 1 ] ] }
+    $CIF_RECORD_FORMAT['BX'] = { :delete => [ :spare, :traction_class ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :ats_code, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
+    $CIF_RECORD_FORMAT['LO'] = { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
+    $CIF_RECORD_FORMAT['LI'] = { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
+    $CIF_RECORD_FORMAT['CR'] = { :delete => [ :spare, :connection_indicator ], :strip => [ :tiploc_code, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
+    $CIF_RECORD_FORMAT['LT'] = { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :public_arrival, 4 ], [ :platform, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :spare, 43 ] ] }
+    $CIF_RECORD_FORMAT['ZZ'] = { :delete => [], :format => [] }
+
+  end
+
+
   module CIF
 
     # Parse and validate a File Mainframe Identity field from a CIF 'HD'
@@ -75,35 +94,8 @@ module TSDBExplorer
       result = Hash.new
       result[:record_identity] = record[0..1]
 
-      structure = case result[:record_identity]
-        when "HD"
-          { :delete => [ :spare ], :format => [ [ :file_mainframe_identity, 20 ], [ :date_of_extract, 6 ], [ :time_of_extract, 4 ], [ :current_file_ref, 7 ], [ :last_file_ref, 7 ], [ :update_indicator, 1 ], [ :version, 1 ], [ :user_extract_start_date, 6 ], [ :user_extract_end_date, 6], [ :spare, 20 ] ] }
-        when "TI"
-          { :delete => [ :capitals_identification, :nlc_check_character, :po_mcp_code, :spare ], :strip => [ :tiploc_code, :tps_description, :description ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :spare, 8 ] ] }
-        when "TA"
-          { :delete => [ :capitals_identification, :nlc_check_character, :po_mcp_code, :spare ], :strip => [ :tiploc_code, :tps_description, :description ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :new_tiploc, 7 ], [ :spare, 1 ] ] }
-        when "TD"
-          { :delete => [ :spare ], :strip => [ :tiploc_code ], :format => [ [ :tiploc_code, 7 ], [ :spare, 71 ] ] }
-        when "AA"
-          { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
-        when "BS"
-          { :delete => [ :spare, :course_indicator, :connection_indicator ], :strip => [ :operating_characteristics, :catering_code ], :convert_yymmdd => [ :runs_from, :runs_to ], :format => [ [ :transaction_type, 1 ], [ :train_uid, 6 ], [ :runs_from, 6 ], [ :runs_to, 6 ], [ :runs_mo, 1 ], [ :runs_tu, 1 ], [ :runs_we, 1 ], [ :runs_th, 1 ], [ :runs_fr, 1 ], [ :runs_sa, 1 ], [ :runs_su, 1 ], [ :bh_running, 1 ], [ :status, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :spare, 1 ], [ :stp_indicator, 1 ] ] }
-        when "BX"
-          { :delete => [ :spare, :traction_class ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :ats_code, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
-        when "LO"
-          { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
-        when "LI"
-          { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
-        when "CR"
-          { :delete => [ :spare, :connection_indicator ], :strip => [ :tiploc_code, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
-        when "LT"
-          { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :public_arrival, 4 ], [ :platform, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :spare, 43 ] ] }
-        when "ZZ"
-          { :delete => [], :format => [] }
-        else
-          raise "Unsupported record type '#{result[:record_identity]}'"
-      end
-
+      raise "Unsupported record type '#{result[:record_identity]}'" unless $CIF_RECORD_FORMAT.has_key? result[:record_identity]
+      structure = $CIF_RECORD_FORMAT[result[:record_identity]]
 
       # Slice up the record in to its fields as defined above, starting at
       # column 2, as we already have the record identity parsed
