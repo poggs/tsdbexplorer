@@ -25,4 +25,25 @@ describe DailySchedule do
     DailySchedule.should respond_to(:runs_on_by_uid_and_date)
   end
 
+  it "should have a method which returns the originating location of a schedule" do
+    DailySchedule.new.should respond_to(:origin)
+  end
+
+  it "should have a method which returns the terminating location of a schedule" do
+    DailySchedule.new.should respond_to(:terminate)
+  end
+
+  it "should return the originating and terminating locations of a schedule" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    activation.status.should eql(:ok)
+    movement = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ')
+    movement.status.should eql(:ok)
+    daily_schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    schedule_origin = daily_schedule.origin
+    schedule_origin.tiploc.tiploc_code.should eql('EUSTON')
+    schedule_terminate = daily_schedule.terminate
+    schedule_terminate.tiploc.tiploc_code.should eql('NMPTN')
+  end
+
 end
