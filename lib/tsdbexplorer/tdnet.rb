@@ -65,25 +65,6 @@ module TSDBExplorer
     end
 
 
-    # Parse a TD.net compact message and return the content as a Hash
-
-    def TDnet.parse_compact_message(xml)
-
-      result = Hash.new
-
-      structure = { 'TDMessageType' => :message_type, 'timestamp' => :timestamp, 'TDReportTime' => :timestamp_four, 'TDIdentity' => :td_identity, 'trainIdentity' => :train_description, 'fromBerthAddress' => :from_berth, 'toBerthAddress' => :to_berth, 'equipmentStatusAddress' => :address, 'equipmentBaseScanAddress' => :address, 'equipmentStatus' => :data, 'equipmentBaseScan' => :data }
-
-      parsed_xml = Nokogiri::parse(xml)
-
-      parsed_xml.xpath('/TDCompact').first.attributes.collect do |k,v|
-        result[structure[k]] = v.value
-      end
-
-      return result
-
-    end
-
-
     # Parse a TD.net raw message and return the content as a hash
 
    def TDnet.parse_raw_message(message)

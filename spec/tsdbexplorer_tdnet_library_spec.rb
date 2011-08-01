@@ -62,41 +62,6 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     lambda { TSDBExplorer::TDnet::parse_message('<ZZ_MSG>foobarbazqux</ZZ_MSG>') }.should raise_error
   end
 
-  it "should parse a compact Train Describer CA message" do
-    expected_data = { :message_type => 'CA', :td_identity => 'SU', :timestamp => '07:59:30Z', :from_berth => 'FROM', :to_berth => 'TOBH', :train_description => 'TDSC' }
-    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="CA" TDIdentity="SU" timestamp="07:59:30Z" fromBerthAddress="FROM" toBerthAddress="TOBH" trainIdentity="TDSC" />').should eql(expected_data)
-  end
-
-  it "should parse a compact Train Describer CB message" do
-    expected_data = { :message_type => 'CB', :td_identity => 'SU', :timestamp => '07:59:30Z', :from_berth => 'FROM', :train_description => 'TDSC' }
-    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="CB" TDIdentity="SU" timestamp="07:59:30Z" fromBerthAddress="FROM" trainIdentity="TDSC" />').should eql(expected_data)
-  end
-
-  it "should parse a compact Train Describer CC message" do
-    expected_data = { :message_type => 'CC', :td_identity => 'SU', :timestamp => '07:59:30Z', :to_berth => 'TOBH', :train_description => 'TDSC' }
-    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="CC" TDIdentity="SU" timestamp="07:59:30Z" toBerthAddress="TOBH" trainIdentity="TDSC" />').should eql(expected_data)
-  end
-
-  it "should parse a compact Train Describer CT message" do
-    expected_data = { :message_type => 'CT', :td_identity => 'SU', :timestamp => '07:59:30Z', :timestamp_four => '0759' }
-    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="CT" TDIdentity="SU" timestamp="07:59:30Z" TDReportTime="0759" />').should eql(expected_data)
-  end
-
-  it "should parse a compact Train Describer SF message" do
-    expected_data = { :message_type => 'SF', :td_identity => 'SU', :timestamp => '07:59:30Z', :address => '0C', :data => '66' }
-    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="SF" TDIdentity="SU" timestamp="07:59:30Z" equipmentStatusAddress="0C" equipmentStatus="66" />').should eql(expected_data)
-  end
-
-  it "should parse a compact Train Describer SG message" do
-    expected_data = { :message_type => 'SG', :td_identity => 'SU', :timestamp => '07:59:30Z', :address => '0C', :data => '66666666' }
-    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="SG" TDIdentity="SU" timestamp="07:59:30Z" equipmentBaseScanAddress="0C" equipmentBaseScan="66666666" />').should eql(expected_data)
-  end
-
-  it "should parse a compact Train Describer SH message" do
-    expected_data = { :message_type => 'SH', :td_identity => 'SU', :timestamp => '07:59:30Z', :address => '0C', :data => '66666666' }
-    TSDBExplorer::TDnet::parse_compact_message('<?xml version="1.0" ?><TDCompact TDMessageType="SH" TDIdentity="SU" timestamp="07:59:30Z" equipmentBaseScanAddress="0C" equipmentBaseScan="66666666" />').should eql(expected_data)
-  end
-
 
   # TRUST message data (raw)
 
@@ -147,14 +112,6 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     expected_data = { :message_type => '0008', :message_queue_timestamp => Time.parse('2006-01-05 10:01:09'), :source_system_id => 'ABCDEFGHIJKLMNOPQMMM', :original_data_source => 'ABCDEFGHIJKLMNOPQNNN', :user_id => 'AAAABBCC', :source_dev_id => 'CCCCDDEE', :train_id => '1214567890', :event_timestamp => Time.parse('2007-03-02 10:15:25'), :revised_location => '12345', :planned_timestamp => Time.parse('2007-03-02 10:15:26'), :original_location => '12345', :original_timestamp => Time.parse('2006-01-04 10:15:26'), :current_train_id => '1214567890', :train_service_code => 'ABCDEFGH', :train_file_address => 'ABC' }
     TSDBExplorer::TDnet::parse_raw_message(data).should eql(expected_data)
   end
-
-
-  # MQ Interface
-
-  it "should receive a message from the TD_DATA queue and process it"
-  it "should receive a message from the TR_DATA queue and process it"
-  it "should receive a message from the VSTP_DATA queue and process it"
-  it "should receive a message form the TSR_DATA queue and process it"
 
 
   # TRUST message handling
