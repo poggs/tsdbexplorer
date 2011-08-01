@@ -141,7 +141,7 @@ module TSDBExplorer
 
       cif_data = File.open(filename)
       file_size = File.size(filename)
-      puts "Processing #{filename} (#{file_size})"
+      puts "Processing #{filename} (#{file_size} bytes)"
 
 
       # The first line of the CIF file must be an HD record
