@@ -8,6 +8,7 @@ gem 'nokogiri', '>= 1.1.4'
 gem 'uuid', '>= 2.3.2'
 gem 'amqp'
 gem 'rake', '0.8.7'
+gem 'fastercsv', '>= 1.5.4'
 
 gem 'activerecord-import', '>= 0.2.6'
 

@@ -17,8 +17,21 @@
 #  $Id$
 #
 
-class GeoElr < ActiveRecord::Base
+class CreateGeoPoints < ActiveRecord::Migration
 
-  has_many :geo_point, :primary_key => :elr_code, :foreign_key => :elr_code
+  def self.up
+    create_table :geo_points do |t|
+      t.text       :location_name
+      t.string     :route_code, :limit => 6
+      t.string     :elr_code, :limit => 4
+      t.integer    :miles
+      t.integer    :chains
+      t.timestamps
+    end
+  end
+
+  def self.down
+    drop_table :geo_points
+  end
 
 end

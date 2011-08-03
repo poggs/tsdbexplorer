@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110801171803) do
+ActiveRecord::Schema.define(:version => 20110803063921) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -150,6 +150,16 @@ ActiveRecord::Schema.define(:version => 20110801171803) do
   create_table "geo_elrs", :force => true do |t|
     t.string   "elr_code",   :limit => 4
     t.text     "line_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geo_points", :force => true do |t|
+    t.text     "location_name"
+    t.string   "route_code",    :limit => 6
+    t.string   "elr_code",      :limit => 4
+    t.integer  "miles"
+    t.integer  "chains"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

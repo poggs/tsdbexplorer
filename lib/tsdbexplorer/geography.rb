@@ -25,17 +25,29 @@ module TSDBExplorer
 
     def Geography.import_static_data
 
-      elr_data = File.open('data/static/elr_list.csv')
+      # Import ELR data
+
       elr_records = Array.new
 
-      elr_data.each do |elr_line|
-        record = elr_line.chop.split(/,/)
-        elr_records << GeoElr.new(:elr_code => record[0], :line_name => record[1])
+      FasterCSV.foreach('data/static/elr_list.csv') do |elr_line|
+        elr_records << GeoElr.new(:elr_code => elr_line[0], :line_name => elr_line[1])
       end
 
-      result = GeoElr.import(elr_records)
+      elr_result = GeoElr.import(elr_records)
 
-      return Struct.new(:status, :message).new(:status => :ok, :message => result.num_inserts.to_s + ' records processed')
+
+      # Import location data
+
+      point_records = Array.new
+
+      FasterCSV.foreach('data/static/locations.csv') do |point_line|
+        point_records << GeoPoint.new(:location_name => point_line[0], :route_code => point_line[1], :elr_code => point_line[2], :miles => point_line[3], :chains => point_line[4])
+      end
+
+      point_result = GeoPoint.import(point_records)
+
+
+      return Struct.new(:status, :message).new(:status => :ok, :message => "#{elr_records.count} ELR records and #{point_result.count} point records processed")
 
     end
 

@@ -17,8 +17,8 @@
 #  $Id$
 #
 
-class GeoElr < ActiveRecord::Base
+class GeoPoint < ActiveRecord::Base
 
-  has_many :geo_point, :primary_key => :elr_code, :foreign_key => :elr_code
+  belongs_to :geo_elr, :primary_key => :elr_code, :foreign_key => :elr_code
 
 end

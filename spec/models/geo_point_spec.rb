@@ -17,8 +17,8 @@
 #  $Id$
 #
 
-class GeoElr < ActiveRecord::Base
+require 'spec_helper'
 
-  has_many :geo_point, :primary_key => :elr_code, :foreign_key => :elr_code
-
+describe GeoPoint do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
