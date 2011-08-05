@@ -1,1 +1,46 @@
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $().ready(function() {
+   $("#elr_code").autocomplete({ source: "/geo/search", minLength: 3 });
+   });
+ </script>
+
+ <script type="text/javascript">
+  $(document).ready( function() {
+   $("tr:nth-child(odd)").addClass("odd");
+  });
+ </script>
+<% end %>
+<%= content_for :head do %>
+ <%= stylesheet_link_tag 'autocomplete' %>
+<% end %>
+
 <h1>Geographical Data</h1>
+
+<% if @points %>
+
+<h2><%= @elr.elr_code %>: <%= @elr.line_name %></h2>
+
+<table>
+ <tr>
+  <th>Location</th>
+  <th>Mileage</th>
+ </tr>
+ <% @points.each do |point| %>
+ <tr>
+  <td><%= point.location_name %></td>
+  <td><%= point.miles %>m <%= point.chains %>ch</td>
+ </tr>
+ <% end %>
+</table>
+
+<% else %>
+
+ <form id="search">
+  <p>
+   Show me points on ELR <input type="text" id="elr_code" name="elr_code" value="<%= params[:elr_code] %>">
+   <input type="submit" value="&gt;" />
+  </p>
+ </form>
+
+<% end %>

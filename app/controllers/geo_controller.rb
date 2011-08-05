@@ -23,6 +23,30 @@ class GeoController < ApplicationController
 
     redirect_to :action => 'setup' if GeoElr.count == 0
 
+    if params[:elr_code]
+      @elr = GeoElr.find_by_elr_code(params[:elr_code])
+      @points = GeoPoint.all(:conditions => { :elr_code => params[:elr_code] }, :order => [ :miles, :chains ])
+    end
+
   end
+
+
+  # Search the ELR records for a value
+
+  def search
+
+    if params[:term].length == 4
+      conditions = [ 'elr_code = ?', params[:term] ]
+    else
+      conditions = [ 'elr_code LIKE ? OR line_name LIKE ?', '%' + params[:term].upcase + '%', '%' + params[:term].upcase + '%' ]
+    end
+
+    matches = GeoElr.find(:all, :conditions => conditions, :limit => 25).collect { |m| { :id => m.elr_code, :label => m.line_name + " (" + m.elr_code + ")", :value => m.elr_code } }
+
+    render :json => matches
+
+  end
+
+
 
 end
