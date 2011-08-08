@@ -21,4 +21,29 @@ require 'spec_helper'
 
 describe GeoController do
 
+  render_views
+
+  it "should render the index page when called with a non-empty database" do
+    GeoElr.create!({ :elr_code => 'FOO1', :line_name => 'Foo to Bar' })
+    get :index
+    response.should render_template('index')
+  end
+
+  it "should render the setup page when called with an empty database" do
+    get :setup
+    response.should render_template('setup')
+    response.body.should =~ /you will require some external static data sets which are not freely redistributable/
+  end
+
+  it "should redirect to a setup page when called with an empty database" do
+    get :index
+    response.should redirect_to :controller => 'geo', :action => 'setup'
+  end
+
+  it "should redirect to the index page when the setup page is called with a non-empty database" do
+    GeoElr.create!({ :elr_code => 'FOO1', :line_name => 'Foo to Bar' })
+    get :setup
+    response.body.should redirect_to :controller => 'geo', :action => 'index'
+  end
+
 end

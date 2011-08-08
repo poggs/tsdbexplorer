@@ -31,6 +31,15 @@ class GeoController < ApplicationController
   end
 
 
+  # Display a setup page if no ELRs exist
+
+  def setup
+
+    redirect_to :action => 'index' if GeoElr.count > 0
+
+  end
+
+
   # Search the ELR records for a value
 
   def search
@@ -46,7 +55,5 @@ class GeoController < ApplicationController
     render :json => matches
 
   end
-
-
 
 end
