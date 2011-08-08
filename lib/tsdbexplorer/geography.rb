@@ -46,8 +46,7 @@ module TSDBExplorer
 
       point_result = GeoPoint.import(point_records)
 
-
-      return Struct.new(:status, :message).new(:status => :ok, :message => "#{elr_records.count} ELR records and #{point_result.count} point records processed")
+      return Struct.new(:status, :message).new(:status => :ok, :message => "#{elr_records.count} ELR records and #{point_records.count} point records processed")
 
     end
 
