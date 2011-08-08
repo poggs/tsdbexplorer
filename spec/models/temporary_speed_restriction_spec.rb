@@ -22,13 +22,13 @@ require 'spec_helper'
 describe TemporarySpeedRestriction do
 
   it "should be valid with all fields populated" do
-    valid_values = { :tsr_id => 71655, :route_group_name => 'Foo', :route_code => 'ZZ9999', :route_order => 1234, :tsr_reference => 'T2009/12345', :from_location => 'Fooington', :to_location => 'Bar LC', :line_name => 'Down Main', :subunit_type => 'chains', :mileage_from => 46, :subunit_from => 54, :mileage_to => 46, :subunit_to => 60, :moving_mileage => '0', :passenger_speed => 70, :freight_speed => 50, :valid_from => DateTime.parse('2009-06-01 10:00:00'), :valid_to => DateTime.parse('2010-04-26 10:00:00'), :reason => 'Condition of Track', :requestor => 'InfraCo Maintenance Division', :comments => 'Example comment', :direction => 'down' }
+    valid_values = { :tsr_id => 71655, :route_group_name => 'Foo', :route_code => 'ZZ9999', :route_order => 1234, :tsr_reference => 'T2009/12345', :from_location => 'Fooington', :to_location => 'Bar LC', :line_name => 'Down Main', :subunit_type => 'chains', :mileage_from => 46, :subunit_from => 54, :mileage_to => 46, :subunit_to => 60, :moving_mileage => '0', :passenger_speed => 70, :freight_speed => 50, :valid_from_date => DateTime.parse('2009-06-01 10:00:00'), :valid_to_date => DateTime.parse('2010-04-26 10:00:00'), :reason => 'Condition of Track', :requestor => 'InfraCo Maintenance Division', :comments => 'Example comment', :direction => 'down' }
     TemporarySpeedRestriction.new(valid_values).should be_valid
   end
 
   it "should not be valid with required fields missing" do
 
-    valid_values = { :tsr_id => 71655, :route_group_name => 'Foo', :route_code => 'ZZ9999', :route_order => 1234, :tsr_reference => 'T2009/12345', :from_location => 'Fooington', :to_location => 'Bar LC', :line_name => 'Down Main', :subunit_type => 'chains', :mileage_from => 46, :subunit_from => 54, :mileage_to => 46, :subunit_to => 60, :moving_mileage => '0', :passenger_speed => 70, :freight_speed => 50, :valid_from => DateTime.parse('2009-06-01 10:00:00'), :valid_to => DateTime.parse('2010-04-26 10:00:00'), :reason => 'Condition of Track', :requestor => 'InfraCo Maintenance Division', :comments => 'Example comment', :direction => 'down' }
+    valid_values = { :tsr_id => 71655, :route_group_name => 'Foo', :route_code => 'ZZ9999', :route_order => 1234, :tsr_reference => 'T2009/12345', :from_location => 'Fooington', :to_location => 'Bar LC', :line_name => 'Down Main', :subunit_type => 'chains', :mileage_from => 46, :subunit_from => 54, :mileage_to => 46, :subunit_to => 60, :moving_mileage => '0', :passenger_speed => 70, :freight_speed => 50, :valid_from_date => DateTime.parse('2009-06-01 10:00:00'), :valid_to_date => DateTime.parse('2010-04-26 10:00:00'), :reason => 'Condition of Track', :requestor => 'InfraCo Maintenance Division', :comments => 'Example comment', :direction => 'down' }
     tsr = TemporarySpeedRestriction.new(valid_values)
 
     valid_values.keys.each do |k|
