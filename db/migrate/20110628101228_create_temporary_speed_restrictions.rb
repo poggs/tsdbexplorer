@@ -37,8 +37,9 @@ class CreateTemporarySpeedRestrictions < ActiveRecord::Migration
       t.string     :moving_mileage
       t.integer    :passenger_speed
       t.integer    :freight_speed
-      t.datetime   :valid_from
-      t.datetime   :valid_to
+      t.datetime   :creation_date
+      t.datetime   :valid_from_date
+      t.datetime   :valid_to_date
       t.string     :reason
       t.string     :requestor
       t.string     :comments

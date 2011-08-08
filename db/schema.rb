@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110803063921) do
+ActiveRecord::Schema.define(:version => 20110804072950) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -215,8 +215,9 @@ ActiveRecord::Schema.define(:version => 20110803063921) do
     t.string   "moving_mileage"
     t.integer  "passenger_speed"
     t.integer  "freight_speed"
-    t.datetime "valid_from"
-    t.datetime "valid_to"
+    t.datetime "creation_date"
+    t.datetime "valid_from_date"
+    t.datetime "valid_to_date"
     t.string   "reason"
     t.string   "requestor"
     t.string   "comments"
@@ -236,6 +237,8 @@ ActiveRecord::Schema.define(:version => 20110803063921) do
     t.string "stanox",          :limit => 5
     t.string "crs_code",        :limit => 3
     t.string "description",     :limit => 16
+    t.float  "geo_lat"
+    t.float  "geo_lon"
   end
 
   add_index "tiplocs", ["crs_code"], :name => "index_tiplocs_on_crs_code"
