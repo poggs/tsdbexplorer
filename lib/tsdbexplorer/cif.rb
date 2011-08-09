@@ -18,13 +18,13 @@
 #
 
 require 'tsdbexplorer/tdnet.rb'
+require 'tsdbexplorer/cif/classes.rb'
 
 module TSDBExplorer
 
   module Constants
 
     $CIF_RECORD_FORMAT = Hash.new
-    $CIF_RECORD_FORMAT['HD'] = { :delete => [ :spare ], :format => [ [ :file_mainframe_identity, 20 ], [ :date_of_extract, 6 ], [ :time_of_extract, 4 ], [ :current_file_ref, 7 ], [ :last_file_ref, 7 ], [ :update_indicator, 1 ], [ :version, 1 ], [ :user_extract_start_date, 6 ], [ :user_extract_end_date, 6], [ :spare, 20 ] ] }
     $CIF_RECORD_FORMAT['TI'] = { :delete => [ :capitals_identification, :nlc_check_character, :po_mcp_code, :spare ], :strip => [ :tiploc_code, :tps_description, :description ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :spare, 8 ] ] }
     $CIF_RECORD_FORMAT['TA'] = { :delete => [ :capitals_identification, :nlc_check_character, :po_mcp_code, :spare ], :strip => [ :tiploc_code, :tps_description, :description ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :new_tiploc, 7 ], [ :spare, 1 ] ] }
     $CIF_RECORD_FORMAT['TD'] = { :delete => [ :spare ], :strip => [ :tiploc_code ], :format => [ [ :tiploc_code, 7 ], [ :spare, 71 ] ] }
@@ -39,53 +39,7 @@ module TSDBExplorer
 
   end
 
-
   module CIF
-
-    # Parse and validate a File Mainframe Identity field from a CIF 'HD'
-    # record.  If the data is valid, it returns a hash with :username and
-    # :extract_date keys.  If the data is not valid, it returns a hash with a
-    # single :error key.
-
-    def CIF.parse_file_mainframe_identity(mainframe_identity)
-
-      data = Hash.new
-
-      if mainframe_identity.match(/TPS.U(.{6}).PD(.{6})/).nil?
-        data[:error] = "File Mainframe Identity '#{mainframe_identity}' is not valid - must start with TPS.U, be followed by six characters, then .PD and a further six characters"
-      end
-
-      username_match = $1
-      extract_date_match = $2
-
-      unless data.has_key? :error
-
-        username = username_match.match(/([CD]F\w{4})/)
-
-        if username.nil?
-          data[:error] = "Username '#{username}' is not valid - must start with CF or DF and be followed by four characters"
-        else
-          data[:username] = $1
-        end
-
-      end
-
-      unless data.has_key? :error
-
-        extract_date = extract_date_match.match(/(\d{6})/)
-
-        if extract_date.nil?
-          data[:error] = "Extract date '#{extract_date}' is not valid - must be six numerics"
-        else
-          data[:extract_date] = $1
-        end
-
-      end
-
-      return data
-
-    end
-
 
     # Process a record from a CIF file and return the data as a Hash
 
@@ -94,40 +48,53 @@ module TSDBExplorer
       result = Hash.new
       result[:record_identity] = record[0..1]
 
-      raise "Unsupported record type '#{result[:record_identity]}'" unless $CIF_RECORD_FORMAT.has_key? result[:record_identity]
       structure = $CIF_RECORD_FORMAT[result[:record_identity]]
 
-      # Slice up the record in to its fields as defined above, starting at
-      # column 2, as we already have the record identity parsed
+      if structure.nil?
 
-      pos = 2
+        # Process the record using the built-in Class parser
 
-      structure[:format].each do |field|
-        value = record.slice(pos, field[1])
-        result[field[0]] = value.blank? ? nil : value
-        pos = pos + field[1]
-      end
-
-
-      # Delete any unnecessary fields
-
-      structure[:delete].each do |field|
-        result.delete field
-      end
-
-
-      # Reformat certain fields if required
-
-      if structure.has_key? :convert_yymmdd
-        structure[:convert_yymmdd].each do |field|
-          result[field] = TSDBExplorer::yymmdd_to_date(result[field])
+        if result[:record_identity] == "HD"
+          result = TSDBExplorer::CIF::Header.new(record)
+        else
+          raise "Unsupported record type '#{result[:record_identity]}'" unless $CIF_RECORD_FORMAT.has_key? result[:record_identity]
         end
-      end
 
-      if structure.has_key? :strip
-        structure[:strip].each do |field|
-          result[field].strip! unless result[field].nil?
+      else
+
+        # Slice up the record in to its fields as defined above, starting at
+        # column 2, as we already have the record identity parsed
+
+        pos = 2
+
+        structure[:format].each do |field|
+          value = record.slice(pos, field[1])
+          result[field[0]] = value.blank? ? nil : value
+          pos = pos + field[1]
         end
+
+
+        # Delete any unnecessary fields
+
+        structure[:delete].each do |field|
+          result.delete field
+        end
+
+
+        # Reformat certain fields if required
+
+        if structure.has_key? :convert_yymmdd
+          structure[:convert_yymmdd].each do |field|
+            result[field] = TSDBExplorer::yymmdd_to_date(result[field])
+          end
+        end
+
+        if structure.has_key? :strip
+          structure[:strip].each do |field|
+            result[field].strip! unless result[field].nil?
+          end
+        end
+
       end
 
       return result
@@ -147,26 +114,22 @@ module TSDBExplorer
       # The first line of the CIF file must be an HD record
 
       header_data = TSDBExplorer::CIF::parse_record(cif_data.first)
-      raise "Expecting an HD record at the start of #{filename} - found a '#{header_data[:record_identity]}' record" unless header_data[:record_identity] == "HD"
+      raise "Expecting an HD record at the start of #{filename} - found a '#{header_data[:record_identity]}' record" unless header_data.is_a? TSDBExplorer::CIF::Header
 
 
-      # Validate the HD record
-
-      file_mainframe_identity_data = TSDBExplorer::CIF::parse_file_mainframe_identity(header_data[:file_mainframe_identity])
-
-      raise file_mainframe_identity_data[:error] if file_mainframe_identity_data.has_key? :error
+      # Display data from the CIF header record
 
       puts "-----------------------------------------------------------------------------"
-      puts "      Mainframe ID : #{header_data[:file_mainframe_identity]}"
-      puts "              User : #{file_mainframe_identity_data[:username]}"
-      puts "      Extract date : #{header_data[:date_of_extract]}"
-      puts "      Extract time : #{header_data[:time_of_extract]}"
-      puts "    File reference : #{header_data[:current_file_ref]}"
-      puts "    Last reference : #{header_data[:last_file_ref]}"
-      puts "  Update indicator : #{header_data[:update_indicator]}"
-      puts "       CIF version : #{header_data[:version]}"
-      puts "     Extract start : #{header_data[:user_extract_start_date]}"
-      puts "       Extract end : #{header_data[:user_extract_end_date]}"
+      puts "      Mainframe ID : #{header_data.file_mainframe_identity}"
+      puts "              User : #{header_data.mainframe_username}"
+      puts "      Extract date : #{header_data.date_of_extract}"
+      puts "      Extract time : #{header_data.time_of_extract}"
+      puts "    File reference : #{header_data.current_file_ref}"
+      puts "    Last reference : #{header_data.last_file_ref}"
+      puts "  Update indicator : #{header_data.update_indicator}"
+      puts "       CIF version : #{header_data.version}"
+      puts "     Extract start : #{header_data.user_extract_start_date}"
+      puts "       Extract end : #{header_data.user_extract_end_date}"
       puts "-----------------------------------------------------------------------------"
 
 
@@ -209,7 +172,7 @@ module TSDBExplorer
 
           record.delete :record_identity
 
-          raise "TIPLOC Amend record not allowed in a full extract" if header_data[:update_indicator] == "F"
+          raise "TIPLOC Amend record not allowed in a full extract" if header_data.update_indicator == "F"
 
           amend_record = Tiploc.find_by_tiploc_code(record[:tiploc_code])
           raise "Unknown TIPLOC '#{record[:tiploc_code]}' found in TA record" if amend_record.nil?
@@ -226,7 +189,7 @@ module TSDBExplorer
 
           # TIPLOC Delete
 
-          raise "TIPLOC Delete record not allowed in a full extract" if header_data[:update_indicator] == "F"
+          raise "TIPLOC Delete record not allowed in a full extract" if header_data.update_indicator == "F"
 
           deletion_record = Tiploc.find_by_tiploc_code(record[:tiploc_code])
           raise "Unknown TIPLOC '#{record[:tiploc_code]}' found in TD record" if deletion_record.nil?
@@ -248,7 +211,7 @@ module TSDBExplorer
 
           if record[:transaction_type] == "R"
 
-            raise "Basic Schedule 'revise' record not allowed in a full extract" if header_data[:update_indicator] == "F"
+            raise "Basic Schedule 'revise' record not allowed in a full extract" if header_data.update_indicator == "F"
 
             deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record[:train_uid], :runs_from => record[:runs_from] })
             raise "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}" if deletion_record.nil?
@@ -305,7 +268,7 @@ module TSDBExplorer
 
           elsif record[:transaction_type] == "D"
 
-            raise "Basic Schedule 'delete' record not allowed in a full extract" if header_data[:update_indicator] == "F"
+            raise "Basic Schedule 'delete' record not allowed in a full extract" if header_data.update_indicator == "F"
 
             deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record[:train_uid], :runs_from => record[:runs_from] })
             raise "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}" if deletion_record.nil?
