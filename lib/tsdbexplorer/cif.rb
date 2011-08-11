@@ -84,12 +84,6 @@ module TSDBExplorer
 
         # Reformat certain fields if required
 
-        if structure.has_key? :convert_yymmdd
-          structure[:convert_yymmdd].each do |field|
-            result[field] = TSDBExplorer::yymmdd_to_date(result[field])
-          end
-        end
-
         if structure.has_key? :strip
           structure[:strip].each do |field|
             result[field].strip! unless result[field].nil?
