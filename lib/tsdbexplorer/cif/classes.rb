@@ -21,7 +21,7 @@ module TSDBExplorer
 
   module CIF
 
-    class Header
+    class HeaderRecord
 
       attr_reader :file_mainframe_identity, :date_of_extract, :time_of_extract, :current_file_ref, :last_file_ref, :update_indicator, :version, :user_extract_start_date, :user_extract_end_date, :mainframe_username, :extract_date
       attr_accessor :file_mainframe_identity, :date_of_extract, :time_of_extract, :current_file_ref, :last_file_ref, :update_indicator, :version, :user_extract_start_date, :user_extract_end_date, :mainframe_username, :extract_date
@@ -41,6 +41,114 @@ module TSDBExplorer
         raise "Mainframe identity is not valid" unless self.file_mainframe_identity.match(/TPS.U(.{6}).PD(.{6})/)
         self.mainframe_username = $1
         self.extract_date = $2
+
+      end
+
+    end
+
+    class TiplocRecord
+
+      attr_reader :action, :tiploc_code, :new_tiploc, :nalco, :tps_description, :stanox, :crs_code, :description
+      attr_accessor :action, :tiploc_code, :new_tiploc, :nalco, :tps_description, :stanox, :crs_code, :description
+
+      def initialize(record)
+
+        self.action = record[1..1]
+        self.tiploc_code = record[2..8].strip
+        self.nalco = record[11..16]
+        self.tps_description = record[18..43]
+        self.stanox = record[44..48]
+        self.crs_code = record[53..55]
+        self.description = record[56..72]
+        self.new_tiploc = record[73..77] if self.action == "A"
+
+        self.description = self.description.strip.empty? ? nil : self.description.strip unless self.description.nil?
+        self.tps_description = self.tps_description.strip.empty? ? nil : self.tps_description.strip unless self.tps_description.nil?
+
+        self.stanox = nil if self.stanox == "00000"
+
+      end
+
+    end
+
+    class BasicScheduleExtendedRecord
+
+      attr_reader :traction_class, :uic_code, :atoc_code, :ats_code, :rsid, :data_source
+      attr_accessor :traction_class, :uic_code, :atoc_code, :ats_code, :rsid, :data_source
+
+      def initialize(record)
+
+        self.traction_class = record[2..5].strip
+        self.uic_code = record[6..10]
+        self.atoc_code = record[11..12]
+        self.ats_code = record[13..13]
+        self.rsid = record[15..22].strip
+        self.data_source = record[23..23].strip
+
+        self.traction_class = self.traction_class.strip.empty? ? nil : self.traction_class.strip
+        self.uic_code = self.uic_code.strip.empty? ? nil : self.uic_code.strip
+        self.rsid = self.rsid.strip.empty? ? nil : self.rsid.strip
+        self.data_source = self.data_source.strip.empty? ? nil : self.data_source.strip
+
+      end
+
+    end
+
+    class BasicScheduleRecord
+
+      attr_reader :uuid, :transaction_type, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :course_indicator, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :connection_indicator, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source
+      attr_accessor :uuid, :transaction_type, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :course_indicator, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :connection_indicator, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source
+
+      def initialize(record)
+
+        self.transaction_type = record[2..2]
+        self.train_uid = record[3..8]
+        self.runs_from = TSDBExplorer::yymmdd_to_date(record[9..14])
+        self.runs_to = TSDBExplorer::yymmdd_to_date(record[15..20])
+        self.runs_mo = record[21..21]
+        self.runs_tu = record[22..22]
+        self.runs_we = record[23..23]
+        self.runs_th = record[24..24]
+        self.runs_fr = record[25..25]
+        self.runs_sa = record[26..26]
+        self.runs_su = record[27..27]
+        self.bh_running = record[28..28].strip
+        self.status = record[29..29]
+        self.category = record[30..31]
+        self.train_identity = record[32..35]
+        self.headcode = record[36..39].strip
+        self.service_code = record[41..48]
+        self.portion_id = record[49..49].strip
+        self.power_type = record[50..52]
+        self.timing_load = record[53..56]
+        self.speed = record[57..59]
+        self.operating_characteristics = record[60..65].strip
+        self.train_class = record[66..66]
+        self.sleepers = record[67..67].strip
+        self.reservations = record[68..68]
+        self.catering_code = record[70..73].strip
+        self.service_branding = record[74..77].strip
+        self.stp_indicator = record[79..79]
+
+        self.bh_running = nil if self.bh_running == ""
+        self.headcode = nil if self.headcode == ""
+        self.portion_id = nil if self.portion_id == ""
+        self.operating_characteristics = nil if self.operating_characteristics == ""
+        self.sleepers = nil if self.sleepers == ""
+        self.catering_code = nil if self.catering_code == ""
+        self.service_branding = nil if self.service_branding == ""
+
+      end
+
+      def merge_bx_record(bx_record)
+
+        raise "A BasicScheduleExtended object must be passed" unless bx_record.is_a? TSDBExplorer::CIF::BasicScheduleExtendedRecord
+
+        self.uic_code = bx_record.uic_code
+        self.atoc_code = bx_record.uic_code
+        self.ats_code = bx_record.ats_code
+        self.rsid = bx_record.rsid
+        self.data_source = bx_record.data_source
 
       end
 

@@ -25,12 +25,7 @@ module TSDBExplorer
   module Constants
 
     $CIF_RECORD_FORMAT = Hash.new
-    $CIF_RECORD_FORMAT['TI'] = { :delete => [ :capitals_identification, :nlc_check_character, :po_mcp_code, :spare ], :strip => [ :tiploc_code, :tps_description, :description ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :spare, 8 ] ] }
-    $CIF_RECORD_FORMAT['TA'] = { :delete => [ :capitals_identification, :nlc_check_character, :po_mcp_code, :spare ], :strip => [ :tiploc_code, :tps_description, :description ], :format => [ [ :tiploc_code, 7 ], [ :capitals_identification, 2 ], [ :nalco, 6 ], [ :nlc_check_character, 1 ], [ :tps_description, 26 ], [ :stanox, 5 ], [ :po_mcp_code, 4 ], [ :crs_code, 3 ], [ :description, 16 ], [ :new_tiploc, 7 ], [ :spare, 1 ] ] }
-    $CIF_RECORD_FORMAT['TD'] = { :delete => [ :spare ], :strip => [ :tiploc_code ], :format => [ [ :tiploc_code, 7 ], [ :spare, 71 ] ] }
     $CIF_RECORD_FORMAT['AA'] = { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
-    $CIF_RECORD_FORMAT['BS'] = { :delete => [ :spare, :course_indicator, :connection_indicator ], :strip => [ :operating_characteristics, :catering_code ], :convert_yymmdd => [ :runs_from, :runs_to ], :format => [ [ :transaction_type, 1 ], [ :train_uid, 6 ], [ :runs_from, 6 ], [ :runs_to, 6 ], [ :runs_mo, 1 ], [ :runs_tu, 1 ], [ :runs_we, 1 ], [ :runs_th, 1 ], [ :runs_fr, 1 ], [ :runs_sa, 1 ], [ :runs_su, 1 ], [ :bh_running, 1 ], [ :status, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :spare, 1 ], [ :stp_indicator, 1 ] ] }
-    $CIF_RECORD_FORMAT['BX'] = { :delete => [ :spare, :traction_class ], :format => [ [ :traction_class, 4 ], [ :uic_code, 5 ], [ :atoc_code, 2 ], [ :ats_code, 1 ], [ :rsid, 8 ], [ :data_source, 1 ], [ :spare, 57 ] ] }
     $CIF_RECORD_FORMAT['LO'] = { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
     $CIF_RECORD_FORMAT['LI'] = { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
     $CIF_RECORD_FORMAT['CR'] = { :delete => [ :spare, :connection_indicator ], :strip => [ :tiploc_code, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
@@ -55,7 +50,13 @@ module TSDBExplorer
         # Process the record using the built-in Class parser
 
         if result[:record_identity] == "HD"
-          result = TSDBExplorer::CIF::Header.new(record)
+          result = TSDBExplorer::CIF::HeaderRecord.new(record)
+        elsif result[:record_identity] == "BS"
+          result = TSDBExplorer::CIF::BasicScheduleRecord.new(record)
+        elsif result[:record_identity] == "BX"
+          result = TSDBExplorer::CIF::BasicScheduleExtendedRecord.new(record)
+        elsif result[:record_identity] == "TI" || result[:record_identity] == "TA" || result[:record_identity] == "TD"
+          result = TSDBExplorer::CIF::TiplocRecord.new(record)
         else
           raise "Unsupported record type '#{result[:record_identity]}'" unless $CIF_RECORD_FORMAT.has_key? result[:record_identity]
         end
@@ -114,7 +115,7 @@ module TSDBExplorer
       # The first line of the CIF file must be an HD record
 
       header_data = TSDBExplorer::CIF::parse_record(cif_data.first)
-      raise "Expecting an HD record at the start of #{filename} - found a '#{header_data[:record_identity]}' record" unless header_data.is_a? TSDBExplorer::CIF::Header
+      raise "Expecting an HD record at the start of #{filename} - found a '#{header_data[:record_identity]}' record" unless header_data.is_a? TSDBExplorer::CIF::HeaderRecord
 
 
       # Display data from the CIF header record
@@ -150,54 +151,52 @@ module TSDBExplorer
 
         record = TSDBExplorer::CIF::parse_record(cif_data.gets)
 
-        if record[:record_identity] == "TI"
+        if record.is_a? TSDBExplorer::CIF::TiplocRecord
 
-          # TIPLOC Insert
+          if record.action == "I"
 
-          record.delete :record_identity
+            # TIPLOC Insert
 
-          record[:stanox] = nil if record[:stanox] == "00000"
+            data = []
+            pending['Tiploc'][:cols].each do |column|
+              data << record.send(column)
+            end
+            pending['Tiploc'][:rows] << data
 
-          data = []
-          pending['Tiploc'][:cols].each do |column|
-            data << record[column]
+            stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
+
+          elsif record.action == "A"
+
+            # TIPLOC Amend
+
+            raise "TIPLOC Amend record not allowed in a full extract" if header_data.update_indicator == "F"
+
+            amend_record = Tiploc.find_by_tiploc_code(record.tiploc_code)
+            raise "Unknown TIPLOC '#{record.tiploc_code}' found in TA record" if amend_record.nil?
+
+            [ :tiploc_code, :nalco, :tps_description, :stanox, :crs_code, :description ].each do |field|
+              amend_record[field] = record.send(field)
+            end
+
+            amend_record.save
+
+            stats[:tiploc][:amend] = stats[:tiploc][:amend] + 1
+
+          elsif record.action == "D"
+
+            # TIPLOC Delete
+
+            raise "TIPLOC Delete record not allowed in a full extract" if header_data.update_indicator == "F"
+
+            deletion_record = Tiploc.find_by_tiploc_code(record.tiploc_code)
+            raise "Unknown TIPLOC '#{record.tiploc_code}' found in TD record" if deletion_record.nil?
+            deletion_record.destroy
+
+            stats[:tiploc][:delete] = stats[:tiploc][:delete] + 1
+
           end
-          pending['Tiploc'][:rows] << data
 
-          stats[:tiploc][:insert] = stats[:tiploc][:insert] + 1
-
-        elsif record[:record_identity] == "TA"
-
-          # TIPLOC Amend
-
-          record.delete :record_identity
-
-          raise "TIPLOC Amend record not allowed in a full extract" if header_data.update_indicator == "F"
-
-          amend_record = Tiploc.find_by_tiploc_code(record[:tiploc_code])
-          raise "Unknown TIPLOC '#{record[:tiploc_code]}' found in TA record" if amend_record.nil?
-
-          record.each do |k,v|
-            amend_record[k] = v
-          end
-
-          amend_record.save
-
-          stats[:tiploc][:amend] = stats[:tiploc][:amend] + 1
-
-        elsif record[:record_identity] == "TD"
-
-          # TIPLOC Delete
-
-          raise "TIPLOC Delete record not allowed in a full extract" if header_data.update_indicator == "F"
-
-          deletion_record = Tiploc.find_by_tiploc_code(record[:tiploc_code])
-          raise "Unknown TIPLOC '#{record[:tiploc_code]}' found in TD record" if deletion_record.nil?
-          deletion_record.destroy
-
-          stats[:tiploc][:delete] = stats[:tiploc][:delete] + 1
-
-        elsif record[:record_identity] == "BS"
+        elsif record.is_a? TSDBExplorer::CIF::BasicScheduleRecord
 
           # Check if we have any pending TIPLOCs to insert, and if so,
           # process them now
@@ -209,11 +208,11 @@ module TSDBExplorer
           # which the revision applies, change the transaction type to New
           # and process normally
 
-          if record[:transaction_type] == "R"
+          if record.transaction_type == "R"
 
             raise "Basic Schedule 'revise' record not allowed in a full extract" if header_data.update_indicator == "F"
 
-            deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record[:train_uid], :runs_from => record[:runs_from] })
+            deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record.train_uid, :runs_from => record.runs_from })
             raise "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}" if deletion_record.nil?
 
             deletion_record.destroy
@@ -221,44 +220,46 @@ module TSDBExplorer
           end
 
 
-
           loc_records = Array.new
 
-          if record[:transaction_type] == "N" || record[:transaction_type] == "R"
-
-            transaction = record[:transaction_type]
+          if record.transaction_type == "N" || record.transaction_type == "R"
 
             # Schedule cancellations (BS records with the STP indicator set to
             # 'C') have no locations, so must be processed separately
 
-            bs_record = record
+            bs_record = Hash.new
 
-            if record[:stp_indicator] != "C"
+            if record.stp_indicator != "C"
+
+              # Generate a UUID  for this BasicSchedule record
 
               uuid = UUID.generate
-              bs_record[:uuid] = uuid
+              record.uuid = uuid
+
+
+              # Read in the associated BX record and merge the data in to the BS record
+
+              bx_record = TSDBExplorer::CIF::parse_record(cif_data.gets)
+              record.merge_bx_record(bx_record)
 
 
               # Read in all records up to and including the next LT record
 
-              bx_record = TSDBExplorer::CIF::parse_record(cif_data.gets)
-              bx_record[:locaion_type] = bx_record[:record_identity]
+              location_record = Hash.new
+              location_record[:record_identity] = ""
 
-              while(record[:record_identity] != "LT")
-                record = TSDBExplorer::CIF::parse_record(cif_data.gets)
-                record[:basic_schedule_uuid] = uuid
-                record[:location_type] = record[:record_identity]
-                record[:public_arrival] = nil if record[:public_arrival] == "0000"
-                record[:public_departure] = nil if record[:public_departure] == "0000"
-                loc_records << record
+              until location_record[:record_identity] == "LT"
+                cif_record = cif_data.gets
+                location_record = TSDBExplorer::CIF::parse_record(cif_record)
+                location_record[:basic_schedule_uuid] = uuid
+                location_record[:location_type] = location_record[:record_identity]
+                location_record[:public_arrival] = nil if location_record[:public_arrival] == "0000"
+                location_record[:public_departure] = nil if location_record[:public_departure] == "0000"
+                loc_records << location_record
               end
 
 
-              # Merge the BS and BX records to create a BasicSchedule
-
-              bs_record.merge!(bx_record)
-
-              if transaction == "N"
+              if record.transaction_type == "N"
                 stats[:schedule][:insert] = stats[:schedule][:insert] + 1
               else
                 stats[:schedule][:amend] = stats[:schedule][:amend] + 1
@@ -266,11 +267,11 @@ module TSDBExplorer
 
             end
 
-          elsif record[:transaction_type] == "D"
+          elsif record.transaction_type == "D"
 
             raise "Basic Schedule 'delete' record not allowed in a full extract" if header_data.update_indicator == "F"
 
-            deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record[:train_uid], :runs_from => record[:runs_from] })
+            deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record.train_uid, :runs_from => record.runs_from })
             raise "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}" if deletion_record.nil?
 
             deletion_record.destroy
@@ -311,7 +312,7 @@ module TSDBExplorer
 
             data = []
             pending['BasicSchedule'][:cols].each do |column|
-              data << bs_record[column]
+              data << record.send(column)
             end
 
             pending['BasicSchedule'][:rows] << data
