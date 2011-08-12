@@ -23,13 +23,13 @@ module TSDBExplorer
 
     # Import non-redistributable static data
 
-    def Geography.import_static_data
+    def Geography.import_static_data(path='data/static')
 
       # Import ELR data
 
       elr_records = Array.new
 
-      FasterCSV.foreach('data/static/elr_list.csv') do |elr_line|
+      FasterCSV.foreach(path + '/elr_list.csv') do |elr_line|
         elr_records << GeoElr.new(:elr_code => elr_line[0], :line_name => elr_line[1])
       end
 
@@ -40,7 +40,7 @@ module TSDBExplorer
 
       point_records = Array.new
 
-      FasterCSV.foreach('data/static/locations.csv') do |point_line|
+      FasterCSV.foreach(path + '/locations.csv') do |point_line|
         point_records << GeoPoint.new(:location_name => point_line[0], :route_code => point_line[1], :elr_code => point_line[2], :miles => point_line[3], :chains => point_line[4])
       end
 
