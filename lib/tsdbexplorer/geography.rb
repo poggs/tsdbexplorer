@@ -25,6 +25,12 @@ module TSDBExplorer
 
     def Geography.import_static_data(path='data/static')
 
+      static_data_files = [ 'elr_list.csv', 'locations.csv' ]
+
+      static_data_files.each do |static_data|
+        raise "Incomplete geography data found in #{path}" unless File.readable?(path + '/' + static_data)
+      end
+
       # Import ELR data
 
       elr_records = Array.new

@@ -49,4 +49,10 @@ describe "lib/tsdbexplorer/geography.rb" do
 
   end
 
+  it "should raise an error if asked to import geography data which does not exist" do
+
+    lambda { TSDBExplorer::Geography.import_static_data('test/fixtures/null_geography') }.should raise_error(RuntimeError, "Incomplete geography data found in test/fixtures/null_geography")
+
+  end
+
 end
