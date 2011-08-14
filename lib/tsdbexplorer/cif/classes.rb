@@ -125,7 +125,7 @@ module TSDBExplorer
         self.operating_characteristics = record[60..65].strip
         self.train_class = record[66..66]
         self.sleepers = record[67..67].strip
-        self.reservations = record[68..68]
+        self.reservations = record[68..68].strip
         self.catering_code = record[70..73].strip
         self.service_branding = record[74..77].strip
         self.stp_indicator = record[79..79]
@@ -135,6 +135,7 @@ module TSDBExplorer
         self.portion_id = nil if self.portion_id == ""
         self.operating_characteristics = nil if self.operating_characteristics == ""
         self.sleepers = nil if self.sleepers == ""
+        self.reservations = nil if self.reservations == ""
         self.catering_code = nil if self.catering_code == ""
         self.service_branding = nil if self.service_branding == ""
 
