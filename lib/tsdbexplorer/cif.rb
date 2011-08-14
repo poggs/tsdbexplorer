@@ -306,7 +306,7 @@ module TSDBExplorer
 
             data = []
             pending['BasicSchedule'][:cols].each do |column|
-              data << record.send(column)
+              data << record.send(column) if record.respond_to? column
             end
 
             pending['BasicSchedule'][:rows] << data
