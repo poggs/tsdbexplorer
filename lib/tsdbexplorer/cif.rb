@@ -26,10 +26,7 @@ module TSDBExplorer
 
     $CIF_RECORD_FORMAT = Hash.new
     $CIF_RECORD_FORMAT['AA'] = { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
-    $CIF_RECORD_FORMAT['LO'] = { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :departure, 5 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :activity, 12 ], [ :performance_allowance, 2 ], [ :spare, 37 ] ] }
-    $CIF_RECORD_FORMAT['LI'] = { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :departure, 5 ], [ :pass, 5 ], [ :public_arrival, 4 ], [ :public_departure, 4 ], [ :platform, 3 ], [ :line, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :engineering_allowance, 2 ], [ :pathing_allowance, 2 ], [ :performance_allowance, 2 ], [ :spare, 20 ] ] }
     $CIF_RECORD_FORMAT['CR'] = { :delete => [ :spare, :connection_indicator ], :strip => [ :tiploc_code, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
-    $CIF_RECORD_FORMAT['LT'] = { :delete => [ :spare ], :strip => [ :tiploc_code, :platform, :line, :activity ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :arrival, 5 ], [ :public_arrival, 4 ], [ :platform, 3 ], [ :path, 3 ], [ :activity, 12 ], [ :spare, 43 ] ] }
     $CIF_RECORD_FORMAT['ZZ'] = { :delete => [], :format => [] }
 
   end
@@ -57,6 +54,8 @@ module TSDBExplorer
           result = TSDBExplorer::CIF::BasicScheduleExtendedRecord.new(record)
         elsif result[:record_identity] == "TI" || result[:record_identity] == "TA" || result[:record_identity] == "TD"
           result = TSDBExplorer::CIF::TiplocRecord.new(record)
+        elsif result[:record_identity] == "LO" || result[:record_identity] == "LI" || result[:record_identity] == "LT"
+          result = TSDBExplorer::CIF::LocationRecord.new(record)
         else
           raise "Unsupported record type '#{result[:record_identity]}'" unless $CIF_RECORD_FORMAT.has_key? result[:record_identity]
         end
@@ -239,19 +238,19 @@ module TSDBExplorer
 
               # Read in all records up to and including the next LT record
 
-              location_record = Hash.new
-              location_record[:record_identity] = ""
+              location_record = TSDBExplorer::CIF::LocationRecord.new
 
-              until location_record[:record_identity] == "LT"
+              while(1)
                 cif_record = cif_data.gets
+                next if cif_record[0..1] == "CR" # TODO: Remove change-en-route hack
                 location_record = TSDBExplorer::CIF::parse_record(cif_record)
-                location_record[:basic_schedule_uuid] = uuid
-                location_record[:location_type] = location_record[:record_identity]
-                location_record[:public_arrival] = nil if location_record[:public_arrival] == "0000"
-                location_record[:public_departure] = nil if location_record[:public_departure] == "0000"
+                raise "Record was parsed as a '#{location_record.class}', expecting a TSDBExplorer::CIF::LocationRecord" unless location_record.is_a? TSDBExplorer::CIF::LocationRecord
+                location_record.basic_schedule_uuid = uuid
                 loc_records << location_record
-              end
 
+                break if location_record.location_type == "LT"
+
+              end
 
               if record.transaction_type == "N"
                 stats[:schedule][:insert] = stats[:schedule][:insert] + 1
@@ -286,13 +285,13 @@ module TSDBExplorer
 
           unless loc_records == []
 
-            origin_location = Tiploc.find_by_tiploc_code(loc_records.first[:tiploc_code])
-            origin_departure = loc_records.first[:departure]
+            origin_location = Tiploc.find_by_tiploc_code(loc_records.first.tiploc_code)
+            origin_departure = loc_records.first.departure
 
             loc_records.each do |r|
               data = []
               pending['Location'][:cols].each do |column|
-                data << r[column]
+                data << r.send(column) if r.respond_to? column
               end
               pending['Location'][:rows] << data
             end

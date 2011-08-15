@@ -71,6 +71,72 @@ module TSDBExplorer
 
     end
 
+    class LocationRecord
+
+      attr_reader :basic_schedule_uuid, :record_identity, :location_type, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity
+      attr_accessor :basic_schedule_uuid, :record_identity, :location_type, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity
+
+      def initialize(record=nil)
+
+        if record
+
+          self.location_type = record[0..1]
+          self.record_identity = self.location_type
+          self.tiploc_code = record[2..8].strip
+          self.tiploc_instance = record[9..9]
+
+          if self.location_type == "LO"
+            self.departure = record[10..14]
+            self.public_departure = record[15..18]
+            self.platform = record[19..21].strip
+            self.line = record[22..24].strip
+            self.engineering_allowance = record[25..26].strip
+            self.pathing_allowance = record[27..28].strip
+            self.activity = record[29..40].strip
+            self.performance_allowance = record[41..42].strip
+          elsif self.location_type == "LI"
+            self.arrival = record[10..14]
+            self.departure = record[15..19]
+            self.pass = record[20..24]
+            self.public_arrival = record[25..28]
+            self.public_departure = record[29..32]
+            self.platform = record[33..35].strip
+            self.line = record[36..38].strip
+            self.path = record[39..41].strip
+            self.activity = record[42..53].strip
+            self.engineering_allowance = record[54..55].strip
+            self.pathing_allowance = record[56..57].strip
+            self.performance_allowance = record[58..59].strip
+          elsif self.location_type == "LT"
+            self.arrival = record[10..14]
+            self.public_arrival = record[15..18]
+            self.platform = record[19..21].strip
+            self.path = record[22..24].strip
+            self.activity = record[25..36].strip
+          else
+            raise "Unknown location type '#{self.location_type}'"
+          end
+
+          self.tiploc_instance = nil if self.tiploc_instance == " "
+          self.arrival = nil if self.arrival == "     "
+          self.departure = nil if self.departure == "     "
+          self.pass = nil if self.pass == "0000 " || self.pass == "     "
+          self.public_arrival = nil if self.public_arrival == "0000"
+          self.public_departure = nil if self.public_departure == "0000"
+          self.line = nil if self.line == ""
+          self.activity = nil if self.activity == ""
+          self.path = nil if self.path == ""
+          self.platform = nil if self.platform == ""
+          self.pathing_allowance = nil if self.pathing_allowance == ""
+          self.engineering_allowance = nil if self.engineering_allowance == ""
+          self.performance_allowance = nil if self.performance_allowance == ""
+
+        end
+
+      end
+
+    end
+
     class BasicScheduleExtendedRecord
 
       attr_reader :traction_class, :uic_code, :atoc_code, :ats_code, :rsid, :data_source
