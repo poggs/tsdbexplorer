@@ -38,21 +38,24 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should correctly parse a CIF 'LO' record" do
-    expected_data = {:performance_allowance=>nil, :platform=>"3", :departure=>"0910 ", :public_departure=>"0000", :record_identity=>"LO", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"PENZNCE", :pathing_allowance=>nil, :activity=>"TBRMA -D", :tiploc_instance=>nil}
+    expected_data = {:performance_allowance=>nil, :platform=>"3", :departure=>"0910 ", :public_departure=>nil, :record_identity=>"LO", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"PENZNCE", :pathing_allowance=>nil, :activity=>"TBRMA -D", :tiploc_instance=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('LOPENZNCE 0910 00003         TBRMA -D                                           ')
-    expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
+    parsed_record.should be_a TSDBExplorer::CIF::LocationRecord
+    expected_data.collect.each { |k,v| parsed_record.send(k).should eql(v) }
   end
 
   it "should correctly parse a CIF 'LI' record" do
-    expected_data = {:performance_allowance=>nil, :platform=>"15", :pass=>nil, :path=>nil, :departure=>"1532H", :arrival=>"1429H", :public_departure=>"0000", :public_arrival=>"0000", :record_identity=>"LI", :engineering_allowance=>nil, :line=>"E", :tiploc_code=>"EUSTON", :pathing_allowance=>nil, :activity=>"RMOP", :tiploc_instance=>nil}
+    expected_data = {:performance_allowance=>nil, :platform=>"15", :pass=>nil, :path=>nil, :departure=>"1532H", :arrival=>"1429H", :public_departure=>nil, :public_arrival=>nil, :record_identity=>"LI", :engineering_allowance=>nil, :line=>"E", :tiploc_code=>"EUSTON", :pathing_allowance=>nil, :activity=>"RMOP", :tiploc_instance=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('LIEUSTON  1429H1532H     0000000015 E     RMOP                                  ')
-    expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
+    parsed_record.should be_a TSDBExplorer::CIF::LocationRecord
+    expected_data.collect.each { |k,v| parsed_record.send(k).should eql(v) }
   end
 
   it "should correctly parse a CIF 'LT' record" do
-    expected_data = {:platform=>nil, :path=>nil, :arrival=>"0417 ", :public_arrival=>"0000", :record_identity=>"LT", :tiploc_code=>"DITTFLR", :activity=>"TFPR", :tiploc_instance=>nil}
+    expected_data = {:platform=>nil, :path=>nil, :arrival=>"0417 ", :public_arrival=>nil, :record_identity=>"LT", :tiploc_code=>"DITTFLR", :activity=>"TFPR", :tiploc_instance=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('LTDITTFLR 0417 0000      TFPR                                                   ')
-    expected_data.collect.each { |k,v| parsed_record[k].should eql(v) }
+    parsed_record.should be_a TSDBExplorer::CIF::LocationRecord
+    expected_data.collect.each { |k,v| parsed_record.send(k).should eql(v) }
   end
 
   it "should correctly parse a CIF 'CR' record" do
