@@ -61,10 +61,38 @@ module ApplicationHelper
   def decode_toc(toc)
 
     toc_hash = {
+      "AW" => "ARRIVA Trains Wales",
+      "CC" => "c2c",
+      "CH" => "Chiltern Railways",
+      "EM" => "East Midlands Trains",
+      "ES" => "Eurostar",
+      "FC" => "First Capital Connect",
+      "GC" => "Grand Central",
+      "GR" => "National Express East Coast",
+      "GW" => "First Great Western",
+      "GX" => "Gatwick Express",
+      "HC" => "Heathrow Connect",
+      "HT" => "Hull Trains",
+      "HX" => "Heathrow Express",
+      "IL" => "Island Line",
+      "LE" => "National Express East Anglia",
       "LM" => "London Midland",
       "LO" => "London Overground",
+      "LT" => "London Underground",
+      "ME" => "Merseyrail",
+      "NT" => "Northern",
+      "NY" => "North Yorkshire Moors Railway",
+      "PT" => "Europorte 2",
+      "SE" => "SouthEastern",
+      "SN" => "Southern",
+      "SR" => "Scotrail",
+      "SW" => "South West Trains",
+      "TP" => "First TransPennine Express",
+      "TW" => "Tyne and Wear Metro",
       "VT" => "Virgin Trains",
-      "LE" => "National Express East Anglia"
+      "WR" => "West Coast Railway Co.",
+      "WS" => "Wrexham & Shropshire",
+      "XC" => "CrossCountry"
     }
 
     if toc_hash.has_key? toc
