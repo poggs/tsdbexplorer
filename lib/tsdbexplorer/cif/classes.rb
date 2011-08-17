@@ -212,7 +212,7 @@ module TSDBExplorer
         raise "A BasicScheduleExtended object must be passed" unless bx_record.is_a? TSDBExplorer::CIF::BasicScheduleExtendedRecord
 
         self.uic_code = bx_record.uic_code
-        self.atoc_code = bx_record.uic_code
+        self.atoc_code = bx_record.atoc_code
         self.ats_code = bx_record.ats_code
         self.rsid = bx_record.rsid
         self.data_source = bx_record.data_source

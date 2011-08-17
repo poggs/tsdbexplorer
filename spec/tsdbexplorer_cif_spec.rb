@@ -142,6 +142,8 @@ describe "lib/tsdbexplorer/cif.rb" do
     expected_data_part_1 = {:tiploc=>{:insert=>18, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif').should eql(expected_data_part_1)
     BasicSchedule.count.should eql(1)
+    BasicSchedule.first.atoc_code.should eql('LM')
+    BasicSchedule.first.ats_code.should eql('Y')
     Location.count.should eql(18)
     Location.first.tiploc_code.should eql('EUSTON')
     Location.last.tiploc_code.should eql('NMPTN')
