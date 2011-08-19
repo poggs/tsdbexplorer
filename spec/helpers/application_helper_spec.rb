@@ -138,4 +138,6 @@ describe ApplicationHelper do
     da_to_text('99').should eql('delay causation code 99')
   end
 
+  it "should return the days of the week a service runs as text"
+
 end
