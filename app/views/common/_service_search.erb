@@ -1,7 +1,7 @@
 <%= content_for :script do %>
  <script type="text/javascript">
   $().ready(function() {
-   $("#location").autocomplete({ source: "/search/location", minLength: 3 });
+   $("#location").autocomplete({ source: "<%= url_for :controller => 'search', :action => 'location' %>", minLength: 3 });
    });
  </script>
 <% end %>
