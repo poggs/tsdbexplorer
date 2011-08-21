@@ -532,4 +532,16 @@ module ApplicationHelper
 
   end
 
+  # Given two dates, returns 'On START' if the dates are equal, otherwise shows 'Between START and END'
+
+  def date_range_or_date(range_start, range_end)
+
+    if range_start == range_end
+      "On #{range_end}"
+    else
+      "From #{range_start} to #{range_end}"
+    end
+
+  end
+
 end
