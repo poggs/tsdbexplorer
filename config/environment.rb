@@ -18,7 +18,7 @@
 #
 
 require File.expand_path('../application', __FILE__)
-require 'lib/tsdbexplorer'
+require 'tsdbexplorer'
 
 require 'yaml'
 $CONFIG = YAML.load(File.open('config/tsdbexplorer.yml'))

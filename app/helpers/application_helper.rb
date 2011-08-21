@@ -119,8 +119,8 @@ module ApplicationHelper
       "XU" => "Unadvertised Express",
       "XX" => "Express Passenger",
       "XZ" => "Sleeper (Domestic)",
-      "BR" => "Bus – Replacement due to engineering work",
-      "BS" => "Bus – WTT Service",
+      "BR" => "Bus - Replacement due to engineering work",
+      "BS" => "Bus - WTT Service",
       "EE" => "Empty Coaching Stock (ECS)",
       "EL" => "ECS, London Underground/Metro Service.",
       "ES" => "ECS & Staff",
@@ -529,6 +529,18 @@ module ApplicationHelper
              }
 
     return (map.has_key? da_code) ? map[da_code] : "delay causation code #{da_code}"
+
+  end
+
+  # Given two dates, returns 'On START' if the dates are equal, otherwise shows 'Between START and END'
+
+  def date_range_or_date(range_start, range_end)
+
+    if range_start == range_end
+      "On #{range_end}"
+    else
+      "From #{range_start} to #{range_end}"
+    end
 
   end
 

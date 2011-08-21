@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.7'
+gem 'rails', '3.0.10'
 gem 'sqlite3'
 gem 'ruby-mysql', '2.9.4', :require => false if RUBY_PLATFORM =~ /darwin/i
 gem 'mysql', :require => false if RUBY_PLATFORM =~ /linux/i
