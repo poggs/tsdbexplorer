@@ -29,6 +29,10 @@ log.level = 1
 
 log.info "TSDBExplorer TRUST subscriber starting"
 
+['hostname', 'username', 'password', 'vhost'].each do |config_key|
+  raise "Missing AMQP_SERVER parameter '#{config_key}' in config/tsdbexplorer.yml" unless $CONFIG['AMQP_SERVER'].has_key? config_key
+end
+
 log.info "Connecting to AMQP server #{$CONFIG['AMQP_SERVER']['hostname']} as user #{$CONFIG['AMQP_SERVER']['username']}"
 
 AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AMQP_SERVER']['username'], :password => $CONFIG['AMQP_SERVER']['password'], :vhost => $CONFIG['AMQP_SERVER']['vhost']) do |connection|
