@@ -25,24 +25,53 @@ class MainController < ApplicationController
 
     redirect_to :action => 'setup' if BasicSchedule.count == 0
 
-    if params[:target_time]
-      @time = Time.parse(params[:target_date] + " " + params[:target_time])
-    else
-      @time = Time.now
+    @time = Time.now
+
+    if params[:search]
+
+      if params[:search] == "by_location"
+
+        @range = Hash.new
+        @range[:from] = @time - 30.minutes
+        @range[:to] = @time + 1.hour
+
+        sql_range_from = @range[:from].to_s(:iso)
+        sql_range_to = @range[:to].to_s(:iso)
+
+        begin
+          @time = Time.parse(params[:target_date] + " " + params[:target_time])
+        rescue
+        end
+
+        @schedule = Location.where(:tiploc_code => params[:location]).between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M')).runs_on('2011-08-23')
+
+      elsif params[:search] == "by_identity"
+
+        @schedule = BasicSchedule
+
+        unless params[:target_date].blank?
+          @schedule = @schedule.runs_on(params[:target_date])
+        end
+
+        # Try a regex match on the search parameters, and look up by UID or identity as appropriate
+
+        if params[:schedule].match(/^\w\d{5}$/)
+          @schedule = @schedule.find_all_by_train_uid(params[:schedule])
+        elsif params[:schedule].match(/^\d\w\d{2}$/) 
+          @schedule = @schedule.find_all_by_train_identity(params[:schedule])
+        end
+
+        # If exactly one schedule has been returned, render the schedule page, otherwise render the default list of schedules
+
+        redirect_to :controller => 'schedule', :action => 'index', :uuid => @schedule.first.uuid if @schedule.count == 1
+
+      else
+        flash[:error] = "Unknown search method"
+      end
+
     end
-
-    @range = Hash.new
-    @range[:from] = @time - 30.minutes
-    @range[:to] = @time + 1.hour
-
-    sql_range_from = @range[:from].to_s(:iso)
-    sql_range_to = @range[:to].to_s(:iso)
 
     @location = Tiploc.find_by_tiploc_code(params[:location])
-
-    unless @location.nil?
-      @schedule = DailyScheduleLocation.where("tiploc_code = ? and ((departure BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (arrival BETWEEN ? AND ?))", @location.tiploc_code, sql_range_from, sql_range_to, sql_range_from, sql_range_to, sql_range_from, sql_range_to)
-    end
 
   end
 
@@ -60,9 +89,9 @@ class MainController < ApplicationController
 
   def schedule
 
-    @schedule = DailySchedule.find_by_uuid(params[:uuid])
+    @schedule = BasicSchedule.find_by_uuid(params[:uuid])
 
-    render 'common/_schedule.erb'
+    render 'common/_schedule'
 
   end
 

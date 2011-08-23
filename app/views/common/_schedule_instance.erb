@@ -1,0 +1,62 @@
+<div id="service_detail">
+  <div id="headline"><%= time_only(@schedule.origin.departure) %> <%= tidy_text(decode_tiploc(@schedule.origin.tiploc)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate.tiploc)) %></div>
+  <div id="operator">Operated by <%= decode_toc(@schedule.atoc_code) %></div>
+  <% if @schedule.is_a? DailySchedule %>
+   <% if @schedule.cancelled? %>
+    <div id="alert">This train has been cancelled.<br />This is due to <%= da_to_text(@schedule.cancellation_reason) %>.</div>
+   <% end %>
+  <% end %>
+</div>
+
+<div id="options">
+ <a onclick="$('#technical').slideToggle();"><%= image_tag('information.png') %>&nbsp;Show/hide technical information</a>
+</div>
+
+<div id="technical" style="display: none;">
+ <table>
+  <tr>
+   <th>Runs</th>
+   <th>Identity</th>
+   <th>UID</th>
+   <th>Category</th>
+   <th>Train type</th>
+   <th>Service Code</th>
+   <th>Status</th>
+   <th>Characteristics</th>
+  </tr>
+  <tr>
+   <td>
+    <% if @schedule.is_a? DailySchedule %>
+     <%= @schedule.runs_on %>
+    <% else %>
+     <%= date_range_or_date(@schedule.runs_from, @schedule.runs_to) =%>
+    <% end %>
+   </td>
+   <td><%= @schedule.train_identity %></td>
+   <td><%= @schedule.train_uid %></td>
+   <td><%= decode_train_category(@schedule.category) %></td>
+   <td><%= @schedule.power_type %><%= @schedule.timing_load %><%= "at " + @schedule.speed + "mph" if @schedule.speed %></td>
+   <td><%= @schedule.service_code %></td>
+   <td><%= decode_train_status(@schedule.status) %></td>
+   <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
+  </tr>
+ </table>
+</div>
+
+<table>
+ <% if @schedule.is_a? DailySchedule %>
+  <%= render :partial => 'common/daily_schedule_header' %>
+ <% else %>
+  <%= render :partial => 'common/schedule_header' %>
+ <% end %>
+
+ <% if @schedule.is_a? DailySchedule %>
+  <%= render :partial => 'common/daily_schedule_point', :collection => @schedule.locations %>
+ <% else %>
+  <%= render :partial => 'common/schedule_point', :collection => @schedule.locations %>
+ <% end %>
+</table>
+
+<div id="key">
+ Scheduled times are in <em>italics</em>, and actual times are in <strong>bold</strong>.  Actual times may be in <span class="early">blue</span> if they are earlier than scheduled, <span class="ontime">green</span> if they are between -3 and +5 minutes of the schedule, and <span class="late">red</span> if they are later than 5 minutes.
+</div>

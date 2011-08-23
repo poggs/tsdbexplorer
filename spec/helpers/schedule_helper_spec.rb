@@ -14,17 +14,21 @@
 #  You should have received a copy of the GNU General Public License along
 #  with TSDBExplorer.  If not, see <http://www.gnu.org/licenses/>.
 #
-#  $Id: routes.rb 108 2011-04-19 20:25:19Z pwh $
+#  $Id$
 #
 
-Tsdbexplorer::Application.routes.draw do
+require 'spec_helper'
 
-  match '/schedule/:uuid', :controller => 'schedule', :action => 'index'
-
-
-  match ':controller(/:action(/:id(.:format)))'
-  match '/disclaimer', :controller => 'main', :action => 'disclaimer'
-  match '/search/location', :controller => 'main', :action => 'search'
-  root :to => "main#index"
-
+# Specs in this file have access to a helper object that includes
+# the ScheduleHelper. For example:
+#
+# describe ScheduleHelper do
+#   describe "string concat" do
+#     it "concats two strings with spaces" do
+#       helper.concat_strings("this","that").should == "this that"
+#     end
+#   end
+# end
+describe ScheduleHelper do
+  pending "add some examples to (or delete) #{__FILE__}"
 end

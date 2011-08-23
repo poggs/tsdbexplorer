@@ -1,0 +1,17 @@
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $(document).ready( function() {
+   $("tr:nth-child(odd)").addClass("odd");
+  });
+ </script>
+<% end %>
+
+<% if @schedule.nil? %>
+
+ <p>Schedule not found.</p>
+
+<% else %>
+
+ <%= render :partial => 'common/schedule_instance' %>
+
+<% end %>

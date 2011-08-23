@@ -32,7 +32,6 @@
 
 <table>
  <tr>
-  <th>&nbsp;</th>
   <th>ID</th>
   <th>Arrival</th>
   <th>Pfm</th>
@@ -50,25 +49,16 @@
    </tr>
   <% else %>
    <tr>
-    <td>
-     <% if train.daily_schedule.cancelled? %>
-      <abbr title="Cancelled at <%= time_only(train.daily_schedule.cancelled) %>"><%= image_tag('cross.png') %></abbr>
-     <% end %>
-    </td>
-    <td><%= link_to train.daily_schedule.train_identity, { :action => 'schedule', :uuid => train.daily_schedule.uuid } %></td>
-    <td><%= raw(schedule_or_actual(train.arrival, train.actual_arrival)) %></td>
+    <td><%= link_to train.basic_schedule.train_identity, { :controller => 'schedule', :uuid => train.basic_schedule.uuid } %></td>
+    <td><%= train.arrival %></td>
     <td><%= train.platform %></td>
-    <td><%= tidy_text(decode_tiploc(train.daily_schedule.daily_schedule_locations.first)) %></td>
-    <td><%= time_only(train.pass) %></td>
-    <td><%= tidy_text(decode_tiploc(train.daily_schedule.daily_schedule_locations.last)) %></td>
-    <td><%= raw(schedule_or_actual(train.departure, train.actual_departure)) %></td>
+    <td><%= tidy_text(decode_tiploc(train.basic_schedule.origin)) %></td>
+    <td><%= train.pass %></td>
+    <td><%= tidy_text(decode_tiploc(train.basic_schedule.terminate)) %></td>
+    <td><%= train.departure %></td>
     <td>
-     <% if train.daily_schedule.cancelled %>
-      <span class="late">CANCELLED</span>
-     <% else %>
-      <% if train.activity == "TB" %>Starts here<% end %>
-      <% if train.activity == "TF" %>Terminates here<% end %>
-     <% end %>
+     <% if train.activity == "TB" %>Starts here<% end %>
+     <% if train.activity == "TF" %>Terminates here<% end %>
     </td>
    </tr>
   <% end %>

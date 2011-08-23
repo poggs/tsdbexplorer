@@ -14,17 +14,17 @@
 #  You should have received a copy of the GNU General Public License along
 #  with TSDBExplorer.  If not, see <http://www.gnu.org/licenses/>.
 #
-#  $Id: routes.rb 108 2011-04-19 20:25:19Z pwh $
+#  $Id$
 #
 
-Tsdbexplorer::Application.routes.draw do
+class ScheduleController < ApplicationController
 
-  match '/schedule/:uuid', :controller => 'schedule', :action => 'index'
+  # Display a single schedule
 
-
-  match ':controller(/:action(/:id(.:format)))'
-  match '/disclaimer', :controller => 'main', :action => 'disclaimer'
-  match '/search/location', :controller => 'main', :action => 'search'
-  root :to => "main#index"
+  def index
+    @schedule = nil
+    @schedule = BasicSchedule.find_by_uuid(params[:uuid]) if params[:uuid]
+  end
 
 end
+

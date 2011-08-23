@@ -1,92 +1,38 @@
+<h1>Select a schedule</h1>
 
-<% if @schedule.nil? %>
+<% if @schedule.is_a? Array %>
 
- <p>Schedule not found.</p>
+ <% if @schedule.count == 0 %>
+  <p>No schedules found.</p>
+ <% else %>
+
+ <p>There are <%= @schedule.count %> schedules for this service.  Please select one from the following:</p>
+
+  <table>
+   <tr>
+    <th style="width: 8em;">Identity</th>
+    <th>Origin</th>
+    <th>Destination</th>
+    <th>Type</th>
+   </tr>
+   <% @schedule.each do |s| %>
+    <tr>
+     <td><%= link_to s.train_identity + " / " + s.train_uid, :controller => 'schedule', :uuid => s.uuid %></td>
+     <td><%= s.origin.departure %> <%= tidy_text(decode_tiploc(s.origin)) %></td>
+     <td><%= tidy_text(decode_tiploc(s.terminate)) %></td>
+     <td><%= s.stp_indicator %></td>
+    </tr>
+   <% end %>
+  </table>
+
+ <% end %>
+
+<% elsif @schedule.is_a? BasicSchedule %>
+
+ <p>ERROR: BasicSchedule passed to schedule</p>
 
 <% else %>
 
-<%= content_for :script do %>
- <script type="text/javascript">
-  $(document).ready( function() {
-   $("tr:nth-child(odd)").addClass("odd");
-  });
- </script>
-<% end %>
-
-<div id="service_detail">
-  <div id="headline"><%= time_only(@schedule.origin.departure) %> <%= tidy_text(decode_tiploc(@schedule.origin.tiploc)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate.tiploc)) %></div>
-  <div id="operator">Operated by <%= decode_toc(@schedule.atoc_code) %></div>
-  <% if @schedule.cancelled? %>
-   <div id="alert">This train has been cancelled.<br />This is due to <%= da_to_text(@schedule.cancellation_reason) %>.</div>
-  <% end %>
-</div>
-
-<div id="options">
- <a onclick="$('#technical').slideToggle();"><%= image_tag('information.png') %>&nbsp;Show/hide technical information</a>
-</div>
-
-<div id="technical" style="display: none;">
- <table>
-  <tr>
-   <th>Runs on</th>
-   <th>Identity</th>
-   <th>UID</th>
-   <th>Category</th>
-   <th>Train type</th>
-   <th>Service Code</th>
-   <th>Status</th>
-   <th>Characteristics</th>
-  </tr>
-  <tr>
-   <td><%= @schedule.runs_on %></td>
-   <td><%= @schedule.train_identity %></td>
-   <td><%= @schedule.train_uid %></td>
-   <td><%= decode_train_category(@schedule.category) %></td>
-   <td><%= @schedule.power_type %><%= @schedule.timing_load %> at <%= @schedule.speed %>mph</td>
-   <td><%= @schedule.service_code %></td>
-   <td><%= decode_train_status(@schedule.status) %></td>
-   <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
-  </tr>
- </table>
-</div>
-
-<table>
- <tr>
-  <th>&nbsp;</th>
-  <th colspan="2" style="text-align: center;">Platform</th>
-  <th colspan="2" style="text-align: center;">Arrival</th>
-  <th colspan="2" style="text-align: center;">Pass</th>
-  <th colspan="2" style="text-align: center;">Departure</th>
- </tr>
- <tr>
-  <th>Location</th>
-  <th style="text-align: center;">Sch</th>
-  <th style="text-align: center;">Act</th>
-  <th style="text-align: center;">Sch</th>
-  <th style="text-align: center;">Act</th>
-  <th style="text-align: center;">Sch</th>
-  <th style="text-align: center;">Act</th>
-  <th style="text-align: center;">Sch</th>
-  <th style="text-align: center;">Act</th>
- </tr>
-
- <% @schedule.daily_schedule_locations.each do |location| %>
-  <tr>
-   <td><%= tidy_text(decode_tiploc(location)) %></td>
-   <td style="text-align: center;"><%= location.platform %></td>
-   <td style="text-align: center;"><%= location.actual_platform %></td>
-   <td style="text-align: center;"><%= time_only(location.arrival) %></td>
-   <td style="text-align: center;"><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.public_arrival, location.actual_arrival)) %></td>
-   <td style="text-align: center;"><%= time_only(location.pass) %></td>
-   <td style="text-align: center;"><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.pass, location.actual_pass)) %></td>
-   <td style="text-align: center;"><%= time_only(location.departure) %></td>
-   <td style="text-align: center;"><%= raw(@schedule.cancelled? ? "<span class=\"late\">Cancelled</span>" : schedule_or_actual(location.public_departure, location.actual_departure)) %></td>
-  </tr>
- <% end %>
-</table>
-
-<div id="key">
- Scheduled times are in <em>italics</em>, and actual times are in <strong>bold</strong>.  Actual times may be in <span class="early">blue</span> if they are earlier than scheduled, <span class="ontime">green</span> if they are between -3 and +5 minutes of the schedule, and <span class="late">red</span> if they are later than 5 minutes.
-</div>
+ <p>No schedules found.</p>
 
 <% end %>
