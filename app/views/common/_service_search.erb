@@ -9,17 +9,22 @@
  <%= stylesheet_link_tag 'autocomplete' %>
 <% end %>
 
-<h1>Search for trains</h1>
+<h1>Search</h1>
 
-<form id="search">
+<div class="search">
+ <fieldset>
+  <legend>By location</legend>
+  <form action="<%= url_for :controller => 'main', :action => 'search_location' %>">
+   <p>Show me trains at <input type="text" id="location" name="location" value="<%= params[:location] %>"> on <input type="text" name="target_date" size="10" value="<%= @time.strftime('%Y-%m-%d') %>"/> at <input type="text" name="target_time" size="5" value="<%= @time.strftime('%H:%M') %>"/><input type="submit" value="Search" /></p>
+  </form>
+ </fieldset>
+</div>
 
- <ul>
-  <li><input type="radio" name="search" checked="checked" value="by_location" /><span id="by_location_text">&nbsp;Show me trains at <input type="text" id="location" name="location" value="<%= params[:location] %>"> on <input type="text" name="target_date" size="10" value="<%= @time.strftime('%Y-%m-%d') %>"/> at <input type="text" name="target_time" size="5" value="<%= @time.strftime('%H:%M') %>"/></span></li>
-  <li><input type="radio" name="search" value="by_identity" %><span id="by_identity_text">&nbsp;Show me train <input type="text" id="schedule" name="schedule" value="<%= params[:schedule] %>" /> which runs on <input type="text" name="target_date" size="10" value="<%= @time.strftime('%Y-%m-%d') %>"/></span></li>
- </ul>
-
- <p>
-  <input type="submit" value="Search" />
- </p>
-
-</form>
+<div class="search">
+ <fieldset>
+  <legend>By identity</legend>
+  <form action="<%= url_for :controller => 'main', :action => 'search_identity' %>">
+   <p>Show me train <input type="text" id="schedule" name="schedule" value="<%= params[:schedule] %>" /> which runs on <input type="text" name="target_date" size="10" value="<%= @time.strftime('%Y-%m-%d') %>"/><input type="submit" value="Search" /></p>
+  </form>
+ </fieldset>
+</div>

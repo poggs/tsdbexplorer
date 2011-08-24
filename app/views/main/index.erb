@@ -1,9 +1,1 @@
-<% if @schedule %>
- <% if params[:search] == "by_identity" %>
-  <%= render :partial => 'common/schedule' %>
- <% elsif params[:search] == "by_location" %>
-  <%= render :partial => 'common/location' %>
- <% end %>
-<% else %>
- <%= render :partial => 'common/service_search' %>
-<% end %>
+<%= render :partial => 'common/service_search' %>
