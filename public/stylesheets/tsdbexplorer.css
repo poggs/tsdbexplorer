@@ -208,3 +208,25 @@ div.monospace {
   font-weight: bold;
   color: red;
 }
+
+/* Twisty styles */
+
+.twistyOpen, .twistyClosed {
+  border-left:1px solid white;
+  border-top:1px solid white;
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  cursor:pointer;cursor:hand;
+  font-weight:bold;
+  padding: 4px 4px 4px 20px;
+  margin-top:1px;
+  margin-bottom: 1px;
+}
+.twistyOpen {
+  background:url('../../images/twisty/open.gif') no-repeat center left;
+  background-color: #eee;
+}
+.twistyClosed {
+  background:url('../../images/twisty/closed.gif') no-repeat center left;
+  background-color: #eee;
+}

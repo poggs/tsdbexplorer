@@ -8,39 +8,38 @@
   <% end %>
 </div>
 
-<div id="options">
- <a onclick="$('#technical').slideToggle();"><%= image_tag('information.png') %>&nbsp;Show/hide technical information</a>
-</div>
-
-<div id="technical" style="display: none;">
- <table>
-  <tr>
-   <th>Runs</th>
-   <th>Identity</th>
-   <th>UID</th>
-   <th>Category</th>
-   <th>Train type</th>
-   <th>Service Code</th>
-   <th>Status</th>
-   <th>Characteristics</th>
-  </tr>
-  <tr>
-   <td>
-    <% if @schedule.is_a? DailySchedule %>
-     <%= @schedule.runs_on %>
-    <% else %>
-     <%= date_range_or_date(@schedule.runs_from, @schedule.runs_to) =%>
-    <% end %>
-   </td>
-   <td><%= @schedule.train_identity %></td>
-   <td><%= @schedule.train_uid %></td>
-   <td><%= decode_train_category(@schedule.category) %></td>
-   <td><%= @schedule.power_type %><%= @schedule.timing_load %><%= "at " + @schedule.speed + "mph" if @schedule.speed %></td>
-   <td><%= @schedule.service_code %></td>
-   <td><%= decode_train_status(@schedule.status) %></td>
-   <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
-  </tr>
- </table>
+<div class="twisty closed">
+ <div>Technical information about this train</div>
+ <div>
+  <table>
+   <tr>
+    <th>Runs</th>
+    <th>Identity</th>
+    <th>UID</th>
+    <th>Category</th>
+    <th>Train type</th>
+    <th>Service Code</th>
+    <th>Status</th>
+    <th>Characteristics</th>
+   </tr>
+   <tr>
+    <td>
+     <% if @schedule.is_a? DailySchedule %>
+      <%= @schedule.runs_on %>
+     <% else %>
+      <%= date_range_or_date(@schedule.runs_from, @schedule.runs_to) =%>
+     <% end %>
+    </td>
+    <td><%= @schedule.train_identity %></td>
+    <td><%= @schedule.train_uid %></td>
+    <td><%= decode_train_category(@schedule.category) %></td>
+    <td><%= @schedule.power_type %><%= @schedule.timing_load %><%= "at " + @schedule.speed + "mph" if @schedule.speed %></td>
+    <td><%= @schedule.service_code %></td>
+    <td><%= decode_train_status(@schedule.status) %></td>
+    <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
+   </tr>
+  </table>
+ </div>
 </div>
 
 <table>
