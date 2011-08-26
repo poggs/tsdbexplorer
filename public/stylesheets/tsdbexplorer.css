@@ -222,10 +222,12 @@ div.monospace {
   margin-top:1px;
   margin-bottom: 1px;
 }
+
 .twistyOpen {
   background:url('../../images/twisty/open.gif') no-repeat center left;
   background-color: #eee;
 }
+
 .twistyClosed {
   background:url('../../images/twisty/closed.gif') no-repeat center left;
   background-color: #eee;
