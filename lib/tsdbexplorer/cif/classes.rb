@@ -180,7 +180,7 @@ module TSDBExplorer
         self.runs_su = record[27..27]
         self.bh_running = record[28..28].strip
         self.status = record[29..29]
-        self.category = record[30..31]
+        self.category = record[30..31].strip
         self.train_identity = record[32..35]
         self.headcode = record[36..39].strip
         self.service_code = record[41..48]
