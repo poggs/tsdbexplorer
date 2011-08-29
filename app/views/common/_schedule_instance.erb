@@ -1,6 +1,9 @@
 <div id="service_detail">
   <div id="headline"><%= time_only(@schedule.origin.departure) %> <%= tidy_text(decode_tiploc(@schedule.origin.tiploc)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate.tiploc)) %></div>
   <div id="operator">Operated by <%= decode_toc(@schedule.atoc_code) %></div>
+  <div id="attributes">
+   <%= raw catering_icon(@schedule.catering_code) unless @schedule.catering_code.nil? %>
+  </div>
   <% if @schedule.is_a? DailySchedule %>
    <% if @schedule.cancelled? %>
     <div id="alert">This train has been cancelled.<br />This is due to <%= da_to_text(@schedule.cancellation_reason) %>.</div>

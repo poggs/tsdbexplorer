@@ -104,10 +104,6 @@ h1 {
   border: 1px solid #ddd;
 }
 
-#service_detail {
-  padding-bottom: 1.25em;
-}
-
 #service_detail #headline {
   font-size: 2em;
 }
@@ -124,6 +120,13 @@ h1 {
   padding: 0.5em;
   background-color: #d00;
   color: #fff;
+}
+
+#service_detail #attributes ul {
+  list-style-type: none;
+  padding-left: 1em;
+  vertical-align: top;
+  font-size: 16px;
 }
 
 #options {
