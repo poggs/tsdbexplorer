@@ -113,18 +113,11 @@ module TSDBExplorer
 
       # Display data from the CIF header record
 
-      puts "-----------------------------------------------------------------------------"
-      puts "      Mainframe ID : #{header_data.file_mainframe_identity}"
-      puts "              User : #{header_data.mainframe_username}"
-      puts "      Extract date : #{header_data.date_of_extract}"
-      puts "      Extract time : #{header_data.time_of_extract}"
-      puts "    File reference : #{header_data.current_file_ref}"
-      puts "    Last reference : #{header_data.last_file_ref}"
-      puts "  Update indicator : #{header_data.update_indicator}"
-      puts "       CIF version : #{header_data.version}"
-      puts "     Extract start : #{header_data.user_extract_start_date}"
-      puts "       Extract end : #{header_data.user_extract_end_date}"
-      puts "-----------------------------------------------------------------------------"
+      puts "+--------------------------------------------------------------------------"
+      puts "| Importing CIF file #{header_data.current_file_ref} for #{header_data.mainframe_username}"
+      puts "| Generated on #{header_data.date_of_extract} at #{header_data.time_of_extract}"
+      puts "| Data from #{header_data.user_extract_start_date} to #{header_data.user_extract_end_date}"
+      puts "+--------------------------------------------------------------------------"
 
 
       # Initialize a set of statistics to return to the calling function
