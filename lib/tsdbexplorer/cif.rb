@@ -131,11 +131,19 @@ module TSDBExplorer
       start_time = Time.now
 
 
+      # Set up a progress bar
+
+      require 'progressbar' # TODO: Eliminate having to 'require' progressbar
+      pbar = ProgressBar.new("CIF Import", file_size)
+
+
       # Iterate through the CIF file and process each record
 
       while(!cif_data.eof)
 
         record = TSDBExplorer::CIF::parse_record(cif_data.gets)
+
+        pbar.set(cif_data.pos)
 
         if record.is_a? TSDBExplorer::CIF::TiplocRecord
 
@@ -304,8 +312,6 @@ module TSDBExplorer
             pending['BasicSchedule'][:rows] << data
 
             if pending['BasicSchedule'][:rows].count > 1000
-              pct_processed = (cif_data.pos.to_f / file_size) * 100
-              puts "#{pct_processed.to_i}% imported"
               pending = process_pending(pending)
             end
 
