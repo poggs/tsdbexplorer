@@ -22,15 +22,6 @@ require 'tsdbexplorer/cif/classes.rb'
 
 module TSDBExplorer
 
-  module Constants
-
-    $CIF_RECORD_FORMAT = Hash.new
-    $CIF_RECORD_FORMAT['AA'] = { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
-    $CIF_RECORD_FORMAT['CR'] = { :delete => [ :spare, :connection_indicator ], :strip => [ :tiploc_code, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
-    $CIF_RECORD_FORMAT['ZZ'] = { :delete => [], :format => [] }
-
-  end
-
   module CIF
 
     # Process a record from a CIF file and return the data as a Hash
@@ -40,55 +31,26 @@ module TSDBExplorer
       result = Hash.new
       result[:record_identity] = record[0..1]
 
-      structure = $CIF_RECORD_FORMAT[result[:record_identity]]
+      # Process the record using the built-in Class parser
 
-      if structure.nil?
-
-        # Process the record using the built-in Class parser
-
-        if result[:record_identity] == "HD"
-          result = TSDBExplorer::CIF::HeaderRecord.new(record)
-        elsif result[:record_identity] == "BS"
-          result = TSDBExplorer::CIF::BasicScheduleRecord.new(record)
-        elsif result[:record_identity] == "BX"
-          result = TSDBExplorer::CIF::BasicScheduleExtendedRecord.new(record)
-        elsif result[:record_identity] == "TI" || result[:record_identity] == "TA" || result[:record_identity] == "TD"
-          result = TSDBExplorer::CIF::TiplocRecord.new(record)
-        elsif result[:record_identity] == "LO" || result[:record_identity] == "LI" || result[:record_identity] == "LT"
-          result = TSDBExplorer::CIF::LocationRecord.new(record)
-        else
-          raise "Unsupported record type '#{result[:record_identity]}'" unless $CIF_RECORD_FORMAT.has_key? result[:record_identity]
-        end
-
+      if result[:record_identity] == "HD"
+        result = TSDBExplorer::CIF::HeaderRecord.new(record)
+      elsif result[:record_identity] == "BS"
+        result = TSDBExplorer::CIF::BasicScheduleRecord.new(record)
+      elsif result[:record_identity] == "BX"
+        result = TSDBExplorer::CIF::BasicScheduleExtendedRecord.new(record)
+      elsif result[:record_identity] == "TI" || result[:record_identity] == "TA" || result[:record_identity] == "TD"
+        result = TSDBExplorer::CIF::TiplocRecord.new(record)
+      elsif result[:record_identity] == "LO" || result[:record_identity] == "LI" || result[:record_identity] == "LT"
+        result = TSDBExplorer::CIF::LocationRecord.new(record)
+      elsif result[:record_identity] == "AA"
+        result = TSDBExplorer::CIF::AssociationRecord.new(record)
+      elsif result[:record_identity] == "CR"
+        result = TSDBExplorer::CIF::ChangeEnRouteRecord.new(record)
+      elsif result[:record_identity] == "ZZ"
+        # End of File
       else
-
-        # Slice up the record in to its fields as defined above, starting at
-        # column 2, as we already have the record identity parsed
-
-        pos = 2
-
-        structure[:format].each do |field|
-          value = record.slice(pos, field[1])
-          result[field[0]] = value.blank? ? nil : value
-          pos = pos + field[1]
-        end
-
-
-        # Delete any unnecessary fields
-
-        structure[:delete].each do |field|
-          result.delete field
-        end
-
-
-        # Reformat certain fields if required
-
-        if structure.has_key? :strip
-          structure[:strip].each do |field|
-            result[field].strip! unless result[field].nil?
-          end
-        end
-
+        raise "Unsupported record type '#{result[:record_identity]}'"
       end
 
       return result

@@ -221,6 +221,79 @@ module TSDBExplorer
 
     end
 
+    class AssociationRecord
+
+      attr_reader :transaction_type, :main_train_uid, :assoc_train_uid, :association_start_date, :association_end_date, :association_mo, :association_tu, :association_we, :association_th, :association_fr, :association_sa, :association_su, :category, :date_indicator, :location, :base_location_suffix, :assoc_location_suffix, :diagram_type, :assoc_type, :stp_indicator
+      attr_writer :transaction_type, :main_train_uid, :assoc_train_uid, :association_start_date, :association_end_date, :association_mo, :association_tu, :association_we, :association_th, :association_fr, :association_sa, :association_su, :category, :date_indicator, :location, :base_location_suffix, :assoc_location_suffix, :diagram_type, :assoc_type, :stp_indicator
+
+      def initialize(record)
+
+        self.transaction_type = record[2..2]
+        self.main_train_uid = record[3..8]
+        self.assoc_train_uid = record[9..14]
+        self.association_start_date = record[15..20]
+        self.association_end_date = record[21..26]
+        self.association_mo = record[27..27]
+        self.association_tu = record[28..28]
+        self.association_we = record[29..29]
+        self.association_th = record[30..30]
+        self.association_fr = record[31..31]
+        self.association_sa = record[32..32]
+        self.association_su = record[33..33]
+        self.category = record[34..35]
+        self.date_indicator = record[36..36]
+        self.location = record[37..43]
+        self.base_location_suffix = record[44..44]
+        self.assoc_location_suffix = record[45..45]
+        self.diagram_type = record[46..46]
+        self.stp_indicator = record[79..79]
+
+      end
+
+    end
+
+    class ChangeEnRouteRecord
+
+      attr_reader :tiploc_code, :tiploc_instance, :category, :train_identity, :headcode, :course_indicator,:service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :catering_code, :service_branding, :traction_class, :uic_code, :rsid
+      attr_writer :tiploc_code, :tiploc_instance, :category, :train_identity, :headcode, :course_indicator,:service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :catering_code, :service_branding, :traction_class, :uic_code, :rsid
+
+      def initialize(record)
+
+        self.tiploc_code = record[2..8].strip
+        self.tiploc_instance = record[9..9].strip
+        self.category = record[10..11]
+        self.train_identity = record[12..15]
+        self.headcode = record[16..19]
+        self.course_indicator = record[20..20]
+        self.service_code = record[21..28]
+        self.portion_id = record[29..29].strip
+        self.power_type = record[30..32]
+        self.timing_load = record[33..36]
+        self.speed = record[37..39]
+        self.operating_characteristics = record[40..43].strip
+        self.train_class = record[46..46]
+        self.sleepers = record[47..47].strip
+        self.reservations = record[48..48]
+        self.catering_code = record[49..52].strip
+        self.service_branding = record[53..56].strip
+        self.traction_class = record[57..60].strip
+        self.uic_code = record[61..65].strip
+        self.rsid = record[66..73].strip
+
+        self.tiploc_instance = nil if self.tiploc_instance == ""
+        self.portion_id = nil if self.portion_id == ""
+        self.operating_characteristics = nil if self.operating_characteristics == ""
+        self.sleepers = nil if self.sleepers == ""
+        self.catering_code = nil if self.catering_code == ""
+        self.service_branding = nil if self.service_branding == ""
+        self.traction_class = nil if self.traction_class == ""
+        self.uic_code = nil if self.uic_code == ""
+        self.rsid = nil if self.rsid == ""
+
+      end
+
+    end
+
   end
 
 end
