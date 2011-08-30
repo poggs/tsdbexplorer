@@ -2,6 +2,7 @@
  <script type="text/javascript">
   $(document).ready( function() {
    $("tr:nth-child(odd)").addClass("odd");
+   $('div.twisty').twisty();
   });
  </script>
 <% end %>
@@ -9,25 +10,24 @@
 <h1>Trains at <%= tidy_text(@location.tps_description) %></h1>
 <h2>Between <%= @range[:from].to_s(:iso) %> and <%= @range[:to].to_s(:iso) %></h2>
 
-<div id="options">
- <a onclick="$('#technical').slideToggle();"><%= image_tag('information.png') %>&nbsp;Show/hide technical information</a>
-</div>
-
-<div id="technical" style="display: none;">
- <table>
-  <tr>
-   <th>TIPLOC</th>
-   <th>CRS code</th>
-   <th>NALCO</th>
-   <th>STANOX</th>
-  </tr>
-  <tr>
-   <td><%= @location.tiploc_code %></td>
-   <td><%= @location.crs_code %></td>
-   <td><%= @location.nalco %></td>
-   <td><%= @location.stanox %></td>
-  </tr>
- </table>
+<div class="twisty closed">
+ <div>Technical information about this location</div>
+ <div>
+  <table>
+   <tr>
+    <th>TIPLOC</th>
+    <th>CRS code</th>
+    <th>NALCO</th>
+    <th>STANOX</th>
+   </tr>
+   <tr>
+    <td><%= @location.tiploc_code %></td>
+    <td><%= @location.crs_code %></td>
+    <td><%= @location.nalco %></td>
+    <td><%= @location.stanox %></td>
+   </tr>
+  </table>
+ </div>
 </div>
 
 <table>

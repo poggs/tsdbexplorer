@@ -71,17 +71,6 @@ describe ApplicationHelper do
     decode_reservations('$').should eql('$: Unknown')
   end
 
-  it "should convert a catering characteristic in to text" do
-    decode_catering('').should eql('None')
-    decode_catering('C').should eql('Buffet Service')
-    decode_catering('R').should eql('Restaurant')
-    decode_catering('HR').should eql('Hot Food service, Restaurant')
-  end
-
-  it "should gracefully handle an unknown catering code" do
-    decode_catering('R$').should eql('Restaurant, Unknown facility $')
-  end
-
   it "should convert operating characteristics in to text" do
     decode_operating_characteristics('B').should eql('B: Vacuum Braked')
     decode_operating_characteristics('Q').should eql('Q: Runs as required')

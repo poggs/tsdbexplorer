@@ -4,7 +4,7 @@
   <title>TSDB Explorer<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
   <%= stylesheet_link_tag :all %>
   <%= yield(:head) %>
-  <%= javascript_include_tag "tsdbexplorer", "jquery-1.6.1.min", "jquery-ui-1.8.12.custom.min" %>
+  <%= javascript_include_tag "tsdbexplorer", "jquery-1.6.1.min", "jquery-ui-1.8.12.custom.min", "jquery.twisty" %>
   <%= csrf_meta_tag %>
   <%= yield(:script) %>
  </head>

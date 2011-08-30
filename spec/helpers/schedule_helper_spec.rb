@@ -19,16 +19,19 @@
 
 require 'spec_helper'
 
-# Specs in this file have access to a helper object that includes
-# the ScheduleHelper. For example:
-#
-# describe ScheduleHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       helper.concat_strings("this","that").should == "this that"
-#     end
-#   end
-# end
 describe ScheduleHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  it "should convert a set of catering codes to icons" do
+    # TODO: Fix wheelchair-only restaurant reservations
+    expected_data = { 'C' => ['Buffet'], 'F' => ['Restaurant', '1st Class'], 'H' => ['Hot food'], 'M' => ['Meal', '1st Class'], 'P' => [''], 'R' => ['Restaurant'], 'T' => ['Trolley'] }
+    expected_data.each do |k,v|
+      v.each do |expected_text|
+        catering_icon(k).should include(expected_text)
+      end
+    end
+  end
+
+  it "should handle a null catering code"
+  it "should handle an invalid catering code"
+
 end

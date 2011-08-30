@@ -242,41 +242,6 @@ module ApplicationHelper
 
   end
 
-
-  def decode_catering(catering)
-
-    catering_facilities = Array.new
-
-    if catering.blank?
-
-      catering_facilities.push 'None'
-
-    else
-
-      catering_hash = {
-        "C" => "Buffet Service",
-        "F" => "Restaurant for First Class passengers",
-        "H" => "Hot Food service",
-        "M" => "Inclusive meal for First Class passengers",
-        "P" => "Wheelchair-only reservations",
-        "R" => "Restaurant",
-        "T" => "Trolley Service"
-      }
-
-      catering.split('').each do |catering_code|
-        if catering_hash.has_key? catering_code
-          catering_facilities.push catering_hash[catering_code]
-        else
-          catering_facilities.push "Unknown facility #{catering_code}"
-        end
-      end
-
-    end
-
-    return catering_facilities.join(", ")
-
-  end
-
   def decode_operating_characteristics(oper_char)
 
     operating_characteristics = Array.new

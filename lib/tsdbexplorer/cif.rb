@@ -22,15 +22,6 @@ require 'tsdbexplorer/cif/classes.rb'
 
 module TSDBExplorer
 
-  module Constants
-
-    $CIF_RECORD_FORMAT = Hash.new
-    $CIF_RECORD_FORMAT['AA'] = { :delete => [ :spare ], :format => [ [ :transaction_type, 1 ], [ :main_train_uid, 6 ], [ :assoc_train_uid, 6 ], [ :association_start_date, 6 ], [ :association_end_date, 6 ], [ :association_days, 7 ], [ :category, 2 ], [ :date_indicator, 1 ], [ :location, 7 ], [ :base_location_suffix, 1 ], [ :assoc_location_suffix, 1 ], [ :diagram_type, 1 ], [ :assoc_type, 1 ], [ :spare, 31 ], [ :stp_indicator, 1 ] ] }
-    $CIF_RECORD_FORMAT['CR'] = { :delete => [ :spare, :connection_indicator ], :strip => [ :tiploc_code, :line ], :format => [ [ :tiploc_code, 7 ], [ :tiploc_instance, 1 ], [ :category, 2 ], [ :train_identity, 4 ], [ :headcode, 4 ], [ :course_indicator, 1 ], [ :service_code, 8 ], [ :portion_id, 1 ], [ :power_type, 3 ], [ :timing_load, 4 ], [ :speed, 3 ], [ :operating_characteristics, 6 ], [ :train_class, 1 ], [ :sleepers, 1 ], [ :reservations, 1 ], [ :connection_indicator, 1 ], [ :catering_code, 4 ], [ :service_branding, 4 ], [ :traction_class, 4 ], [ :uic_code, 5 ], [ :rsid, 8 ], [ :spare, 5 ] ] }
-    $CIF_RECORD_FORMAT['ZZ'] = { :delete => [], :format => [] }
-
-  end
-
   module CIF
 
     # Process a record from a CIF file and return the data as a Hash
@@ -40,55 +31,26 @@ module TSDBExplorer
       result = Hash.new
       result[:record_identity] = record[0..1]
 
-      structure = $CIF_RECORD_FORMAT[result[:record_identity]]
+      # Process the record using the built-in Class parser
 
-      if structure.nil?
-
-        # Process the record using the built-in Class parser
-
-        if result[:record_identity] == "HD"
-          result = TSDBExplorer::CIF::HeaderRecord.new(record)
-        elsif result[:record_identity] == "BS"
-          result = TSDBExplorer::CIF::BasicScheduleRecord.new(record)
-        elsif result[:record_identity] == "BX"
-          result = TSDBExplorer::CIF::BasicScheduleExtendedRecord.new(record)
-        elsif result[:record_identity] == "TI" || result[:record_identity] == "TA" || result[:record_identity] == "TD"
-          result = TSDBExplorer::CIF::TiplocRecord.new(record)
-        elsif result[:record_identity] == "LO" || result[:record_identity] == "LI" || result[:record_identity] == "LT"
-          result = TSDBExplorer::CIF::LocationRecord.new(record)
-        else
-          raise "Unsupported record type '#{result[:record_identity]}'" unless $CIF_RECORD_FORMAT.has_key? result[:record_identity]
-        end
-
+      if result[:record_identity] == "HD"
+        result = TSDBExplorer::CIF::HeaderRecord.new(record)
+      elsif result[:record_identity] == "BS"
+        result = TSDBExplorer::CIF::BasicScheduleRecord.new(record)
+      elsif result[:record_identity] == "BX"
+        result = TSDBExplorer::CIF::BasicScheduleExtendedRecord.new(record)
+      elsif result[:record_identity] == "TI" || result[:record_identity] == "TA" || result[:record_identity] == "TD"
+        result = TSDBExplorer::CIF::TiplocRecord.new(record)
+      elsif result[:record_identity] == "LO" || result[:record_identity] == "LI" || result[:record_identity] == "LT"
+        result = TSDBExplorer::CIF::LocationRecord.new(record)
+      elsif result[:record_identity] == "AA"
+        result = TSDBExplorer::CIF::AssociationRecord.new(record)
+      elsif result[:record_identity] == "CR"
+        result = TSDBExplorer::CIF::ChangeEnRouteRecord.new(record)
+      elsif result[:record_identity] == "ZZ"
+        # End of File
       else
-
-        # Slice up the record in to its fields as defined above, starting at
-        # column 2, as we already have the record identity parsed
-
-        pos = 2
-
-        structure[:format].each do |field|
-          value = record.slice(pos, field[1])
-          result[field[0]] = value.blank? ? nil : value
-          pos = pos + field[1]
-        end
-
-
-        # Delete any unnecessary fields
-
-        structure[:delete].each do |field|
-          result.delete field
-        end
-
-
-        # Reformat certain fields if required
-
-        if structure.has_key? :strip
-          structure[:strip].each do |field|
-            result[field].strip! unless result[field].nil?
-          end
-        end
-
+        raise "Unsupported record type '#{result[:record_identity]}'"
       end
 
       return result
@@ -113,18 +75,11 @@ module TSDBExplorer
 
       # Display data from the CIF header record
 
-      puts "-----------------------------------------------------------------------------"
-      puts "      Mainframe ID : #{header_data.file_mainframe_identity}"
-      puts "              User : #{header_data.mainframe_username}"
-      puts "      Extract date : #{header_data.date_of_extract}"
-      puts "      Extract time : #{header_data.time_of_extract}"
-      puts "    File reference : #{header_data.current_file_ref}"
-      puts "    Last reference : #{header_data.last_file_ref}"
-      puts "  Update indicator : #{header_data.update_indicator}"
-      puts "       CIF version : #{header_data.version}"
-      puts "     Extract start : #{header_data.user_extract_start_date}"
-      puts "       Extract end : #{header_data.user_extract_end_date}"
-      puts "-----------------------------------------------------------------------------"
+      puts "+--------------------------------------------------------------------------"
+      puts "| Importing CIF file #{header_data.current_file_ref} for #{header_data.mainframe_username}"
+      puts "| Generated on #{header_data.date_of_extract} at #{header_data.time_of_extract}"
+      puts "| Data from #{header_data.user_extract_start_date} to #{header_data.user_extract_end_date}"
+      puts "+--------------------------------------------------------------------------"
 
 
       # Initialize a set of statistics to return to the calling function
@@ -138,11 +93,19 @@ module TSDBExplorer
       start_time = Time.now
 
 
+      # Set up a progress bar
+
+      require 'progressbar' # TODO: Eliminate having to 'require' progressbar
+      pbar = ProgressBar.new("CIF Import", file_size)
+
+
       # Iterate through the CIF file and process each record
 
       while(!cif_data.eof)
 
         record = TSDBExplorer::CIF::parse_record(cif_data.gets)
+
+        pbar.set(cif_data.pos)
 
         if record.is_a? TSDBExplorer::CIF::TiplocRecord
 
@@ -285,9 +248,6 @@ module TSDBExplorer
 
           unless loc_records == []
 
-            origin_location = Tiploc.find_by_tiploc_code(loc_records.first.tiploc_code)
-            origin_departure = loc_records.first.departure
-
             loc_records.each do |r|
               data = []
               pending['Location'][:cols].each do |column|
@@ -311,8 +271,6 @@ module TSDBExplorer
             pending['BasicSchedule'][:rows] << data
 
             if pending['BasicSchedule'][:rows].count > 1000
-              pct_processed = (cif_data.pos.to_f / file_size) * 100
-              puts "#{pct_processed.to_i}% imported"
               pending = process_pending(pending)
             end
 
@@ -336,9 +294,10 @@ module TSDBExplorer
 
       pending.keys.each do |model_object|
 
-#        puts "Processing #{pending[model_object][:rows].count} instances of a #{model_object}"
+        Rails.logger.silence do
+          eval(model_object).import pending[model_object][:cols], pending[model_object][:rows], :validate => false
+        end
 
-        eval(model_object).import pending[model_object][:cols], pending[model_object][:rows], :validate => false
         pending[model_object][:rows] = []
 
       end
