@@ -332,9 +332,10 @@ module TSDBExplorer
 
       pending.keys.each do |model_object|
 
-#        puts "Processing #{pending[model_object][:rows].count} instances of a #{model_object}"
+        Rails.logger.silence do
+          eval(model_object).import pending[model_object][:cols], pending[model_object][:rows], :validate => false
+        end
 
-        eval(model_object).import pending[model_object][:cols], pending[model_object][:rows], :validate => false
         pending[model_object][:rows] = []
 
       end
