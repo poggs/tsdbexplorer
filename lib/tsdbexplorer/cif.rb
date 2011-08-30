@@ -286,9 +286,6 @@ module TSDBExplorer
 
           unless loc_records == []
 
-            origin_location = Tiploc.find_by_tiploc_code(loc_records.first.tiploc_code)
-            origin_departure = loc_records.first.departure
-
             loc_records.each do |r|
               data = []
               pending['Location'][:cols].each do |column|
