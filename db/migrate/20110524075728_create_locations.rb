@@ -40,6 +40,7 @@ class CreateLocations < ActiveRecord::Migration
       t.timestamps
     end
     add_index(:locations, :basic_schedule_uuid)
+    add_index(:locations, :tiploc_code)
     add_index(:locations, :arrival)
     add_index(:locations, :pass)
     add_index(:locations, :departure)
