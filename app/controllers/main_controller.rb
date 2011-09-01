@@ -124,4 +124,24 @@ class MainController < ApplicationController
 
   end
 
+
+  # Change to advanced mode
+
+  def mode_advanced
+
+    session[:mode] = 'advanced'
+    redirect_to :back
+
+  end
+
+
+  # Change to normal mode
+
+  def mode_normal
+
+    session[:mode] = 'normal'
+    redirect_to :back
+
+  end
+
 end

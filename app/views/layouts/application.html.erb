@@ -22,6 +22,13 @@
 
    <div id="footer">
     <a href="http://github.com/poggs/tsdbexplorer">TSDB Explorer</a> is &copy;2011 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a>. Data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>.  Please read the important information in the <a href="disclaimer">disclaimer</a>.
+    <span style="float: right;">
+     <% if session[:mode] == 'advanced' %>
+      <%= link_to (image_tag 'modes/normal.png', :alt => 'Change to Normal Mode'), :controller => 'main', :action => 'mode_normal' %>
+     <% else %>
+      <%= link_to (image_tag 'modes/advanced.png', :alt => 'Change to Advanced Mode'), :controller => 'main', :action => 'mode_advanced' %>
+     <% end %>
+    </span>
    </div>
   </div>
 
