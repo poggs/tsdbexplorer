@@ -65,9 +65,40 @@ module TSDBExplorer
     end
 
 
+    # Process a TRUST message
+
+   def TDnet.process_trust_message(raw_message)
+
+      message = parse_raw_message(raw_message)
+
+      case message[:message_type]
+        when "0001"   # Train activation
+          result = process_trust_activation(message[:train_uid], message[:schedule_origin_depart_timestamp].strftime('%Y-%m-%d'), message[:train_id])
+        when "0002"   # Train cancellation
+          result = process_trust_cancellation(message[:train_id], message[:train_cancellation_timestamp], message[:cancellation_reason_code])
+        when "0003"   # Train movement
+          result = process_trust_movement(message[:train_id], message[:event_type], message[:actual_timestamp], message[:location_stanox], message[:offroute_indicator])
+        when "0004"   # Unidentified train report
+          result = nil
+        when "0005"   # Train reinstatement report
+          result = nil
+        when "0006"   # Change of Origin report
+          result = nil
+        when "0007"   # Change of Identity report
+          result = nil
+        when "0008"   # Change of Location report
+        else
+          result = nil
+      end
+
+      return result
+
+    end
+
+
     # Parse a TD.net raw message and return the content as a hash
 
-   def TDnet.parse_raw_message(message)
+    def TDnet.parse_raw_message(message)
 
      result = Hash.new
      result[:message_type] = message[0..3]
