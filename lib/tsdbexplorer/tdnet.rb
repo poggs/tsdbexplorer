@@ -203,7 +203,7 @@ module TSDBExplorer
     def TDnet.process_trust_movement(train_identity, event_type, timestamp, location_stanox, offroute_indicator)
 
       schedule = DailySchedule.find_by_train_identity_unique(train_identity)
-      return Struct.new(:status, :message).new(:error, 'Failed to move train ' + train_identity + ': schedule not found') if schedule.nil?
+      return Struct.new(:status, :message).new(:error, 'Message for unactivated train ' + train_identity + " - ignoring") if schedule.nil?
 
       # TODO: Handle off-route movement messages
 
