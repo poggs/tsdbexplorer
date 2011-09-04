@@ -259,4 +259,21 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   it "should process a train change-of-identity report"
   it "should process a train change-of-location report"
 
+
+  # Real-time data processing
+
+  it "should allow a train to be activated and record its progress" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/tdnet/train_movement_1_schedule.cif')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120110824230314TRUST               TSIA                                522T52M125201108242303145274120110825010300L068092024051100000020101211000000CO2T52M000005274120110825010300AN2121910000   ')
+    activation.status.should eql(:ok)
+    activation.message.should include('Activated train UID L06809 on 2011-08-25 as train identity 522T52M125')
+    DailySchedule.count.should eql(1)
+    first_schedule = DailySchedule.first
+    first_schedule_expected = { :runs_on => Date.parse('2011-08-25'), :cancelled => nil, :cancellation_timestamp => nil, :cancellation_reason => nil, :status => "P", :train_uid => "L06809", :category => "OO", :train_identity => "2T52", :train_identity_unique => "522T52M125", :headcode => nil, :service_code => "21910000", :portion_id => nil, :power_type => "EMU", :timing_load => "317 ", :speed => "100", :operating_characteristics => "D", :train_class => "S", :sleepers => nil, :reservations => nil, :catering_code => nil, :service_branding => nil, :stp_indicator => "P", :uic_code => nil, :atoc_code => "LE", :ats_code => "Y", :rsid => nil, :data_source => nil }
+    first_schedule_expected.each do |k,v|
+      first_schedule.send(k.to_sym).should eql(v)
+    end
+    DailySchedule.first.daily_schedule_locations.count.should eql(10)
+  end
+
 end
