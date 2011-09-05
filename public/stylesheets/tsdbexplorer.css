@@ -105,6 +105,7 @@ h1 {
 
 #service_detail {
   padding-bottom: 8px;
+  min-height: 64px;
 }
 
 #service_detail #headline {
@@ -114,6 +115,10 @@ h1 {
 #service_detail #operator {
   font-size: 1.25em;
   font-weight: bold;
+}
+
+#service_detail #mode {
+  float: right;
 }
 
 #service_detail #alert {

@@ -53,4 +53,26 @@ module ScheduleHelper
 
   end
 
+
+  # Return an icon for a transport mode
+
+  def mode_icon_for(code)
+
+    icon = nil
+
+    image_file = case code
+      when "P"
+        'train_64x64.png'
+      when "B"
+        'bus_64x64.png'
+      else
+        nil
+    end
+
+    icon = image_tag(image_file) unless image_file.nil?
+
+    return icon
+
+  end
+
 end
