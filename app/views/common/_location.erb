@@ -7,9 +7,10 @@
  </script>
 <% end %>
 
-<h1>Trains at <%= tidy_text(@location.tps_description) %></h1>
-<h2>Between <%= @range[:from].to_s(:iso) %> and <%= @range[:to].to_s(:iso) %></h2>
+<h1>Services at <%= tidy_text(@location.tps_description) %></h1>
+<h3>Between <%= @range[:from].strftime('%H%M on %A %d %B %Y') %> and <%= @range[:to].strftime('%H%M on %A %d %B %Y') %></h3>
 
+<% if session[:mode] == "advanced" %>
 <div class="twisty closed">
  <div>Technical information about this location</div>
  <div>
@@ -29,14 +30,16 @@
   </table>
  </div>
 </div>
+<% end %>
 
 <table>
  <tr>
-  <th>ID</th>
+  <th style="width: 1px;"></th>
+  <% if session[:mode] == "advanced" %><th>ID</th><% end %>
   <th>Arrival</th>
   <th>Pfm</th>
   <th>From</th>
-  <th>Pass</th>
+  <% if session[:mode] == "advanced" %><th>Pass</th><% end %>
   <th>To</th>
   <th>Departure</th>
   <th>Activity</th>
@@ -49,11 +52,12 @@
    </tr>
   <% else %>
    <tr>
-    <td><%= link_to train.basic_schedule.train_identity, { :controller => 'schedule', :uuid => train.basic_schedule.uuid } %></td>
+    <td><%= link_to (image_tag 'information.png'), :controller => 'schedule', :uuid => train.basic_schedule.uuid %></td>
+    <% if session[:mode] == "advanced" %><td><%= train.basic_schedule.train_identity %></td><% end %>
     <td><%= train.arrival %></td>
     <td><%= train.platform %></td>
     <td><%= tidy_text(decode_tiploc(train.basic_schedule.origin)) %></td>
-    <td><%= train.pass %></td>
+    <% if session[:mode] == "advanced" %><td><%= train.pass %></td><% end %>
     <td><%= tidy_text(decode_tiploc(train.basic_schedule.terminate)) %></td>
     <td><%= train.departure %></td>
     <td>

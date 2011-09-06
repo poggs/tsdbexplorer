@@ -105,7 +105,6 @@ h1 {
 
 #service_detail {
   padding-bottom: 8px;
-  min-height: 64px;
 }
 
 #service_detail #headline {
@@ -245,6 +244,6 @@ div.monospace {
   background-color: #eee;
 }
 
-.twisty .content {
+.twisty p {
   padding: 1px 24px 1px 24px;
 }

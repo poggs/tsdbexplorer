@@ -2,6 +2,9 @@
  <th>Location</th>
  <th style="text-align: center;">Platform</th>
  <th style="text-align: center;">Arrival</th>
- <th style="text-align: center;">Pass</th>
+ <% if session[:mode] == 'advanced' %><th style="text-align: center;">Public</th><% end %>
+ <% if session[:mode] == 'advanced' %><th style="text-align: center;">Pass</th><% end %>
+ <% if session[:mode] == 'advanced' %><th style="text-align: center;">Line</th><% end %>
  <th style="text-align: center;">Departure</th>
+ <% if session[:mode] == 'advanced' %><th style="text-align: center;">Public</th><% end %>
 </tr>

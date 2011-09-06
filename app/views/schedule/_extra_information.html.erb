@@ -1,0 +1,34 @@
+<% if @schedule.status == 'B' || @schedule.status == '5' %>
+ <div class="twisty closed">
+  <div>Bus information</div>
+  <div>
+   <% if @schedule.status == 'B' %>
+    <p>This is a scheduled bus service.</p>
+   <% elsif @schedule.status == '5' %>
+    <p>This is a rail-replacement bus service due to engineering work.</p>
+   <% else %>
+   <% end %>
+  </div>
+ </div>
+<% else %>
+ <div class="twisty closed">
+  <div>Train information</div>
+  <div>
+   <p>This schedule is timed for a <%= @schedule.power_type %><%= @schedule.timing_load %> running at <%= @schedule.speed.to_i %> mph.  The train will run as <%= @schedule.train_identity %></p>
+   <table>
+    <tr>
+     <th>Category</th>
+     <th>Service Code</th>
+     <th>Status</th>
+     <th>Characteristics</th>
+    </tr>
+    <tr>
+     <td><%= decode_train_category(@schedule.category) %></td>
+     <td><%= @schedule.service_code %></td>
+     <td><%= decode_train_status(@schedule.status) %></td>
+     <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
+    </tr>
+   </table>
+  </div>
+ </div>
+<% end %>

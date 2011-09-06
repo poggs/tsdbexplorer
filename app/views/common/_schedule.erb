@@ -10,17 +10,27 @@
 
   <table>
    <tr>
-    <th style="width: 8em;">Identity</th>
-    <th>Origin</th>
-    <th>Destination</th>
-    <th>Type</th>
+    <th style="width: 1px;"></th>
+<% if session[:mode] == 'advanced' %>
+    <th>Identity</th>
+<% end %>
+    <th>Journey</th>
+<% if session[:mode] == 'advanced' %>
+    <th>Traction</th>
+<% end %>
+    <th>Operator</th>
    </tr>
    <% @schedule.each do |s| %>
     <tr>
-     <td><%= link_to s.train_identity + " / " + s.train_uid, :controller => 'schedule', :uuid => s.uuid %></td>
-     <td><%= s.origin.departure %> <%= tidy_text(decode_tiploc(s.origin)) %></td>
-     <td><%= tidy_text(decode_tiploc(s.terminate)) %></td>
-     <td><%= s.stp_indicator %></td>
+     <td><%= link_to (image_tag 'information.png'), :controller => 'schedule', :uuid => s.uuid %></td>
+<% if session[:mode] == 'advanced' %>
+     <td><%= s.train_identity %></td>
+<% end %>
+     <td><%= s.origin.departure %> <%= tidy_text(decode_tiploc(s.origin)) %> to <%= tidy_text(decode_tiploc(s.terminate)) %></td>
+<% if session[:mode] == 'advanced' %>
+     <td><%= s.power_type %><%= s.speed %></td>
+<% end %>
+     <td><%= s.atoc_code %></td>
     </tr>
    <% end %>
   </table>

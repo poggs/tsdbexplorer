@@ -1,7 +1,12 @@
+<% if schedule_point.pass.nil? || session[:mode] == "advanced"  %>
 <tr>
  <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>
  <td style="text-align: center;"><%= schedule_point.platform %></td>
- <td style="text-align: center;"><%= schedule_point.arrival %></td>
- <td style="text-align: center;"><%= schedule_point.pass %></td>
- <td style="text-align: center;"><%= schedule_point.departure %></td>
+ <% if session[:mode] == 'advanced' %><td style="text-align: center;"><%= schedule_point.arrival %></td><% end %>
+ <td style="text-align: center;"><%= schedule_point.public_arrival %></td>
+ <% if session[:mode] == 'advanced' %><td style="text-align: center;"><%= schedule_point.pass %></td><% end %>
+ <% if session[:mode] == 'advanced' %><td style="text-align: center;"><%= schedule_point.line %></td><% end %>
+ <% if session[:mode] == 'advanced' %><td style="text-align: center;"><%= schedule_point.departure %></td><% end %>
+ <td style="text-align: center;"><%= schedule_point.public_departure %></td>
 </tr>
+<% end %>

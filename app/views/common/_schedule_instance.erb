@@ -5,6 +5,17 @@
   <div id="attributes">
    <%= raw catering_icon(@schedule.catering_code) unless @schedule.catering_code.nil? %>
   </div>
+  <div id="running_status">
+   <% if @daily_schedule %>
+    <% if @daily_schedule.departed_origin? %>
+     <p>Real-time information is available for this train</p>
+    <% else %>
+    <p>Real-time information will be available once the train has left <%= tidy_text(decode_tiploc(@schedule.origin)) %>.</p>
+    <% end %>
+   <% else %>
+    <p>This schedule may be subject to amendment up to 48 hours before departure.</p>
+   <% end %>
+  </div>
   <% if @schedule.is_a? DailySchedule %>
    <% if @schedule.cancelled? %>
     <div id="alert">This train has been cancelled.<br />This is due to <%= da_to_text(@schedule.cancellation_reason) %>.</div>
@@ -12,52 +23,14 @@
   <% end %>
 </div>
 
-<div class="twisty closed">
- <div>Technical information about this train</div>
- <div>
-  <table>
-   <tr>
-    <th>Runs</th>
-    <th>Identity</th>
-    <th>UID</th>
-    <th>Category</th>
-    <th>Train type</th>
-    <th>Service Code</th>
-    <th>Status</th>
-    <th>Characteristics</th>
-   </tr>
-   <tr>
-    <td>
-     <% if @schedule.is_a? DailySchedule %>
-      <%= @schedule.runs_on %>
-     <% else %>
-      <%= date_range_or_date(@schedule.runs_from, @schedule.runs_to) =%>
-     <% end %>
-    </td>
-    <td><%= @schedule.train_identity %></td>
-    <td><%= @schedule.train_uid %></td>
-    <td><%= decode_train_category(@schedule.category) %></td>
-    <td><%= @schedule.power_type %><%= @schedule.timing_load %><%= "at " + @schedule.speed + "mph" if @schedule.speed %></td>
-    <td><%= @schedule.service_code %></td>
-    <td><%= decode_train_status(@schedule.status) %></td>
-    <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
-   </tr>
-  </table>
- </div>
-</div>
+<% if session[:mode] == 'advanced' %>
+ <%= render :partial => 'schedule/schedule_information', :schedule => @schedule %>
+ <%= render :partial => 'schedule/extra_information', :schedule => @schedule %>
+<% end %>
 
 <table>
- <% if @schedule.is_a? DailySchedule %>
-  <%= render :partial => 'common/daily_schedule_header' %>
- <% else %>
-  <%= render :partial => 'common/schedule_header' %>
- <% end %>
-
- <% if @schedule.is_a? DailySchedule %>
-  <%= render :partial => 'common/daily_schedule_point', :collection => @schedule.locations %>
- <% else %>
-  <%= render :partial => 'common/schedule_point', :collection => @schedule.locations %>
- <% end %>
+ <%= render :partial => 'common/schedule_header' %>
+ <%= render :partial => 'common/schedule_point', :collection => @schedule.locations %>
 </table>
 
 <div id="key">
