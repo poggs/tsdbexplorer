@@ -63,6 +63,14 @@ class CreateBasicSchedules < ActiveRecord::Migration
     add_index(:basic_schedules, :train_identity)
     add_index(:basic_schedules, :train_identity_unique)
 
+    add_index(:basic_schedules, :runs_mo)
+    add_index(:basic_schedules, :runs_tu)
+    add_index(:basic_schedules, :runs_we)
+    add_index(:basic_schedules, :runs_th)
+    add_index(:basic_schedules, :runs_fr)
+    add_index(:basic_schedules, :runs_sa)
+    add_index(:basic_schedules, :runs_su)
+
   end
 
   def self.down
