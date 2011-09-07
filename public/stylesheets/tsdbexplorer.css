@@ -23,7 +23,7 @@ body,html {
   padding: 0;
   color: #333;
   background: #eee;
-  font-family: sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 12px;
 }
 
@@ -37,8 +37,9 @@ body,html {
 }
 
 #header {
-  font-size: 3em;
-  padding: 8px;
+  font-size: 3.5em;
+  text-align: center;
+  padding: 0.2em 0 0.2em 0;
   background: #005b9a;
   border-bottom: 1px dotted #333;
   color: white;

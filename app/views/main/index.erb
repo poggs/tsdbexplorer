@@ -1,1 +1,39 @@
-<%= render :partial => 'common/service_search' %>
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $().ready(function() {
+   $("#location").autocomplete({ source: "<%= url_for :controller => 'main', :action => 'search' %>", minLength: 3 });
+   $('div.twisty').twisty();
+   });
+ </script>
+<% end %>
+<%= content_for :head do %>
+ <%= stylesheet_link_tag 'autocomplete' %>
+<% end %>
+
+<h1>Welcome</h1>
+
+<% if session[:mode] == 'advanced' %>
+<div class="twisty open">
+ <div>Search by location, date and time</div>
+ <div class="content">
+<% end %>
+  <form action="<%= url_for :controller => 'main', :action => 'search_location' %>">
+   <p>Show me trains at <input type="text" id="location" name="location" value="<%= params[:location] %>"> on <input type="text" name="target_date" size="10" value="<%= @time.strftime('%Y-%m-%d') %>"/> at <input type="text" name="target_time" size="5" value="<%= @time.strftime('%H:%M') %>"/><input type="submit" value="Search" /></p>
+  </form>
+<% if session[:mode] == 'advanced' %>
+ </div>
+</div>
+<% end %>
+
+<% if session[:mode] == 'advanced' %>
+
+<div class="twisty closed">
+ <div>Search by train and date</div>
+ <div class="content">
+  <form action="<%= url_for :controller => 'main', :action => 'search_identity' %>">
+   <p>Show me train <input type="text" id="schedule" name="schedule" value="<%= params[:schedule] %>" /> which runs on <input type="text" name="target_date" size="10" value="<%= @time.strftime('%Y-%m-%d') %>"/><input type="submit" value="Search" /></p>
+  </form>
+ </div>
+</div>
+
+<% end %>

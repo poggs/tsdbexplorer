@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
  <head>
-  <title>TSDB Explorer<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
+  <title>Open Train Times<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
   <%= stylesheet_link_tag :all %>
   <%= yield(:head) %>
   <%= javascript_include_tag "tsdbexplorer", "jquery-1.6.1.min", "jquery-ui-1.8.12.custom.min", "jquery.twisty" %>
@@ -12,7 +12,7 @@
  <body>
 
   <div id="header">
-   <div>TSDB Explorer<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></div>
+   <div>Open Train Times<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></div>
   </div>
 
   <div id="page">
@@ -22,7 +22,7 @@
    </div>
 
    <div id="footer">
-    <a href="http://github.com/poggs/tsdbexplorer">TSDB Explorer</a> is &copy;2011 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a>. Data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>.  Please read the important information in the <a href="disclaimer">disclaimer</a>.
+    <a href="http://github.com/poggs/tsdbexplorer">Open Train Times</a> is &copy;2011 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a>. Data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>.  Please read the important information in the <a href="disclaimer">disclaimer</a>.
     <span style="float: right;">
      <% if session[:mode] == 'advanced' %>
       <%= link_to (image_tag 'modes/normal.png', :alt => 'Change to Normal Mode'), :controller => 'main', :action => 'mode_normal' %>
