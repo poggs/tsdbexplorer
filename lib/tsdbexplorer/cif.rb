@@ -64,6 +64,7 @@ module TSDBExplorer
 
       cif_data = File.open(filename)
       file_size = File.size(filename)
+      puts "\n"
       puts "Processing #{filename} (#{file_size} bytes)"
 
 
@@ -96,7 +97,7 @@ module TSDBExplorer
       # Set up a progress bar
 
       require 'progressbar' # TODO: Eliminate having to 'require' progressbar
-      pbar = ProgressBar.new("CIF Import", file_size)
+      pbar = ProgressBar.new(header_data.current_file_ref, file_size)
 
 
       # Iterate through the CIF file and process each record
@@ -278,8 +279,9 @@ module TSDBExplorer
 
         end
 
-
       end
+
+      pbar.finish
 
       pending = process_pending(pending)
 
