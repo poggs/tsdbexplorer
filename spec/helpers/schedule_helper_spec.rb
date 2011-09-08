@@ -34,4 +34,13 @@ describe ScheduleHelper do
   it "should handle a null catering code"
   it "should handle an invalid catering code"
 
+  it "should convert a train category in to text" do
+    decode_train_category('XX').should eql('Express Passenger')
+    decode_train_category('OO').should eql('Ordinary Passenger')
+  end
+
+  it "should gracefully handle an unknown train category" do
+    decode_train_category('$$').should eql('Unknown')
+  end
+
 end

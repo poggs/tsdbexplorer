@@ -31,15 +31,6 @@ describe ApplicationHelper do
     time_only(Time.parse('2011-01-01 19:00:30')).should eql('1900H')
   end
 
-  it "should convert a train category in to text" do
-    decode_train_category('XX').should eql('XX: Express Passenger')
-    decode_train_category('OO').should eql('OO: Ordinary Passenger')
-  end
-
-  it "should gracefully handle an unknown train category" do
-    decode_train_category('$$').should eql('$$: Unknown')
-  end
-
   it "should convert a train class in to text" do
     decode_train_class('B').should_not be_nil
     decode_train_class('S').should_not be_nil
@@ -114,8 +105,8 @@ describe ApplicationHelper do
     decode_toc('LO').should eql('London Overground')
   end
 
-  it "should return the TOC code when asked to decode an unknown TOC" do
-    decode_toc('11').should eql('11')
+  it "should return nil when asked to decode an unknown TOC" do
+    decode_toc('11').should be_nil
   end
 
   it "should decode a Delay Attribution code in to text" do
