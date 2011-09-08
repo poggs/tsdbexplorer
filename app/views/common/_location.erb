@@ -37,11 +37,13 @@
   <th style="width: 1px;"></th>
   <% if session[:mode] == "advanced" %><th>ID</th><% end %>
   <th>Arrival</th>
-  <th>Pfm</th>
+  <% if session[:mode] == "advanced" %><th>WTT Arr</th><% end %>
   <th>From</th>
   <% if session[:mode] == "advanced" %><th>Pass</th><% end %>
   <th>To</th>
   <th>Departure</th>
+  <th>Pfm</th>
+  <% if session[:mode] == "advanced" %><th>WTT Dep</th><% end %>
   <th>Activity</th>
  </tr>
 
@@ -54,12 +56,14 @@
    <tr>
     <td><%= link_to (image_tag 'information.png'), :controller => 'schedule', :uuid => train.basic_schedule.uuid %></td>
     <% if session[:mode] == "advanced" %><td><%= train.basic_schedule.train_identity %></td><% end %>
-    <td><%= train.arrival %></td>
-    <td><%= train.platform %></td>
+    <% if session[:mode] == "advanced" %><td><%= train.arrival %></td><% end %>
+    <td><%= train.public_arrival %></td>
     <td><%= tidy_text(decode_tiploc(train.basic_schedule.origin)) %></td>
     <% if session[:mode] == "advanced" %><td><%= train.pass %></td><% end %>
     <td><%= tidy_text(decode_tiploc(train.basic_schedule.terminate)) %></td>
-    <td><%= train.departure %></td>
+    <td><%= train.public_departure %></td>
+    <td><%= train.platform %></td>
+    <% if session[:mode] == "advanced" %><td><%= train.departure %></td><% end %>
     <td>
      <% if train.activity == "TB" %>Starts here<% end %>
      <% if train.activity == "TF" %>Terminates here<% end %>
