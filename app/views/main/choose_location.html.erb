@@ -1,0 +1,7 @@
+<p>More than one location matched - please choose from the following:</p>
+
+<ul>
+<% @location.each do |l| %>
+ <li><%= link_to (tidy_text(l.tps_description)), { :location => l.tiploc_code, :target_date => params[:target_date], :target_time => params[:target_time] } %></li>
+<% end %>
+</ul>
