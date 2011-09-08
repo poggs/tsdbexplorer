@@ -18,7 +18,10 @@
   <div id="page">
 
    <div id="body"> 
-   <%= yield %>
+    <% if flash[:warn] %>
+     <div class="flash warn"><%= flash[:warn] %></div>
+    <% end %>
+    <%= yield %>
    </div>
 
    <div id="footer">

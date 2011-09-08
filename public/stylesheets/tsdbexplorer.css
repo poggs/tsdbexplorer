@@ -97,6 +97,38 @@ h1 {
   font-weight: bold;
 }
 
+#search {
+  border: solid black 1px;
+  text-align: center;
+  background: #eee;
+}
+
+#search * {
+  font-size: 16px;
+  text-shadow: #eee 1px 1px 1px;
+  margin: 0;
+  padding: 8px;
+}
+
+.flash {
+  padding: 6px;
+  margin-bottom: 6px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.flash.error {
+  border: solid #f00 3px;
+  background: #a00;
+  color: white;
+}
+
+.flash.warn {
+  border: solid #ff0 3px;
+  background: #dd0;
+  color: black;
+}
+
 #key {
   font-size: 0.9em;
   background: #eee;

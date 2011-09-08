@@ -62,23 +62,36 @@ class MainController < ApplicationController
 
   def search_location
 
-    @time = Time.now
-    @date = Date.today
+    @location = find_tiploc_for_text(params[:location])
 
-    begin
-      @time = Time.parse(params[:target_date] + " " + params[:target_time])
-      @date = Date.parse(params[:target_date])
-    rescue
+    if @location.nil? || @location == Array.new
+      redirect_to :back, :flash => { :warn => "Couldn't find that location"  }
+    elsif @location.is_a? ActiveRecord::Relation
+      render 'choose_location'
+    else
+
+      @time = Time.now
+      @date = Date.today
+
+      begin
+        @time = Time.parse(params[:target_date] + " " + params[:target_time])
+        @date = Date.parse(params[:target_date])
+      rescue
+      end
+
+      @range = Hash.new
+      @range[:from] = @time - 30.minutes
+      @range[:to] = @time + 1.hour
+
+      @schedule = Location.where(:tiploc_code => @location.tiploc_code).between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M')).runs_on(@date.to_s(:iso))
     end
 
-    @range = Hash.new
-    @range[:from] = @time - 30.minutes
-    @range[:to] = @time + 1.hour
+  end
 
-    @schedule = Location.where(:tiploc_code => params[:location]).between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M')).runs_on(@date.to_s(:iso))
 
-    @location = Tiploc.find_by_tiploc_code(params[:location])
+  # Present a list of locations and allow one to be chosen
 
+  def choose_location
   end
 
 
@@ -141,6 +154,26 @@ class MainController < ApplicationController
 
     session[:mode] = 'normal'
     redirect_to :back
+
+  end
+
+  private
+
+
+  # Find a location by looking for an exact CRS code or TIPLOC match, falling back on a fuzzy match on the description
+
+  def find_tiploc_for_text(text)
+
+    if text.length == 3
+      location = Tiploc.find_by_crs_code(text.upcase)
+    else
+      location = Tiploc.find_by_tiploc_code(text)
+      if location.nil?
+        location = Tiploc.where('tps_description LIKE :search_text', { :search_text => '%' + text.upcase + '%' }).limit(25)
+      end
+    end
+
+    return location
 
   end
 
