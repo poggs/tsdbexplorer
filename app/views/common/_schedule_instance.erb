@@ -8,21 +8,33 @@
    <%= raw catering_icon(@schedule.catering_code) unless @schedule.catering_code.nil? %>
   </div>
   <div id="running_status">
-   <% if @daily_schedule %>
-    <% if @daily_schedule.departed_origin? %>
-     <p>Real-time information is available for this train</p>
+
+   <% if @schedule.is_a? DailySchedule %>
+
+    <% if @schedule.departed_origin? %>
+     <p>Showing actual running data from <%= @schedule.runs_on %></p>
     <% else %>
-    <p>Real-time information will be available once the train has left <%= tidy_text(decode_tiploc(@schedule.origin)) %>.</p>
+     <p>Real-time information will be available once the train has left <%= tidy_text(decode_tiploc(@schedule.origin)) %>.</p>
     <% end %>
+
+    <% if @schedule.cancelled? %>
+     <div id="alert">This train has been cancelled.<br />This is due to <%= da_to_text(@schedule.cancellation_reason) %>.</div>
+    <% end %>
+
    <% else %>
+
     <p>This schedule may be subject to amendment up to 48 hours before departure.</p>
+
+    <ul>
+     <% @as_run.each do |history| %>
+      <li><%= link_to 'History for ' + history.runs_on.to_s, :action => 'actual', :uuid => history.uuid %></li>
+     <% end %>
+    </ul>
+
    <% end %>
+
   </div>
-  <% if @schedule.is_a? DailySchedule %>
-   <% if @schedule.cancelled? %>
-    <div id="alert">This train has been cancelled.<br />This is due to <%= da_to_text(@schedule.cancellation_reason) %>.</div>
-   <% end %>
-  <% end %>
+
 </div>
 
 <% if session[:mode] == 'advanced' %>

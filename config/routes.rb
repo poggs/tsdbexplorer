@@ -22,6 +22,7 @@ Tsdbexplorer::Application.routes.draw do
   root :to => "main#index"
 
   match '/schedule/:uuid', :controller => 'schedule', :action => 'index'
+  match '/actual/:uuid', :controller => 'schedule', :action => 'actual'
 
   match '/disclaimer', :controller => 'main', :action => 'disclaimer'
   match '/search', :controller => 'main', :action => 'search_location'

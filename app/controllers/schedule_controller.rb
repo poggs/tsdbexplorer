@@ -22,8 +22,23 @@ class ScheduleController < ApplicationController
   # Display a single schedule
 
   def index
+
     @schedule = nil
     @schedule = BasicSchedule.find_by_uuid(params[:uuid]) if params[:uuid]
+
+    @as_run = DailySchedule.find_all_by_train_uid(@schedule.train_uid)
+
+  end
+
+
+  # Display real-time information
+
+  def actual
+
+    @schedule = DailySchedule.find_by_uuid(params[:uuid])
+
+    render 'common/_schedule_instance'
+
   end
 
 end

@@ -19,16 +19,30 @@
 
 class DailySchedule < ActiveRecord::Base
 
-  has_many :daily_schedule_locations, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
+  has_many :locations, :class_name => 'DailyScheduleLocation', :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
 
   scope :runs_on_by_uid_and_date, lambda { |uid,date| where(:train_uid => uid).where(:runs_on => date) }
 
   def origin
-    self.daily_schedule_locations.first
+    self.locations.first
   end
 
   def terminate
-    self.daily_schedule_locations.last
+    self.locations.last
+  end
+
+
+  # Return true if the train has departed from its originating location
+
+  def departed_origin?
+    self.locations.first.actual_departure.nil? ? false : true
+  end
+
+
+  # Return true is the train has terminated at its destination
+
+  def terminated?
+    self.locations.last.actual_arrival.nil? ? false : true
   end
 
 end
