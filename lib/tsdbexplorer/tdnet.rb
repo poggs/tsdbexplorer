@@ -249,7 +249,7 @@ module TSDBExplorer
 
       location.each do |possible_location|
         next unless point.nil?
-        point = schedule.daily_schedule_locations.find_by_tiploc_code(possible_location.tiploc_code)
+        point = schedule.locations.find_by_tiploc_code(possible_location.tiploc_code)
       end
 
       return Struct.new(:status, :message).new(:error, 'Failed to find the following schedule location(s) ' + location.collect { |x| x.tiploc_code }.join(", ") + ' for train ' + train_identity) if point.nil?

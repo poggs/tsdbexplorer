@@ -125,9 +125,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     ds.train_uid.should eql('C43391')
     ds.train_identity_unique.should eql('722N53MW12')
-    ds.daily_schedule_locations.count.should eql(18)
+    ds.locations.count.should eql(18)
     first_location_data = { :location_type => "LO", :activity => "TB", :tiploc_code => "EUSTON", :tiploc_instance => nil, :arrival => nil, :public_arrival => nil, :expected_arrival => nil, :actual_arrival => nil, :platform => '10', :actual_platform => nil, :line => 'C', :actual_line => nil, :pass => nil, :expected_pass => nil, :actual_pass => nil, :path => nil, :departure => Time.parse('2010-12-12 18:34:00'), :public_departure => Time.parse('2010-12-12 18:34:00'), :expected_departure => nil, :actual_departure => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil, :cancelled => nil, :cancellation_reason => nil, :cancellation_timestamp => nil }
-    first_location = ds.daily_schedule_locations.first
+    first_location = ds.locations.first
     first_location_data.each do |k,v|
       first_location.send(k.to_sym).should eql(v)
     end
@@ -190,7 +190,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     movement.message.should match(/722N53MW16/)
     movement.message.should match(/LONDON EUSTON/)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
-    originating_point = schedule.daily_schedule_locations.find_by_tiploc_code('EUSTON')
+    originating_point = schedule.locations.find_by_tiploc_code('EUSTON')
     originating_point.actual_departure.should eql(Time.parse('2011-01-19 18:34:00'))
   end
 
@@ -207,7 +207,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     movement_2.message.should match(/722N53MW16/)
     movement_2.message.should match(/CAMDEN SOUTH JN/)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
-    passing_point = schedule.daily_schedule_locations.find_by_tiploc_code('CMDNSTH')
+    passing_point = schedule.locations.find_by_tiploc_code('CMDNSTH')
     passing_point.actual_pass.should eql(Time.parse('2011-01-19 18:37:00'))
   end
 
@@ -220,14 +220,14 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     movement_1.message.should match(/722N53MW16/)
     movement_1.message.should match(/WATFORD JUNCTION/)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
-    calling_point_arrival = schedule.daily_schedule_locations.find_by_tiploc_code('WATFDJ')
+    calling_point_arrival = schedule.locations.find_by_tiploc_code('WATFDJ')
     calling_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
     movement_2 = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:51:00'), '71040', ' ')
     movement_2.status.should eql(:ok)
     movement_2.message.should match(/722N53MW16/)
     movement_2.message.should match(/WATFORD JUNCTION/)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
-    calling_point_departure = schedule.daily_schedule_locations.find_by_tiploc_code('WATFDJ')
+    calling_point_departure = schedule.locations.find_by_tiploc_code('WATFDJ')
     calling_point_departure.actual_departure.should eql(Time.parse('2011-01-19 18:51:00'))
   end
 
@@ -238,7 +238,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     movement = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ')
     movement.status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
-    terminating_point_arrival = schedule.daily_schedule_locations.find_by_tiploc_code('NMPTN')
+    terminating_point_arrival = schedule.locations.find_by_tiploc_code('NMPTN')
     terminating_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
   end
 
@@ -249,7 +249,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     movement = TSDBExplorer::TDnet::process_trust_movement('521N08MA22', 'D', Time.parse('2011-05-22 10:43:00'), '50423', ' ')
     movement.status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('L02923', '2011-05-22').first
-    terminating_point_arrival = schedule.daily_schedule_locations.find_by_tiploc_code('ILFORD')
+    terminating_point_arrival = schedule.locations.find_by_tiploc_code('ILFORD')
     terminating_point_arrival.actual_pass.should eql(Time.parse('2011-05-22 10:43:00'))
   end
 
@@ -273,7 +273,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     first_schedule_expected.each do |k,v|
       first_schedule.send(k.to_sym).should eql(v)
     end
-    DailySchedule.first.daily_schedule_locations.count.should eql(10)
+    DailySchedule.first.locations.count.should eql(10)
   end
 
 end
