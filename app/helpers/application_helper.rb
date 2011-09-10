@@ -241,6 +241,7 @@ module ApplicationHelper
                       'DC' => 'D.C.',
                       'D.C.' => 'D.C.',
                       'DN' => 'Down',
+                      'ELL' => '(East London Line)',
                       'BDG' => 'Bridge',
                       'HL' => 'High Level',
                       'H.L.' => 'High Level',
