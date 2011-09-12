@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110804072950) do
+ActiveRecord::Schema.define(:version => 20110907064706) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(:version => 20110804072950) do
     t.string   "train_class",               :limit => 1
     t.string   "sleepers",                  :limit => 1
     t.string   "reservations",              :limit => 1
-    t.string   "catering_code",             :limit => 1
+    t.string   "catering_code",             :limit => 4
     t.string   "service_branding",          :limit => 1
     t.string   "stp_indicator",             :limit => 1
     t.string   "uic_code",                  :limit => 5
@@ -69,10 +69,27 @@ ActiveRecord::Schema.define(:version => 20110804072950) do
     t.datetime "updated_at"
   end
 
+  add_index "basic_schedules", ["runs_fr"], :name => "index_basic_schedules_on_runs_fr"
+  add_index "basic_schedules", ["runs_mo"], :name => "index_basic_schedules_on_runs_mo"
+  add_index "basic_schedules", ["runs_sa"], :name => "index_basic_schedules_on_runs_sa"
+  add_index "basic_schedules", ["runs_su"], :name => "index_basic_schedules_on_runs_su"
+  add_index "basic_schedules", ["runs_th"], :name => "index_basic_schedules_on_runs_th"
+  add_index "basic_schedules", ["runs_tu"], :name => "index_basic_schedules_on_runs_tu"
+  add_index "basic_schedules", ["runs_we"], :name => "index_basic_schedules_on_runs_we"
   add_index "basic_schedules", ["train_identity"], :name => "index_basic_schedules_on_train_identity"
   add_index "basic_schedules", ["train_identity_unique"], :name => "index_basic_schedules_on_train_identity_unique"
   add_index "basic_schedules", ["train_uid"], :name => "index_basic_schedules_on_train_uid"
   add_index "basic_schedules", ["uuid"], :name => "index_basic_schedules_on_uuid"
+
+  create_table "cif_files", :force => true do |t|
+    t.string   "file_ref",          :limit => 7
+    t.datetime "extract_timestamp"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "update_indicator"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "daily_schedule_locations", :force => true do |t|
     t.string   "daily_schedule_uuid",    :limit => 36
@@ -189,11 +206,20 @@ ActiveRecord::Schema.define(:version => 20110804072950) do
   add_index "locations", ["basic_schedule_uuid"], :name => "index_locations_on_basic_schedule_uuid"
   add_index "locations", ["departure"], :name => "index_locations_on_departure"
   add_index "locations", ["pass"], :name => "index_locations_on_pass"
+  add_index "locations", ["tiploc_code"], :name => "index_locations_on_tiploc_code"
 
   create_table "queued_messages", :force => true do |t|
     t.string   "queue_name"
     t.string   "message"
     t.integer  "state",      :limit => 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "service_codes", :force => true do |t|
+    t.string   "service_code", :limit => 8
+    t.string   "atoc_code",    :limit => 2
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
