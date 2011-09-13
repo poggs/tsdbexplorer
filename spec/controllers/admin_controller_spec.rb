@@ -17,9 +17,8 @@
 #  $Id$
 #
 
-class DailyScheduleLocation < ActiveRecord::Base
+require 'spec_helper'
 
-  belongs_to :daily_schedule, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
-  has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
+describe AdminController do
 
 end

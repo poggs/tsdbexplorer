@@ -30,7 +30,7 @@
 <% if session[:mode] == 'advanced' %>
      <td><%= s.power_type %><%= s.speed %></td>
 <% end %>
-     <td><%= s.atoc_code %></td>
+     <td><%= decode_toc(s.atoc_code) %></td>
     </tr>
    <% end %>
   </table>

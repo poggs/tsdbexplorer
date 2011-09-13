@@ -17,9 +17,18 @@
 #  $Id$
 #
 
-class DailyScheduleLocation < ActiveRecord::Base
+class AdminController < ApplicationController
 
-  belongs_to :daily_schedule, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
-  has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
+  def index
+    @stats = Hash.new
+    @stats[:tiplocs] = Tiploc.count
+    @stats[:basic_schedules] = BasicSchedule.count
+    @stats[:earliest_schedule] = BasicSchedule.minimum(:runs_from)
+    @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to)
+    @stats[:daily_schedules] = DailySchedule.count
+
+    @stats[:cifs_imported] = CifFile.count
+    @stats[:last_cif_import] = CifFile.maximum(:created_at)
+  end
 
 end

@@ -17,9 +17,18 @@
 #  $Id$
 #
 
-class DailyScheduleLocation < ActiveRecord::Base
+require 'spec_helper'
 
-  belongs_to :daily_schedule, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
-  has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
-
+# Specs in this file have access to a helper object that includes
+# the AdminHelper. For example:
+#
+# describe AdminHelper do
+#   describe "string concat" do
+#     it "concats two strings with spaces" do
+#       helper.concat_strings("this","that").should == "this that"
+#     end
+#   end
+# end
+describe AdminHelper do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
