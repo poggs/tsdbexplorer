@@ -22,12 +22,4 @@ class DailyScheduleLocation < ActiveRecord::Base
   belongs_to :daily_schedule, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
   has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
-  def origin
-    self.locations.first
-  end
-
-  def terminate
-    self.locations.last
-  end
-
 end
