@@ -47,67 +47,12 @@ AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AM
 
   queue.bind(exchange).subscribe do |metadata, payload|
 
-    msg = TSDBExplorer::TDnet::parse_raw_message(payload)
+    msg = TSDBExplorer::TDnet::process_trust_message(payload)
 
-    if msg[:message_type] == "0001"
-
-      activation = TSDBExplorer::TDnet::process_trust_activation(msg[:train_uid], msg[:schedule_origin_depart_timestamp].strftime("%Y-%m-%d"), msg[:train_id])
-
-      if activation.status == :ok
-        log.debug activation.message
-      else
-        log.warn activation.message
-      end
-
-    elsif msg[:message_type] == "0002"
-
-      cancellation = TSDBExplorer::TDnet::process_trust_cancellation(msg[:train_id], msg[:train_cancellation_timestamp], msg[:cancellation_reason_code])
-
-      if cancellation.status == :ok
-        log.debug cancellation.message
-      else
-        log.warn cancellation.message
-      end
-
-    elsif msg[:message_type] == "0003"
-
-      movement = TSDBExplorer::TDnet::process_trust_movement(msg[:train_id], msg[:event_type], msg[:actual_timestamp], msg[:location_stanox], msg[:offroute_indicator])
-
-      if movement.status == :ok
-        log.debug movement.message
-      else
-        log.warn movement.message
-      end
-
-    elsif msg[:message_type] == "0004"
-
-      log.debug "TRUST unidentified train report"
-      log.debug msg.inspect
-
-    elsif msg[:message_type] == "0005"
-
-      log.debug "TRUST train reinstatement report"
-      log.debug msg.inspect
-
-    elsif msg[:message_type] == "0006"
-
-      log.debug "TRUST change of origin report"
-      log.debug msg.inspect
-
-    elsif msg[:message_type] == "0007"
-
-      log.debug "TRUST change of identity report"
-      log.debug msg.inspect
-
-    elsif msg[:message_type] == "0008"
-
-      log.debug "TRUST change of location report"
-      log.debug msg.inspect
-
+    if msg.status == :ok
+      log.debug msg.message
     else
-
-      log.warn "Unknown TRUST report type #{msg[:message_type]}"
-
+      log.warn msg.message
     end
 
   end
