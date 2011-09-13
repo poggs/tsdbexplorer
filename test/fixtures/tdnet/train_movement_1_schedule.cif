@@ -1,0 +1,24 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIBTHNLGR16696100RBETHNAL GREEN             52739   0BETBETHNAL GREEN           
+TICHINGFD00691400TCHINGFORD                 52731   0CHICHINGFORD               
+TICLAPTNJ32692611YCLAPTON JN                51938   0                           
+TICLAPTON00692600XCLAPTON                   52735   0CPTCLAPTON                 
+TIHAKNYNM00686700NHACKNEY DOWNS             52736   0HACHACKNEY DOWNS           
+TIHGHMSPK08691900VHIGHAMS PARK              52732   0HIPHIGHAMS PARK            
+TILIVST  00696500XLONDON LIVERPOOL STREET   527412904LSTLONDON LIVRPL ST        
+TISTJMSST18697300LST JAMES STREET           52734   0SJSST JAMES ST WSTW        
+TIWDST   02695400CWOOD STREET               52729   0WSTWOOD STREET             
+TIWLTWCEN08695300TWALTHAMSTOW CENTRAL       52733   0WHCWALTHAMSTOW CTL      
+BSNL068091105241112100111110 POO2T52    121910000 EMU317 100D     S            P
+BX         LEY                                                                  
+LOLIVST   0103 01033  S      TB                                                 
+LIBTHNLGR           0106 00000000   S  S                                        
+LIHAKNYNM 0110 0110H     011001104        T X                                   
+LICLAPTON 0113 0113H     01130113         T                                     
+LICLAPTNJ           0114H00000000                                               
+LISTJMSST 0116H0117      01170117         T                                     
+LIWLTWCEN 0118H0119      01190119         T                                     
+LIWDST    0120H0121      01210121         T                                     
+LIHGHMSPK 0123H0124      01240124         T           1                         
+LTCHINGFD 0129 01292     TF                                                     
+ZZ
