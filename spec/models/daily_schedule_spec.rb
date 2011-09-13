@@ -37,7 +37,7 @@ describe DailySchedule do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
     activation.status.should eql(:ok)
-    movement = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ')
+    movement = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ', nil, nil)
     movement.status.should eql(:ok)
     daily_schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
     schedule_origin = daily_schedule.origin

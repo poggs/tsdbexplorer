@@ -77,7 +77,7 @@ module TSDBExplorer
         when "0002"   # Train cancellation
           result = process_trust_cancellation(message[:train_id], message[:train_cancellation_timestamp], message[:cancellation_reason_code])
         when "0003"   # Train movement
-          result = process_trust_movement(message[:train_id], message[:event_type], message[:actual_timestamp], message[:location_stanox], message[:offroute_indicator])
+          result = process_trust_movement(message[:train_id], message[:event_type], message[:actual_timestamp], message[:location_stanox], message[:offroute_indicator], message[:platform], message[:line_indicator])
         when "0004"   # Unidentified train report
           result = nil
         when "0005"   # Train reinstatement report
@@ -231,7 +231,7 @@ module TSDBExplorer
 
     # Process a TRUST movement message
 
-    def TDnet.process_trust_movement(train_identity, event_type, timestamp, location_stanox, offroute_indicator)
+    def TDnet.process_trust_movement(train_identity, event_type, timestamp, location_stanox, offroute_indicator, platform, line)
 
       schedule = DailySchedule.find_by_train_identity_unique(train_identity)
       return Struct.new(:status, :message).new(:error, 'Message for unactivated train ' + train_identity + " - ignoring") if schedule.nil?
@@ -256,15 +256,20 @@ module TSDBExplorer
 
       # Update the actual arrival, departure or passing time
 
-      if event_type == 'A'
-        point.actual_arrival = timestamp
-      elsif event_type == 'D'
-        if point.pass.nil?
+      if point.pass.nil?
+        if event_type == 'A'
+          point.actual_arrival = timestamp
+        elsif event_type == 'D'
           point.actual_departure = timestamp
         else
-          point.actual_pass = timestamp
+          return Struct.new(:status, :message).new(:error, 'Unknown event type ' + event_type + ' for movement at ' + location)
         end
+      else
+        point.actual_pass = timestamp
       end
+
+      point.actual_platform = platform.strip unless platform.nil?
+      point.actual_line = line.strip unless line.nil?
 
       point.save!
 
