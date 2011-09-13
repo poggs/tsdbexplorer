@@ -1,3 +1,12 @@
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $(document).ready( function() {
+   $("tr:nth-child(odd)").addClass("odd");
+   $('div.twisty').twisty();
+  });
+ </script>
+<% end %>
+
 <div id="service_detail">
   <div id="mode"><%= mode_icon_for(@schedule.status) %></div>
   <div id="headline"><%= time_only(@schedule.origin.departure) %> <%= tidy_text(decode_tiploc(@schedule.origin.tiploc)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate.tiploc)) %></div>
