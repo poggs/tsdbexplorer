@@ -22,7 +22,11 @@ class Location < ActiveRecord::Base
   belongs_to :basic_schedule, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid
   has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
-  scope :between, lambda { |from_time,to_time| where('(arrival BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time, from_time, to_time) }
+  # The 'between' scope will ignore passing times.  The 'passes_between' scope will include passing times.
+
+  scope :between, lambda { |from_time,to_time| where('(arrival BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?) AND pass IS NULL AND (public_arrival IS NOT NULL AND public_departure IS NOT NULL)', from_time, to_time, from_time, to_time) }
+  scope :passes_between, lambda { |from_time,to_time| where('(arrival BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time, from_time, to_time) }
+
   scope :runs_on, lambda { |date| joins('JOIN basic_schedules ON locations.basic_schedule_uuid = basic_schedules.uuid').where('? BETWEEN basic_schedules.runs_from AND basic_schedules.runs_to', date).where([ 'basic_schedules.runs_su', 'basic_schedules.runs_mo', 'basic_schedules.runs_tu', 'basic_schedules.runs_we', 'basic_schedules.runs_th', 'basic_schedules.runs_fr', 'basic_schedules.runs_sa' ][Date.parse(date).wday] => true ) }
 
 end
