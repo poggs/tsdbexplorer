@@ -15,18 +15,6 @@
   <div>Train information</div>
   <div>
    <p>This <%= decode_train_category(@schedule.category) %> train is timed for a <%= @schedule.power_type %><%= @schedule.timing_load %> running at <%= @schedule.speed.to_i %> mph.  The train will run as <%= @schedule.train_identity %>.</p>
-   <table>
-    <tr>
-     <th>Service Code</th>
-     <th>Status</th>
-     <th>Characteristics</th>
-    </tr>
-    <tr>
-     <td><%= @schedule.service_code %></td>
-     <td><%= decode_train_status(@schedule.status) %></td>
-     <td><%= decode_operating_characteristics(@schedule.operating_characteristics) %></td>
-    </tr>
-   </table>
   </div>
  </div>
 <% end %>
