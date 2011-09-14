@@ -79,16 +79,16 @@ module TSDBExplorer
         when "0003"   # Train movement
           result = process_trust_movement(message[:train_id], message[:event_type], message[:actual_timestamp], message[:location_stanox], message[:offroute_indicator], message[:platform], message[:line_indicator])
         when "0004"   # Unidentified train report
-          result = nil
+          result = Struct.new(:status, :message).new(:status => :warn, :message => "Unidentified Train report not processed - pending support")
         when "0005"   # Train reinstatement report
-          result = nil
+          result = Struct.new(:status, :message).new(:status => :warn, :message => "Train Reinstatement report not processed - pending support")
         when "0006"   # Change of Origin report
-          result = nil
+          result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Origin report not processed - pending support")
         when "0007"   # Change of Identity report
-          result = nil
+          result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Identity report not processed - pending support")
         when "0008"   # Change of Location report
         else
-          result = nil
+          result = Struct.new(:status, :message).new(:status => :warn, :message => "Received unsupported message type #{message[:message_type]}")
       end
 
       return result
