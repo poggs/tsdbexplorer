@@ -21,4 +21,16 @@ require 'spec_helper'
 
 describe ScheduleController do
 
+  render_views
+
+  it "should display a planned schedule" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.first
+    get :index, :uuid => schedule.uuid
+  end
+
+  it "should return an error if passed an invalid planned schedule"
+  it "should display an as-run schedule"
+  it "should return an error if passed an invalid as-run schedule"
+
 end

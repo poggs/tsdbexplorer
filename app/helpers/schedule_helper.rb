@@ -23,33 +23,41 @@ module ScheduleHelper
 
   def catering_icon(code)
 
-    icons = Array.new
+    data = nil
 
-    code.split(//).each do |c|
-      icon = case code
-        when "C"  # Buffet service
-          [ 'cake.png', 'Buffet' ]
-        when "F"  # Restaurant for First Class passengers
-          [ 'cutlery.png', 'Restaurant for 1st Class passengers' ]
-        when "H"  # Service of hot food available
-          [ 'hamburger.png', 'Hot food service' ]
-        when "M"  # Meal for First Class passengers
-          [ 'cutlery.png', 'Meal for 1st Class passengers' ]
-        when "P"  # Wheelchair only reservations
-          nil # TODO: Provide wheelchair icon
-        when "R"  # Restaurant
-          [ 'cutlery.png', 'Restaurant' ]
-        when "T"  # Trolley service
-          [ 'cake.png', 'Trolley' ]
-        else
-          nil
+    unless code.nil? || code.blank?
+
+      icons = Array.new
+
+      code.split(//).each do |c|
+        icon = case code
+          when "C"  # Buffet service
+            [ 'cake.png', 'Buffet' ]
+          when "F"  # Restaurant for First Class passengers
+            [ 'cutlery.png', 'Restaurant for 1st Class passengers' ]
+          when "H"  # Service of hot food available
+            [ 'hamburger.png', 'Hot food service' ]
+          when "M"  # Meal for First Class passengers
+            [ 'cutlery.png', 'Meal for 1st Class passengers' ]
+          when "P"  # Wheelchair only reservations
+            nil # TODO: Provide wheelchair icon
+          when "R"  # Restaurant
+            [ 'cutlery.png', 'Restaurant' ]
+          when "T"  # Trolley service
+            [ 'cake.png', 'Trolley' ]
+          else
+            nil
+        end
+        icons << icon unless icon.nil?
       end
-      icons << icon unless icon.nil?
+
+      html = icons.collect { |icon,description| "<li>" + image_tag('catering/' + icon, :alt => description) + " " + description + "</li>" }
+
+      data = "<ul>\n" + html.join("\n") + "</ul>\n" unless icons.blank?
+
     end
 
-    html = icons.collect { |icon,description| "<li>" + image_tag('catering/' + icon, :alt => description) + " " + description + "</li>" }
-
-    return "<ul>\n" + html.join("\n") + "</ul>\n"
+    return data
 
   end
 

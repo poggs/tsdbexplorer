@@ -23,7 +23,7 @@ describe ScheduleHelper do
 
   it "should convert a set of catering codes to icons" do
     # TODO: Fix wheelchair-only restaurant reservations
-    expected_data = { 'C' => ['Buffet'], 'F' => ['Restaurant', '1st Class'], 'H' => ['Hot food'], 'M' => ['Meal', '1st Class'], 'P' => [''], 'R' => ['Restaurant'], 'T' => ['Trolley'] }
+    expected_data = { 'C' => ['Buffet'], 'F' => ['Restaurant', '1st Class'], 'H' => ['Hot food'], 'M' => ['Meal', '1st Class'], 'P' => [], 'R' => ['Restaurant'], 'T' => ['Trolley'] }
     expected_data.each do |k,v|
       v.each do |expected_text|
         catering_icon(k).should include(expected_text)
@@ -31,8 +31,17 @@ describe ScheduleHelper do
     end
   end
 
-  it "should handle a null catering code"
-  it "should handle an invalid catering code"
+  it "should handle a null catering code" do
+    [ nil, '', ' ' ].each do |catering_code|
+      catering_icon(catering_code).should be_nil
+    end
+  end
+
+  it "should handle an invalid catering code" do
+    [ '!', '0' ].each do |catering_code|
+      catering_icon(catering_code).should be_nil
+    end
+  end
 
   it "should convert a train category in to text" do
     decode_train_category('XX').should eql('Express Passenger')
@@ -41,6 +50,19 @@ describe ScheduleHelper do
 
   it "should gracefully handle an unknown train category" do
     decode_train_category('$$').should eql('Unknown')
+  end
+
+  it "should return an appropriately named mode icon for a transport mode" do
+    expected_data = { 'P' => 'train', 'B' => 'bus' }
+    expected_data.each do |k,v|
+      mode_icon_for(k).should include(v)
+    end
+  end
+
+  it "should return nil if given an undefined transport mode" do
+    ['_', '!', '', nil].each do |transport_mode|
+      mode_icon_for(transport_mode).should be_nil
+    end
   end
 
 end

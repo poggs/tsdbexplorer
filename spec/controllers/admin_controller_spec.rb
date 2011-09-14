@@ -21,4 +21,8 @@ require 'spec_helper'
 
 describe AdminController do
 
+  it "should display a page of statistics" do
+    get :index
+  end
+
 end
