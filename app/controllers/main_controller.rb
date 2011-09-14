@@ -83,7 +83,14 @@ class MainController < ApplicationController
       @range[:from] = @time - 30.minutes
       @range[:to] = @time + 1.hour
 
-      @schedule = Location.where(:tiploc_code => @location.tiploc_code).between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M')).runs_on(@date.to_s(:iso))
+      @schedule = Location.where(:tiploc_code => @location.tiploc_code).runs_on(@date.to_s(:iso))
+
+      if session[:mode] == 'advanced'
+        @schedule = @schedule.passes_between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M'))
+      else
+        @schedule = @schedule.between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M'))
+      end
+
     end
 
   end
