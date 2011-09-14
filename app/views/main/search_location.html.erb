@@ -1,1 +1,74 @@
-<%= render :partial => 'common/location' %>
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $(document).ready( function() {
+   $("tr:nth-child(odd)").addClass("odd");
+   $('div.twisty').twisty();
+  });
+ </script>
+<% end %>
+
+<h1>Services at <%= tidy_text(@location.tps_description) %></h1>
+<h3>Between <%= @range[:from].strftime('%H%M on %A %d %B %Y') %> and <%= @range[:to].strftime('%H%M on %A %d %B %Y') %></h3>
+
+<% if session[:mode] == "advanced" %>
+<div class="twisty closed">
+ <div>Technical information about this location</div>
+ <div>
+  <table>
+   <tr>
+    <th>TIPLOC</th>
+    <th>CRS code</th>
+    <th>NALCO</th>
+    <th>STANOX</th>
+   </tr>
+   <tr>
+    <td><%= @location.tiploc_code %></td>
+    <td><%= @location.crs_code %></td>
+    <td><%= @location.nalco %></td>
+    <td><%= @location.stanox %></td>
+   </tr>
+  </table>
+ </div>
+</div>
+<% end %>
+
+<table>
+ <tr>
+  <th style="width: 1px;"></th>
+  <% if session[:mode] == "advanced" %><th>ID</th><% end %>
+  <th>Arrival</th>
+  <% if session[:mode] == "advanced" %><th>WTT Arr</th><% end %>
+  <th>From</th>
+  <% if session[:mode] == "advanced" %><th>Pass</th><% end %>
+  <th>To</th>
+  <th>Departure</th>
+  <th>Pfm</th>
+  <% if session[:mode] == "advanced" %><th>WTT Dep</th><% end %>
+  <th>Activity</th>
+ </tr>
+
+ <% @schedule.sort { |a,b| TSDBExplorer::train_sort(a,b) }.each do |train| %>
+  <% if train.nil? %>
+   <tr>
+    <td colspan="8" style="background: #c44; color: white; font-weight: bold; text-align: center;">ERROR: Schedule <%= train.daily_schedule_uuid %> not found</td>
+   </tr>
+  <% else %>
+   <tr>
+    <td><%= link_to (image_tag 'information.png'), :controller => 'schedule', :uuid => train.basic_schedule.uuid %></td>
+    <% if session[:mode] == "advanced" %><td><%= train.basic_schedule.train_identity %></td><% end %>
+    <% if session[:mode] == "advanced" %><td><%= train.arrival %></td><% end %>
+    <td><%= train.public_arrival %></td>
+    <td><%= tidy_text(decode_tiploc(train.basic_schedule.origin)) %></td>
+    <% if session[:mode] == "advanced" %><td><%= train.pass %></td><% end %>
+    <td><%= tidy_text(decode_tiploc(train.basic_schedule.terminate)) %></td>
+    <td><%= train.public_departure %></td>
+    <td><%= train.platform %></td>
+    <% if session[:mode] == "advanced" %><td><%= train.departure %></td><% end %>
+    <td>
+     <% if train.activity == "TB" %>Starts here<% end %>
+     <% if train.activity == "TF" %>Terminates here<% end %>
+    </td>
+   </tr>
+  <% end %>
+ <% end %>
+</table>
