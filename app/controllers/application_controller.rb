@@ -18,5 +18,25 @@
 #
 
 class ApplicationController < ActionController::Base
+
   protect_from_forgery
+
+  helper_method :advanced_mode?
+
+  # Return true if advanced mode has been selected
+  
+  def advanced_mode?
+    return session[:mode] == 'advanced'
+  end
+
+
+  # Toggle between normal and advanced mode
+   
+  def toggle_mode
+      
+    session[:mode] = (session[:mode] == 'advanced' ? 'normal' : 'advanced')
+    redirect_to :back
+              
+  end
+
 end

@@ -144,16 +144,6 @@ class MainController < ApplicationController
 
   end
 
-
-  # Toggle between normal and advanced mode
-
-  def toggle_mode
-
-    session[:mode] = (session[:mode] == 'advanced' ? 'normal' : 'advanced')
-    redirect_to :back
-        
-  end
-
   private
 
 
