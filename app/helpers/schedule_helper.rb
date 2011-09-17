@@ -73,6 +73,8 @@ module ScheduleHelper
         'train_64x64.png'
       when "B"
         'bus_64x64.png'
+      when "5"
+        'bus_64x64.png'
       else
         nil
     end
