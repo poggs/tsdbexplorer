@@ -28,11 +28,11 @@ class BasicSchedule < ActiveRecord::Base
   scope :runs_on, lambda { |date| where('? BETWEEN runs_from AND runs_to', date).runs_on_wday(Date.parse(date).wday) }
 
   def origin
-    self.locations.first
+    self.locations.where(:location_type => 'LO').first
   end
 
   def terminate
-    self.locations.last
+    self.locations.where(:location_type => 'LT').first
   end
 
   def is_stp_cancelled?
