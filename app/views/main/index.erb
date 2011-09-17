@@ -18,7 +18,7 @@
 
 <br />
 
-<% if session[:mode] == 'advanced' %>
+<% if advanced_mode? %>
 
 <div id="search">
  <form action="<%= url_for :controller => 'main', :action => 'search_identity' %>">

@@ -1,6 +1,6 @@
 <% if schedule_point.respond_to? :basic_schedule_uuid %>
 
- <% if session[:mode] == 'advanced' %>
+ <% if advanced_mode? %>
 
   <tr>
    <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>
@@ -27,7 +27,7 @@
 
 <% else %>
 
- <% if session[:mode] == 'advanced' %>
+ <% if advanced_mode? %>
 
   <tr>
    <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>

@@ -85,7 +85,7 @@ class MainController < ApplicationController
 
       @schedule = Location.where(:tiploc_code => @location.tiploc_code).runs_on(@date.to_s(:iso))
 
-      if session[:mode] == 'advanced'
+      if advanced_mode?
         @schedule = @schedule.passes_between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M'))
       else
         @schedule = @schedule.between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M'))
@@ -145,23 +145,13 @@ class MainController < ApplicationController
   end
 
 
-  # Change to advanced mode
+  # Toggle between normal and advanced mode
 
-  def mode_advanced
+  def toggle_mode
 
-    session[:mode] = 'advanced'
+    session[:mode] = (session[:mode] == 'advanced' ? 'normal' : 'advanced')
     redirect_to :back
-
-  end
-
-
-  # Change to normal mode
-
-  def mode_normal
-
-    session[:mode] = 'normal'
-    redirect_to :back
-
+        
   end
 
   private

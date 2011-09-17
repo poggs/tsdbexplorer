@@ -11,11 +11,11 @@
   <table>
    <tr>
     <th style="width: 1px;"></th>
-<% if session[:mode] == 'advanced' %>
+<% if advanced_mode? %>
     <th>Identity</th>
 <% end %>
     <th>Journey</th>
-<% if session[:mode] == 'advanced' %>
+<% if advanced_mode? %>
     <th>Traction</th>
 <% end %>
     <th>Operator</th>
@@ -23,11 +23,11 @@
    <% @schedule.each do |s| %>
     <tr>
      <td><%= link_to (image_tag 'information.png'), :controller => 'schedule', :uuid => s.uuid %></td>
-<% if session[:mode] == 'advanced' %>
+<% if advanced_mode? %>
      <td><%= s.train_identity %></td>
 <% end %>
      <td><%= s.origin.departure %> <%= tidy_text(decode_tiploc(s.origin)) %> to <%= tidy_text(decode_tiploc(s.terminate)) %></td>
-<% if session[:mode] == 'advanced' %>
+<% if advanced_mode? %>
      <td><%= s.power_type %><%= s.speed %></td>
 <% end %>
      <td><%= decode_toc(s.atoc_code) %></td>

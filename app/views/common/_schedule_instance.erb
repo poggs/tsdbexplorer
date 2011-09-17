@@ -46,7 +46,7 @@
 
 </div>
 
-<% if session[:mode] == 'advanced' %>
+<% if advanced_mode? %>
  <%= render :partial => 'schedule/schedule_information', :schedule => @schedule %>
  <%= render :partial => 'schedule/extra_information', :schedule => @schedule %>
 <% end %>

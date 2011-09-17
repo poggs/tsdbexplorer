@@ -19,6 +19,12 @@
 
 module ApplicationHelper
 
+  # Return true if advanced mode has been selected
+
+  def advanced_mode?
+    return session[:mode] == 'advanced'
+  end
+
   def time_only(date_obj)
     date_obj.sec == 30 ? date_obj.localtime.strftime('%H%M')+"H" : date_obj.localtime.strftime('%H%M') if date_obj.is_a? Time
   end

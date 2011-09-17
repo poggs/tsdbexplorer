@@ -1,6 +1,6 @@
 <% if @schedule.is_a? BasicSchedule %>
 
- <% if session[:mode] == 'advanced' %>
+ <% if advanced_mode? %>
 
   <tr>
    <th>Location</th>
@@ -27,7 +27,7 @@
 
 <% else %>
 
- <% if session[:mode] == 'advanced' %>
+ <% if advanced_mode? %>
 
   <tr>
    <th>&nbsp;</th>
