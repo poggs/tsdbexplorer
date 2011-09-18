@@ -22,4 +22,41 @@ class DailyScheduleLocation < ActiveRecord::Base
   belongs_to :daily_schedule, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
   has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
+
+  # Returns true if this location is a publically advertised location, for
+  # example, the origin or destination, calling points and pick-up or
+  # set-down points
+
+  def is_public?
+    ['TB','TF','T','D','U'].include? self.activity
+  end
+
+
+  # Returns true if this location is to pick up passengers only
+
+  def pickup_only?
+    self.activity == "U"
+  end
+
+
+  # Returns true if this location is to set down passengers only
+
+  def setdown_only?
+    self.activity == "D"
+  end
+
+
+  # Returns true if the schedule starts at this location
+
+  def is_origin?
+    self.activity == "TB"
+  end
+
+
+  # Returns true if the schedule finishes at this location
+
+  def is_destination?
+    self.activity == "TF"
+  end
+
 end
