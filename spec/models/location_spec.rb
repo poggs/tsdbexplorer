@@ -57,4 +57,26 @@ describe Location do
 
   end
 
+  it "should return true if the schedule starts at this location" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
+    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', '2011-05-22').first
+
+    willesden_ll_bay = willesden_to_stratford.locations.where(:tiploc_code => 'WLSDNJL').first
+    willesden_ll_bay.is_origin?.should be_true
+    willesden_ll_bay.is_destination?.should_not be_true
+
+  end
+
+  it "should return true if the schedule finishes at this location" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
+    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', '2011-05-22').first
+
+    stratford = willesden_to_stratford.locations.where(:tiploc_code => 'STFD').first
+    stratford.is_origin?.should_not be_true
+    stratford.is_destination?.should be_true
+
+  end
+
 end

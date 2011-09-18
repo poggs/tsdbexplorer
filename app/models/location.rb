@@ -52,4 +52,18 @@ class Location < ActiveRecord::Base
     self.activity == "D"
   end
 
+
+  # Returns true if the schedule starts at this location
+
+  def is_origin?
+    self.activity == "TB"
+  end
+
+
+  # Returns true if the schedule finishes at this location
+
+  def is_destination?
+    self.activity == "TF"
+  end
+
 end

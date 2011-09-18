@@ -65,8 +65,10 @@
     <td><%= train.platform %></td>
     <% if advanced_mode? %><td><%= train.departure %></td><% end %>
     <td>
-     <% if train.activity == "TB" %>Starts here<% end %>
-     <% if train.activity == "TF" %>Terminates here<% end %>
+     <% if train.is_origin? %>Starts here<% end %>
+     <% if train.is_destination? %>Terminates here<% end %>
+     <% if train.pickup_only? %>Stops to pick up passengers<% end %>
+     <% if train.setdown_only? %>Stops to set down passengers<% end %>
     </td>
    </tr>
   <% end %>
