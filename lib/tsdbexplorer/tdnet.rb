@@ -277,6 +277,135 @@ module TSDBExplorer
 
     end
 
+
+    # Process a VSTP schedule creation.  Very Short Term Planning schedules
+    # are created less than 48 hours before the train is due to run, and do
+    # not appear in CIF extracts.
+
+    def process_vstp_schedule(vstp_schedule)
+
+      doc = Nokogiri::XML(vstp_schedule) do |config|
+        config.options = Nokogiri::XML::ParseOptions::NOBLANKS
+      end
+
+      vstp = Hash.new
+
+      doc.children.each do |doc_child_1|
+
+        raise "Expecting a VSTPCIFMsgv1 message" unless doc_child_1.name == "VSTPCIFMsgV1"
+
+        doc_child_1.children.each do |doc_child_2|
+
+          if doc_child_2.name == "Sender"
+
+            # Parse the message sender details
+
+            vstp[:sender_org] = doc_child_2.attributes['organisation'].text
+            vstp[:sender_app] = doc_child_2.attributes['application'].text
+            vstp[:sender_component] = doc_child_2.attributes['component'].text
+
+          elsif doc_child_2.name == "schedule"
+
+            vstp[:transaction_type] = doc_child_2.attributes['transaction_type'].text
+
+            basic_schedule = Hash.new
+            basic_schedule[:uuid] = UUID.generate
+
+            days_run = doc_child_2.attributes['schedule_days_runs'].text.split(//)
+
+            basic_schedule[:runs_mo] = days_run[0]
+            basic_schedule[:runs_tu] = days_run[1]
+            basic_schedule[:runs_we] = days_run[2]
+            basic_schedule[:runs_th] = days_run[3]
+            basic_schedule[:runs_fr] = days_run[4]
+            basic_schedule[:runs_sa] = days_run[5]
+            basic_schedule[:runs_su] = days_run[6]
+
+            mapping = { :train_uid => 'CIF_train_uid', :status => 'train_status', :runs_from => 'schedule_start_date', :runs_to => 'schedule_end_date', :bh_running => 'CIF_bank_holiday_running', :stp_indicator => 'CIF_stp_indicator', :ats_code => 'applicable_timetable' }
+
+
+            # The CIF 'applicable timetable service' code does not appear for trains with a STP indicator of 'O' (STP Overlay to Permanent Schedule), so we must check each attributes presence before attempting to work with it
+
+            mapping.each do |bs_attr, cif_attr|
+              basic_schedule[bs_attr] = doc_child_2.attributes[cif_attr].text if doc_child_2.attributes.has_key? cif_attr
+            end
+
+            doc_child_2.children.each do |doc_child_3|
+
+              raise "Expecting a schedule_segment" unless doc_child_3.name == "schedule_segment"
+
+              mapping = { :category => 'CIF_train_category', :train_identity => 'signalling_id', :headcode => 'CIF_headcode', :service_code => 'CIF_train_service_code', :power_type => 'CIF_power_type', :timing_load => 'CIF_timing_load', :speed => 'CIF_speed', :operating_characteristics => 'CIF_operating_characteristics', :train_class => 'CIF_train_class', :sleepers => 'CIF_sleepers', :reservations => 'CIF_reservations', :catering_code => 'CIF_catering_code', :service_branding => 'CIF_service_branding', :uic_code => 'uic_code', :atoc_code => 'atoc_code' }
+
+              mapping.each do |bs_attr, cif_attr|
+                basic_schedule[bs_attr] = doc_child_3.attributes[cif_attr].text
+              end
+
+              vstp[:location] = Array.new
+
+              doc_child_3.children.each do |doc_child_4|
+
+                raise "Expecting a schedule_location" unless doc_child_4.name == "schedule_location"
+
+                # TODO: How are TIPLOC instances processed?
+
+                mapping = { :arrival => 'scheduled_arrival_time', :public_arrival => 'public_arrival_time', :pass => 'scheduled_pass_time', :departure => 'scheduled_departure_time', :public_departure => 'public_departure_time', :platform => 'CIF_platform', :line => 'CIF_line', :path => 'CIF_path', :engineering_allowance => 'CIF_engineering_allowance', :pathing_allowance => 'CIF_pathing_allowance', :performance_allowance => 'CIF_performance_allowance', :activity => 'CIF_activity' }
+                location = Hash.new
+
+                location[:basic_schedule_uuid] = basic_schedule[:uuid]
+
+                mapping.each do |bs_attr, cif_attr|
+                  location[bs_attr] = doc_child_4.attributes[cif_attr].text
+                end
+
+                if location[:activity] == "TB"
+                  location[:location_type] = "LO"
+                elsif location[:activity] == "TF"
+                  location[:location_type] = "LT"
+                else
+                  location[:location_type] = "LI"
+                end
+
+                location[:tiploc_code] = doc_child_4.children.children.first.attributes['tiploc_id'].text
+
+
+                # Trim the last two characters from the public arrival and departure times, as these will only ever be whole minutes
+
+                location[:public_arrival] = location[:public_arrival][0..3] unless location[:public_arrival].empty?
+                location[:public_departure] = location[:public_departure][0..3] unless location[:public_departure].empty?
+
+
+                # Replace the last two characters from an arrival, departure or pass time with a ' ' if a whole minute, or 'H' if a half-minute
+
+                [ :arrival, :pass, :departure ].each do |field_name|
+                  next if location[field_name].nil?
+                  location[field_name].sub!(/00$/, ' ')
+                  location[field_name].sub!(/30$/, 'H') 
+                end
+
+                vstp[:location] << location
+
+              end
+
+            end
+
+            vstp[:basic_schedule] = basic_schedule
+
+          end
+
+        end
+
+      end
+
+      BasicSchedule.create!(vstp[:basic_schedule])
+
+      vstp[:location].each do |location|
+        Location.create!(location)
+      end
+
+      return Struct.new(:status, :message).new(:ok, 'Created VSTP schedule for train ' + train_identity + ' running from ' + basic_schedule[:runs_from] + ' to ' + basic_schedule[:runs_to]  + ' as ' + basic_schedule[:train_identity])
+
+    end
+
   end
 
 end
