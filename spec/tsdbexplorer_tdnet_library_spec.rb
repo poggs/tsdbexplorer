@@ -21,45 +21,45 @@ require 'spec_helper'
 
 describe "lib/tsdbexplorer/tdnet.rb" do
 
-  # Network Rail TD.net message parsing
+  # Network Rail SMART message parsing
 
   it "should parse a raw Train Describer CA message" do
     expected_data = { :message_type => 'CA', :td_identity => 'aa', :from_berth => 'bbbb', :to_berth => 'cccc', :train_description => 'dddd', :timestamp => 'eeeeee' }
-    TSDBExplorer::TDnet::parse_message('<CA_MSG>aaCAbbbbccccddddeeeeee</CA_MSG>').should eql(expected_data)
+    TSDBExplorer::TDnet::parse_smart_message('<CA_MSG>aaCAbbbbccccddddeeeeee</CA_MSG>').should eql(expected_data)
   end
 
   it "should parse a raw Train Describer CB message" do
     expected_data = { :message_type => 'CB', :td_identity => 'aa', :from_berth => 'bbbb', :train_description => 'dddd', :timestamp => 'eeeeee' }
-    TSDBExplorer::TDnet::parse_message('<CB_MSG>aaCBbbbbddddeeeeee</CB_MSG>').should eql(expected_data)
+    TSDBExplorer::TDnet::parse_smart_message('<CB_MSG>aaCBbbbbddddeeeeee</CB_MSG>').should eql(expected_data)
   end
 
   it "should parse a raw Train Describer CC message" do
     expected_data = { :message_type => 'CC', :td_identity => 'aa', :to_berth => 'cccc', :train_description => 'dddd', :timestamp => 'eeeeee'}
-    TSDBExplorer::TDnet::parse_message('<CC_MSG>aaCCccccddddeeeeee</CC_MSG>').should eql(expected_data)
+    TSDBExplorer::TDnet::parse_smart_message('<CC_MSG>aaCCccccddddeeeeee</CC_MSG>').should eql(expected_data)
   end
 
   it "should parse a raw Train Describer CT message" do
     expected_data = { :message_type => 'CT', :td_identity => 'aa', :timestamp_four => 'hhmm', :timestamp => 'eeeeee' }
-    TSDBExplorer::TDnet::parse_message('<CT_MSG>aaCThhmmeeeeee</CT_MSG>').should eql(expected_data)
+    TSDBExplorer::TDnet::parse_smart_message('<CT_MSG>aaCThhmmeeeeee</CT_MSG>').should eql(expected_data)
   end
 
   it "should parse a raw Train Describer SF message" do
     expected_data = { :message_type => 'SF', :td_identity => 'aa', :address => 'ff', :data => 'gg', :timestamp => 'eeeeee' }
-    TSDBExplorer::TDnet::parse_message('<SF_MSG>aaSFffggeeeeee</SF_MSG>').should eql(expected_data)
+    TSDBExplorer::TDnet::parse_smart_message('<SF_MSG>aaSFffggeeeeee</SF_MSG>').should eql(expected_data)
   end
 
   it "should parse a raw Train Describer SG message" do
     expected_data = { :message_type => 'SG', :td_identity => 'aa', :address => 'ff', :data => 'gggggggg', :timestamp => 'eeeeee' }
-    TSDBExplorer::TDnet::parse_message('<SG_MSG>aaSGffggggggggeeeeee</SG_MSG>').should eql(expected_data)
+    TSDBExplorer::TDnet::parse_smart_message('<SG_MSG>aaSGffggggggggeeeeee</SG_MSG>').should eql(expected_data)
   end
 
   it "should parse a raw Train Describer SH message" do
     expected_data = { :message_type => 'SH', :td_identity => 'aa', :address => 'ff', :data => 'gggggggg', :timestamp => 'eeeeee' }
-    TSDBExplorer::TDnet::parse_message('<SH_MSG>aaSHffggggggggeeeeee</SH_MSG>').should eql(expected_data)
+    TSDBExplorer::TDnet::parse_smart_message('<SH_MSG>aaSHffggggggggeeeeee</SH_MSG>').should eql(expected_data)
   end
 
   it "should raise an error if passed an invalid Train Describer message type" do
-    lambda { TSDBExplorer::TDnet::parse_message('<ZZ_MSG>foobarbazqux</ZZ_MSG>') }.should raise_error
+    lambda { TSDBExplorer::TDnet::parse_smart_message('<ZZ_MSG>foobarbazqux</ZZ_MSG>') }.should raise_error
   end
 
 

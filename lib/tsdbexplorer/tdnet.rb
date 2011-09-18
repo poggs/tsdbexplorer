@@ -21,9 +21,9 @@ module TSDBExplorer
 
   module TDnet
 
-    # Parse a TD.net Raw TD Message and return the content as a Hash
+    # Parse a SMARTS raw TD Message and return the content as a Hash
 
-    def TDnet.parse_message(message)
+    def TDnet.parse_smart_message(message)
 
       result = Hash.new
       result[:message_type] = message[10..11]
