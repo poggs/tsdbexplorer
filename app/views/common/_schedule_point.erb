@@ -14,8 +14,7 @@
    <td style="text-align: center;"><%= schedule_point.public_departure %></td>
   </tr>
 
- <% elsif schedule_point.pass.nil? %>
-
+ <% elsif schedule_point.is_public? %>
   <tr>
    <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>
    <td style="text-align: center;"><%= schedule_point.platform %></td>
@@ -67,7 +66,7 @@
 
  <% else %>
 
-  <% unless schedule_point.pass? %>
+  <% unless schedule_point.is_public? %>
 
    <tr>
     <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>

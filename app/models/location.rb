@@ -29,4 +29,27 @@ class Location < ActiveRecord::Base
 
   scope :runs_on, lambda { |date| joins('JOIN basic_schedules ON locations.basic_schedule_uuid = basic_schedules.uuid').where('? BETWEEN basic_schedules.runs_from AND basic_schedules.runs_to', date).where([ 'basic_schedules.runs_su', 'basic_schedules.runs_mo', 'basic_schedules.runs_tu', 'basic_schedules.runs_we', 'basic_schedules.runs_th', 'basic_schedules.runs_fr', 'basic_schedules.runs_sa' ][Date.parse(date).wday] => true ) }
 
+
+  # Returns true if this location is a publically advertised location, for
+  # example, the origin or destination, calling points and pick-up or
+  # set-down points
+
+  def is_public?
+    ['TB','TF','T','D','U'].include? self.activity
+  end
+
+
+  # Returns true if this location is to pick up passengers only
+
+  def pickup_only?
+    self.activity == "U"
+  end
+
+
+  # Returns true if this location is to set down passengers only
+
+  def setdown_only?
+    self.activity == "D"
+  end
+
 end
