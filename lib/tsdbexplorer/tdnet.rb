@@ -282,9 +282,9 @@ module TSDBExplorer
     # are created less than 48 hours before the train is due to run, and do
     # not appear in CIF extracts.
 
-    def process_vstp_schedule(vstp_schedule)
+    def TDnet.process_vstp_message(msg)
 
-      doc = Nokogiri::XML(vstp_schedule) do |config|
+      doc = Nokogiri::XML(msg) do |config|
         config.options = Nokogiri::XML::ParseOptions::NOBLANKS
       end
 
@@ -323,11 +323,10 @@ module TSDBExplorer
 
             mapping = { :train_uid => 'CIF_train_uid', :status => 'train_status', :runs_from => 'schedule_start_date', :runs_to => 'schedule_end_date', :bh_running => 'CIF_bank_holiday_running', :stp_indicator => 'CIF_stp_indicator', :ats_code => 'applicable_timetable' }
 
-
             # The CIF 'applicable timetable service' code does not appear for trains with a STP indicator of 'O' (STP Overlay to Permanent Schedule), so we must check each attributes presence before attempting to work with it
 
             mapping.each do |bs_attr, cif_attr|
-              basic_schedule[bs_attr] = doc_child_2.attributes[cif_attr].text if doc_child_2.attributes.has_key? cif_attr
+              basic_schedule[bs_attr] = doc_child_2.attributes[cif_attr].text.strip if doc_child_2.attributes.has_key? cif_attr
             end
 
             doc_child_2.children.each do |doc_child_3|
@@ -388,6 +387,10 @@ module TSDBExplorer
 
             end
 
+            [:bh_running, :service_branding, :catering_code, :operating_characteristics, :headcode, :sleepers].each do |f|
+              basic_schedule[f.to_sym] = nil if basic_schedule[f.to_sym].blank?
+            end
+
             vstp[:basic_schedule] = basic_schedule
 
           end
@@ -402,7 +405,7 @@ module TSDBExplorer
         Location.create!(location)
       end
 
-      return Struct.new(:status, :message).new(:ok, 'Created VSTP schedule for train ' + train_identity + ' running from ' + basic_schedule[:runs_from] + ' to ' + basic_schedule[:runs_to]  + ' as ' + basic_schedule[:train_identity])
+      return Struct.new(:status, :message).new(:ok, 'Created VSTP schedule for train ' + vstp[:basic_schedule][:train_uid] + ' running from ' + vstp[:basic_schedule][:runs_from] + ' to ' + vstp[:basic_schedule][:runs_to]  + ' as ' + vstp[:basic_schedule][:train_identity])
 
     end
 

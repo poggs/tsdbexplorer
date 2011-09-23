@@ -483,4 +483,24 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   end
 
+
+  # VSTP message processing
+
+  it "should process a VSTP CREATE message" do
+
+    vstp_data = File.open('test/fixtures/tdnet/vstp_create_1.xml').read
+    vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
+    vstp_message.status.should eql(:ok)
+    vstp_message.message.should include('Created VSTP schedule for train W51133 running from 20110802 to 20110802 as 1G56')
+
+    bs_expected = { :train_uid => 'W51133', :train_identity => '1G56', :uic_code => '', :atoc_code => '', :category => 'XX', :headcode => nil, :portion_id => nil, :service_code => '24661005', :power_type => 'EMU', :timing_load => '', :speed => '', :operating_characteristics => nil, :train_class => "", :sleepers => nil, :reservations => '0', :catering_code => nil, :service_branding => nil, :status => '1', :stp_indicator => 'O',  :runs_from => Date.parse('2011-08-02'), :runs_to => Date.parse('2011-08-02'), :runs_mo => false, :runs_tu => true, :runs_we => false, :runs_th => false, :runs_fr => false, :runs_sa => false, :runs_su => false, :ats_code => 'Y', :bh_running => nil }
+
+    vstp_schedule = BasicSchedule.find_all_by_train_uid('W51133')
+    vstp_schedule.count.should eql(1)
+    bs_expected.each do |k,v|
+      vstp_schedule.first.send(k).should eql(v)
+    end
+
+  end
+
 end
