@@ -10,6 +10,7 @@ gem 'amqp'
 gem 'rake', '0.8.7'
 gem 'fastercsv', '>= 1.5.4'
 gem 'ruby-progressbar', '>= 0.0.10'
+gem 'memcache', '>= 1.2.13'
 
 gem 'activerecord-import', '>= 0.2.6'
 
