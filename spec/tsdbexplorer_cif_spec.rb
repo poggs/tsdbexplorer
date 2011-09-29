@@ -257,5 +257,6 @@ describe "lib/tsdbexplorer/cif.rb" do
   # Schedule processing
 
   it "should process a complete schedule from a CIF file"
+  it "should process an update extract from a CIF file"
 
 end
