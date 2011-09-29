@@ -259,13 +259,16 @@ module TSDBExplorer
       if point.pass.nil?
         if event_type == 'A'
           point.actual_arrival = timestamp
+          point.arrival_source = "TRUST"
         elsif event_type == 'D'
           point.actual_departure = timestamp
+          point.departure_source = "TRUST"
         else
           return Struct.new(:status, :message).new(:error, 'Unknown event type ' + event_type + ' for movement at ' + location)
         end
       else
         point.actual_pass = timestamp
+        point.pass_source = "TRUST"
       end
 
       point.actual_platform = platform.strip unless platform.nil?
