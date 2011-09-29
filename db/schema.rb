@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110907064706) do
+ActiveRecord::Schema.define(:version => 20110926210151) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -160,6 +160,8 @@ ActiveRecord::Schema.define(:version => 20110907064706) do
     t.string   "data_source",               :limit => 1
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "source_system"
+    t.text     "call_type"
   end
 
   add_index "daily_schedules", ["train_identity_unique"], :name => "index_daily_schedules_on_train_identity_unique"
@@ -220,6 +222,26 @@ ActiveRecord::Schema.define(:version => 20110907064706) do
     t.string   "service_code", :limit => 8
     t.string   "atoc_code",    :limit => 2
     t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "td_areas", :force => true do |t|
+    t.string   "td_area",    :limit => 2
+    t.text     "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "td_berths", :force => true do |t|
+    t.string   "td_area_id", :limit => 2
+    t.string   "berth",      :limit => 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "td_maps", :force => true do |t|
+    t.text     "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
