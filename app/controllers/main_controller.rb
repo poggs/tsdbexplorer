@@ -88,7 +88,7 @@ class MainController < ApplicationController
       if advanced_mode?
         @schedule = @schedule.passes_between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M'))
       else
-        @schedule = @schedule.between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M'))
+        @schedule = @schedule.between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M')).only_passenger
       end
 
     end
