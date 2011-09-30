@@ -20,4 +20,16 @@
 require 'spec_helper'
 
 describe DailyScheduleLocation do
+
+  it "should not be valid when first created" do
+    record = DailyScheduleLocation.new
+    record.should_not be_valid
+  end
+
+  it "should have a method which identifies if the location should be publically advertised"
+  it "should have a method which identifies if this location is to pick-up passengers only"
+  it "should have a method which identifies if this location is to set down passengers only"
+  it "should have a method which identifies if this location is the originating point of the schedule"
+  it "should hvae a method which identifies if this location is the terminating point of the schedule"
+
 end
