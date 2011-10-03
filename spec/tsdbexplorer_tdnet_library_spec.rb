@@ -235,6 +235,10 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     calling_point_departure.actual_departure.should eql(Time.parse('2011-01-19 18:51:00'))
   end
 
+  it "should record the source of an automatically generated movement correctly"
+  it "should record the source of a manually input movement correctly"
+  it "should handle an off-route movement for a train"
+
   it "should process a train movement message for an arrival at the terminating station" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
