@@ -1,0 +1,197 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIADSWDRD16277101TADSWOOD ROAD JN           32561   0                           
+TIALDEDGE32276000HALDERLEY EDGE             32581   0ALDALDERLEY EDGE           
+TIAMNGTNJ00132350UAMINGTON JUNCTION         69003   0XIM                        
+TIARDWCKJ32296001HARDWICK JN                32009   0                           
+TIBHAMINT08121500UBIRMINGHAM INTERNATIONAL  69215   0BHIBIRMINGHAM INTL         
+TIBHAMNWS40112700EBIRMINGHAM NEW STREET     656302810BHMBIRMINGHAM N ST         
+TIBLTCHLY00136000ZBLETCHLEY                 703062815BLYBLETCHLEY               
+TIBONENDJ00140224WBOURNE END JN (HERTS)     71009   0XOE                        
+TICHDH   04287000CCHEADLE HULME             32563   0CHUCHEADLE HULME           
+TICHDHNJ 24287005HCHEADLE HULME NORTH JN    00000   0                           
+TICHDHSJ 24287007JCHEADLE HULME SOUTH JN    00000   0                           
+TICMDNJN 08136701JCAMDEN JN                 72315   0                           
+TICMDNSTH08144005UCAMDEN SOUTH JN           72316   0                           
+TICOLWICH00108401UCOLWICH                   43328   0XCO                        
+TICOVNTRY00103000LCOVENTRY                  692022834COVCOVENTRY                
+TICREWBHJ56123908RCREWE BASFORD HALL JN     42155   0                           
+TICREWE  00124300JCREWE                     421402835CRECREWE                   
+TICREWECS48124394RCREWE C.S.                42145   0XCR                        
+TICREWECY48124330YCREWE COAL YARD           42128   0                           
+TICREWEDL48124329BCREWE DOWN LOOP           42145   0                           
+TICREWEFP48124327VCREWE F.P.                42137   0                           
+TICREWEGL48123905XCREWE GRESTY LANE         42166   0                           
+TICREWEMD56122261JCREWE T.M.D. (E)          42123   0                           
+TICREWENJ48124301KCREWE NORTH JN            42126   0                           
+TICREWESJ48124303MCREWE SOUTH JN            42147   0                           
+TICREWESN00124338DCREWE SHUNTING NECK       00000   0                           
+TICREWESW48124305XCREWE STEEL WORKS         42117   0                           
+TICREWESY48124324ZCREWE SOUTH YARD          42141   0XCT                        
+TICREWETS48124317ZCREWE THOMAS STREET C.C.E.42127   0                           
+TICREWEVQ16123914QCREWE VIRTUAL QUARRY      42158   0                           
+TICREWSBG56124306PCREWE SYDNEY BRIDGE       42015   0                           
+TIDUDLPT 08121200GDUDLEY PORT               65811   0DDPDUDLEY PORT             
+TIEUSTON 00144400NLONDON EUSTON             724102893EUSLONDON EUSTON           
+TIGALTONJ32111402HGALTON JN                 65823   0XGJ                        
+TIHANSLPJ32136403ZHANSLOPE JN               70201   0XHN                        
+TIHMTNJ  11108769QHILLMORTON JN             70070   0                           
+TIHROW   04139700GHARROW & WEALDSTONE       72007   0HRWHARROW & WEALDST        
+TIHROW30507139703JHARROW DC SIGNAL WS305    72018   0                           
+TIHROW30707139702WHARROW D.C. TURNBACK WS30772018   0                           
+TIHROWDC 28139701HHARROW & WEALDSTONE D.C.  72017   0                           
+TIHTNOJN 10286102CHEATON NORRIS JN          32525   0                           
+TILCHTNJ 00129107YLICHFIELD NORTH JN (LL)   65309   0XOI                        
+TILEDBRNJ32137301ZLEDBURN JN                70320   0XOD                        
+TILNGBKBY04106700ULONG BUCKBY               70091   0LBKLONG BUCKBY             
+TIMADELEY00126808KMADELEY (STAFFS)          42302   0                           
+TIMKNSCEN09137800TMILTON KEYNES CENTRAL     702613397MKCMILTON KEYNES C         
+TIMNCRPIC08296800AMANCHESTER PICCADILLY     320002934MANMANCHESTER PIC          
+TINMPTN  00106900WNORTHAMPTON               70100   0NMPNORTHAMPTON             
+TINMPTNCY48106904MNORTHAMPTON CASTLE YARD   70102   0                           
+TINMPTNN416106015RNORTHAMPTON DGL           70107   0                           
+TINMPTNNJ48106906XNORTHAMPTON NORTH JN      70103   0                           
+TINMPTNRS48106001KNORTHAMPTON RIVER SDGS    70101   0                           
+TINMPTNSJ48106907PNORTHAMPTON SOUTH JN      70105   0                           
+TINMPTNTC48106000JNORTHAMPTON T.C.          70104   0                           
+TINMPTNUS48106002LNORTHAMPTON TC UP SIDINGS 70104   0                           
+TINNTN   00107700FNUNEATON                  69021   0NUNNUNEATON                
+TINNTN20500107719RNUNEATON SIGNAL WN4205    69014   0                           
+TINNTN22300107720LNUNEATON SIGNAL NW4223    69026   0                           
+TINNTN22600107728ZNUNEATON SIGNAL NW4226    69029   0                           
+TINNTN24200107725QNUNEATON SIG NW4242       69004   0                           
+TINNTN26100107721MNUNEATON SIG. WN1261      69028   0                           
+TINNTN26600107724PNUNEATON SIG NL1266       69005   0                           
+TINNTN42700107718QNUNEATON SIG NL3427       69012   0                           
+TINNTN44600107717PNUNEATON SIG NL3446       69011   0                           
+TINNTN51100107707MNUNEATON SIGNAL 511       69017   0                           
+TINNTN53900107723XNUNEATON SIG RN9539       69006   0                           
+TINNTN55000107722NNUNEATON SIG NL9550       69008   0                           
+TINNTNABJ00107708NNUNEATON ABBEY JN         66190   0                           
+TINNTNASJ00107715NASHBY JUNCTION            69013   0                           
+TINNTNCHC00107716XNUNEATON CHILVERS COTON JN69101   0                           
+TINNTNCVE40107709XNUNEATON CIVIL ENGINEERS  69022   0                           
+TINNTNHS 08107702HNUNEATON HS/'A'SDGS       69019   0                           
+TINNTNMID00107703WNUNEATON MIDLAND JN       69015   0                           
+TINNTNSHJ40107714MNUNEATON SOUTH JN         69018   0                           
+TINNTNVTC16107706LNUNEATON CEMETARY SDGS    69016   0                           
+TINTNB   04135600ZNORTON BRIDGE             42312   0NTBNORTON BRIDGE           
+TINTNBGB 24135604AGREAT BRIDGEFORD          42313   0                           
+TINTNBSB 24135603VSTANDON BRIDGE            42310   0                           
+TINTNBSD 28985800ENORTON BRIDGE STATION DRV 00000   0NBS                        
+TIPROOFHJ48112703HPROOF HOUSE JN            65625   0XOZ                        
+TIRUGBNBJ00108779ZNEWBOLD JUNCTION          69030   0                           
+TIRUGBTVJ56108704QRUGBY TRENT VALLEY JN     70029   0                           
+TIRUGBY  00108700MRUGBY                     700303484RUGRUGBY                   
+TIRUGBYAS00108787TRUGBY ARRIVAL SDGS        70020   0                           
+TIRUGBYCS48108762JRUGBY C.S.                70031   0                           
+TIRUGBYY 16108713YRUGBY NORTH T.C.          70017   0                           
+TIRUGLYNJ48108402VRUGELEY NORTH JN          43333   0                           
+TISBCH   00126100NSANDBACH                  42012   0SDBSANDBACH                
+TISBCHDRS00126110QSANDBACH (DRS)            42010   0                           
+TISBCHHC 24126111RSANDBACH HAYS CHEMICALS   42011   0                           
+TISBCHTC 00984400ASANDBACH TOWN CENTRE      00000   0                           
+TISLDLJN 12296802CSLADE LANE JN             32515   0                           
+TISNDWDUD08114900FSANDWELL & DUDLEY         65821   0SADSANDWELL & DUDLY        
+TISOHOSJ 24115104VSOHO SOUTH JN             65826   0XOS                        
+TISTAFFRD00126800CSTAFFORD                  433143534STASTAFFORD                
+TISTECHFD00104300KSTECHFORD                 65611   0SCFSTECHFORD               
+TISTKP   00277100ZSTOCKPORT                 325342973SPTSTOCKPORT               
+TISTKPCS 08277162QSTOCKPORT CAR. M.D.       32531   0                           
+TISTKPCVJ56277105BCHEADLE VILLAGE JUNCTION  32533   0                           
+TISTKPE1 08277102UEDGELEY JN NO1            32537   0                           
+TISTKPE2 08277103VEDGELEY JN NO2            32536   0                           
+TISTKPVIA08277110VSTOCKPORT VIADUCT         32532   0                           
+TITRING  00139300JTRING                     70411   0TRITRING                   
+TITRINGCE00139313PTRING CE SDGS             70412   0                           
+TITRINGNJ49139301KTRING NORTH JN            70410   0                           
+TIWATFDJ 16140200UWATFORD JUNCTION          710402991WFJWATFORD JUNCTION        
+TIWLMSL  00277400LWILMSLOW                  32568   0WMLWILMSLOW                
+TIWLSDWLJ56145731VWILLESDEN WEST LONDN JN   72268   0XWI                        
+TIWMBY   00142300RWEMBLEY CENTRAL           72021   0WMBWEMBLEY CENTRAL         
+TIWMBY99907142308C9 WEMBLEY DOWN CAR LINE   00000   0                           
+TIWMBYBNJ00142409WBRENT NEW JN              72114   0                           
+TIWMBYCSF00142402BWEMBLEY CARRIAGE SIDINGS  72112   0                           
+TIWMBYCSL00142313AWEMBLEY TC CARRIAGE SDGS  72109   0                           
+TIWMBYDC 24142309DWEMBLEY CENTRAL DC        72020   0                           
+TIWMBYDRR00142314BWEMBLEY SIGNALS WM827/829 72015   0                           
+TIWMBYEFT56142304UWEMBLEY EUR FRT OPS CNTRE 72027   0                           
+TIWMBYHS 24142305VWEMBLEY H.S.              72023   0                           
+TIWMBYICD56142401AWEMBLEY INTER CITY DEPOT  72111   0XWF                        
+TIWMBYURR00142315CWEMBLEY SIGNALS WM929/931 72014   0                           
+TIWMBYWHL08145412CWEMBLEY WHEEL LATHE       72102   0                           
+TIWMBYWLF00142312VWEMBLEY TC WHEEL LATHE    72104   0                           
+TIWVRMPTN00121800NWOLVERHAMPTON             650432995WVHWOLVERHAMPTON           
+BSNP640241105221112040000001 PXX1A027501122108001 EMU390 125      B S C        P
+BX         VTY                                                                  
+LOMNCRPIC 0805 08057  FL     TB                                                 
+LIARDWCKJ           0807 00000000                                               
+LISLDLJN            0808H00000000                                               
+LIHTNOJN            0810H00000000                         1                     
+LISTKP    0813 0814H     081308142        T                                     
+LISTKPE1            0815H00000000                                               
+LIADSWDRD           0817 00000000                                               
+LICHDH              0817H000000002                                              
+LIWLMSL   0820H0822      082108224        T                                     
+LIALDEDGE           0824 00000000                                               
+LISBCH              0831H000000001  FL                1   1                     
+LICREWSBG           0836 00000000                                               
+LICREWE   0838H0843      083908431  FL    T                                     
+LICREWBHJ           0846 00000000                                               
+LIMADELEY           0850 00000000   FL FL             1                         
+LINTNB              0856H00000000   FL FL                                       
+LISTAFFRD 0900H0902H     090109021  FL FL T                                     
+LICOLWICH           0908 00000000   FL FL                                       
+LIRUGLYNJ           0910 00000000                                               
+LILCHTNJ            0914 00000000                                               
+LIAMNGTNJ           0917H00000000                                               
+LINNTN              0923H000000004     FL             3                         
+LIRUGBNBJ           0933H00000000   SL                                          
+LIRUGBTVJ           0934H00000000   UNL                                         
+LIRUGBY             0935H000000005  UNLUNL                                      
+LIHMTNJ             0937 00000000                                               
+LILNGBKBY           0943H00000000                                               
+LINMPTN             0952 00000000UML                                            
+LIHANSLPJ           1000H00000000   SL                2                         
+LIMKNSCEN           1007H000000001  SL SL                                       
+LIBLTCHLY           1009H000000005  SL SL                                       
+LILEDBRNJ           1016 00000000   SL SL             4                         
+LITRING             1024 000000005  SL SL                                       
+LIBONENDJ           1028 00000000   SL SL                                       
+LIWATFDJ  1034H1036      103500009     SL D                                     
+LIHROW              1040H00000000   SL                2   1                     
+LIWMBY              1045H00000000                                               
+LIWLSDWLJ           1047H00000000                                               
+LICMDNJN            1050H00000000   D                                           
+LICMDNSTH           1051 00000000                                               
+LTEUSTON  1054 105718    TF
+BSNP644371105221112040000001 PXX1G025001122100001 EMU390 125      B S C        P
+BX         VTY                                                                  
+LOEUSTON  0850 08506  X     HTB                                                 
+LICMDNSTH           0853 00000000   E                                           
+LICMDNJN            0853H00000000   SL                                          
+LIWLSDWLJ           0856H00000000   SL SL                                       
+LIWMBY              0858H00000000                                               
+LIHROW              0900H00000000   SL                                          
+LIWATFDJ  0904H0906      000009058     SL U                                     
+LIBONENDJ           0913 00000000   SL                                          
+LITRING             0917 000000003  SL SL             2                         
+LILEDBRNJ           0923 00000000   SL SL                                       
+LIBLTCHLY           0929H000000003  SL SL             4  H                      
+LIMKNSCEN 0936H0938H     093709383  SL SL T                                     
+LIHANSLPJ           0944 00000000      SL             2                         
+LINMPTN             0954H000000002                                              
+LILNGBKBY           1003H00000000                     1                         
+LIHMTNJ             1010H00000000   DNL                                         
+LIRUGBY   1012 1014      101210141  DCLDNLT                                     
+LIRUGBTVJ           1016 00000000                     1                         
+LICOVNTRY 1023 1025      102310243        T                                     
+LIBHAMINT 1034 1036      103410352        T                                     
+LISTECHFD           1039H00000000                     1   1                     
+LIPROOFHJ           1044 00000000   WL                                          
+LIBHAMNWS 1047 1051      104710515        T                                     
+LISOHOSJ            1055H00000000                                               
+LIGALTONJ           1057 00000000                                               
+LISNDWDUD 1059 1100H     10591100         T                                     
+LIDUDLPT            1103 00000000                     1                         
+LTWVRMPTN 1111 11132     TF
+ZZ

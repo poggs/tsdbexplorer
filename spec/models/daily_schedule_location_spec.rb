@@ -26,10 +26,39 @@ describe DailyScheduleLocation do
     record.should_not be_valid
   end
 
-  it "should have a method which identifies if the location should be publically advertised"
-  it "should have a method which identifies if this location is to pick-up passengers only"
-  it "should have a method which identifies if this location is to set down passengers only"
-  it "should have a method which identifies if this location is the originating point of the schedule"
-  it "should hvae a method which identifies if this location is the terminating point of the schedule"
+  it "should have a method which identifies if the location should be publically advertised" do
+  end
+
+  it "should identify locations in a schedule which are to pick up passengers only" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/pickup_and_setdown.cif')
+    euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('P64437', '2011-05-22').first
+    watford_junction = euston_to_wolverhampton.locations.find_by_tiploc_code('WATFDJ')
+    watford_junction.pickup_only?.should be_true
+    watford_junction.setdown_only?.should be_false
+  end
+
+  it "should identify locations in a schedule which are to set down passengers only" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/pickup_and_setdown.cif')
+    manchester_to_euston = BasicSchedule.runs_on_by_uid_and_date('P64024', '2011-05-22').first
+    watford_junction = manchester_to_euston.locations.find_by_tiploc_code('WATFDJ')
+    watford_junction.pickup_only?.should be_false
+    watford_junction.setdown_only?.should be_true
+  end
+
+  it "should have a method which reports if this is the originating location in the schedule" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/pickup_and_setdown.cif')
+    euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('P64437', '2011-05-22').first
+    london_euston = euston_to_wolverhampton.locations.find_by_tiploc_code('EUSTON')
+    london_euston.is_origin?.should be_true
+    london_euston.is_destination?.should be_false
+  end
+
+  it "should have a method which reports if this is the terminating location in the schedule" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/pickup_and_setdown.cif')
+    euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('P64437', '2011-05-22').first
+    wolverhampton = euston_to_wolverhampton.locations.find_by_tiploc_code('WVRMPTN')
+    wolverhampton.is_origin?.should be_false
+    wolverhampton.is_destination?.should be_true
+  end
 
 end
