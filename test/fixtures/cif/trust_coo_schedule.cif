@@ -1,0 +1,40 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIHERTFDE32681800GHERTFORD EAST             51702   0HFEHERTFORD EAST           
+TIWARE   00682400QWARE                      51707   0WARWARE HERTS              
+TISMARGRT00682100BST MARGARETS (HERTS)      51711   0SMTST MARGARETS HTS        
+TIRYEHOUS00682000ZRYE HOUSE                 51717   0RYHRYE HOUSE               
+TIBROXBNJ32681213FBROXBOURNE JN             51720   0                           
+TIBROXBRN00681200VBROXBOURNE                51722   0BXBBROXBOURNE
+TICHESHNT00681400JCHESHUNT                  51815   0CHNCHESHUNT                
+TIWALHAMX00682300LWALTHAM CROSS             51912   0WLCWALTHAM CROSS           
+TIENFLDLK16681500XENFIELD LOCK              51913   0ENLENFIELD LOCK            
+TIBRIMSDN00681000MBRIMSDOWN                 51914   0BMDBRIMSDOWN               
+TIPNDRSEN00681900LPONDERS END               51918   0PONPONDERS END             
+TITTNHMHL48695100KTOTTENHAM HALE            51931   0TOMTOTTENHAM HALE          
+TITTNHMSJ48695111XTOTTENHAM SOUTH JN        51935   0                           
+TICOPRMLJ32692612ZCOPPERMILL JUNCTION       51937   0XMI                        
+TICLAPTNJ32692611YCLAPTON JN                51938   0                           
+TIHAKNYNM00686700NHACKNEY DOWNS             52736   0HACHACKNEY DOWNS           
+TIBTHNLGR16696100RBETHNAL GREEN             52739   0BETBETHNAL GREEN           
+TILIVST  00696500XLONDON LIVERPOOL STREET   527412904LSTLONDON LIVRPL ST        
+BSNL059851105281112100000010 POO2O03    121920000 EMU317 100D     B            P
+BX         LEY                                                                  
+LOHERTFDE 1839 18392         TB                                                 
+LIWARE    1843 1843H     18431843         T                                     
+LISMARGRT 1847 1847H     18471847         T                                     
+LIRYEHOUS 1849H1850      18501850         T                                     
+LIBROXBNJ           1851H00000000                                               
+LIBROXBRN 1854 1854H     185418542        T                                     
+LICHESHNT 1858 1858H     18581858         T                                     
+LIWALHAMX 1900H1901      19011901         T                                     
+LIENFLDLK 1903 1903H     19031903         T                                     
+LIBRIMSDN 1905H1906      19061906         T                                     
+LIPNDRSEN 1907H1908      19081908         T           1                         
+LITTNHMHL 1913H1914      19141914         T                                     
+LITTNHMSJ           1915 00000000                                               
+LICOPRMLJ           1916 00000000                                               
+LICLAPTNJ           1917 00000000                     1                         
+LIHAKNYNM 1920H1921      192019201  FL    T                                     
+LIBTHNLGR           1924H00000000   S  FL X                                     
+LTLIVST   1928 19286     TF
+ZZ

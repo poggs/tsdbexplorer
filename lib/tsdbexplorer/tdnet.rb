@@ -83,7 +83,7 @@ module TSDBExplorer
         when "0005"   # Train reinstatement report
           result = Struct.new(:status, :message).new(:status => :warn, :message => "Train Reinstatement report not processed - pending support")
         when "0006"   # Change of Origin report
-          result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Origin report not processed - pending support")
+          result = process_trust_change_of_origin(message[:train_id], message[:change_of_origin_timestamp], message[:reason_code], message[:location_stanox])
         when "0007"   # Change of Identity report
           result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Identity report not processed - pending support")
         when "0008"   # Change of Location report
@@ -277,6 +277,41 @@ module TSDBExplorer
       point.save!
 
       return Struct.new(:status, :message).new(:ok, 'Processed movement type ' + event_type + ' for train ' + train_identity + ' at ' + point.tiploc.tps_description + ' on ' + timestamp.strftime("%Y-%m-%d %H:%M"))
+
+    end
+
+
+    # Process a TRUST change of origin message.  COO messages indicate the calling points between the 
+
+    def TDnet.process_trust_change_of_origin(train_identity, timestamp, reason_code, location_stanox)
+
+      schedule = DailySchedule.find_by_train_identity_unique(train_identity)
+      return Struct.new(:status, :message).new(:error, 'Message for unactivated train ' + train_identity + " - ignoring") if schedule.nil?
+
+      original_origin = schedule.origin
+
+      new_origin_location = Tiploc.find_by_stanox(location_stanox)
+      return Struct.new(:status, :message).new(:error, 'COO message for ' + train_identity + ' has an unknown STANOX ' + location_stanox) if new_origin_location.nil?
+
+      new_origin = schedule.locations.where(:tiploc_code => new_origin_location.tiploc_code).first
+      return Struct.new(:status, :message).new(:error, 'COO message for ' + train_identity + ' changes origin to ' + new_origin.tiploc_code + ' which is not in the schedule') if new_origin.nil?
+
+      new_origin.location_type = 'LO'
+      new_origin.save
+
+      reached_new_origin = false
+
+      schedule.locations.each do |calling_point|
+        if calling_point.tiploc_code == new_origin.tiploc_code || reached_new_origin == true
+          reached_new_origin = true
+          next
+        end
+        calling_point.cancelled = true
+        calling_point.cancellation_reason = reason_code
+        calling_point.save
+      end
+
+      return Struct.new(:status, :message).new(:ok, 'Origin of train ' + train_identity + ' changed from ' + original_origin.tiploc_code + ' to ' + new_origin.tiploc_code + ' for reason ' + reason_code)
 
     end
 

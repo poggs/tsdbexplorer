@@ -259,7 +259,34 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process an unidentified train report"
   it "should process a train reinstatement report"
-  it "should process a train change-of-origin report"
+
+  it "should process a train change-of-origin report" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/trust_coo_schedule.cif')
+
+    activation = TSDBExplorer::TDnet::process_trust_message('000120110723163915TRUST               TSIA                                512O03MX23201107231639155170220110723183900L059852028051100000020101211000000CO2O03M000005170220110723183900AN2121920000   ')
+    activation.status.should eql(:ok)
+    activation.message.should include('Activated train UID L05985 on 2011-07-23')
+
+    coo_broxbourne = TSDBExplorer::TDnet::process_trust_message('000620110723185333TRUST               TRUST DA                    LSHH    512O03MX23201107231853005172220110723185430                   512O03MX2321920000XR2121O   ')
+    train_2O03 = DailySchedule.runs_on_by_uid_and_date('L05985', '2011-07-23').first
+
+    cancelled_locations = ["HERTFDE", "WARE", "SMARGRT", "RYEHOUS", "BROXBNJ"]
+    cancelled_locations.each do |l|
+      loc = train_2O03.locations.where(:tiploc_code => l).first
+      loc.cancelled.should be_true
+      loc.cancellation_reason.should eql('XR')
+    end
+
+    running_locations = ["CHESHNT", "WALHAMX", "ENFLDLK", "BRIMSDN", "PNDRSEN", "TTNHMHL", "TTNHMSJ", "COPRMLJ", "CLAPTNJ", "HAKNYNM", "BTHNLGR", "LIVST"]
+    running_locations.each do |l|
+      loc = train_2O03.locations.where(:tiploc_code => l).first
+      loc.cancelled.should_not be_true
+      loc.cancellation_reason.should be_nil
+    end
+
+  end
+
   it "should process a train change-of-identity report"
   it "should process a train change-of-location report"
 

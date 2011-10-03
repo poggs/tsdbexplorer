@@ -25,7 +25,7 @@ class DailyScheduleLocation < ActiveRecord::Base
   validates_presence_of :daily_schedule_uuid
   validates_inclusion_of :location_type, :in => ['LO','LI','LT']
   validates_presence_of :tiploc_code
-  validates_inclusion_of :cancelled, :in => [nil,'1']
+  validates_inclusion_of :cancelled, :in => [nil,true,false]
 
 
   # Returns true if this location is a publically advertised location, for
