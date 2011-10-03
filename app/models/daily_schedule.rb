@@ -24,7 +24,11 @@ class DailySchedule < ActiveRecord::Base
   scope :runs_on_by_uid_and_date, lambda { |uid,date| where(:train_uid => uid).where(:runs_on => date) }
 
   def origin
-    self.locations.first
+    if self.locations.first.cancelled?
+      self.locations.where(:location_type => 'LO').where(:cancelled => nil).first
+    else
+      self.locations.first
+    end
   end
 
   def terminate
