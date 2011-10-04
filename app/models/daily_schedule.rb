@@ -25,14 +25,18 @@ class DailySchedule < ActiveRecord::Base
 
   def origin
     if self.locations.first.cancelled?
-      self.locations.where(:location_type => 'LO').where(:cancelled => nil).first
+      self.locations.where(:location_type => 'LO').where(:cancelled => nil).order(:id).first
     else
-      self.locations.first
+      self.locations.order(:id).first
     end
   end
 
   def terminate
-    self.locations.last
+    if self.locations.last.cancelled?
+      self.locations.where(:location_type => 'LT').where(:cancelled => nil).order(:id).last
+    else
+      self.locations.order(:id).last
+    end
   end
 
 
