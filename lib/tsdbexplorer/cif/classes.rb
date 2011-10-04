@@ -231,22 +231,25 @@ module TSDBExplorer
         self.transaction_type = record[2..2]
         self.main_train_uid = record[3..8]
         self.assoc_train_uid = record[9..14]
-        self.association_start_date = record[15..20]
-        self.association_end_date = record[21..26]
-        self.association_mo = record[27..27]
-        self.association_tu = record[28..28]
-        self.association_we = record[29..29]
-        self.association_th = record[30..30]
-        self.association_fr = record[31..31]
-        self.association_sa = record[32..32]
-        self.association_su = record[33..33]
+        self.association_start_date = Date.parse("20" + record[15..20])
+        self.association_end_date = Date.parse("20" + record[21..26])
+        self.association_mo = record[27..27].to_i
+        self.association_tu = record[28..28].to_i
+        self.association_we = record[29..29].to_i
+        self.association_th = record[30..30].to_i
+        self.association_fr = record[31..31].to_i
+        self.association_sa = record[32..32].to_i
+        self.association_su = record[33..33].to_i
         self.category = record[34..35]
         self.date_indicator = record[36..36]
-        self.location = record[37..43]
-        self.base_location_suffix = record[44..44]
-        self.assoc_location_suffix = record[45..45]
+        self.location = record[37..43].strip
+        self.base_location_suffix = record[44..44].strip
+        self.assoc_location_suffix = record[45..45].strip
         self.diagram_type = record[46..46]
         self.stp_indicator = record[79..79]
+
+        self.base_location_suffix = nil if self.base_location_suffix.blank?
+        self.assoc_location_suffix = nil if self.assoc_location_suffix.blank?
 
       end
 

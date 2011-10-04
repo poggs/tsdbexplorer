@@ -23,6 +23,13 @@ describe "lib/tsdbexplorer/cif.rb" do
 
   # Record parsing
 
+  it "should correctly parse a CIF 'AA' record" do
+    expected_data = {:transaction_type=>'N', :main_train_uid=>'G31230', :assoc_train_uid=>'G31665', :association_start_date=>Date.parse('2011-05-22'), :association_end_date=>Date.parse('2011-12-04'), :association_mo=>0, :association_tu=>0, :association_we=>0, :association_th=>0, :association_fr=>0, :association_sa=>0, :association_su=>1, :category=>'NP', :date_indicator => 'S', :location=>'LEEDS', :base_location_suffix=>nil, :assoc_location_suffix=>nil, :diagram_type=>'T', :stp_indicator=>'P'}
+    parsed_record = TSDBExplorer::CIF::parse_record('AANG31230G316651105221112040000001NPSLEEDS    TO                               P')
+    parsed_record.should be_a TSDBExplorer::CIF::AssociationRecord
+    expected_data.collect.each { |k,v| parsed_record.send(k).should eql(v) }
+  end
+
   it "should correctly parse a CIF 'BS' record" do
     expected_data = {:timing_load=>"321 ", :status=>"P", :train_uid=>"C43391", :transaction_type=>"N", :connection_indicator=>nil, :category=>"OO", :bh_running=>nil, :stp_indicator=>"P", :speed=>"100", :catering_code=>nil, :headcode=>nil, :operating_characteristics=>nil, :service_branding=>nil, :service_code=>"22209000", :train_class=>"B", :runs_from=>"2010-12-12", :portion_id=>nil, :train_identity=>"2N53", :sleepers=>nil, :runs_to=>"2011-05-15", :power_type=>"EMU", :reservations=>"S", :runs_mo=>"0", :runs_tu=>"0", :runs_we=>"0", :runs_th=>"0", :runs_fr=>"0", :runs_sa=>"0", :runs_su=>"1"}
     parsed_record = TSDBExplorer::CIF::parse_record('BSNC433911012121105150000001 POO2N53    122209000 EMU321 100      B S          P')
@@ -155,7 +162,7 @@ describe "lib/tsdbexplorer/cif.rb" do
     BasicSchedule.count.should eql(1)
     Location.count.should eql(18)
     Location.first.tiploc_code.should eql('EUSTON')
-    Location.last.tiploc_code.should eql('NMPTN')    
+    Location.last.tiploc_code.should eql('NMPTN')
   end
 
   it "should not allow BS 'delete' records in a CIF full extract" do
