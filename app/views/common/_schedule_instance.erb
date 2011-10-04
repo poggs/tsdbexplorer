@@ -53,7 +53,7 @@
 
 <table>
  <%= render :partial => 'common/schedule_header' %>
- <%= render :partial => 'common/schedule_point', :collection => @schedule.locations %>
+ <%= render :partial => 'common/schedule_point', :collection => @schedule.locations.order(:id) %>
 </table>
 
 <div id="key">
