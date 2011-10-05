@@ -239,13 +239,14 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   it "should record the source of a manually input movement correctly"
   it "should handle an off-route movement for a train"
 
-  it "should process a train movement message for an arrival at the terminating station" do
+  it "should process a train movement message for an arrival at the terminating station and set the Terminated flag" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
     activation.status.should eql(:ok)
     movement = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ', '10', 'C')
     movement.status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    schedule.terminated?.should be_true
     terminating_point_arrival = schedule.locations.find_by_tiploc_code('NMPTN')
     terminating_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
   end
