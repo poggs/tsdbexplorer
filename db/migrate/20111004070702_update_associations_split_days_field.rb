@@ -21,13 +21,13 @@ class UpdateAssociationsSplitDaysField < ActiveRecord::Migration
 
   def self.up
     remove_column :associations, :association_days
-    add_column :associations, :valid_mo, :boolean, :limit => 1
-    add_column :associations, :valid_tu, :boolean, :limit => 1
-    add_column :associations, :valid_we, :boolean, :limit => 1
-    add_column :associations, :valid_th, :boolean, :limit => 1
-    add_column :associations, :valid_fr, :boolean, :limit => 1
-    add_column :associations, :valid_sa, :boolean, :limit => 1
-    add_column :associations, :valid_su, :boolean, :limit => 1
+    add_column :associations, :valid_mo, :boolean
+    add_column :associations, :valid_tu, :boolean
+    add_column :associations, :valid_we, :boolean
+    add_column :associations, :valid_th, :boolean
+    add_column :associations, :valid_fr, :boolean
+    add_column :associations, :valid_sa, :boolean
+    add_column :associations, :valid_su, :boolean
   end
 
   def self.down
