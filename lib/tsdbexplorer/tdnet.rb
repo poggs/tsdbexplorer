@@ -312,7 +312,7 @@ module TSDBExplorer
       return Struct.new(:status, :message).new(:error, 'COO message for ' + train_identity + ' has an unknown STANOX ' + location_stanox) if new_origin_location.nil?
 
       new_origin = schedule.locations.where(:tiploc_code => new_origin_location.tiploc_code).first
-      return Struct.new(:status, :message).new(:error, 'COO message for ' + train_identity + ' changes origin to ' + new_origin.tiploc_code + ' which is not in the schedule') if new_origin.nil?
+      return Struct.new(:status, :message).new(:error, 'COO message for ' + train_identity + ' changes origin to STANOX ' + location_stanox + ' which does not refer to a TIPLOC in the schedule') if new_origin.nil?
 
       new_origin.location_type = 'LO'
       new_origin.save
