@@ -1,0 +1,73 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIBRBY   00143700UBRONDESBURY               72415   0BSYBRONDESBURY             
+TIBRBYPK 08143800DBRONDESBURY PARK          72414   0BSPBRONDESBURY PARK        
+TICHNELSJ32696916TCHANNELSEA JN             52219   0                           
+TICLDNNRB48143900WCALEDONIAN RD & BARNSBURY 52058   0CIRCALEDONIAN ROAD         
+TICLPHMJ216559527XCLAPHAM JUNCTION          87219   0                           
+TICMDNRD 00144000QCAMDEN ROAD               72421   0CMDCAMDEN ROAD             
+TICMDNRDJ40144001RCAMDEN ROAD JN            72421   0                           
+TICMDNREJ56144002YCAMDEN RD. E. JN.         72422   0                           
+TICNNB   00144100UCANONBURY                 52048   0CNNCANONBURY               
+TICNNBYWJ48144160QCANONBURY WEST JN         52054   0XJC                        
+TICSEAH  08958600FIMPERIAL WHARF            72245   0IMWIMPERIAL WHARF          
+TIDALSKLD08142900BDALSTON KINGSLAND         52046   0DLKDALSTON KINGSLND        
+TIFNCHLYR32144500YFINCHLEY ROAD & FROGNAL   72417   0FNYFINCHLEY RD & FL        
+TIGOSPLOK16140900KGOSPEL OAK                72419   0GPOGOSPEL OAK              
+TIHACKNYC32697700WHACKNEY CENTRAL           52044   0HKCHACKNEY CENTRAL         
+TIHACKNYW32697800NHACKNEY WICK              52040   0HKWHACKNEY WICK            
+TIHIGHBYA00686600WHIGHBURY & ISLINGTON      52053   0HII                        
+TIHMPSTDH32141300KHAMPSTEAD HEATH           72418   0HDHHAMPSTEAD HEATH         
+TIHOMRTON00697900YHOMERTON                  52042   0HMNHOMERTON                
+TIKENOLYM04309200TKENSINGTON (OLYMPIA)      72241   0KPAKENSNGTN OLYMPIA        
+TIKENR   04144800KKENSAL RISE               72413   0KNRKENSAL RISE             
+TIKENSLGJ48145735DKENSAL GREEN JN           72273   0XKG                        
+TIKNTSHTW48144900PKENTISH TOWN WEST         72420   0KTWKENTISH TN WEST         
+TILEAJ   04697811RLEA JUNCTION              52038   0                           
+TILTCHMRJ32512701LLATCHMERE JN              87205   0                           
+TIMTRBDGJ36145733BMITRE BRIDGE JN           72237   0XMB                        
+TINAVRDJ 20686712YNAVARINO ROAD JN          52045   0                           
+TINPLE81801512706QNORTH POLE SIGNAL VC818   72238   0                           
+TISHPDSB 16958700KSHEPHERD'S BUSH           72242   0SPBSHEPHERDS BUSH          
+TISTFD   00696900LSTRATFORD                 52226   0SRASTRATFORD LONDON        
+TIWBRMPTN01887500NWEST BROMPTON             72243   0WBPWEST BROMPTON           
+TIWHMDSTD01142100HWEST HAMPSTEAD            72416   0WHDWEST HAMPSTEAD          
+TIWLSDJHL56145900VWILLESDEN JN. HIGH LEVEL  72275   0WJH                        
+TIWSBRNRJ00143902KWESTBOURNE ROAD JUNCTION  73823   0                           
+BSNL951261105231112091111100 POO2Y01    122214000 EMU375 075                   P
+BX         LOY                                                                  
+LOSTFD    1806 18051  NLL    TB                                                 
+LICHNELSJ           1807H00000000                                               
+LILEAJ              1808 00000000                                               
+LIHACKNYW 1809 1809H     180818081        T                                     
+LIHOMRTON 1811H1812      18111811         T                                     
+LIHACKNYC 1813H1814      18131813         T                                     
+LINAVRDJ            1814H00000000                                               
+LIDALSKLD 1815H1816      18151815         T                                     
+LICNNB    1817H1818      181718173        T                                     
+LICNNBYWJ           1819 00000000                                               
+LIHIGHBYA 1819H1821      181918207        T                                     
+LIWSBRNRJ           1822 00000000   REV                                         
+LICLDNNRB 1822H1823      182218222        T                                     
+LICMDNREJ           1824H00000000                                               
+LICMDNRD  1825H1826      182518251        T                                     
+LICMDNRDJ           1826H00000000                                               
+LIKNTSHTW 1828 1828H     18271827         T               1                     
+LIGOSPLOK 1831 1831H     183018301        T                                     
+LIHMPSTDH 1833 1833H     18321832         T                                     
+LIFNCHLYR 1835 1835H     18341834         T                                     
+LIWHMDSTD 1837 1837H     18361836         T                                     
+LIBRBY    1838H1839      18381838         T                                     
+LIBRBYPK  1840 1840H     18391839         T                                     
+LIKENR    1842 1842H     18411841         T                                     
+LIKENSLGJ           1844 00000000                         1                     
+CRWLSDJHL OO2Y01    122204000 EMU375 075                                        
+LIWLSDJHL 1846 1847H     184518465        T                                     
+LIMTRBDGJ           1849H00000000                                               
+LINPLE818 1851 1852      00000000         OP                                    
+LISHPDSB  1854H1855      18541854         T                                     
+LIKENOLYM 1856H1857      185618563        T                                     
+LIWBRMPTN 1859 1859H     18581858         T                                     
+LICSEAH   1902 1902H     19011901         T                                     
+LILTCHMRJ           1905 00000000                         1                     
+LTCLPHMJ2 1909 19122     TF                                                     
+ZZ

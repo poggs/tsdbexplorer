@@ -239,13 +239,14 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   it "should record the source of a manually input movement correctly"
   it "should handle an off-route movement for a train"
 
-  it "should process a train movement message for an arrival at the terminating station" do
+  it "should process a train movement message for an arrival at the terminating station and set the Terminated flag" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
     activation.status.should eql(:ok)
     movement = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ', '10', 'C')
     movement.status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    schedule.terminated?.should be_true
     terminating_point_arrival = schedule.locations.find_by_tiploc_code('NMPTN')
     terminating_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
   end
@@ -262,7 +263,52 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   end
 
   it "should process an unidentified train report"
-  it "should process a train reinstatement report"
+
+  it "should process a train reinstatement report" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/trust_cancellation_schedule.cif')
+
+    activation = TSDBExplorer::TDnet::process_trust_message('000120110720160618TRUST               TSIA                                522Y01MW20201107201606175222620110720180600L951262023051100000020091211000000CO2Y01M000005222620110720180600AN3022214000   ')
+    activation.status.should eql(:ok)
+    activation.message.should include('Activated train UID L95126 on 2011-07-20 as train identity 522Y01MW20')
+
+    cancellation = TSDBExplorer::TDnet::process_trust_message('000220110720181920TRUST               TRUST DA            #QHPA017LMWB    522Y01MW20201107201819005222620110720180600     00000000000000C522Y01MW2022214000M53030C   ')
+    cancellation.status.should eql(:ok)
+    cancellation.message.should include('Cancelled train 522Y01MW20 due to reason M5')
+
+    cancelled_schedule = DailySchedule.runs_on_by_uid_and_date('L95126', '2011-07-20').first
+    cancelled_schedule.cancelled?.should be_true
+    cancelled_schedule.cancellation_reason.should eql('M5')
+
+    reinstatement = TSDBExplorer::TDnet::process_trust_message('000520110720182503TRUST               TRUST DA            #QHPA017LMWB    522Y01MW20201107201825005222620110720180600     00000000000000522Y01MW20222140003030R   ')
+    reinstatement.status.should eql(:ok)
+    reinstatement.message.should include('Reinstated train 522Y01MW20')
+
+    reinstated_schedule = DailySchedule.runs_on_by_uid_and_date('L95126', '2011-07-20').first
+    reinstated_schedule.cancelled?.should_not be_true
+    reinstated_schedule.cancellation_reason.should be_nil
+
+    change_of_origin = TSDBExplorer::TDnet::process_trust_message('000620110720182519TRUST               TRUST DA                    LMWB    522Y01MW20201107201825007227520110720184730                   522Y01MW2022214000M53030O   ')
+    change_of_origin.status.should eql(:ok)
+    change_of_origin.message.should include('Changed origin of train 522Y01MW20 to')
+    change_of_origin.message.should include('for reason M5')
+
+    amended_schedule = DailySchedule.runs_on_by_uid_and_date('L95126', '2011-07-20').first
+    amended_schedule.cancelled?.should_not be_true
+    amended_schedule.cancellation_reason.should be_nil
+
+    cancelled_locations = ["STFD", "CHNELSJ", "LEAJ", "HACKNYW", "HOMRTON", "HACKNYC", "NAVRDJ", "DALSKLD", "CNNB", "CNNBYWJ", "HIGHBYA", "WSBRNRJ", "CLDNNRB", "CMDNREJ", "CMDNRD", "CMDNRDJ", "KNTSHTW", "GOSPLOK", "HMPSTDH", "FNCHLYR", "WHMDSTD", "BRBY", "BRBYPK", "KENR", "KENSLGJ"]
+    amended_schedule.locations.each do |loc|
+      if cancelled_locations.include? loc.tiploc_code
+        loc.cancelled.should be_true
+        loc.cancellation_reason.should eql('M5')
+      else
+        loc.cancelled.should_not be_true
+        loc.cancellation_reason.should be_nil
+      end
+    end
+
+  end
 
   it "should process a train change-of-origin report" do
 

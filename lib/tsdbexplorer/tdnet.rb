@@ -81,12 +81,13 @@ module TSDBExplorer
         when "0004"   # Unidentified train report
           result = Struct.new(:status, :message).new(:status => :warn, :message => "Unidentified Train report not processed - pending support")
         when "0005"   # Train reinstatement report
-          result = Struct.new(:status, :message).new(:status => :warn, :message => "Train Reinstatement report not processed - pending support")
+          result = process_trust_reinstatement(message[:train_id], message[:reinstatement_timestamp])
         when "0006"   # Change of Origin report
           result = process_trust_change_of_origin(message[:train_id], message[:change_of_origin_timestamp], message[:reason_code], message[:location_stanox])
         when "0007"   # Change of Identity report
           result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Identity report not processed - pending support")
         when "0008"   # Change of Location report
+          result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Location report not processed - pending support")
         else
           result = Struct.new(:status, :message).new(:status => :warn, :message => "Received unsupported message type #{message[:message_type]}")
       end
@@ -229,6 +230,23 @@ module TSDBExplorer
     end
 
 
+    # Process a TRUST reinstatement message.  This indicates that a train which was previously cancelled has been reinstated - it may be subject to further alteration
+
+    def TDnet.process_trust_reinstatement(train_identity, reinstatement_timestamp)
+
+      schedule = DailySchedule.find_by_train_identity_unique(train_identity)
+      return Struct.new(:status, :message).new(:error, 'Message for unactivated train ' + train_identity + ' - ignoring') if schedule.nil?
+      return Struct.new(:status, :message).new(:error, 'Reinstatement for uncancelled train ' + train_identity + ' - ignoring') unless schedule.cancelled?
+
+      schedule.cancelled = false
+      schedule.cancellation_reason = nil
+      schedule.save
+
+      return Struct.new(:status, :message).new(:ok, 'Reinstated train ' + train_identity)
+
+    end
+
+
     # Process a TRUST movement message
 
     def TDnet.process_trust_movement(train_identity, event_type, timestamp, location_stanox, offroute_indicator, platform, line)
@@ -311,7 +329,7 @@ module TSDBExplorer
         calling_point.save
       end
 
-      return Struct.new(:status, :message).new(:ok, 'Origin of train ' + train_identity + ' changed from ' + original_origin.tiploc_code + ' to ' + new_origin.tiploc_code + ' for reason ' + reason_code)
+      return Struct.new(:status, :message).new(:ok, 'Changed origin of train ' + train_identity + ' to ' + new_origin.tiploc_code + ' from ' + original_origin.tiploc_code + ' for reason ' + reason_code)
 
     end
 
