@@ -87,6 +87,7 @@ module TSDBExplorer
         when "0007"   # Change of Identity report
           result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Identity report not processed - pending support")
         when "0008"   # Change of Location report
+          result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Location report not processed - pending support")
         else
           result = Struct.new(:status, :message).new(:status => :warn, :message => "Received unsupported message type #{message[:message_type]}")
       end
