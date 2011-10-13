@@ -26,9 +26,9 @@ class UpdateDailyScheduleLocationsAddSource < ActiveRecord::Migration
   end
 
   def self.down
-    drop_column :daily_schedule_locations, :arrival_source
-    drop_column :daily_schedule_locations, :pass_source
-    drop_column :daily_schedule_locations, :departure_source
+    remove_column :daily_schedule_locations, :arrival_source
+    remove_column :daily_schedule_locations, :pass_source
+    remove_column :daily_schedule_locations, :departure_source
   end
 
 end
