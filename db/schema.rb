@@ -10,14 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110926210151) do
+ActiveRecord::Schema.define(:version => 20111012171828) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
     t.string   "assoc_train_uid"
     t.date     "association_start_date"
     t.date     "association_end_date"
-    t.string   "association_days"
     t.string   "category"
     t.string   "date_indicator"
     t.string   "location"
@@ -28,6 +27,13 @@ ActiveRecord::Schema.define(:version => 20110926210151) do
     t.string   "stp_indicator"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "valid_mo"
+    t.boolean  "valid_tu"
+    t.boolean  "valid_we"
+    t.boolean  "valid_th"
+    t.boolean  "valid_fr"
+    t.boolean  "valid_sa"
+    t.boolean  "valid_su"
   end
 
   create_table "basic_schedules", :force => true do |t|
@@ -122,6 +128,18 @@ ActiveRecord::Schema.define(:version => 20110926210151) do
     t.string   "activity",               :limit => 12
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "arrival_source",         :limit => 16
+    t.string   "pass_source",            :limit => 16
+    t.string   "departure_source",       :limit => 16
+    t.string   "arrival_system",         :limit => 20
+    t.string   "arrival_device_id",      :limit => 8
+    t.string   "arrival_username",       :limit => 8
+    t.string   "pass_system",            :limit => 20
+    t.string   "pass_device_id",         :limit => 8
+    t.string   "pass_username",          :limit => 8
+    t.string   "departure_system",       :limit => 20
+    t.string   "departure_device_id",    :limit => 8
+    t.string   "departure_username",     :limit => 8
   end
 
   add_index "daily_schedule_locations", ["arrival"], :name => "index_daily_schedule_locations_on_arrival"
@@ -160,8 +178,6 @@ ActiveRecord::Schema.define(:version => 20110926210151) do
     t.string   "data_source",               :limit => 1
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "source_system"
-    t.text     "call_type"
   end
 
   add_index "daily_schedules", ["train_identity_unique"], :name => "index_daily_schedules_on_train_identity_unique"
