@@ -38,7 +38,7 @@ class UpdateAssociationsSplitDaysField < ActiveRecord::Migration
     remove_column :associations, :valid_fr
     remove_column :associations, :valid_sa
     remove_column :associations, :valid_su
-    add_column :associations, :association_days, :length => 7
+    add_column :associations, :association_days, :string, :limit => 7
   end
 
 end
