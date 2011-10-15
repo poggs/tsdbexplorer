@@ -18,5 +18,4 @@
 #
 
 Time::DATE_FORMATS[:iso] = '%Y-%m-%d %H:%M:%S'
-
-
+Date::DATE_FORMATS[:default] = lambda { |date| "#{date.strftime('%A')} #{date.day.ordinalize} #{date.strftime('%B %Y')}" }

@@ -2,7 +2,7 @@
  <div>Schedule information</div>
  <div>
   <% if @schedule.is_a? BasicSchedule %>
-   <p>This schedule (<%= @schedule.train_uid %>) is valid between <%= @schedule.runs_from %> and <%= @schedule.runs_to %>.  Alterations and cancellations may apply on other dates.</p>
+   <p>This schedule (<%= @schedule.train_uid %>) is valid between <%= @schedule.runs_from.to_s(:default) %> and <%= @schedule.runs_to.to_s(:default) %>.  Alterations and cancellations may apply on other dates.</p>
   <% else %>
    <p>Train <%= @schedule.train_uid %> ran on <%= @schedule.runs_on %>.  It was activated by TRUST at <%= @schedule.created_at.to_s %>.</p>
   <% end %>
