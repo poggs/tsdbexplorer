@@ -185,8 +185,8 @@ module TSDBExplorer
         self.headcode = record[36..39].strip
         self.service_code = record[41..48]
         self.portion_id = record[49..49].strip
-        self.power_type = record[50..52]
-        self.timing_load = record[53..56]
+        self.power_type = record[50..52].strip
+        self.timing_load = record[53..56].strip
         self.speed = record[57..59]
         self.operating_characteristics = record[60..65].strip
         self.train_class = record[66..66]
@@ -199,6 +199,8 @@ module TSDBExplorer
         self.bh_running = nil if self.bh_running == ""
         self.headcode = nil if self.headcode == ""
         self.portion_id = nil if self.portion_id == ""
+        self.power_type = nil if self.power_type == ""
+        self.timing_load = nil if self.timing_load == ""
         self.operating_characteristics = nil if self.operating_characteristics == ""
         self.sleepers = nil if self.sleepers == ""
         self.reservations = nil if self.reservations == ""
@@ -270,8 +272,8 @@ module TSDBExplorer
         self.course_indicator = record[20..20]
         self.service_code = record[21..28]
         self.portion_id = record[29..29].strip
-        self.power_type = record[30..32]
-        self.timing_load = record[33..36]
+        self.power_type = record[30..32].strip
+        self.timing_load = record[33..36].strip
         self.speed = record[37..39]
         self.operating_characteristics = record[40..43].strip
         self.train_class = record[46..46]
@@ -285,6 +287,8 @@ module TSDBExplorer
 
         self.tiploc_instance = nil if self.tiploc_instance == ""
         self.portion_id = nil if self.portion_id == ""
+        self.power_type = nil if self.power_type == ""
+        self.timing_load = nil if self.timing_load == ""
         self.operating_characteristics = nil if self.operating_characteristics == ""
         self.sleepers = nil if self.sleepers == ""
         self.catering_code = nil if self.catering_code == ""

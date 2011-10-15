@@ -1,0 +1,8 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIKNGX   00612100QLONDON KINGS CROSS        543112901KGXLONDON KINGS X          
+TILEEDS  00848700JLEEDS                     171322881LDSLEEDS                   
+BSNG311191105281112100000010 PXX1D172367121702001ZE  410 125EP    B R TC       P
+BX         GRY                                                                  
+LOKNGX    1403 14030  FL2    TBK                                                
+LTLEEDS   1623H16288     TF                                                     
+ZZ
