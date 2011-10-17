@@ -29,14 +29,14 @@ To extract the TIPLOC data from these files from a full extract named DFTESTA.CI
 
 =end
 
-toc_code = ['ZZ', 'XX']
+toc_code = ['LO']
 
 schedule = Array.new
 
 while record = gets
 
   record_type = record[0..1]
-  puts record if ['HD', 'ZZ'].include? record_type
+  puts record if ['HD', 'TI', 'ZZ'].include? record_type
   next if ['AA', 'TI', 'TA', 'TD'].include? record_type
 
   schedule << record.chomp
