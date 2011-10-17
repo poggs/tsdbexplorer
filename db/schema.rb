@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111012171828) do
+ActiveRecord::Schema.define(:version => 20111015143653) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(:version => 20111012171828) do
     t.string   "departure_system",       :limit => 20
     t.string   "departure_device_id",    :limit => 8
     t.string   "departure_username",     :limit => 8
+    t.string   "event_source",           :limit => 1
   end
 
   add_index "daily_schedule_locations", ["arrival"], :name => "index_daily_schedule_locations_on_arrival"

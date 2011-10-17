@@ -1,0 +1,67 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIADWICK 00835300DADWICK                    23118   0AWKADWICK                  
+TIADWICKJ32835411MADWICK JN                 23120   0                           
+TIALEXNDP32602500CALEXANDRA PALACE          54103   0AAPALEXANDRA PALACE        
+TICLPLLP 04647512RCLAYPOLE LOOP             44365   0                           
+TIDONC   00641700DDONCASTER                 234212841DONDONCASTER               
+TIFNPK   02611900DFINSBURY PARK             54238   0FPKFINSBURY PARK LO        
+TIGTHM   00646900CGRANTHAM                  444213247GRAGRANTHAM                
+TIHAREPKJ40859115FHARE PARK JUNCTION        18068   0                           
+TIHITCHIN00608600DHITCHIN                   532213286HITHITCHIN                 
+TIHNTNGDN00610800XHUNTINGDON                45201   0HUNHUNTINGDON              
+TIHOLBJCN00850310QHOLBECK JUNCTION          17151   0                           
+TIHOLME  00613100AHOLME JN.                 45150   0XHO                        
+TIKNGX   00612100QLONDON KINGS CROSS        543112901KGXLONDON KINGS X          
+TIKNGXBAL00612101RKINGS CROSS BALLAST SDG   54312   0                           
+TIKNGXBEL08612020RBELLE ISLE                54304   0XKB                        
+TIKNGXFTJ00612016TCOPENHAGEN JUNCTION       54315   0                           
+TILEEDS  00848700JLEEDS                     171322881LDSLEEDS                   
+TILEEDSWJ16848712XLEEDS WEST JUNCTION       17131   0                           
+TINEWANG 24649900ANEWARK NORTH GATE         44304   0NNGNEWARK N GATE           
+TINWRKFC 08649915WNEWARK F.C.               44301   0XNK                        
+TIPBRO   00613300KPETERBOROUGH              451062950PBOPETERBOROUGH            
+TIPOTRSBR16602200KPOTTERS BAR               54001   0PBRPOTTERS BAR             
+TIRTFD   00651100HRETFORD                   23491   0RETRETFORD                 
+TISKIRBYJ33835514TSOUTH KIRKBY JN           18076   0                           
+TISNDY   00617200KSANDY                     45603   0SDYSANDY                   
+TISOKEJN 08646921JSTOKE JN.                 44999   0                           
+TISTEVNGE00609200NSTEVENAGE                 53223   0SVGSTEVENAGE               
+TITALNGTN00614110KTALLINGTON JN.            45002   0                           
+TIWHRDJN 08850314TWHITEHALL JN              17135   0                           
+TIWKFLDWG16859100TWAKEFIELD WESTGATE        180672986WKFWAKEFIELD WESTGT        
+TIWLMRGRN08608811RWOOLMER GREEN JN.         53231   0XGN                        
+TIWLWYNGC48618300VWELWYN GARDEN CITY        53401   0WGCWELWYN GDN CITY         
+BSNG311191105281112100000010 PXX1D172367121702001ZE  410 125EP    B R TC       P
+BX         GRY                                                                  
+LOKNGX    1403 14030  FL2    TBK                                                
+LIKNGXBEL           1405 00000000   FL                                          
+LIFNPK              1407H000000003                                              
+LIALEXNDP           1409H00000000                                               
+LIPOTRSBR           1414 000000003                                              
+LIWLWYNGC           1418 00000000                        H                      
+LIWLMRGRN           1420 00000000                                               
+LISTEVNGE           1422 000000003                      1H H                    
+LIHITCHIN           1426 00000000                                               
+LISNDY              1432 00000000                                               
+LIHNTNGDN           1439 00000000   FL FL                                       
+LIHOLME             1444 00000000                          H                    
+LIPBRO    1449H1451H     145014504        T K                                   
+LITALNGTN           1458H00000000                                               
+LISOKEJN            1505H00000000                                               
+LIGTHM    1509 1510H     150915092        T               1                     
+LICLPLLP            1518H00000000                                               
+LINEWANG  1522 1523H     152215221        T                                     
+LINWRKFC            1525 00000000                         1                     
+LIRTFD              1536 00000000                                               
+LIDONCLCJ           1542H00000000                         1                     
+LIDONC    1547 1551H     154715504        T K                                   
+LIADWICK            1556 000000002                                              
+LIADWICKJ           1556H00000000                                               
+LISKIRBYJ           1559H00000000                                               
+LIHAREPKJ           1603 00000000                                               
+LIWKFLDWG 1607 1608H     160716072        T           2                         
+LIHOLBJCN           1621 00000000                                               
+LIWHRDJN            1621H00000000   C                                           
+LILEEDSWJ           1622 00000000   C                                           
+LTLEEDS   1623H16288     TF                                                     
+ZZ

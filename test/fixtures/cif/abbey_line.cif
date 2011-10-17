@@ -1,0 +1,45 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TISTALBNA34156200FST ALBANS ABBEY           71030   0SAAST ALBANS ABBEY         
+TIPKST   02156100APARK STREET               71032   0PKTPARK STREET             
+TIHOWWOOD04156300KHOW WOOD                  71034   0HWWHOW WOOD  HERTS         
+TIBCWD   02156000YBRICKET WOOD              71036   0BWOBRICKET WOOD            
+TIGRSTH  08155900KGARSTON (HERTFORDSHIRE)   71038   0GSNGARSTON HERTS           
+TIWATFDN 16140300DWATFORD NORTH             71039   0WFNWATFORD NORTH           
+TIWATFDJ 16140200UWATFORD JUNCTION          710402991WFJWATFORD JUNCTION        
+BSNP457771105221110230000001 POO2F01    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  0807 080711        TB                                                 
+LIWATFDN  0809H0810      08090809         T                                     
+LIGRSTH   0812 0812H     08120812         T                                     
+LIBCWD    0815 0815H     08150815         T                                     
+LIHOWWOOD 0817 0817H     08170817         T                                     
+LIPKST    0819H0820      08190819         T               1                     
+LTSTALBNA 0823 0823      TF                                                     
+BSNP457791105221110230000001 POO2F02    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 0828 0828          TB                                                 
+LIPKST    0831 0831H     08310831         T                                     
+LIHOWWOOD 0833 0833H     08330833         T                                     
+LIBCWD    0835H0836      08360836         T                                     
+LIGRSTH   0838H0839      08390839         T                                     
+LIWATFDN  0841 0841H     08410841         T               1                     
+LTWATFDJ  0844 084411    TF                                                     
+BSNP457851105221110230000001 POO2F03    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  0907 090711        TB                                                 
+LIWATFDN  0909H0910      09090909         T                                     
+LIGRSTH   0912 0912H     09120912         T                                     
+LIBCWD    0915 0915H     09150915         T                                     
+LIHOWWOOD 0917 0917H     09170917         T                                     
+LIPKST    0919H0920      09190919         T               1                     
+LTSTALBNA 0923 0923      TF                                                     
+BSNP457911105221110230000001 POO2F04    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 0928 0928          TB                                                 
+LIPKST    0931 0931H     09310931         T                                     
+LIHOWWOOD 0933 0933H     09330933         T                                     
+LIBCWD    0935H0936      09360936         T                                     
+LIGRSTH   0938H0939      09390939         T                                     
+LIWATFDN  0941 0941H     09410941         T               1                     
+LTWATFDJ  0944 094411    TF                                                     
+ZZ

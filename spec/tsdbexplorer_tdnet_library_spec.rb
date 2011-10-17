@@ -183,83 +183,91 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process a train movement message for a departure from an the originating station" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615315222620101212183400C433912016071100000020160711000000CP2N53M000005222620101212183400AN3022214000   ')
     activation.status.should eql(:ok)
-    movement = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:34:00'), '72410', ' ', '10', 'C')
+    movement = TSDBExplorer::TDnet::process_trust_message('000320101212183424TRUST               SMART                               722N53MW1220101212183400724102010121218340020101212183400     00000000000000DDA  U  23722N53MW26222140003030000 52219001 Y   72410Y')
     movement.status.should eql(:ok)
-    movement.message.should match(/722N53MW16/)
+    movement.message.should match(/722N53MW12/)
     movement.message.should match(/LONDON EUSTON/)
-    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     originating_point = schedule.locations.find_by_tiploc_code('EUSTON')
-    originating_point.actual_departure.should eql(Time.parse('2011-01-19 18:34:00'))
+    originating_point.actual_departure.should eql(DateTime.parse('2010-12-12 18:34:00'))
     originating_point.platform.should eql('10')
     originating_point.line.should eql('C')
   end
 
   it "should process a train movement message for a passing point" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615315222620101212183400C433912016071100000020160711000000CP2N53M000005222620101212183400AN3022214000   ')
     activation.status.should eql(:ok)
-    movement_1 = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:34:00'), '72410', ' ', '10', 'C')
+    movement_1 = TSDBExplorer::TDnet::process_trust_message('000320101212183617TRUST               SMART                               722N53MW1220101212183600723160000000000000020101212183700     00000000000000DDA  DC  1722N53MX12222090002929001E72315000     00000Y')
     movement_1.status.should eql(:ok)
-    movement_1.message.should match(/722N53MW16/)
-    movement_1.message.should match(/LONDON EUSTON/)
-    movement_2 = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:37:00'), '72316', ' ', nil, nil)
-    movement_2.status.should eql(:ok)
-    movement_2.message.should match(/722N53MW16/)
-    movement_2.message.should match(/CAMDEN SOUTH JN/)
-    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    movement_1.message.should match(/722N53MW12/)
+    movement_1.message.should match(/CAMDEN SOUTH JN/)
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     passing_point = schedule.locations.find_by_tiploc_code('CMDNSTH')
-    passing_point.actual_pass.should eql(Time.parse('2011-01-19 18:37:00'))
+    passing_point.actual_pass.should eql(Time.parse('2010-12-12 18:36:00'))
     passing_point.platform.should eql(nil)
     passing_point.line.should eql(nil)
   end
 
   it "should process a train movement message for a calling point" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
     activation.status.should eql(:ok)
-    movement_1 = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '71040', ' ', '10', 'C')
+    movement_1 = TSDBExplorer::TDnet::process_trust_message('000320101212184913TRUST               SMART                               722N53MW1220101212184900710402010121218500020101212185000     00000000000000AAA  D  80722N53MW12222090002929001E71011002 Y   71040Y')
     movement_1.status.should eql(:ok)
-    movement_1.message.should match(/722N53MW16/)
+    movement_1.message.should match(/722N53MW12/)
     movement_1.message.should match(/WATFORD JUNCTION/)
-    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     calling_point_arrival = schedule.locations.find_by_tiploc_code('WATFDJ')
-    calling_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
-    movement_2 = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'D', Time.parse('2011-01-19 18:51:00'), '71040', ' ', '8', 'S')
+    calling_point_arrival.actual_arrival.should eql(Time.parse('2010-12-12 18:49:00'))
+    movement_2 = TSDBExplorer::TDnet::process_trust_message('000320101212185122TRUST               SMART                               722N53MW1220101212185100710402010121218510020101212185100     00000000000000DDA  DS 82722N53MW12222090002929000 71011007 Y   71040Y')
     movement_2.status.should eql(:ok)
-    movement_2.message.should match(/722N53MW16/)
+    movement_2.message.should match(/722N53MW12/)
     movement_2.message.should match(/WATFORD JUNCTION/)
-    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     calling_point_departure = schedule.locations.find_by_tiploc_code('WATFDJ')
-    calling_point_departure.actual_departure.should eql(Time.parse('2011-01-19 18:51:00'))
+    calling_point_departure.actual_departure.should eql(Time.parse('2010-12-12 18:51:00'))
   end
 
   it "should record the source of an automatically generated movement correctly"
-  it "should record the source of a manually input movement correctly"
+
+  it "should record the source of a manually input movement correctly" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line.cif')
+    activation = TSDBExplorer::TDnet::process_trust_activation('P45779', '2011-07-17', '712F02MC17')
+    activation.status.should eql(:ok)
+    depart_saa_manual = TSDBExplorer::TDnet::process_trust_message('000320110718003245TRUST               SDR                 #QRP3750V3HK    712F02MC1720110717082800710302011071708280020110717082800     00000000000000DDM       712F02MC17222130002929000 71032003 Y   71030N')
+    depart_saa_location = DailySchedule.runs_on_by_uid_and_date('P45779', '2011-07-17').first.locations.where(:tiploc_code => 'STALBNA').first
+    depart_saa_location.event_source.should eql('M')
+    arrive_wfj_manual = TSDBExplorer::TDnet::process_trust_message('000320110718003330TRUST               SDR                 #QRP3750V3HK    712F02MC1720110717084400710402011071708440020110717084400     00000000000000TAM      0712F02MC17222130002929000      000YY   71040Y')
+    arrive_wfj_location = DailySchedule.runs_on_by_uid_and_date('P45779', '2011-07-17').first.locations.where(:tiploc_code => 'WATFDJ').first
+    arrive_wfj_location.event_source.should eql('M')
+  end
+
   it "should handle an off-route movement for a train"
 
   it "should process a train movement message for an arrival at the terminating station and set the Terminated flag" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
     activation.status.should eql(:ok)
-    movement = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ', '10', 'C')
+    movement = TSDBExplorer::TDnet::process_trust_message('000320101212194309TRUST               SMART                               722N53MW1220101212194400701002010121219460020101212194600     00000000000000TAA  D3 30722N53MW12222090002929002E     000YY   70100Y')
     movement.status.should eql(:ok)
-    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     schedule.terminated?.should be_true
     terminating_point_arrival = schedule.locations.find_by_tiploc_code('NMPTN')
-    terminating_point_arrival.actual_arrival.should eql(Time.parse('2011-01-19 18:50:00'))
+    terminating_point_arrival.actual_arrival.should eql(Time.parse('2010-12-12 19:44:00'))
   end
 
   it "should process a train movement message when the STANOX code identifies more than one TIPLOC" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_nonunique_stanox.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('L02923', '2011-05-22', '521N08MA22')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120110522093221TRUST               TSIA                                521N08MH22201105220932215274120110522103200L029232017071100000020170711000000CP1N08M000005274120110522103200AN2121939001   ')
     activation.status.should eql(:ok)
-    movement = TSDBExplorer::TDnet::process_trust_movement('521N08MA22', 'D', Time.parse('2011-05-22 10:43:00'), '50423', ' ', '10', 'C')
+    movement = TSDBExplorer::TDnet::process_trust_message('000320110522104541TRUST               SMART                               521N08MH2220110522104500504230000000000000020110522104330     00000000000000AAA      0521N08MH17219390012121002L50334001 Y   50423Y')
     movement.status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('L02923', '2011-05-22').first
-    terminating_point_arrival = schedule.locations.find_by_tiploc_code('ILFORD')
-    terminating_point_arrival.actual_pass.should eql(Time.parse('2011-05-22 10:43:00'))
+    multi_tiploc_point = schedule.locations.find_by_tiploc_code('ILFORD')
+    multi_tiploc_point.actual_pass.should eql(Time.parse('2011-05-22 10:45:00'))
   end
 
   it "should process an unidentified train report"
@@ -351,7 +359,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     activation.message.should include('Activated train UID L06809 on 2011-08-25 as train identity 522T52M125')
     DailySchedule.count.should eql(1)
     first_schedule = DailySchedule.first
-    first_schedule_expected = { :runs_on => Date.parse('2011-08-25'), :cancelled => nil, :cancellation_timestamp => nil, :cancellation_reason => nil, :status => "P", :train_uid => "L06809", :category => "OO", :train_identity => "2T52", :train_identity_unique => "522T52M125", :headcode => nil, :service_code => "21910000", :portion_id => nil, :power_type => "EMU", :timing_load => "317 ", :speed => "100", :operating_characteristics => "D", :train_class => "S", :sleepers => nil, :reservations => nil, :catering_code => nil, :service_branding => nil, :stp_indicator => "P", :uic_code => nil, :atoc_code => "LE", :ats_code => "Y", :rsid => nil, :data_source => nil }
+    first_schedule_expected = { :runs_on => Date.parse('2011-08-25'), :cancelled => nil, :cancellation_timestamp => nil, :cancellation_reason => nil, :status => "P", :train_uid => "L06809", :category => "OO", :train_identity => "2T52", :train_identity_unique => "522T52M125", :headcode => nil, :service_code => "21910000", :portion_id => nil, :power_type => "EMU", :timing_load => "317", :speed => "100", :operating_characteristics => "D", :train_class => "S", :sleepers => nil, :reservations => nil, :catering_code => nil, :service_branding => nil, :stp_indicator => "P", :uic_code => nil, :atoc_code => "LE", :ats_code => "Y", :rsid => nil, :data_source => nil }
     first_schedule_expected.each do |k,v|
       first_schedule.send(k.to_sym).should eql(v)
     end

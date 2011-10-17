@@ -35,11 +35,11 @@ describe DailySchedule do
 
   it "should return the originating and terminating locations of a schedule" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-16', '722N53MW16')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120110123163441TRUST               TSIA                                722N53MX21201101231634417241020110123183400C433912022051100000020280811000000CO2N53M000007241020110123183400AN2922209000   ')
     activation.status.should eql(:ok)
-    movement = TSDBExplorer::TDnet::process_trust_movement('722N53MW16', 'A', Time.parse('2011-01-19 18:50:00'), '70100', ' ', nil, nil)
+    movement = TSDBExplorer::TDnet::process_trust_message('000320110123193610TRUST               SMART                               722N53MX2120110123193600702010000000000000020110123193700     00000000000000DDA  DNF 3722N53MX17222090002929001E70100009 Y   70201Y')
     movement.status.should eql(:ok)
-    daily_schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-16').first
+    daily_schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2011-01-23').first
     schedule_origin = daily_schedule.origin
     schedule_origin.tiploc.tiploc_code.should eql('EUSTON')
     schedule_terminate = daily_schedule.terminate
