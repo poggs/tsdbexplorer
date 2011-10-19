@@ -35,7 +35,7 @@ module TSDBExplorer
 
       elr_records = Array.new
 
-      FasterCSV.foreach(path + '/elr_list.csv') do |elr_line|
+      CSV.foreach(path + '/elr_list.csv') do |elr_line|
         elr_records << GeoElr.new(:elr_code => elr_line[0], :line_name => elr_line[1])
       end
 
@@ -46,7 +46,7 @@ module TSDBExplorer
 
       point_records = Array.new
 
-      FasterCSV.foreach(path + '/locations.csv') do |point_line|
+      CSV.foreach(path + '/locations.csv') do |point_line|
         point_records << GeoPoint.new(:location_name => point_line[0], :route_code => point_line[1], :elr_code => point_line[2], :miles => point_line[3], :chains => point_line[4])
       end
 

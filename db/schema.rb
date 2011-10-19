@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111015143653) do
+ActiveRecord::Schema.define(:version => 20111013072103) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -230,15 +231,7 @@ ActiveRecord::Schema.define(:version => 20111015143653) do
   create_table "queued_messages", :force => true do |t|
     t.string   "queue_name"
     t.string   "message"
-    t.integer  "state",      :limit => 1
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "service_codes", :force => true do |t|
-    t.string   "service_code", :limit => 8
-    t.string   "atoc_code",    :limit => 2
-    t.text     "description"
+    t.integer  "state",      :limit => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
