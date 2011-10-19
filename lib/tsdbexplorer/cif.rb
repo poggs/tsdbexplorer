@@ -89,7 +89,7 @@ module TSDBExplorer
 
       pending = { 'Tiploc' => { :cols => [ :tiploc_code, :nalco, :tps_description, :stanox, :crs_code, :description ], :rows => [] },
                   'BasicSchedule' => { :cols => [ :uuid, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source ], :rows => [] },
-                  'Location' => { :cols => [ :basic_schedule_uuid, :location_type, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity ], :rows => [] } }
+                  'Location' => { :cols => [ :basic_schedule_uuid, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity ], :rows => [] } }
 
       start_time = Time.now
 
@@ -204,15 +204,21 @@ module TSDBExplorer
 
               location_record = TSDBExplorer::CIF::LocationRecord.new
 
+              seq = 10
+
               while(1)
+
                 cif_record = cif_data.gets
                 next if cif_record[0..1] == "CR" # TODO: Remove change-en-route hack
                 location_record = TSDBExplorer::CIF::parse_record(cif_record)
+                location_record.seq = seq
                 raise "Record was parsed as a '#{location_record.class}', expecting a TSDBExplorer::CIF::LocationRecord" unless location_record.is_a? TSDBExplorer::CIF::LocationRecord
                 location_record.basic_schedule_uuid = uuid
                 loc_records << location_record
 
                 break if location_record.location_type == "LT"
+
+                seq = seq + 10
 
               end
 

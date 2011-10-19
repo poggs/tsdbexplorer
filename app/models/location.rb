@@ -22,6 +22,8 @@ class Location < ActiveRecord::Base
   belongs_to :basic_schedule, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid
   has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
+  default_scope :order => 'seq'
+
   # The 'between' scope will ignore passing times.  The 'passes_between' scope will include passing times.
 
   scope :between, lambda { |from_time,to_time| where('(arrival BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time) }

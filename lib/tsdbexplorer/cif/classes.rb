@@ -73,8 +73,8 @@ module TSDBExplorer
 
     class LocationRecord
 
-      attr_reader :basic_schedule_uuid, :record_identity, :location_type, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity
-      attr_accessor :basic_schedule_uuid, :record_identity, :location_type, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity
+      attr_reader :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity
+      attr_accessor :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity
 
       def initialize(record=nil)
 

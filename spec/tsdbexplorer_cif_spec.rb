@@ -208,6 +208,24 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
 
+  # Sequence processing
+
+  it "should include an incrementing sequence number with schedule locations" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+
+    schedule = BasicSchedule.first
+
+    last_id = 0
+
+    schedule.locations.each do |loc|
+      loc.seq.should > last_id
+      last_id = loc.seq
+    end 
+
+  end
+
+
   # Time procesing
 
   it "should process Basic Schedule arrival, public arrival, passing, departure and public departure times correctly" do
