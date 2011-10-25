@@ -38,35 +38,38 @@ class Location < ActiveRecord::Base
   # set-down points
 
   def is_public?
-    ['TB','TF','T','D','U'].include? self.activity
+    [:activity_tb, :activity_tf, :activity_d, :activity_u].each do |a|
+      return true if self.send(a) == true
+    end
+    return false
   end
 
 
   # Returns true if this location is to pick up passengers only
 
   def pickup_only?
-    self.activity == "U"
+    self.activity_u == true
   end
 
 
   # Returns true if this location is to set down passengers only
 
   def setdown_only?
-    self.activity == "D"
+    self.activity_d == true
   end
 
 
   # Returns true if the schedule starts at this location
 
   def is_origin?
-    self.activity == "TB"
+    self.activity_tb == true
   end
 
 
   # Returns true if the schedule finishes at this location
 
   def is_destination?
-    self.activity == "TF"
+    self.activity_tf == true
   end
 
 end

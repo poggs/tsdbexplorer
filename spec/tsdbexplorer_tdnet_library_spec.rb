@@ -126,7 +126,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     ds.train_uid.should eql('C43391')
     ds.train_identity_unique.should eql('722N53MW12')
     ds.locations.count.should eql(18)
-    first_location_data = { :location_type => "LO", :activity => "TB", :tiploc_code => "EUSTON", :tiploc_instance => nil, :arrival => nil, :public_arrival => nil, :expected_arrival => nil, :actual_arrival => nil, :platform => '10', :actual_platform => nil, :line => 'C', :actual_line => nil, :pass => nil, :expected_pass => nil, :actual_pass => nil, :path => nil, :departure => Time.parse('2010-12-12 18:34:00'), :public_departure => Time.parse('2010-12-12 18:34:00'), :expected_departure => nil, :actual_departure => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil, :cancelled => nil, :cancellation_reason => nil, :cancellation_timestamp => nil }
+    first_location_data = { :location_type => "LO", :activity_tb => true, :tiploc_code => "EUSTON", :tiploc_instance => nil, :arrival => nil, :public_arrival => nil, :expected_arrival => nil, :actual_arrival => nil, :platform => '10', :actual_platform => nil, :line => 'C', :actual_line => nil, :pass => nil, :expected_pass => nil, :actual_pass => nil, :path => nil, :departure => Time.parse('2010-12-12 18:34:00'), :public_departure => Time.parse('2010-12-12 18:34:00'), :expected_departure => nil, :actual_departure => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil, :cancelled => nil, :cancellation_reason => nil, :cancellation_timestamp => nil }
     first_location = ds.locations.first
     first_location_data.each do |k,v|
       first_location.send(k.to_sym).should eql(v)

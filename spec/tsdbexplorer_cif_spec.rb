@@ -21,6 +21,31 @@ require 'spec_helper'
 
 describe "lib/tsdbexplorer/cif.rb" do
 
+  # Location activity processing
+
+  it "should correctly process a set of activities in to an array" do
+
+    responses = [
+                 ['TB', { :activity_tb=>true }],
+                 ['TF', { :activity_tf=>true }],
+                 ['D', { :activity_d=>true }],
+                 ['U', { :activity_u=>true }],
+                 ['N', { :activity_n=>true }],
+                 ['R', { :activity_r=>true }],
+                 ['S', { :activity_s=>true }],
+                 ['T', { :activity_t=>true }],
+                ]
+
+    responses.each do |r|
+      activities = TSDBExplorer::CIF::parse_activities(r[0])
+      r[1].keys.each do |fields_true|
+        activities[fields_true].should be_true
+      end
+    end
+
+  end
+
+
   # Record parsing
 
   it "should correctly parse a CIF 'AA' record" do
@@ -45,21 +70,21 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should correctly parse a CIF 'LO' record" do
-    expected_data = {:performance_allowance=>nil, :platform=>"3", :departure=>"0910 ", :public_departure=>nil, :record_identity=>"LO", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"PENZNCE", :pathing_allowance=>nil, :activity=>"TBRMA -D", :tiploc_instance=>nil}
+    expected_data = {:performance_allowance=>nil, :platform=>"3", :departure=>"0910 ", :public_departure=>nil, :record_identity=>"LO", :engineering_allowance=>nil, :line=>nil, :tiploc_code=>"PENZNCE", :pathing_allowance=>nil, :activity_tb=>true, :activity_tf=>false, :activity_d=>false, :activity_u=>false, :activity_n=>false, :activity_r=>false, :activity_s=>false, :activity_t=>false, :tiploc_instance=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('LOPENZNCE 0910 00003         TBRMA -D                                           ')
     parsed_record.should be_a TSDBExplorer::CIF::LocationRecord
     expected_data.collect.each { |k,v| parsed_record.send(k).should eql(v) }
   end
 
   it "should correctly parse a CIF 'LI' record" do
-    expected_data = {:performance_allowance=>nil, :platform=>"15", :pass=>nil, :path=>nil, :departure=>"1532H", :arrival=>"1429H", :public_departure=>nil, :public_arrival=>nil, :record_identity=>"LI", :engineering_allowance=>nil, :line=>"E", :tiploc_code=>"EUSTON", :pathing_allowance=>nil, :activity=>"RMOP", :tiploc_instance=>nil}
+    expected_data = {:performance_allowance=>nil, :platform=>"15", :pass=>nil, :path=>nil, :departure=>"1532H", :arrival=>"1429H", :public_departure=>nil, :public_arrival=>nil, :record_identity=>"LI", :engineering_allowance=>nil, :line=>"E", :tiploc_code=>"EUSTON", :pathing_allowance=>nil, :activity_tb=>false, :activity_tf=>false, :activity_d=>false, :activity_u=>false, :activity_n=>false, :activity_r=>false, :activity_s=>false, :activity_t=>false, :tiploc_instance=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('LIEUSTON  1429H1532H     0000000015 E     RMOP                                  ')
     parsed_record.should be_a TSDBExplorer::CIF::LocationRecord
     expected_data.collect.each { |k,v| parsed_record.send(k).should eql(v) }
   end
 
   it "should correctly parse a CIF 'LT' record" do
-    expected_data = {:platform=>nil, :path=>nil, :arrival=>"0417 ", :public_arrival=>nil, :record_identity=>"LT", :tiploc_code=>"DITTFLR", :activity=>"TFPR", :tiploc_instance=>nil}
+    expected_data = {:platform=>nil, :path=>nil, :arrival=>"0417 ", :public_arrival=>nil, :record_identity=>"LT", :tiploc_code=>"DITTFLR", :activity_tb=>false, :activity_tf=>true, :activity_d=>false, :activity_u=>false, :activity_n=>false, :activity_r=>false, :activity_s=>false, :activity_t=>false, :tiploc_instance=>nil}
     parsed_record = TSDBExplorer::CIF::parse_record('LTDITTFLR 0417 0000      TFPR                                                   ')
     parsed_record.should be_a TSDBExplorer::CIF::LocationRecord
     expected_data.collect.each { |k,v| parsed_record.send(k).should eql(v) }
@@ -95,6 +120,7 @@ describe "lib/tsdbexplorer/cif.rb" do
   # TIPLOC Record processing
 
   it "should process TI records from a CIF file" do
+
     Tiploc.all.count.should eql(0)
     expected_data = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif').should eql(expected_data)
@@ -223,6 +249,36 @@ describe "lib/tsdbexplorer/cif.rb" do
       last_id = loc.seq
     end 
 
+  end
+
+
+  # Activity processing
+
+  it "should set the activity_tb column on the location where the train begins" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.first
+    london_euston = schedule.locations.where(:tiploc_code => 'EUSTON').first
+    london_euston.activity_tb.should be_true
+  end
+
+  it "should set the activity_d column on locations where the train stops to set down passengers only"
+  it "should set the activity_u column on locations where the train stops to pick up passengers only"
+  it "should set the activity_n column on locations where the stop is unadvertised"
+  it "should set the activity_r column on locations where the train stops only when required"
+  it "should set the activity_s column on locations where the train stops for railway personnel only"  
+
+  it "should set the activity_t column on locations where the train stops to pick up and set down passengers" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.first
+    watford_junction = schedule.locations.where(:tiploc_code => 'WATFDJ').first
+    watford_junction.activity_t.should be_true
+  end
+
+  it "should set the activity_tf column on the location where the train finishes" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.first
+    northampton = schedule.locations.where(:tiploc_code => 'NMPTN').first
+    northampton.activity_tf.should be_true
   end
 
 

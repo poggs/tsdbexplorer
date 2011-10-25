@@ -89,8 +89,7 @@ module TSDBExplorer
 
       pending = { 'Tiploc' => { :cols => [ :tiploc_code, :nalco, :tps_description, :stanox, :crs_code, :description ], :rows => [] },
                   'BasicSchedule' => { :cols => [ :uuid, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source ], :rows => [] },
-                  'Location' => { :cols => [ :basic_schedule_uuid, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity ], :rows => [] } }
-
+                  'Location' => { :cols => [ :basic_schedule_uuid, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_tb, :activity_tf, :activity_d, :activity_u, :activity_n, :activity_r, :activity_s, :activity_t ], :rows => [] } }
       start_time = Time.now
 
 
@@ -292,6 +291,44 @@ module TSDBExplorer
       pending = process_pending(pending)
 
       return stats
+
+    end
+
+
+    # Parse a list of CIF activities in to a hash, with activities present in the list represented by true values in the hash
+
+    def CIF.parse_activities(activity_list)
+
+      activities = ['AE', 'BL', '-D', 'HH', 'KC', 'KE', 'KF', 'KS', 'OP', 'OR', 'PR', 'RM', 'RR', '-T', 'TB', 'TF', 'TS', 'TW', '-U', 'A', 'C', 'D', 'E', 'G', 'H', 'K', 'L', 'N', 'R', 'S', 'T', 'U', 'W', 'X']
+      processed_activities = Hash.new
+
+      activities.each do |z|
+        processed_activities["activity_#{z}".sub(/\-/, 'minus').downcase.to_sym] = false
+      end
+
+      activity_list.strip!
+
+      while(activity_list.length > 0)
+      
+        activity_list.lstrip!
+
+        changed = nil
+
+        activities.each do |activity|
+          m = activity_list.match("^#{activity}(.*)")
+          unless m.nil?
+            processed_activities["activity_#{activity}".sub(/\-/, 'minus').downcase.to_sym] = true
+            activity_list = m[1]
+            changed = true
+            break
+          end
+        end
+
+        raise "Unknown CIF activity '#{activity_list}'" if changed.nil?
+
+      end
+
+      return processed_activities
 
     end
 

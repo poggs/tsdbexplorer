@@ -73,8 +73,8 @@ module TSDBExplorer
 
     class LocationRecord
 
-      attr_reader :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity
-      attr_accessor :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity
+      attr_reader :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_ae, :activity_bl, :activity_minusd, :activity_hh, :activity_kc, :activity_ke, :activity_kf, :activity_ks, :activity_op, :activity_or, :activity_pr, :activity_rm, :activity_rr, :activity_minust, :activity_tb, :activity_tf, :activity_ts, :activity_tw, :activity_minusu, :activity_a, :activity_c, :activity_d, :activity_e, :activity_g, :activity_h, :activity_k, :activity_l, :activity_n, :activity_r, :activity_s, :activity_t, :activity_u, :activity_w, :activity_x
+      attr_accessor :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_ae, :activity_bl, :activity_minusd, :activity_hh, :activity_kc, :activity_ke, :activity_kf, :activity_ks, :activity_op, :activity_or, :activity_pr, :activity_rm, :activity_rr, :activity_minust, :activity_tb, :activity_tf, :activity_ts, :activity_tw, :activity_minusu, :activity_a, :activity_c, :activity_d, :activity_e, :activity_g, :activity_h, :activity_k, :activity_l, :activity_n, :activity_r, :activity_s, :activity_t, :activity_u, :activity_w, :activity_x
 
       def initialize(record=nil)
 
@@ -84,6 +84,7 @@ module TSDBExplorer
           self.record_identity = self.location_type
           self.tiploc_code = record[2..8].strip
           self.tiploc_instance = record[9..9]
+          activity_list = nil
 
           if self.location_type == "LO"
             self.departure = record[10..14]
@@ -92,7 +93,7 @@ module TSDBExplorer
             self.line = record[22..24].strip
             self.engineering_allowance = record[25..26].strip
             self.pathing_allowance = record[27..28].strip
-            self.activity = record[29..40].strip
+            activity_list = record[29..40].strip
             self.performance_allowance = record[41..42].strip
           elsif self.location_type == "LI"
             self.arrival = record[10..14]
@@ -103,7 +104,7 @@ module TSDBExplorer
             self.platform = record[33..35].strip
             self.line = record[36..38].strip
             self.path = record[39..41].strip
-            self.activity = record[42..53].strip
+            activity_list = record[42..53].strip
             self.engineering_allowance = record[54..55].strip
             self.pathing_allowance = record[56..57].strip
             self.performance_allowance = record[58..59].strip
@@ -112,9 +113,14 @@ module TSDBExplorer
             self.public_arrival = record[15..18]
             self.platform = record[19..21].strip
             self.path = record[22..24].strip
-            self.activity = record[25..36].strip
+            activity_list = record[25..36].strip
           else
             raise "Unknown location type '#{self.location_type}'"
+          end
+
+          activities = CIF.parse_activities(activity_list)
+          activities.keys.each do |a|
+            self.send("#{a}=", activities[a])
           end
 
           self.tiploc_instance = nil if self.tiploc_instance == " "
@@ -124,7 +130,6 @@ module TSDBExplorer
           self.public_arrival = nil if self.public_arrival == "0000"
           self.public_departure = nil if self.public_departure == "0000"
           self.line = nil if self.line == ""
-          self.activity = nil if self.activity == ""
           self.path = nil if self.path == ""
           self.platform = nil if self.platform == ""
           self.pathing_allowance = nil if self.pathing_allowance == ""

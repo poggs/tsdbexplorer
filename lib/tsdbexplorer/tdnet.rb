@@ -404,7 +404,7 @@ module TSDBExplorer
 
                 # TODO: How are TIPLOC instances processed?
 
-                mapping = { :arrival => 'scheduled_arrival_time', :public_arrival => 'public_arrival_time', :pass => 'scheduled_pass_time', :departure => 'scheduled_departure_time', :public_departure => 'public_departure_time', :platform => 'CIF_platform', :line => 'CIF_line', :path => 'CIF_path', :engineering_allowance => 'CIF_engineering_allowance', :pathing_allowance => 'CIF_pathing_allowance', :performance_allowance => 'CIF_performance_allowance', :activity => 'CIF_activity' }
+                mapping = { :arrival => 'scheduled_arrival_time', :public_arrival => 'public_arrival_time', :pass => 'scheduled_pass_time', :departure => 'scheduled_departure_time', :public_departure => 'public_departure_time', :platform => 'CIF_platform', :line => 'CIF_line', :path => 'CIF_path', :engineering_allowance => 'CIF_engineering_allowance', :pathing_allowance => 'CIF_pathing_allowance', :performance_allowance => 'CIF_performance_allowance' }
                 location = Hash.new
 
                 location[:basic_schedule_uuid] = basic_schedule[:uuid]
@@ -413,9 +413,13 @@ module TSDBExplorer
                   location[bs_attr] = doc_child_4.attributes[cif_attr].text
                 end
 
-                if location[:activity] == "TB"
+                # Split the CIF activities
+
+                activities = TSDBExplorer::CIF::parse_activities(doc_child_4.attributes['CIF_activity'].text)
+
+                if activities[:activity_tb] == true
                   location[:location_type] = "LO"
-                elsif location[:activity] == "TF"
+                elsif activities[:activity_tf] == true
                   location[:location_type] = "LT"
                 else
                   location[:location_type] = "LI"
