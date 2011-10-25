@@ -22,6 +22,8 @@ class DailyScheduleLocation < ActiveRecord::Base
   belongs_to :daily_schedule, :primary_key => :uuid, :foreign_key => :daily_schedule_uuid
   has_one :tiploc, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
+  default_scope :order => 'seq'
+
   validates_presence_of :daily_schedule_uuid
   validates_inclusion_of :location_type, :in => ['LO','LI','LT']
   validates_presence_of :tiploc_code
