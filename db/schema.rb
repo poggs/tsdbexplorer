@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111013072103) do
+ActiveRecord::Schema.define(:version => 20111020073650) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -142,6 +142,41 @@ ActiveRecord::Schema.define(:version => 20111013072103) do
     t.string   "departure_device_id",    :limit => 8
     t.string   "departure_username",     :limit => 8
     t.string   "event_source",           :limit => 1
+    t.integer  "seq"
+    t.boolean  "activity_ae"
+    t.boolean  "activity_bl"
+    t.boolean  "activity_minusd"
+    t.boolean  "activity_hh"
+    t.boolean  "activity_kc"
+    t.boolean  "activity_ke"
+    t.boolean  "activity_kf"
+    t.boolean  "activity_ks"
+    t.boolean  "activity_op"
+    t.boolean  "activity_or"
+    t.boolean  "activity_pr"
+    t.boolean  "activity_rm"
+    t.boolean  "activity_rr"
+    t.boolean  "activity_minust"
+    t.boolean  "activity_tb"
+    t.boolean  "activity_tf"
+    t.boolean  "activity_ts"
+    t.boolean  "activity_tw"
+    t.boolean  "activity_minusu"
+    t.boolean  "activity_a"
+    t.boolean  "activity_c"
+    t.boolean  "activity_d"
+    t.boolean  "activity_e"
+    t.boolean  "activity_g"
+    t.boolean  "activity_h"
+    t.boolean  "activity_k"
+    t.boolean  "activity_l"
+    t.boolean  "activity_n"
+    t.boolean  "activity_r"
+    t.boolean  "activity_s"
+    t.boolean  "activity_t"
+    t.boolean  "activity_u"
+    t.boolean  "activity_w"
+    t.boolean  "activity_x"
   end
 
   add_index "daily_schedule_locations", ["arrival"], :name => "index_daily_schedule_locations_on_arrival"
@@ -217,9 +252,43 @@ ActiveRecord::Schema.define(:version => 20111013072103) do
     t.integer  "engineering_allowance"
     t.integer  "pathing_allowance"
     t.integer  "performance_allowance"
-    t.string   "activity",              :limit => 12
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "seq"
+    t.boolean  "activity_ae"
+    t.boolean  "activity_bl"
+    t.boolean  "activity_minusd"
+    t.boolean  "activity_hh"
+    t.boolean  "activity_kc"
+    t.boolean  "activity_ke"
+    t.boolean  "activity_kf"
+    t.boolean  "activity_ks"
+    t.boolean  "activity_op"
+    t.boolean  "activity_or"
+    t.boolean  "activity_pr"
+    t.boolean  "activity_rm"
+    t.boolean  "activity_rr"
+    t.boolean  "activity_minust"
+    t.boolean  "activity_tb"
+    t.boolean  "activity_tf"
+    t.boolean  "activity_ts"
+    t.boolean  "activity_tw"
+    t.boolean  "activity_minusu"
+    t.boolean  "activity_a"
+    t.boolean  "activity_c"
+    t.boolean  "activity_d"
+    t.boolean  "activity_e"
+    t.boolean  "activity_g"
+    t.boolean  "activity_h"
+    t.boolean  "activity_k"
+    t.boolean  "activity_l"
+    t.boolean  "activity_n"
+    t.boolean  "activity_r"
+    t.boolean  "activity_s"
+    t.boolean  "activity_t"
+    t.boolean  "activity_u"
+    t.boolean  "activity_w"
+    t.boolean  "activity_x"
   end
 
   add_index "locations", ["arrival"], :name => "index_locations_on_arrival"
@@ -232,6 +301,14 @@ ActiveRecord::Schema.define(:version => 20111013072103) do
     t.string   "queue_name"
     t.string   "message"
     t.integer  "state",      :limit => 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "service_codes", :force => true do |t|
+    t.string   "service_code", :limit => 8
+    t.string   "atoc_code",    :limit => 2
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
