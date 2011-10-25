@@ -28,7 +28,19 @@ describe Location do
 pending
   end
 
-  it "should return true if a location is for pick-up only" do
+  it "should identify locations that that are not for picking up or setting down passengers" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
+    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', '2011-05-22').first
+
+    willesden_bay_to_high_level = willesden_to_stratford.locations.where(:tiploc_code => 'WLSDLUC').first
+    willesden_bay_to_high_level.is_public?.should_not be_true
+    willesden_bay_to_high_level.pickup_only?.should_not be_true
+    willesden_bay_to_high_level.setdown_only?.should_not be_true
+
+  end
+
+  it "should identify locations where the train picks up passengers only" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
     euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('P64437', '2011-05-22').first
@@ -40,7 +52,19 @@ pending
 
   end
 
-  it "should return true if a location is for set-down only" do
+  it "should identify locations where the train picks up and sets down passengers" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
+    euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('P64437', '2011-05-22').first
+
+    milton_keynes_central = euston_to_wolverhampton.locations.where(:tiploc_code => 'MKNSCEN').first
+    milton_keynes_central.is_public?.should be_true
+    milton_keynes_central.pickup_only?.should_not be_true
+    milton_keynes_central.setdown_only?.should_not be_true
+
+  end
+
+  it "should identify locations where the train sets down passengers only" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
     wolverhampton_to_euston = BasicSchedule.runs_on_by_uid_and_date('P64027', '2011-05-22').first
@@ -49,18 +73,6 @@ pending
     watford_junction.is_public?.should be_true
     watford_junction.pickup_only?.should_not be_true
     watford_junction.setdown_only?.should be_true
-
-  end
-
-  it "should return true if a location is a publically advertised calling point" do
-
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
-    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', '2011-05-22').first
-
-    willesden_bay_to_high_level = willesden_to_stratford.locations.where(:tiploc_code => 'WLSDLUC').first
-    willesden_bay_to_high_level.is_public?.should_not be_true
-    willesden_bay_to_high_level.pickup_only?.should_not be_true
-    willesden_bay_to_high_level.setdown_only?.should_not be_true
 
   end
 
