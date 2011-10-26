@@ -72,18 +72,26 @@
     <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>
     <td style="text-align: center;"><%= schedule_point.platform %></td>
     <td style="text-align: center;">
-     <% unless schedule_point.location_type == 'LO' %>
+     <% unless schedule_point.activity_tb == true || schedule_point.activity_u == true %>
       <% if schedule_point.actual_arrival.nil? %>
-       Expected <%= time_only(schedule_point.expected_arrival) %>
+       <% if @schedule.departed_origin? %>
+        Expected <%= time_only(schedule_point.expected_arrival) %>
+       <% else %>
+        Est'd <%= time_only(schedule_point.public_arrival) %>
+       <% end %>
       <% else %>
        Arrived <%= time_only(schedule_point.actual_arrival) %>
       <% end %>
      <% end %>
     </td>
     <td style="text-align: center;">
-     <% unless schedule_point.location_type == 'LT' %>
+     <% unless schedule_point.activity_tf == true || schedule_point.activity_d == true %>
       <% if schedule_point.actual_departure.nil? %>
-       Expected <%= time_only(schedule_point.expected_departure) %>
+       <% if @schedule.departed_origin? %>
+        Expected <%= time_only(schedule_point.expected_departure) %>
+       <% else %>
+        Est'd <%= time_only(schedule_point.public_departure) %>
+       <% end %>
       <% else %>
        Departed <%= time_only(schedule_point.actual_departure) %>
       <% end %>
