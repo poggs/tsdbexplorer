@@ -65,4 +65,33 @@ describe ScheduleHelper do
     end
   end
 
+  it "should output a list of days on which a schedule is valid" do
+
+    expected_data = { 'every day' => [ :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running ],
+                      'every weekday' => [ :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr ],
+                      'weekends' => [ :runs_sa, :runs_su ],
+                      'Monday only' => [ :runs_mo ],
+                      'Tuesday only' => [ :runs_tu ],
+                      'Wednesday only' => [ :runs_we ],
+                      'Thursday only' => [ :runs_th ],
+                      'Friday only' => [ :runs_fr ],
+                      'Saturday only' => [ :runs_sa ],
+                      'Sunday only' => [ :runs_su ],
+                      'Monday and Tuesday' => [ :runs_mo, :runs_tu ],
+                      'Tuesday and Wednesday' => [ :runs_tu, :runs_we ],
+                      'Monday, Tuesday and Wednesday' => [ :runs_mo, :runs_tu, :runs_we ],
+                      'Tuesday, Wednesday and Thursday' => [ :runs_tu, :runs_we, :runs_th ],
+                      'Monday, Tuesday, Wednesday and Thursday' => [ :runs_mo, :runs_tu, :runs_we, :runs_th ],
+                      'Tuesday, Wednesday, Thursday and Friday' => [ :runs_tu, :runs_we, :runs_th, :runs_fr ] }
+
+    expected_data.each do |expected_text,run_days|
+      bs = BasicSchedule.new
+      run_days.each do |day|
+        bs[day] = true
+      end
+      runs_on_days(bs).should eql(expected_text)
+    end
+
+  end
+
 end
