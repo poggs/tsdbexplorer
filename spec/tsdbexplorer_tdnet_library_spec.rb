@@ -345,6 +345,43 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   end
 
+  it "should return an error when processing a change-of-origin report for an unactivated train" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/trust_coo_schedule.cif')
+
+    coo_unactivated_train = TSDBExplorer::TDnet::process_trust_message('000620110723185333TRUST               TRUST DA                    LSHH    512O03MX23201107231853005172220110723185430                   512O03MX2321920000XR2121O   ')
+
+    coo_unactivated_train.status.should eql(:error)
+    coo_unactivated_train.message.should include('COO message for unactivated train 512O03MX23')    
+
+  end
+
+  it "should return an error when processing a change-of-origin report for a train to an unknown location" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/trust_coo_schedule.cif')
+
+    activation = TSDBExplorer::TDnet::process_trust_message('000120110723163915TRUST               TSIA                                512O03MX23201107231639155170220110723183900L059852028051100000020101211000000CO2O03M000005170220110723183900AN2121920000   ')
+    coo_unknown_stanox = TSDBExplorer::TDnet::process_trust_message('000620110723185333TRUST               TRUST DA                    LSHH    512O03MX23201107231853009999920110723185430                   512O03MX2321920000XR2121O   ')
+
+    coo_unknown_stanox.status.should eql(:error)
+    coo_unknown_stanox.message.should include('COO message for train 512O03MX23')
+    coo_unknown_stanox.message.should include('unknown STANOX 99999')
+
+  end
+
+  it "should return an error when processing a change-of-origin report for a train to a location not in the schedule" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/trust_coo_schedule.cif')
+
+    activation = TSDBExplorer::TDnet::process_trust_message('000120110723163915TRUST               TSIA                                512O03MX23201107231639155170220110723183900L059852028051100000020101211000000CO2O03M000005170220110723183900AN2121920000   ')
+    coo_nonschedule_stanox = TSDBExplorer::TDnet::process_trust_message('000620110723185333TRUST               TRUST DA                    LSHH    512O03MX23201107231853001713220110723185430                   512O03MX2321920000XR2121O   ')
+
+    coo_nonschedule_stanox.status.should eql(:error)
+    coo_nonschedule_stanox.message.should include('COO message for train 512O03MX23')
+    coo_nonschedule_stanox.message.should include('changes origin to LEEDS which is not in the schedule')
+
+  end
+
   it "should process a train change-of-identity report"
   it "should process a train change-of-location report"
 

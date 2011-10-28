@@ -305,15 +305,15 @@ module TSDBExplorer
     def TDnet.process_trust_change_of_origin(train_identity, timestamp, reason_code, location_stanox)
 
       schedule = DailySchedule.find_by_train_identity_unique(train_identity)
-      return Struct.new(:status, :message).new(:error, 'Message for unactivated train ' + train_identity + " - ignoring") if schedule.nil?
+      return Struct.new(:status, :message).new(:error, 'COO message for unactivated train ' + train_identity + " - ignoring") if schedule.nil?
 
       original_origin = schedule.origin
 
       new_origin_location = Tiploc.find_by_stanox(location_stanox)
-      return Struct.new(:status, :message).new(:error, 'COO message for ' + train_identity + ' has an unknown STANOX ' + location_stanox) if new_origin_location.nil?
+      return Struct.new(:status, :message).new(:error, 'COO message for train ' + train_identity + ' has an unknown STANOX ' + location_stanox) if new_origin_location.nil?
 
       new_origin = schedule.locations.where(:tiploc_code => new_origin_location.tiploc_code).first
-      return Struct.new(:status, :message).new(:error, 'COO message for ' + train_identity + ' changes origin to ' + new_origin.tiploc_code + ' which is not in the schedule') if new_origin.nil?
+      return Struct.new(:status, :message).new(:error, 'COO message for train ' + train_identity + ' changes origin to ' + new_origin_location.tiploc_code + ' which is not in the schedule') if new_origin.nil?
 
       new_origin.location_type = 'LO'
       new_origin.save
