@@ -133,6 +133,8 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     end
   end
 
+  it "should set the expected arrival and departure times of an activated train to the scheduled arrival and departure times"
+
   it "should not allow a train activation message for a date on which the schedule does not exist" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-13', '722N53MW13')

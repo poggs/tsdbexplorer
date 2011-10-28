@@ -158,4 +158,39 @@ module ScheduleHelper
 
   end
 
+
+  # Return the days a schedule is valid in textual format
+
+  def runs_on_days(schedule)
+
+    text = nil
+
+    if schedule[:runs_mo] && schedule[:runs_tu] && schedule[:runs_we] && schedule[:runs_th] && schedule[:runs_fr] && schedule[:runs_sa] && schedule[:runs_su]
+      text = "every day"
+    elsif schedule[:runs_mo] && schedule[:runs_tu] && schedule[:runs_we] && schedule[:runs_th] && schedule[:runs_fr] && !schedule[:runs_sa] && !schedule[:runs_su]
+      text = "every weekday"
+    elsif !schedule[:runs_mo] && !schedule[:runs_tu] && !schedule[:runs_we] && !schedule[:runs_th] && !schedule[:runs_fr] && schedule[:runs_sa] && schedule[:runs_su]
+      text = "weekends"
+    else
+
+      days = Array.new
+      mapping = { :runs_mo => 'Monday', :runs_tu => 'Tuesday', :runs_we => 'Wednesday', :runs_th => 'Thursday', :runs_fr => 'Friday', :runs_sa => 'Saturday', :runs_su => 'Sunday' }
+      mapping.each do |k,v|
+        days.push v if schedule[k] == true
+      end
+
+      if days.count == 1
+        text = days.first + " only"
+      elsif days.count == 2
+        text = days.join(" and ")
+      else
+        text = days[0..(days.count-2)].join(", ") + " and " + days.last
+      end
+
+    end
+
+    return text
+
+  end
+
 end
