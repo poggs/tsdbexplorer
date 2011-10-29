@@ -79,17 +79,17 @@ module TSDBExplorer
         when "0003"   # Train movement
           result = process_trust_movement(message[:train_id], message[:event_type], message[:actual_timestamp], message[:location_stanox], message[:offroute_indicator], message[:platform], message[:line_indicator], message[:planned_event_source])
         when "0004"   # Unidentified train report
-          result = Struct.new(:status, :message).new(:status => :warn, :message => "Unidentified Train report not processed - pending support")
+          result = Struct.new(:status, :message).new(:warn, "Unidentified Train report not processed - pending support")
         when "0005"   # Train reinstatement report
           result = process_trust_reinstatement(message[:train_id], message[:reinstatement_timestamp])
         when "0006"   # Change of Origin report
           result = process_trust_change_of_origin(message[:train_id], message[:change_of_origin_timestamp], message[:reason_code], message[:location_stanox])
         when "0007"   # Change of Identity report
-          result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Identity report not processed - pending support")
+          result = Struct.new(:status, :message).new(:warn, "Change of Identity report not processed - pending support")
         when "0008"   # Change of Location report
-          result = Struct.new(:status, :message).new(:status => :warn, :message => "Change of Location report not processed - pending support")
+          result = Struct.new(:status, :message).new(:warn, "Change of Location report not processed - pending support")
         else
-          result = Struct.new(:status, :message).new(:status => :warn, :message => "Received unsupported message type #{message[:message_type]}")
+          result = Struct.new(:status, :message).new(:warn, "Received unsupported message type #{message[:message_type]}")
       end
 
       return result

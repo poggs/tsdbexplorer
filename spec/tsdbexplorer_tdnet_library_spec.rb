@@ -272,7 +272,15 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     multi_tiploc_point.actual_pass.should eql(Time.parse('2011-05-22 10:45:00'))
   end
 
-  it "should process an unidentified train report"
+  it "should process an unidentified train report" do
+    # TODO: Implement support for unidentified train reports, which depends on seeing an actual report in TRUST data!
+    data = "000420060105100109ABCDEFGHIJKLMNOPQMMMABCDEFGHIJKLMNOPQNNNAAAABBCCCCCCDDEE12342007030210152512345AUF12AA  "
+    unidentified_train = TSDBExplorer::TDnet::process_trust_message(data)
+    unidentified_train.status.should eql(:warn)
+    unidentified_train.message.should include('Unidentified Train')
+    unidentified_train.message.should include('not processed')
+    unidentified_train.message.should include('pending support')
+  end
 
   it "should process a train reinstatement report" do
 
@@ -347,8 +355,21 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   end
 
-  it "should process a train change-of-identity report"
-  it "should process a train change-of-location report"
+  it "should process a train change-of-identity report" do
+    change_of_identity = TSDBExplorer::TDnet::process_trust_message('000720110724113937TRUST               TOPS                        X107360 066K051H2420110724113900066K051H24066K081H2453790125NYV')
+    change_of_identity.status.should eql(:warn)
+    change_of_identity.message.should include('Change of Identity')
+    change_of_identity.message.should include('report not processed')
+    change_of_identity.message.should include('pending support')
+  end
+
+  it "should process a train change-of-location report" do
+    change_of_location = TSDBExplorer::TDnet::process_trust_message('000820060105100109ABCDEFGHIJKLMNOPQMMMABCDEFGHIJKLMNOPQNNNAAAABBCCCCCCDDEE121456789020070302101525123452007030210152612345200601041015261214567890ABCDEFGHABC')
+    change_of_location.status.should eql(:warn)
+    change_of_location.message.should include('Change of Location')
+    change_of_location.message.should include('report not processed')
+    change_of_location.message.should include('pending support')
+  end
 
 
   # Real-time data processing
