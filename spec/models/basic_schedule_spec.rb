@@ -58,4 +58,46 @@ describe BasicSchedule do
     schedule.is_stp_cancelled?.should be_true
   end
 
+  it "should have a method which returns a schedule and all alterations to it" do
+    BasicSchedule.should respond_to(:all_schedules_by_uid)
+  end
+
+  it "should return only a schedule where no alterations exist" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.all_schedules_by_uid('C43391')
+    schedule.count.should eql(1)
+    schedule.first.stp_indicator.should eql('P')
+  end
+
+  it "should return a schedule and all alterations where a permanent schedule and an overlay exists" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part1.cif')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part2.cif')
+    schedule = BasicSchedule.all_schedules_by_uid('C43158')
+    schedule.count.should eql(2)
+    schedule.first.stp_indicator.should eql('P')
+    schedule.last.stp_indicator.should eql('O')
+  end
+
+  it "should return only a schedule where an STP schedule and no alterations exist" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part2.cif')
+    schedule = BasicSchedule.all_schedules_by_uid('C43158')
+    schedule.count.should eql(1)
+    schedule.first.stp_indicator.should eql('O')
+  end
+
+  it "should return an STP schedule and all alterations where they exist" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_train_with_overlays.cif')
+    schedule = BasicSchedule.all_schedules_by_uid('G31158')
+    schedule.count.should eql(33)
+    count = 0
+    schedule.each do |s|
+      if count == 0
+        s.stp_indicator.should eql('P')
+      else
+        s.stp_indicator.should eql('O')
+      end
+      count = count + 1
+    end
+  end
+
 end
