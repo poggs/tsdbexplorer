@@ -193,32 +193,6 @@ module TSDBExplorer
   end
 
 
-  # Convert a time in HHMM(H) format to a number of seconds since midnight
-
-  def TSDBExplorer.time_to_secs(time)
-
-    time.nil? ? nil : Time.parse(TSDBExplorer::normalise_time(time)).to_i - Time.now.midnight.to_i
-
-  end
-
-
-  # Convert a number of seconds since midnight to a time in HHMM(H) format
-
-  def TSDBExplorer.secs_to_time(secs)
-
-    time = nil
-
-    unless secs.nil?
-      intermediate_time = Time.now.midnight + secs.seconds
-      time = intermediate_time.strftime('%H%M')
-      time = time + "H" if intermediate_time.sec == 30
-    end
-
-    return time
-
-  end
-
-
   # Sort a list of trains on arrival, pass and departure times
 
   def TSDBExplorer.train_sort(a, b)

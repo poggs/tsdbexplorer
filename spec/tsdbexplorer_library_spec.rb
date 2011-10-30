@@ -115,26 +115,6 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
-  it "should convert a time in HHMM to a number of seconds since midnight" do
-
-    TSDBExplorer.time_to_secs("0000").should eql(0)
-    TSDBExplorer.time_to_secs("0000H").should eql(30)
-    TSDBExplorer.time_to_secs("1200").should eql(43200)
-    TSDBExplorer.time_to_secs("2359").should eql(86340)
-
-    TSDBExplorer.time_to_secs(nil).should eql(nil)
-
-  end
-
-  it "should convert a number of seconds since midnight in to a time in HHMM" do
-
-    TSDBExplorer.secs_to_time(0).should eql("0000")
-    TSDBExplorer.secs_to_time(30).should eql("0000H")
-    TSDBExplorer.secs_to_time(43200).should eql("1200")
-    TSDBExplorer.secs_to_time(86340).should eql("2359")
-
-  end
-
   it "should convert an allowance time to an integer number of seconds" do
 
     TSDBExplorer.normalise_allowance_time("0").should eql(0)
