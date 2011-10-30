@@ -26,6 +26,7 @@ class BasicSchedule < ActiveRecord::Base
 
   scope :runs_on_wday, lambda { |wday| where([ :runs_su, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa ][wday] => true) }
   scope :runs_on, lambda { |date| where('? BETWEEN runs_from AND runs_to', date).runs_on_wday(Date.parse(date).wday) }
+  scope :all_schedules_by_uid, lambda { |train_uid| where(:train_uid => train_uid).order('stp_indicator DESC') }
 
   def origin
     self.locations.where(:location_type => 'LO').first
