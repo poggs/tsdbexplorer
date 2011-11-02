@@ -38,9 +38,4 @@ describe MainController do
     get :search_identity, :target_date => '2011-01-01', :schedule => '1Z99'
   end
 
-  it "should allow searching for trains by location" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
-    get :search_location, :location => 'EUSTON'
-  end
-
 end

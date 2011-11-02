@@ -1,0 +1,12 @@
+<h1>Select a location</h1>
+
+<p>Your entered <strong><%= params[:text] %></strong>.  We couldn't find a station with that name - did you mean one of these?</p>
+
+<ul>
+ <% @matches.each do |m| %>
+ <% next unless !m.crs_code.blank? %>
+ <li><%= link_to "#{m.crs_code}: #{tidy_text(m.tps_description)}", :controller => 'location', :location => m.crs_code %></li>
+ <% end %>
+</ul>
+
+<p>To save time, you can always enter the three letter code for a station.  For example, type EUS rather than London Euston.</p>

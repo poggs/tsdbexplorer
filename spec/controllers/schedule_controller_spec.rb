@@ -25,11 +25,29 @@ describe ScheduleController do
 
   it "should display a planned schedule" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    schedule = BasicSchedule.first
-    get :index, :uuid => schedule.uuid
+    get :schedule_by_uid, :uid => 'C43391'
   end
 
-  it "should return an error if passed an invalid planned schedule"
+  it "should return an error if passed an invalid schedule" do
+    get :schedule_by_uid, :uid => 'Z99999'
+    response.code.should eql("404")
+    response.body.should =~ /schedule Z99999/
+  end
+
+  it "should return an error if passed a valid schedule and invalid run date" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'C43391', :run_date => '2010-12-13'
+    response.code.should eql("404")
+    response.body.should =~ /schedule C43391/
+    response.body.should =~ /running on 2010-12-13/
+  end
+
+  it "should return an error if passed an invalid schedule and invalid run date" do
+    get :schedule_by_uid_and_run_date, :uid => 'Z99999', :run_date => '2011-01-01'
+    response.code.should eql("404")
+    response.body.should =~ /schedule Z99999/
+  end
+
   it "should display an as-run schedule"
   it "should return an error if passed an invalid as-run schedule"
 

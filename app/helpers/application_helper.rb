@@ -435,10 +435,27 @@ module ApplicationHelper
   def date_range_or_date(range_start, range_end)
 
     if range_start == range_end
-      "On #{range_end}"
+      "on #{range_end}"
     else
-      "From #{range_start} to #{range_end}"
+      "from #{range_start} to #{range_end}"
     end
+
+  end
+
+
+  # Given two dates, display 'from XXXX to YYYY on DATE' if the days are identical, otherwise display 'from XXXX on DATE1 to YYYY on DATE2' if the dates are not identical
+
+  def date_range(date1, date2)
+
+    text = nil
+
+    if date1.to_date == date2.to_date
+      text = "between #{date1.strftime('%H%M')} and #{date2.strftime('%H%M')} on #{date1.strftime('%A %d %B %Y')}"
+    else
+      text = "between #{date1.strftime('%H%M')} on #{date1.strftime('%A %d %B %Y')} and #{date2.strftime('%H%M')} on #{date2.strftime('%A %d %B %Y')}"
+    end
+
+    return text
 
   end
 

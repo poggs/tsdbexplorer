@@ -1,0 +1,7 @@
+<%= render :partial => 'schedule_header' %>
+
+<% if @as_run.nil? %>
+ <%= render :partial => 'schedule_locations' %>
+<% else %>
+ <%= render :partial => 'schedule_locations_realtime' %>
+<% end %>

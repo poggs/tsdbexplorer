@@ -1,0 +1,77 @@
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $(document).ready( function() {
+   $("tr:nth-child(odd)").addClass("odd");
+   $('div.twisty').twisty();
+  });
+ </script>
+<% end %>
+
+<p>Displaying real-time information</p>
+
+<table>
+
+<% if session[:mode] == 'advanced' %>
+
+ <thead>
+  <tr>
+   <th>&nbsp;</th>
+   <th>&nbsp;</th>
+   <th colspan="3">Arrival</th>
+   <th colspan="3">Departure</th>
+  </tr>
+  <tr>
+   <th>Location</th>
+   <th>Platform</th>
+   <th>WTT</th>
+   <th>Public</th>
+   <th>WTT</th>
+   <th>Public</th>
+  </tr>
+ </thead>
+ <tbody>
+  <% @as_run.locations.each do |l| %>
+   <tr>
+    <td><%= tidy_text(decode_tiploc(l)) %></td>
+    <td><%=raw l.platform || "&nbsp;" %></td>
+    <% if l.pass? %>
+     <td colspan="4" style="text-align: center;">PASS <%= l.pass %></td>
+    <% else %>
+     <td><%= time_only(l.arrival) %></td>
+     <td><%= time_only(l.public_arrival) %></td>
+     <td><%= time_only(l.actual_arrival) %></td>
+     <td><%= time_only(l.departure) %></td>
+     <td><%= time_only(l.public_departure) %></td>
+     <td><%= time_only(l.actual_departure) %></td>
+    <% end %>
+   </tr>
+  <% end %>
+ </tbody>
+
+<% else %>
+ <thead>
+  <tr>
+   <th>Location</th>
+   <th style="text-align: center;">Platform</th>
+   <th>Arrival</th>
+   <th>Departure</th>
+  </tr>
+ </thead>
+ <tbody>
+  <% @as_run.locations.each do |l| %>
+   <% if l.is_public? %>
+    <tr>
+     <td><%= tidy_text(decode_tiploc(l)) %></td>
+     <td style="text-align: center;"><%=raw l.platform || "&nbsp;" %></td>
+     <%= format_time(l, 'arrival') %>
+     <%= format_time(l, 'departure') %>
+    </tr>
+   <% end %>
+  <% end %>
+ </tbody>
+
+<% end %>
+
+</table>
+
+<%= render :partial => 'common/schedule_key' %>

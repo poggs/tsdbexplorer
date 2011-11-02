@@ -1,0 +1,50 @@
+<%= render :partial => 'common/twisty_javascript'%>
+
+<h1>Services at <%= tidy_text(@location.tps_description) %></h1>
+<h2>Between <%= date_range(@range[:from], @range[:to]) %></h2>
+
+<% if session[:mode] == "advanced" %>
+ <div class="twisty closed">
+  <div>Technical information</div>
+  <div>
+   <ul>
+    <li><strong>TIPLOC:</strong> <%= @location.tiploc_code %></li>
+    <li><strong>CRS:</strong> <%= @location.crs_code %></li>
+    <li><strong>NALCO:</strong> <%= @location.nalco %></li>
+    <li><strong>STANOX:</strong> <%= @location.stanox %></li>
+   </ul>
+  </div>
+ </div>
+
+ <p></p>
+<% end %>
+
+<div>
+ <div style="text-align: left; float: left;"><%= link_to "< 1h earlier", :date => (@datetime - 1.hour).to_s(:yyyymmdd), :time => (@datetime - 1.hour).to_s(:hhmm) %></div>
+ <div style="text-align: right;"><%= link_to "1h later >", :date => (@datetime + 1.hour).to_s(:yyyymmdd), :time => (@datetime + 1.hour).to_s(:hhmm) %></div>
+</div>
+
+<table>
+ <thead>
+  <tr>
+   <th>Info</th>
+   <th>Arrival</th>
+   <th>From</th>
+   <th>Platform</th>
+   <th>To</th>
+   <th>Departure</th>
+  </tr>
+ </thead>
+ <tbody>
+  <% @schedule.sort { |a,b| TSDBExplorer::train_sort(a,b) }.each do |s| %>
+   <tr>
+    <td><%= link_to (image_tag 'information.png'), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :run_date => @datetime.to_s(:yyyymmdd) %></td>
+    <td><%= s.public_arrival %></td>
+    <td><%= tidy_text(decode_tiploc(s.basic_schedule.origin)) %></td>
+    <td><%= s.platform %></td>
+    <td><%= tidy_text(decode_tiploc(s.basic_schedule.terminate)) %></td>
+    <td><%= s.public_departure %></td>
+   </tr>
+  <% end %>
+ </tbody>
+</table>

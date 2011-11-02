@@ -17,7 +17,7 @@
 #  $Id$
 #
 
-Time::DATE_FORMATS[:iso] = '%Y-%m-%d %H:%M:%S'
-Time::DATE_FORMATS[:yyyymmdd] = '%Y-%m-%d'
-Time::DATE_FORMATS[:hhmm] = '%H:%M'
-Date::DATE_FORMATS[:default] = lambda { |date| "#{date.strftime('%A')} #{date.day.ordinalize} #{date.strftime('%B %Y')}" }
+require 'spec_helper'
+
+describe LocationHelper do
+end

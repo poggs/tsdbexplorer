@@ -120,4 +120,9 @@ describe ApplicationHelper do
 
   it "should return the days of the week a service runs as text"
 
+  it "should display the simplest representation of the time between two dates" do
+    date_range(Time.parse('2011-01-01 09:00:00'), Time.parse('2011-01-01 10:00:00')).should eql('between 0900 and 1000 on Saturday 01 January 2011')
+    date_range(Time.parse('2011-01-01 23:00:00'), Time.parse('2011-01-02 01:00:00')).should eql('between 2300 on Saturday 01 January 2011 and 0100 on Sunday 02 January 2011')
+  end
+
 end

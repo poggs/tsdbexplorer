@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111020073650) do
+ActiveRecord::Schema.define(:version => 20111026173101) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -366,14 +366,15 @@ ActiveRecord::Schema.define(:version => 20111020073650) do
   add_index "temporary_speed_restrictions", ["tsr_id"], :name => "index_temporary_speed_restrictions_on_tsr_id"
 
   create_table "tiplocs", :force => true do |t|
-    t.string "tiploc_code",     :limit => 7
-    t.string "nalco",           :limit => 6
-    t.string "tps_description", :limit => 26
-    t.string "stanox",          :limit => 5
-    t.string "crs_code",        :limit => 3
-    t.string "description",     :limit => 16
-    t.float  "geo_lat"
-    t.float  "geo_lon"
+    t.string  "tiploc_code",     :limit => 7
+    t.string  "nalco",           :limit => 6
+    t.string  "tps_description", :limit => 26
+    t.string  "stanox",          :limit => 5
+    t.string  "crs_code",        :limit => 3
+    t.string  "description",     :limit => 16
+    t.float   "geo_lat"
+    t.float   "geo_lon"
+    t.boolean "is_public"
   end
 
   add_index "tiplocs", ["crs_code"], :name => "index_tiplocs_on_crs_code"

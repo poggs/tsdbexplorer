@@ -94,4 +94,46 @@ describe ScheduleHelper do
 
   end
 
+  it "should return the scheduled time for a location when no predicted or actual time is known" do
+    location = DailyScheduleLocation.new(:arrival => Time.parse('2011-10-30 09:00:00'), :expected_arrival => nil, :actual_arrival => nil)
+    output = format_time(location, 'arrival')
+    output.should include('0900')
+    output.should match(/class=".*scheduled.*"/)
+  end
+
+  it "should return the expected time for a location where it is available and no actual time is known" do
+    location = DailyScheduleLocation.new(:arrival => Time.parse('2011-10-30 09:00:00'), :expected_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => nil)
+    output = format_time(location, 'arrival')
+    output.should include('0900')
+    output.should match(/class=".*expected.*"/)
+  end
+
+  it "should return the actual time for a location where it is available" do
+    location = DailyScheduleLocation.new(:arrival => Time.parse('2011-10-30 09:00:00'), :expected_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 09:00:00'))
+    output = format_time(location, 'arrival')
+    output.should include('0900')
+    output.should match(/class=".*actual.*"/)
+  end
+
+  it "should identify where the actual time for a location is more than -3m from the scheduled time" do
+    location = DailyScheduleLocation.new(:arrival => Time.parse('2011-10-30 09:00:00'), :expected_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 08:50:00'))
+    output = format_time(location, 'arrival')
+    output.should include('0850')
+    output.should match(/class="actual early"/)
+  end
+
+  it "should identify where the actual time for a location is between -3m and +3m of the scheduled time" do
+    location = DailyScheduleLocation.new(:arrival => Time.parse('2011-10-30 09:00:00'), :expected_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 08:58:00'))
+    output = format_time(location, 'arrival')
+    output.should include('0858')
+    output.should match(/class="actual ontime"/)
+  end
+
+  it "should identify where the actual time for a location is more than +3m from the scheduled time" do
+    location = DailyScheduleLocation.new(:arrival => Time.parse('2011-10-30 09:00:00'), :expected_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 09:04:00'))
+    output = format_time(location, 'arrival')
+    output.should include('0904')
+    output.should match(/class="actual late"/)
+  end
+
 end

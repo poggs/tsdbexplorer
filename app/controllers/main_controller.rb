@@ -29,6 +29,7 @@ class MainController < ApplicationController
   end
 
 
+
   # Search for a schedule by train identity or schedule UID
 
   def search_identity
@@ -58,50 +59,6 @@ class MainController < ApplicationController
   end
 
 
-  # Search for a schedule by location
-
-  def search_location
-
-    @location = find_tiploc_for_text(params[:location])
-
-    if @location.nil? || @location == Array.new
-      redirect_to :back, :flash => { :warn => "Couldn't find that location"  }
-    elsif @location.is_a? ActiveRecord::Relation
-      render 'choose_location'
-    else
-
-      @time = Time.now
-      @date = Date.today
-
-      begin
-        @time = Time.parse(params[:target_date] + " " + params[:target_time])
-        @date = Date.parse(params[:target_date])
-      rescue
-      end
-
-      @range = Hash.new
-      @range[:from] = @time - 30.minutes
-      @range[:to] = @time + 1.hour
-
-      @schedule = Location.where(:tiploc_code => @location.tiploc_code).runs_on(@date.to_s(:iso))
-
-      if advanced_mode?
-        @schedule = @schedule.passes_between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M'))
-      else
-        @schedule = @schedule.between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M')).only_passenger
-      end
-
-    end
-
-  end
-
-
-  # Present a list of locations and allow one to be chosen
-
-  def choose_location
-  end
-
-
   # Present a setup/welcome page if there are no BasicSchedules, otherwise redirect back to the main page
 
   def setup
@@ -111,57 +68,10 @@ class MainController < ApplicationController
   end
 
 
-  # Display a single schedule
-
-  def schedule
-
-    @schedule = BasicSchedule.find_by_uuid(params[:uuid])
-
-    render 'common/_schedule'
-
-  end
-
-
   # Display the disclaimer
 
   def disclaimer
   end
 
-
-  # Search the TIPLOC records for a value
-
-  def search
-
-    if params[:term].length == 3
-      conditions = [ 'crs_code = ?', params[:term] ]
-    else
-      conditions = [ 'tiploc_code LIKE ? OR tps_description LIKE ?', '%' + params[:term].upcase + '%', '%' + params[:term].upcase + '%' ]
-    end
-
-    matches = Tiploc.find(:all, :conditions => conditions, :limit => 25).collect { |m| { :id => m.tiploc_code, :label => m.tps_description + " (" + (m.crs_code.blank? ? m.tiploc_code : m.crs_code) + ")", :value => m.tiploc_code } }
-
-    render :json => matches
-
-  end
-
-  private
-
-
-  # Find a location by looking for an exact CRS code or TIPLOC match, falling back on a fuzzy match on the description
-
-  def find_tiploc_for_text(text)
-
-    if text.length == 3
-      location = Tiploc.find_by_crs_code(text.upcase)
-    else
-      location = Tiploc.find_by_tiploc_code(text)
-      if location.nil?
-        location = Tiploc.where('tps_description LIKE :search_text', { :search_text => '%' + text.upcase + '%' }).limit(25)
-      end
-    end
-
-    return location
-
-  end
 
 end

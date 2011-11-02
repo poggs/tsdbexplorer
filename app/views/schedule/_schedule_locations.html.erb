@@ -1,0 +1,72 @@
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $(document).ready( function() {
+   $("tr:nth-child(odd)").addClass("odd");
+   $('div.twisty').twisty();
+  });
+ </script>
+<% end %>
+
+<table>
+
+<% if session[:mode] == 'advanced' %>
+
+ <thead>
+  <tr>
+   <th>&nbsp;</th>
+   <th>&nbsp;</th>
+   <th colspan="2">Arrival</th>
+   <th colspan="2">Departure</th>
+  </tr>
+  <tr>
+   <th>Location</th>
+   <th>Platform</th>
+   <th>WTT</th>
+   <th>Public</th>
+   <th>WTT</th>
+   <th>Public</th>
+  </tr>
+ </thead>
+ <tbody>
+  <% @schedule.locations.each do |l| %>
+   <tr>
+    <td><%= tidy_text(decode_tiploc(l)) %></td>
+    <td><%=raw l.platform || "&nbsp;" %></td>
+    <% if l.pass? %>
+     <td colspan="4" style="text-align: center;">PASS <%= l.pass %></td>
+    <% else %>
+     <td><%= l.arrival %></td>
+     <td><%= l.public_arrival %></td>
+     <td><%= l.departure %></td>
+     <td><%= l.public_departure %></td>
+    <% end %>
+   </tr>
+  <% end %>
+ </tbody>
+
+<% else %>
+
+ <thead>
+  <tr>
+   <th>Location</th>
+   <th>Platform</th>
+   <th>Arrival</th>
+   <th>Departure</th>
+  </tr>
+ </thead>
+ <tbody>
+  <% @schedule.locations.each do |l| %>
+   <% if l.is_public? %>
+    <tr>
+     <td><%= tidy_text(decode_tiploc(l)) %></td>
+     <td><%=raw l.platform || "&nbsp;" %></td>
+     <td><%= l.public_arrival %></td>
+     <td><%= l.public_departure %></td>
+    </tr>
+   <% end %>
+  <% end %>
+ </tbody>
+
+<% end %>
+
+</table>

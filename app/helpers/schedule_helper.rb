@@ -19,6 +19,8 @@
 
 module ScheduleHelper
 
+  include ApplicationHelper
+
   # Return icons for the type of catering available on a train
 
   def catering_icon(code)
@@ -190,6 +192,67 @@ module ScheduleHelper
     end
 
     return text
+
+  end
+
+
+  def run_details(schedule)
+
+    if schedule.runs_from == schedule.runs_to
+      "#{date_range_or_date(@schedule.runs_from, @schedule.runs_to)} only"
+    else
+      "#{runs_on_days(@schedule)} #{date_range_or_date(@schedule.runs_from, @schedule.runs_to)}"
+    end
+
+  end
+
+
+  # Return the scheduled, expected or actual time for the arrival, passing or departure time
+
+  def format_time(location, type)
+
+    html_class = nil
+    value = nil
+
+    if ['arrival', 'pass', 'departure'].include? type
+
+      scheduled = location.send(type)
+      expected = location.send("expected_" + type)
+      actual = location.send("actual_" + type)
+
+      if !actual.nil?
+        if (actual - scheduled) >= 180
+          html_class = "actual late"
+        elsif (actual - scheduled) >= -180 && (actual - scheduled) < 180
+          html_class = "actual ontime"
+        else
+          html_class = "actual early"
+        end
+        value = actual
+      elsif !expected.nil?
+        if (expected - scheduled) >= 180
+          html_class = "expected late"
+        elsif (expected - scheduled) >= -180 && (expected - scheduled) < 180
+          html_class = "expected ontime"
+        else
+          html_class = "expected early"
+        end
+        value = expected
+      else !scheduled.nil?
+        value = scheduled
+        html_class = "scheduled"
+      end
+
+      value = time_only(value)
+
+    else
+
+      html_class = "error"
+      value = "ERROR"
+
+    end
+
+    return content_tag(:td, value, :class => html_class)
 
   end
 
