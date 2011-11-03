@@ -26,7 +26,7 @@ Tsdbexplorer::Application.routes.draw do
   match '/location/:location/:date', :controller => 'location', :action => 'index'
   match '/location/:location', :controller => 'location', :action => 'index'
 
-  match '/schedule/:uid/:run_date', :controller => 'schedule', :action => 'schedule_by_uid_and_run_date'
+  match '/schedule/:uid/:date', :controller => 'schedule', :action => 'schedule_by_uid_and_run_date'
   match '/schedule/:uid', :controller => 'schedule', :action => 'schedule_by_uid'
 
   match '/actual/:uuid', :controller => 'schedule', :action => 'actual'
