@@ -53,7 +53,7 @@ class ScheduleController < ApplicationController
 
     # If exactly one schedule has been returned, render the schedule page, otherwise render the default list of schedules
 
-    redirect_to :controller => 'schedule', :action => 'index', :uuid => @schedule.first.uuid if @schedule.count == 1
+    redirect_to :controller => 'schedule', :action => 'schedule_by_uid', :uid => @schedule.first.train_uid if @schedule.count == 1
 
     @location = Tiploc.find_by_tiploc_code(params[:location])
 
