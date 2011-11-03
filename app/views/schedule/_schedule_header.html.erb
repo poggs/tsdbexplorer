@@ -2,6 +2,7 @@
  <div id="mode"><%= mode_icon_for(@schedule.status) %></div>
  <div id="headline"><%= time_only(@schedule.origin.public_departure) || @schedule.origin.departure %> <%= tidy_text(decode_tiploc(@schedule.origin)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate)) %></div>
 <% unless @schedule.atoc_code == 'ZZ' %>
- <div id="operator">Operated by <%= decode_toc(@schedule.atoc_code) %></div>
+ <div id="operator"><%= decode_toc(@schedule.atoc_code) %></div>
 <% end %>
 </div>
+

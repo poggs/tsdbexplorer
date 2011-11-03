@@ -7,7 +7,11 @@
  </script>
 <% end %>
 
-<p>Displaying real-time information</p>
+<% if @as_run.departed_origin? %>
+ <p>Real-time information about this train is shown in the schedule below.</p>
+<% else %>
+ <p>Further information on this train will be available when it has departed <%= tidy_text(decode_tiploc(@as_run.origin)) %>.</p>
+<% end %>
 
 <table>
 

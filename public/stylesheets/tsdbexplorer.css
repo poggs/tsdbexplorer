@@ -137,20 +137,21 @@ h1 {
 }
 
 #service_detail {
-  padding-bottom: 8px;
+  min-height: 68px;
 }
 
 #service_detail #headline {
+  padding-top: 8px;
   font-size: 2em;
 }
 
 #service_detail #operator {
-  font-size: 1.25em;
+  font-size: 1.5em;
   font-weight: bold;
 }
 
 #service_detail #mode {
-  float: right;
+  float: left;
 }
 
 #service_detail #alert {
