@@ -15,8 +15,8 @@
 <% if advanced_mode? %>
 
 <div id="search">
- <form action="<%= url_for :controller => 'main', :action => 'search_identity' %>">
-  <p>Show me train <input type="text" id="schedule" name="schedule" value="<%= params[:schedule] %>" /> on <input type="text" name="target_date" size="11" value="<%= @time.strftime('%Y-%m-%d') %>"/> <input type="submit" value="Go" /></p>
+ <form action="<%= url_for :controller => 'schedule', :action => 'search' %>">
+  <p>Show me train <input type="text" id="schedule" name="schedule" value="<%= params[:schedule] %>" /> on <input type="text" name="date" size="11" value="<%= @time.strftime('%Y-%m-%d') %>"/> <input type="submit" value="Go" /></p>
  </form>
 </div>
 

@@ -29,36 +29,6 @@ class MainController < ApplicationController
   end
 
 
-
-  # Search for a schedule by train identity or schedule UID
-
-  def search_identity
-
-    @time = Time.now
-
-    @schedule = BasicSchedule
-
-    unless params[:target_date].blank?
-      @schedule = @schedule.runs_on(params[:target_date])
-    end
-
-    # Try a regex match on the search parameters, and look up by UID or identity as appropriate
-
-    if params[:schedule].match(/^\w\d{5}$/)
-      @schedule = @schedule.find_all_by_train_uid(params[:schedule].upcase)
-    elsif params[:schedule].match(/^\d\w\d{2}$/) 
-      @schedule = @schedule.find_all_by_train_identity(params[:schedule].upcase)
-    end
-
-    # If exactly one schedule has been returned, render the schedule page, otherwise render the default list of schedules
-
-    redirect_to :controller => 'schedule', :action => 'index', :uuid => @schedule.first.uuid if @schedule.count == 1
-
-    @location = Tiploc.find_by_tiploc_code(params[:location])
-
-  end
-
-
   # Present a setup/welcome page if there are no BasicSchedules, otherwise redirect back to the main page
 
   def setup

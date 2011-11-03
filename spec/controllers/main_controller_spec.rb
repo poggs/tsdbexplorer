@@ -34,8 +34,4 @@ describe MainController do
     response.body.should =~ /You will need some CIF timetable data/
   end
 
-  it "should allow a searching for a train by a train UID or train identity" do
-    get :search_identity, :target_date => '2011-01-01', :schedule => '1Z99'
-  end
-
 end

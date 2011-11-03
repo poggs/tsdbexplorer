@@ -1,0 +1,9 @@
+<h1>Select a schedule</h1>
+
+<p>Your entered <strong><%= params[:schedule] %></strong>.  We found more than one schedule that matched - did you mean one of these?</p>
+
+<ul>
+ <% @schedule.each do |s| %>
+  <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :date => params[:date] %></li>
+ <% end %>
+</ul>
