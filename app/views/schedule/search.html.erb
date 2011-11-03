@@ -1,9 +1,21 @@
 <h1>Select a schedule</h1>
 
-<p>Your entered <strong><%= params[:schedule] %></strong>.  We found more than one schedule that matched - did you mean one of these?</p>
+<% if @schedule.count == 0 %>
 
-<ul>
- <% @schedule.each do |s| %>
-  <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :date => params[:date] %></li>
- <% end %>
-</ul>
+ <p>We couldn't find any schedule that matched <strong><%= params[:schedule] %></strong>.  You can search for a schedule by UID (e.g. A12345) or by train identity (e.g. 2A01).</p>
+
+<% else %>
+ <p>We found more than one schedule that matched - did you mean one of these?</p>
+
+ <ul>
+  <% @schedule.each do |s| %>
+   <% if params[:date].nil? %>
+    <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %></li>
+   <% else %>
+    <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :date => params[:date] %></li>
+   <% end %>
+  <% end %>
+ </ul>
+
+<% end %>
+

@@ -35,13 +35,14 @@ class ScheduleController < ApplicationController
 
   def search
 
-    @time = Time.now
-
     @schedule = BasicSchedule
 
-    unless params[:date].blank?
+    # Optionally limit to a date
+
+    unless params[:date].nil?
       @schedule = @schedule.runs_on(params[:date])
     end
+
 
     # Try a regex match on the search parameters, and look up by UID or identity as appropriate
 
@@ -54,8 +55,6 @@ class ScheduleController < ApplicationController
     # If exactly one schedule has been returned, render the schedule page, otherwise render the default list of schedules
 
     redirect_to :controller => 'schedule', :action => 'schedule_by_uid', :uid => @schedule.first.train_uid if @schedule.count == 1
-
-    @location = Tiploc.find_by_tiploc_code(params[:location])
 
   end
 
