@@ -199,9 +199,9 @@ module ScheduleHelper
   def run_details(schedule)
 
     if schedule.runs_from == schedule.runs_to
-      "#{date_range_or_date(@schedule.runs_from, @schedule.runs_to)} only"
+      "#{date_range_or_date(schedule.runs_from, schedule.runs_to)} only"
     else
-      "#{runs_on_days(@schedule)} #{date_range_or_date(@schedule.runs_from, @schedule.runs_to)}"
+      "#{runs_on_days(schedule)} #{date_range_or_date(schedule.runs_from, schedule.runs_to)}"
     end
 
   end
