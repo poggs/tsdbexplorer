@@ -65,6 +65,18 @@ describe ScheduleHelper do
     end
   end
 
+  it "should convert operating characteristics in to text" do
+    decode_operating_characteristics('B').should eql('Vacuum Braked')
+    decode_operating_characteristics('Q').should eql('Runs as required')
+    decode_operating_characteristics('BQ').should eql('Vacuum Braked, Runs as required')
+  end
+
+  it "should gracefully handle an unknown operatic characteristic" do
+    decode_operating_characteristics(nil).should eql('None')
+    decode_operating_characteristics('').should eql('None')
+    decode_operating_characteristics('$').should eql('Unknown ($)')
+  end
+
   it "should output a list of days on which a schedule is valid" do
 
     expected_data = { 'every day' => [ :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running ],

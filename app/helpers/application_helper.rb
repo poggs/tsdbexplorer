@@ -171,43 +171,6 @@ module ApplicationHelper
 
   end
 
-  def decode_operating_characteristics(oper_char)
-
-    operating_characteristics = Array.new
-
-    if oper_char.nil? || oper_char.blank?
-
-      return "None"
-
-    end
-
-    operating_characteristics_hash = {
-      "B" => "Vacuum Braked",
-      "C" => "Timed at 100mph",
-      "D" => "DOO",
-      "E" => "Mark 4 coaches",
-      "G" => "Guard required",
-      "M" => "Timed at 110mph",
-      "P" => "Push/Pull train",
-      "Q" => "Runs as required",
-      "R" => "Air conditioned with PA system",
-      "S" => "Steam heated",
-      "Y" => "Runs to terminals/yard as required",
-      "Z" => "Not to be diverted from booked route"
-    }
-
-    oper_char.split('').each do |characteristic|
-      if operating_characteristics_hash.has_key? characteristic
-        operating_characteristics.push "#{characteristic}: #{operating_characteristics_hash[characteristic]}"
-      else
-        operating_characteristics.push "#{characteristic}: Unknown"
-      end
-    end
-
-    return operating_characteristics.join(", ")
-
-  end
-
   def decode_tiploc(obj)
 
     decoded_tiploc = nil

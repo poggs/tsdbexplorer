@@ -62,18 +62,6 @@ describe ApplicationHelper do
     decode_reservations('$').should eql('$: Unknown')
   end
 
-  it "should convert operating characteristics in to text" do
-    decode_operating_characteristics('B').should eql('B: Vacuum Braked')
-    decode_operating_characteristics('Q').should eql('Q: Runs as required')
-    decode_operating_characteristics('BQ').should eql('B: Vacuum Braked, Q: Runs as required')
-  end
-
-  it "should gracefully handle an unknown operatic characteristic" do
-    decode_operating_characteristics(nil).should eql('None')
-    decode_operating_characteristics('').should eql('None')
-    decode_operating_characteristics('$').should eql('$: Unknown')
-  end
-
   it "should convert a Tiploc object in to text" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
     decode_tiploc(Tiploc.first).should eql('London Euston')

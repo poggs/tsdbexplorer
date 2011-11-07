@@ -154,6 +154,11 @@ h1 {
   float: left;
 }
 
+#service_detail #identity {
+  font-size: 3em;
+  float: right;
+}
+
 #service_detail #alert {
   font-size: 1.25em;
   font-weight: bold;
