@@ -72,9 +72,13 @@ describe ScheduleHelper do
   end
 
   it "should gracefully handle an unknown operatic characteristic" do
-    decode_operating_characteristics(nil).should eql('None')
-    decode_operating_characteristics('').should eql('None')
     decode_operating_characteristics('$').should eql('Unknown ($)')
+  end
+
+  it "should return nil if passed a blank set of operating characteristics" do
+    decode_operating_characteristics('').should be_nil
+    decode_operating_characteristics(nil).should be_nil
+    decode_operating_characteristics('        ').should be_nil
   end
 
   it "should output a list of days on which a schedule is valid" do

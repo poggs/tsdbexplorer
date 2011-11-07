@@ -11,7 +11,7 @@
  <ul>
   <li>Runs <%= run_details(@schedule) %></li>
   <li><%= decode_train_category(@schedule.category) %> service</li>
-  <li><%= decode_operating_characteristics(@schedule.operating_characteristics)%></li>
+  <% unless @schedule.operating_characteristics.nil? %><li><%= decode_operating_characteristics(@schedule.operating_characteristics) %></li><% end %>
  </ul>
 </div>
 
