@@ -100,4 +100,17 @@ describe BasicSchedule do
     end
   end
 
+  it "should have a method which identifies if this schedule is for a passenger service" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    BasicSchedule.first.should respond_to(:is_passenger?)
+  end
+
+  it "should identify if a schedule is for a passenger service" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    schedule.is_passenger?.should be_true
+  end
+
+  it "should identify if a schedule is for a non-passenger service"
+
 end
