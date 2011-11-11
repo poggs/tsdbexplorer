@@ -51,6 +51,18 @@ describe LocationController do
     response.body.should =~ /Bletchley/
   end
 
+  it "should display an error if passed an invalid CRS code" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :index, :location => 'ZZZ'
+    response.code.should eql('404')
+  end
+
+  it "should display an error if passed an invalid TIPLOC" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :index, :location => 'ZZZZZZZ'
+    response.code.should eql('404')
+  end
+
   it "should display services at a location given a CRS code and date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'BLY', :date => '2010-12-12'
@@ -65,6 +77,15 @@ describe LocationController do
     response.code.should eql('200')
     response.body.should =~ /Bletchley/
     response.body.should =~ /Sunday 12 December 2010/
+  end
+
+  it "should display services at a location if the date range spans midnight" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/train_over_midnight.cif')
+    get :index, :location => 'LST', :date => '2011-05-22', :time => '23:30'
+    response.body.should =~ /Between/
+    response.body.should =~ /2300 on Sunday 22 May 2011/
+    response.body.should =~ /0030 on Monday 23 May 2011/
+    response.body.should =~ /L02600/
   end
 
   it "should display an error if passed an incorrectly formatted date" do
@@ -85,7 +106,7 @@ describe LocationController do
 
   it "should display services at a location given a CRS code, date and time" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :index, :location => 'BLY', :date => '2010-12-12', :time => '1300'
+    get :index, :location => 'BLY', :date => '2010-12-12', :time => '13:00'
     response.code.should eql('200')
     response.body.should =~ /Bletchley/
     response.body.should =~ /Sunday 12 December 2010/
@@ -93,7 +114,7 @@ describe LocationController do
 
   it "should display services at a location given a TIPLOC code, date and time" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :index, :location => 'BLTCHLY', :date => '2010-12-12', :time => '1300'
+    get :index, :location => 'BLTCHLY', :date => '2010-12-12', :time => '13:00'
     response.code.should eql('200')
     response.body.should =~ /Bletchley/
     response.body.should =~ /Sunday 12 December 2010/
@@ -116,5 +137,15 @@ describe LocationController do
     response.body.should =~ /time/
     response.body.should =~ /2405/
   end
+
+
+  # Location search
+
+  it "should not return any location matches unless a search string is passed" do
+    get :search
+    response.body.should redirect_to(:controller => 'main', :action => 'index')
+  end
+
+  it "should "
 
 end

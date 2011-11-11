@@ -1,8 +1,5 @@
 <%= render :partial => 'common/twisty_javascript' %>
-
-<%= content_for :head do %>
- <%= stylesheet_link_tag 'autocomplete' %>
-<% end %>
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'text', :controller => 'location', :action => 'search', :min_length => 3 } %>
 
 <div id="search">
  <form action="<%= url_for :controller => 'location', :action => 'search' %>">
