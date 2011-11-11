@@ -72,4 +72,16 @@ class Location < ActiveRecord::Base
     self.activity_tf == true
   end
 
+
+  # Return trains arriving or departing between the specified times
+
+  scope :calls_between, lambda { |from_time,to_time|
+    where('(arrival BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time)
+  }
+
+  scope :passes_between, lambda { |from_time,to_time|
+    where('(arrival BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time, from_time, to_time)
+  }
+
+
 end

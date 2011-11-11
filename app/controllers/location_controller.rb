@@ -59,15 +59,16 @@ class LocationController < ApplicationController
       @range[:from] = @datetime - early_range
       @range[:to] = @datetime + late_range
 
-      @schedule = Location.where(:tiploc_code => @location.tiploc_code).runs_on(@datetime.to_s(:iso))
+      @schedule = Location.where(:tiploc_code => @location.tiploc_code)
 
-      if advanced_mode?
-        @schedule = @schedule.passes_between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M'))
+      # Handle windows which span midnight
+
+      if @range[:from].midnight == @range[:to].midnight
+        @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
       else
-        @schedule = @schedule.between(@range[:from].strftime('%H%M'), @range[:to].strftime('%H%M')).only_passenger
+        @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), '2359')
+        @schedule_b = @schedule.runs_on(@range[:to].to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
       end
-
-      render
 
     end
 
@@ -78,18 +79,22 @@ class LocationController < ApplicationController
 
   def search
 
+    term = params[:term] || params[:text]
+
+    redirect_to :controller => 'main', :action => 'index' and return if term.blank?
+
     matches = Array.new
 
-    if params[:text].length == 3
-      conditions = [ 'crs_code = ?', params[:text].upcase ]
-    else
-      conditions = [ 'tiploc_code LIKE ? OR tps_description LIKE ?', '%' + params[:text].upcase + '%', '%' + params[:text].upcase + '%' ]
-    end
+    unless term.nil?
 
-    @matches = Tiploc.find(:all, :conditions => conditions, :limit => 25) #.collect { |m| { :id => m.tiploc_code, :label => m.tps_description + " (" + (m.crs_code.blank? ? m.tiploc_code : m.crs_code) + ")", :value => m.tiploc_code } }
+      if term.length == 3
+        conditions = [ 'crs_code = ?', term.upcase ]
+      else
+        conditions = [ 'tiploc_code LIKE ? OR tps_description LIKE ?', '%' + term.upcase + '%', '%' + term.upcase + '%' ]
+      end
 
-    if matches.length == 1
-      redirect_to :action => 'index', :location => @matches.first[:crs_code], :date => params[:date], :time => params[:time] and return
+      @matches = Tiploc.find(:all, :conditions => conditions, :limit => 25)
+
     end
 
   end

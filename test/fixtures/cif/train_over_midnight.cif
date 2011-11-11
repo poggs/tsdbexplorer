@@ -1,0 +1,28 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIBOWJ   04696914YBOW JUNCTION              52701   0XOW                        
+TIBTHNLGR16696100RBETHNAL GREEN             52739   0BETBETHNAL GREEN           
+TICHLMSFD00683600KCHELMSFORD                50223   0CHMCHELMSFORD ESSEX        
+TICLCHSTR00686100GCOLCHESTER                50049   0COLCOLCHESTER              
+TIFRSTGTJ40687611ZFOREST GATE JN            50434   0                           
+TIGIDEAPK16687700TGIDEA PARK                50334   0GDPGIDEA PARK              
+TIILFORD 00688100TILFORD                    50423   0IFDILFORD                  
+TILIVST  00696500XLONDON LIVERPOOL STREET   527412904LSTLONDON LIVRPL ST        
+TIMRKSTEY08686300QMARKS TEY                 50105   0MKTMARKS TEY               
+TISHENFLD00688800JSHENFIELD                 50328   0SNFSHENFIELD               
+TISTFD   00696900LSTRATFORD                 52226   0SRASTRATFORD LONDON        
+TIWITHAME32684400HWITHAM                    50211   0WTMWITHAM                  
+BSNL026001105221112040000001 PXX1F64    121939001 EMU360 100D     B            P
+BX         LEY                                                                  
+LOLIVST   2332 233213 ML     TB                                                 
+LIBTHNLGR           2335 00000000   ML ML                                       
+LIBOWJ              2337 00000000   ML ML                                       
+LISTFD    2338H2339      2339233910 ML ML T                                     
+LIFRSTGTJ           2341H00000000   ML ML                                       
+LIILFORD            2343H000000002  ML ML             1                         
+LIGIDEAPK           2351 00000000   ML ML             1                         
+LISHENFLD 2359 0001      235900013        T                                     
+LICHLMSFD 0009H0010H     001000102        T           1                         
+LIWITHAME 0020 0021      002000213        T                                     
+LIMRKSTEY 0028 0028H     002800282        T           5                         
+LTCLCHSTR 0039 00392     TF                                                     
+ZZ
