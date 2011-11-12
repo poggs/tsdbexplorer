@@ -1,0 +1,11 @@
+<%= content_for :head do %>
+ <%= stylesheet_link_tag 'autocomplete' %>
+<% end %>
+
+<%= content_for :script do %>
+ <script type="text/javascript">
+  $().ready(function() {
+   $("#<%= element %>").autocomplete({ source: '<%= url_for :controller => controller, :action => action %>', minLength: <%= min_length %> });
+   });
+ </script>
+<% end %>
