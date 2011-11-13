@@ -196,7 +196,7 @@ module TSDBExplorer
         dsl_record[:daily_schedule_uuid] = ds_record[:uuid]
 
         [ :arrival, :public_arrival, :pass, :departure, :public_departure ].each do |time_attr|
-          dsl_record[time_attr] = Time.parse(run_date.to_s + " " + TSDBExplorer::normalise_time(location[time_attr])) unless location[time_attr].nil?
+          dsl_record[time_attr] = Time.parse(run_date.to_s + " " + TSDBExplorer::normalise_time(location[time_attr])) unless location[time_attr].nil? || location[time_attr].blank?
         end
 
         location_list << DailyScheduleLocation.new(dsl_record)
