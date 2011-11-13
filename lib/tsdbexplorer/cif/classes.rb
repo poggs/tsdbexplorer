@@ -124,9 +124,9 @@ module TSDBExplorer
           end
 
           self.tiploc_instance = nil if self.tiploc_instance == " "
-          self.arrival = nil if self.arrival == "     "
-          self.departure = nil if self.departure == "     "
-          self.pass = nil if self.pass == "0000 " || self.pass == "     "
+          self.arrival = nil if self.arrival.blank?
+          self.departure = nil if self.departure.blank?
+          self.pass = nil if self.pass == "0000 " || self.pass.blank?
           self.public_arrival = nil if self.public_arrival == "0000"
           self.public_departure = nil if self.public_departure == "0000"
           self.line = nil if self.line == ""
