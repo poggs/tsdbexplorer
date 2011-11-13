@@ -113,4 +113,28 @@ describe BasicSchedule do
 
   it "should identify if a schedule is for a non-passenger service"
 
+  it "should identify if a schedule is for a train" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    schedule.is_a_train?.should be_true
+    schedule.is_a_bus?.should be_false
+    schedule.is_a_ship?.should be_false
+  end
+
+  it "should identify if a schedule is for a bus" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_bus.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('G39152', '2011-05-22').first
+    schedule.is_a_train?.should be_false
+    schedule.is_a_bus?.should be_true
+    schedule.is_a_ship?.should be_false
+  end
+
+  it "should identify if a schedule is for a ship" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_ship.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('P87065', '2011-05-22').first
+    schedule.is_a_train?.should be_false
+    schedule.is_a_bus?.should be_false
+    schedule.is_a_ship?.should be_true
+  end
+
 end

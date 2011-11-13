@@ -48,4 +48,16 @@ class BasicSchedule < ActiveRecord::Base
     self.stp_indicator == "C"
   end
 
+  def is_a_train?
+    ['F', 'P', 'T', '1', '2', '3'].include? self.status
+  end
+
+  def is_a_bus?
+    ['B', '5'].include? self.status
+  end
+
+  def is_a_ship?
+    ['S', '4'].include? self.status
+  end
+
 end
