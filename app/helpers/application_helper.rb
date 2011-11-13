@@ -232,7 +232,7 @@ module ApplicationHelper
                       'T.C.' => 'TC',
                       'T.M.D' => 'TMD',
                       'T&R.S.M.D' => 'T&RSMD',
-                      'T.&R.S.M.D.' => 'T&RSMD'
+                      'T.&R.S.M.D.' => 'T&RSMD',
                       'W' => 'West',
                       'E' => 'East',
                       'S.B.' => 'Signal Box',
