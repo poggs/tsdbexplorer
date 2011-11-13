@@ -330,7 +330,7 @@ module TSDBExplorer
         calling_point.save
       end
 
-      return Struct.new(:status, :message).new(:ok, 'Changed origin of train ' + train_identity + ' to ' + new_origin.tiploc_code + ' from ' + original_origin.tiploc_code + ' for reason ' + reason_code)
+      return Struct.new(:status, :message).new(:ok, "Changed origin of train #{train_identity} to #{new_origin.tiploc_code} from #{original_origin.tiploc_code} for reason #{reason_code}")
 
     end
 
