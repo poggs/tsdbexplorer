@@ -244,6 +244,10 @@ table td {
   padding: 5px;
 }
 
+img {
+  vertical-align: middle;
+}
+
 div.monospace {
   background: black;
   color: white;

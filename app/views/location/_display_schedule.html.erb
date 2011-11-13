@@ -1,6 +1,10 @@
 <% schedule.sort { |a,b| TSDBExplorer::train_sort(a,b) }.each do |s| %>
  <tr>
-  <td><%= link_to (image_tag 'information.png', :alt => 'Information'), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :date => @datetime.to_s(:yyyymmdd) %><% if s.basic_schedule.realtime_for(params[:date]) %>&nbsp;<%= image_tag 'tick.png', :alt => 'Real-time information available' %><% end %></td>
+  <td>
+   <%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :date => @datetime.to_s(:yyyymmdd) %>
+   <% if s.basic_schedule.realtime_for(params[:date]) %>&nbsp;<%= image_tag 'tick.png', :alt => 'Real-time information available' %><% end %>
+   <% if advanced_mode? %><%= s.basic_schedule.train_identity %><% end %>
+  </td>
   <td><%= s.public_arrival %></td>
   <td><%= tidy_text(decode_tiploc(s.basic_schedule.origin)) %></td>
   <td><%= s.platform %></td>
