@@ -7,7 +7,9 @@
  </script>
 <% end %>
 
-<div id="schedule_flash">Real-time information is not yet available for this train.</div>
+<% if @schedule.is_a_train? %>
+ <div id="schedule_flash">Real-time information is not yet available for this train.</div>
+<% end %>
 
 <table>
 

@@ -79,4 +79,18 @@ describe ScheduleController do
     response.body.should =~ /available for this train/
   end
 
+  it "should not display real-time information for bus services" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_bus.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'G39152', :date => '2011-05-22'
+    response.code.should eql("200")
+    response.body.should_not =~ /Real-time information/
+  end
+
+  it "should not display real-time information for ship services" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_ship.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'P87065', :date => '2011-05-22'
+    response.code.should eql("200")
+    response.body.should_not =~ /Real-time information/
+  end
+
 end
