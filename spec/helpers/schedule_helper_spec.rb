@@ -53,8 +53,9 @@ describe ScheduleHelper do
   end
 
   it "should return an appropriately named mode icon for a transport mode" do
-    expected_data = { 'P' => 'train', 'B' => 'bus', '5' => 'bus' }
+    expected_data = { 'P' => 'train', 'F' => 'train', 'T' => 'train', '1' => 'train', '2' => 'train', '3' => 'train', 'B' => 'bus', '5' => 'bus'  }
     expected_data.each do |k,v|
+      mode_icon_for(k).should_not be_nil
       mode_icon_for(k).should include(v)
     end
   end

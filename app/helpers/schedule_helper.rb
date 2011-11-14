@@ -73,6 +73,16 @@ module ScheduleHelper
     image_file = case code
       when "P"
         'train_64x64.png'
+      when "F"
+        'train_64x64.png'
+      when "T"
+        'train_64x64.png'
+      when "1"
+        'train_64x64.png'
+      when "2"
+        'train_64x64.png'
+      when "3"
+        'train_64x64.png'
       when "B"
         'bus_64x64.png'
       when "5"
