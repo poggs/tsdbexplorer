@@ -636,16 +636,38 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     vstp_data = File.open('test/fixtures/tdnet/vstp_create_1.xml').read
     vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
     vstp_message.status.should eql(:ok)
-    vstp_message.message.should include('Created VSTP schedule for train W51133 running from 20110802 to 20110802 as 1G56')
+    vstp_message.message.should include('Created VSTP schedule for train 20203 running from 20111114 to 20111114 as 5Z51')
 
-    bs_expected = { :train_uid => 'W51133', :train_identity => '1G56', :uic_code => '', :atoc_code => '', :category => 'XX', :headcode => nil, :portion_id => nil, :service_code => '24661005', :power_type => 'EMU', :timing_load => '', :speed => '', :operating_characteristics => nil, :train_class => "", :sleepers => nil, :reservations => '0', :catering_code => nil, :service_branding => nil, :status => '1', :stp_indicator => 'O',  :runs_from => Date.parse('2011-08-02'), :runs_to => Date.parse('2011-08-02'), :runs_mo => false, :runs_tu => true, :runs_we => false, :runs_th => false, :runs_fr => false, :runs_sa => false, :runs_su => false, :ats_code => 'Y', :bh_running => nil }
+    bs_expected = { :train_uid => '20203', :train_identity => '5Z51', :uic_code => '', :atoc_code => '', :category => 'EE', :headcode => nil, :portion_id => nil, :service_code => '24605004', :power_type => 'EMU', :timing_load => '', :speed => '', :operating_characteristics => nil, :train_class => "", :sleepers => nil, :reservations => '0', :catering_code => nil, :service_branding => nil, :status => '1', :stp_indicator => 'N',  :runs_from => Date.parse('2011-11-14'), :runs_to => Date.parse('2011-11-14'), :runs_mo => true, :runs_tu => false, :runs_we => false, :runs_th => false, :runs_fr => false, :runs_sa => false, :runs_su => false, :ats_code => 'N', :bh_running => nil }
 
-    vstp_schedule = BasicSchedule.find_all_by_train_uid('W51133')
+    vstp_schedule = BasicSchedule.find_all_by_train_uid('20203')
     vstp_schedule.count.should eql(1)
     bs_expected.each do |k,v|
       vstp_schedule.first.send(k).should eql(v)
     end
 
+    loc_expected = [
+      { :tiploc_code => 'CHRTLCN', :arrival => nil, :departure => '0130', :pass => nil, :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tb => true, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'ASHFKI', :arrival => nil, :departure => nil, :pass => '0135', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'WYEE', :arrival => nil, :departure => nil, :pass => '0140', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'CNTBW', :arrival => nil, :departure => nil, :pass => '0155', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'MINSTER', :arrival => nil, :departure => nil, :pass => '0208', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'MINSTEJ', :arrival => nil, :departure => nil, :pass => '0209', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'RAMSGTE', :arrival => '0214', :departure => nil, :pass => nil, :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tf => true, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil }
+    ]
+
+    vstp_schedule.first.locations.order(:id).each do |loc|
+
+      sch_loc = loc_expected.shift
+      sch_loc.keys.each do |k,v|
+        puts "Examining #{k}"
+        loc[k].should eql(sch_loc[k])
+      end
+
+    end
+
   end
+
+  it "should process a VSTP DELETE message"
 
 end

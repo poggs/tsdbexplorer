@@ -417,6 +417,10 @@ module TSDBExplorer
 
                 activities = TSDBExplorer::CIF::parse_activities(doc_child_4.attributes['CIF_activity'].text)
 
+                activities.each do |k,v|
+                  location[k] = v
+                end
+
                 if activities[:activity_tb] == true
                   location[:location_type] = "LO"
                 elsif activities[:activity_tf] == true
@@ -436,10 +440,19 @@ module TSDBExplorer
 
                 # Replace the last two characters from an arrival, departure or pass time with a ' ' if a whole minute, or 'H' if a half-minute
 
-                [ :arrival, :pass, :departure ].each do |field_name|
+                [ :arrival, :pass, :departure, :public_arrival, :public_departure ].each do |field_name|
                   next if location[field_name].nil?
                   location[field_name].sub!(/00$/, ' ')
-                  location[field_name].sub!(/30$/, 'H') 
+                  location[field_name].sub!(/30$/, 'H')
+                  location[field_name].strip!
+                  location[field_name] = nil if location[field_name].blank?
+                end
+
+
+                # Tidy up the rest of the fields
+
+                [ :platform, :line, :path ].each do |field_name|
+                  location[field_name] = nil if location[field_name].blank?
                 end
 
                 vstp[:location] << location
