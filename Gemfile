@@ -17,7 +17,7 @@ end
 gem 'activerecord-import', '>= 0.2.6'
 
 group :development, :test do
-  gem "rspec-rails", ">= 2.5.0"
+  gem "rspec-rails", ">= 2.7.0"
   gem "rcov", ">= 0.9.9"
   gem "guard-rspec"
   gem "rb-inotify", :require => false if RUBY_PLATFORM =~ /linux/i
