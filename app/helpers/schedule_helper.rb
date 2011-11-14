@@ -87,6 +87,10 @@ module ScheduleHelper
         'bus_64x64.png'
       when "5"
         'bus_64x64.png'
+      when "S"
+        'ship_64x64.png'
+      when "4"
+        'ship_64x64.png'
       else
         nil
     end
