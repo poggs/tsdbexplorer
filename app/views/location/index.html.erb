@@ -20,8 +20,8 @@
 <% end %>
 
 <div>
- <div style="text-align: left; float: left;"><%= link_to "< 1h earlier", :date => (@datetime - 1.hour).to_s(:yyyymmdd), :time => (@datetime - 1.hour).to_s(:hhmm) %></div>
- <div style="text-align: right;"><%= link_to "1h later >", :date => (@datetime + 1.hour).to_s(:yyyymmdd), :time => (@datetime + 1.hour).to_s(:hhmm) %></div>
+ <div style="text-align: left; float: left;"><%= link_to "< 1h earlier", :date => (@datetime - 1.hour).to_s(:yyyymmdd), :time => (@datetime - 1.hour).to_s(:hhmm_colon) %></div>
+ <div style="text-align: right;"><%= link_to "1h later >", :date => (@datetime + 1.hour).to_s(:yyyymmdd), :time => (@datetime + 1.hour).to_s(:hhmm_colon) %></div>
 </div>
 
 <table>
