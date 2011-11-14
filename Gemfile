@@ -9,6 +9,11 @@ gem 'rake', '0.9.2'
 gem 'ruby-progressbar', '>= 0.0.10'
 gem 'memcache', '>= 1.2.13'
 
+group :test do
+  gem 'cucumber-rails'
+  gem 'database_cleaner'
+end
+
 gem 'activerecord-import', '>= 0.2.6'
 
 group :development, :test do
