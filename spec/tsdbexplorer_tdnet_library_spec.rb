@@ -660,7 +660,6 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
       sch_loc = loc_expected.shift
       sch_loc.keys.each do |k,v|
-        puts "Examining #{k}"
         loc[k].should eql(sch_loc[k])
       end
 
