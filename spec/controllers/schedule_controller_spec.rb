@@ -23,9 +23,20 @@ describe ScheduleController do
 
   render_views
 
-  it "should display a planned schedule" do
+  it "should display a planned schedule originating from CIF" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :schedule_by_uid, :uid => 'C43391'
+    response.code.should eql("200")
+    response.body.should =~ /originated from CIF/
+  end
+
+  it "should display a planned schedule originating from VSTP" do
+    vstp_data = File.open('test/fixtures/tdnet/vstp_create_1.xml').read
+    vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
+    vstp_message.status.should eql(:ok)
+    get :schedule_by_uid, :uid => '20203'
+    response.code.should eql("200")
+    response.body.should =~ /originated from VSTP/
   end
 
   it "should return an error if passed an invalid schedule" do
