@@ -165,6 +165,8 @@ module TSDBExplorer
 
     def TDnet.process_trust_activation(uid, run_date, unique_train_id)
 
+      uid.strip!
+
       schedule = BasicSchedule.runs_on_by_uid_and_date(uid, run_date).first
 
       if schedule.nil?

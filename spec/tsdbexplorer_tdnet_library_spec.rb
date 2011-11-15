@@ -669,4 +669,15 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process a VSTP DELETE message"
 
+  it "should process the activation of a VSTP train" do
+
+    vstp_data = File.open('test/fixtures/tdnet/vstp_four_oaks_to_redditch.xml')
+    vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
+
+    activation = TSDBExplorer::TDnet::process_trust_message('000120111114082848TRUST               TSIA                                652T192D14201111140828486560120111114083500 202632014111100000020141111000000VN2T192202636560120111114083500MN2922272000   ')
+    activation.status.should eql(:ok)
+    activation.message.should include('Activated train UID 20263 on 2011-11-14 as train identity 652T192D14')
+
+  end
+
 end
