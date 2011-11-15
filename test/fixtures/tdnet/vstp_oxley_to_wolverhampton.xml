@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VSTPCIFMsgV1 xmlns="http://xml.networkrail.co.uk/ns/2008/Train" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:eai="http://xml.networkrail.co.uk/ns/2008/EAI" xsi:schemaLocation="http://xml.networkrail.co.uk/ns/2008/Train itm_vstp_cif_messaging_v1.xsd" classification="industry" timestamp="2011-11-15T06:25:42-00:00" owner="Network Rail" originMsgId="2011-11-15T06:25:42-00:00@vstp.networkrail.co.uk">
+	<eai:Sender organisation="Network Rail" application="TOPS" component="VSTP"/>
+	<schedule schedule_id="" transaction_type="Create" schedule_start_date="20111115" schedule_end_date="20111115" schedule_days_runs="0100000" applicable_timetable="N" CIF_bank_holiday_running=" " CIF_train_uid=" 20616" train_status="1" CIF_stp_indicator="N">
+		<schedule_segment signalling_id="5R14" uic_code="" atoc_code="" CIF_train_category="EE" CIF_headcode="" CIF_course_indicator="" CIF_train_service_code="22100001" CIF_business_sector="" CIF_power_type="EMU" CIF_timing_load="" CIF_speed="" CIF_operating_characteristics="" CIF_train_class="" CIF_sleepers="" CIF_reservations="0" CIF_connection_indicator="" CIF_catering_code="" CIF_service_branding="" CIF_traction_class="">
+			<schedule_location scheduled_arrival_time=" " scheduled_departure_time="064600" scheduled_pass_time=" " public_arrival_time=" " public_departure_time="00" CIF_platform="" CIF_line="" CIF_path=" " CIF_activity="TB" CIF_engineering_allowance="" CIF_pathing_allowance="" CIF_performance_allowance="">
+				<location>
+					<tiploc tiploc_id="OXLEYCS"/>
+				</location>
+			</schedule_location>
+			<schedule_location scheduled_arrival_time="      " scheduled_departure_time="      " scheduled_pass_time="064800" public_arrival_time="      " public_departure_time="      " CIF_platform="" CIF_line="" CIF_path="" CIF_activity="" CIF_engineering_allowance="" CIF_pathing_allowance="" CIF_performance_allowance="">
+				<location>
+					<tiploc tiploc_id="OXLEY"/>
+				</location>
+			</schedule_location>
+			<schedule_location scheduled_arrival_time="      " scheduled_departure_time="      " scheduled_pass_time="064900" public_arrival_time="      " public_departure_time="      " CIF_platform="" CIF_line="" CIF_path="" CIF_activity="" CIF_engineering_allowance="" CIF_pathing_allowance="" CIF_performance_allowance="">
+				<location>
+					<tiploc tiploc_id="WVRMTNJ"/>
+				</location>
+			</schedule_location>
+			<schedule_location scheduled_arrival_time="065100" scheduled_departure_time=" " scheduled_pass_time=" " public_arrival_time="00" public_departure_time=" " CIF_platform="" CIF_line=" " CIF_path="" CIF_activity="TF" CIF_engineering_allowance=" " CIF_pathing_allowance=" " CIF_performance_allowance=" ">
+				<location>
+					<tiploc tiploc_id="WVRMPTN"/>
+				</location>
+			</schedule_location>
+		</schedule_segment>
+	</schedule>
+</VSTPCIFMsgV1>

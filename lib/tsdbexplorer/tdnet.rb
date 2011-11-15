@@ -416,6 +416,12 @@ module TSDBExplorer
                   location[bs_attr] = doc_child_4.attributes[cif_attr].text
                 end
 
+                # If the public arrival or public departure times are '00', get rid of them
+
+                location[:public_arrival] = nil if location[:public_arrival] == "00" || location[:public_arrival].blank?
+                location[:public_departure] = nil if location[:public_departure] == "00" || location[:public_departure].blank?
+
+
                 # Split the CIF activities
 
                 activities = TSDBExplorer::CIF::parse_activities(doc_child_4.attributes['CIF_activity'].text)
@@ -430,6 +436,11 @@ module TSDBExplorer
                   location[:location_type] = "LT"
                 else
                   location[:location_type] = "LI"
+
+                  # VSTP schedules don't have a 'T' activity to indicate calling points, so we need to guess by looking for a public arrival or departure time
+
+                  location[:activity_t] = true unless (location[:public_arrival].nil? && location[:public_departure].nil?)
+
                 end
 
                 location[:tiploc_code] = doc_child_4.children.children.first.attributes['tiploc_id'].text
@@ -437,16 +448,16 @@ module TSDBExplorer
 
                 # Trim the last two characters from the public arrival and departure times, as these will only ever be whole minutes
 
-                location[:public_arrival] = location[:public_arrival][0..3] unless location[:public_arrival].empty?
-                location[:public_departure] = location[:public_departure][0..3] unless location[:public_departure].empty?
+                location[:public_arrival] = location[:public_arrival][0..3] unless location[:public_arrival].nil?
+                location[:public_departure] = location[:public_departure][0..3] unless location[:public_departure].nil?
 
 
                 # Replace the last two characters from an arrival, departure or pass time with a ' ' if a whole minute, or 'H' if a half-minute
 
                 [ :arrival, :pass, :departure, :public_arrival, :public_departure ].each do |field_name|
                   next if location[field_name].nil?
-                  location[field_name].sub!(/00$/, ' ')
-                  location[field_name].sub!(/30$/, 'H')
+                  location[field_name].sub!(/00$/, ' ') if location[field_name][4..5] == "00"
+                  location[field_name].sub!(/30$/, 'H') if location[field_name][4..5] == "30"
                   location[field_name].strip!
                   location[field_name] = nil if location[field_name].blank?
                 end
@@ -464,8 +475,12 @@ module TSDBExplorer
 
             end
 
-            [:bh_running, :service_branding, :catering_code, :operating_characteristics, :headcode, :sleepers].each do |f|
+            [:bh_running, :atoc_code, :service_branding, :catering_code, :operating_characteristics, :headcode, :sleepers].each do |f|
               basic_schedule[f.to_sym] = nil if basic_schedule[f.to_sym].blank?
+            end
+
+            [:reservations].each do |f|
+              basic_schedule[f.to_sym] = nil if basic_schedule[f.to_sym] == "0"
             end
 
             vstp[:basic_schedule] = basic_schedule

@@ -419,7 +419,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     activation.message.should include('Activated train UID L06809 on 2011-08-25 as train identity 522T52M125')
     DailySchedule.count.should eql(1)
     first_schedule = DailySchedule.first
-    first_schedule_expected = { :runs_on => Date.parse('2011-08-25'), :cancelled => nil, :cancellation_timestamp => nil, :cancellation_reason => nil, :status => "P", :train_uid => "L06809", :category => "OO", :train_identity => "2T52", :train_identity_unique => "522T52M125", :headcode => nil, :service_code => "21910000", :portion_id => nil, :power_type => "EMU", :timing_load => "317", :speed => "100", :operating_characteristics => "D", :train_class => "S", :sleepers => nil, :reservations => nil, :catering_code => nil, :service_branding => nil, :stp_indicator => "P", :uic_code => nil, :atoc_code => "LE", :ats_code => "Y", :rsid => nil, :data_source => nil }
+    first_schedule_expected = { :runs_on => Date.parse('2011-08-25'), :cancelled => nil, :cancellation_timestamp => nil, :cancellation_reason => nil, :status => "P", :train_uid => "L06809", :category => "OO", :train_identity => "2T52", :train_identity_unique => "522T52M125", :headcode => nil, :service_code => "21910000", :portion_id => nil, :power_type => "EMU", :timing_load => "317", :speed => "100", :operating_characteristics => "D", :train_class => "S", :sleepers => nil, :reservations => nil, :catering_code => nil, :service_branding => nil, :stp_indicator => "P", :uic_code => nil, :atoc_code => "LE", :ats_code => "Y", :rsid => nil, :data_source => 'CIF' }
     first_schedule_expected.each do |k,v|
       first_schedule.send(k.to_sym).should eql(v)
     end
@@ -631,29 +631,41 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   # VSTP message processing
 
-  it "should process a VSTP CREATE message" do
+  it "should process a VSTP CREATE message for a passenger service" do
 
-    vstp_data = File.open('test/fixtures/tdnet/vstp_create_1.xml').read
+    vstp_data = File.open('test/fixtures/tdnet/vstp_four_oaks_to_redditch.xml').read
     vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
     vstp_message.status.should eql(:ok)
-    vstp_message.message.should include('Created VSTP schedule for train 20203 running from 20111114 to 20111114 as 5Z51')
+    vstp_message.message.should include('Created VSTP schedule for train 20263 running from 20111114 to 20111114 as 2T19')
 
-    bs_expected = { :train_uid => '20203', :train_identity => '5Z51', :uic_code => '', :atoc_code => '', :category => 'EE', :headcode => nil, :portion_id => nil, :service_code => '24605004', :power_type => 'EMU', :timing_load => '', :speed => '', :operating_characteristics => nil, :train_class => "", :sleepers => nil, :reservations => '0', :catering_code => nil, :service_branding => nil, :status => '1', :stp_indicator => 'N',  :runs_from => Date.parse('2011-11-14'), :runs_to => Date.parse('2011-11-14'), :runs_mo => true, :runs_tu => false, :runs_we => false, :runs_th => false, :runs_fr => false, :runs_sa => false, :runs_su => false, :ats_code => 'N', :bh_running => nil, :data_source => 'VSTP' }
+    bs_expected = { :runs_from => Date.parse('2011-11-14'), :runs_to => Date.parse('2011-11-14'), :runs_mo => true, :runs_tu => false, :runs_we => false, :runs_th => false, :runs_fr => false, :runs_sa => false, :runs_su => false, :ats_code => 'N', :bh_running => nil, :train_uid => '20263', :status => '1', :stp_indicator => 'N', :data_source => 'VSTP', :train_identity => '2T19', :atoc_code => nil, :category => 'OO', :headcode => nil, :sleepers => nil, :reservations => nil, :catering_code => nil, :service_branding => nil }
 
-    vstp_schedule = BasicSchedule.find_all_by_train_uid('20203')
+    vstp_schedule = BasicSchedule.find_all_by_train_uid('20263')
     vstp_schedule.count.should eql(1)
     bs_expected.each do |k,v|
       vstp_schedule.first.send(k).should eql(v)
     end
 
     loc_expected = [
-      { :tiploc_code => 'CHRTLCN', :arrival => nil, :departure => '0130', :pass => nil, :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tb => true, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
-      { :tiploc_code => 'ASHFKI', :arrival => nil, :departure => nil, :pass => '0135', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
-      { :tiploc_code => 'WYEE', :arrival => nil, :departure => nil, :pass => '0140', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
-      { :tiploc_code => 'CNTBW', :arrival => nil, :departure => nil, :pass => '0155', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
-      { :tiploc_code => 'MINSTER', :arrival => nil, :departure => nil, :pass => '0208', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
-      { :tiploc_code => 'MINSTEJ', :arrival => nil, :departure => nil, :pass => '0209', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
-      { :tiploc_code => 'RAMSGTE', :arrival => '0214', :departure => nil, :pass => nil, :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tf => true, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil }
+      { :tiploc_code => 'FOUROKS', :arrival => nil, :departure => '0835', :pass => nil, :public_arrival => nil, :public_departure => '0835', :platform => nil, :line => nil, :path => nil, :activity_tb => true, :activity_t => false, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'SUTCO', :arrival => '0838', :departure => '0839', :pass => nil, :public_arrival => '0838', :public_departure => '0839', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'WYGN', :arrival => '0841', :departure => '0842', :pass => nil, :public_arrival => '0841', :public_departure => '0842', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'CHSRD', :arrival => '0843H', :departure => '0844H', :pass => nil, :public_arrival => '0844', :public_departure => '0844', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'ERDNGTN', :arrival => '0845H', :departure => '0846H', :pass => nil, :public_arrival => '0846', :public_departure => '0846', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'GRAVLYH', :arrival => '0848H', :departure => '0849H', :pass => nil, :public_arrival => '0849', :public_departure => '0849', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'ASTON', :arrival => '0854', :departure => '0855', :pass => nil, :public_arrival => '0853', :public_departure => '0853', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'PROOFHJ', :arrival => nil, :departure => nil, :pass => '0859', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => false, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'BHAMNWS', :arrival => '0901', :departure => '0903', :pass => nil, :public_arrival => '0901', :public_departure => '0903', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'FIVEWYS', :arrival => '0906', :departure => '0906H', :pass => nil, :public_arrival => '0906', :public_departure => '0906', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'UNVRSYB', :arrival => '0909H', :departure => '0910H', :pass => nil, :public_arrival => '0910', :public_departure => '0910', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'SELYOAK', :arrival => '0912', :departure => '0913', :pass => nil, :public_arrival => '0912', :public_departure => '0913', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'BOURNVL', :arrival => '0914H', :departure => '0915', :pass => nil, :public_arrival => '0915', :public_departure => '0915', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'KNORTON', :arrival => '0917', :departure => '0918', :pass => nil, :public_arrival => '0917', :public_departure => '0918', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'NRTF', :arrival => '0920', :departure => '0921', :pass => nil, :public_arrival => '0920', :public_departure => '0921', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'LONB', :arrival => '0923', :departure => '0926', :pass => nil, :public_arrival => '0924', :public_departure => '0926', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'BGRN', :arrival => '0930', :departure => '0938H', :pass => nil, :public_arrival => '0930', :public_departure => '0938', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'ALVCHRC', :arrival => '0942H', :departure => '0943', :pass => nil, :public_arrival => '0943', :public_departure => '0943', :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => true, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'RDIT', :arrival => '0948', :departure => nil, :pass => nil, :public_arrival => '0951', :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => false, :activity_tf => true, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil }
     ]
 
     vstp_schedule.first.locations.order(:id).each do |loc|
@@ -666,6 +678,40 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     end
 
   end
+
+  it "should process a VSTP CREATE message for an ECS" do
+
+    vstp_data = File.open('test/fixtures/tdnet/vstp_oxley_to_wolverhampton.xml').read
+    vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
+    vstp_message.status.should eql(:ok)
+    vstp_message.message.should include('Created VSTP schedule for train 20616 running from 20111115 to 20111115 as 5R14')
+
+    bs_expected = { :runs_from => Date.parse('2011-11-15'), :runs_to => Date.parse('2011-11-15'), :runs_mo => false, :runs_tu => true, :runs_we => false, :runs_th => false, :runs_fr => false, :runs_sa => false, :runs_su => false, :ats_code => 'N', :bh_running => nil, :train_uid => '20616', :status => '1', :stp_indicator => 'N', :data_source => 'VSTP', :train_identity => '5R14', :atoc_code => nil, :category => 'EE', :headcode => nil, :sleepers => nil, :reservations => nil, :catering_code => nil, :service_branding => nil }
+
+    vstp_schedule = BasicSchedule.find_all_by_train_uid('20616')
+    vstp_schedule.count.should eql(1)
+    bs_expected.each do |k,v|
+      vstp_schedule.first.send(k).should eql(v)
+    end
+
+    loc_expected = [
+      { :tiploc_code => 'OXLEYCS', :arrival => nil, :departure => '0646', :pass => nil, :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tb => true, :activity_t => false, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'OXLEY', :arrival => nil, :departure => nil, :pass => '0648', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => false, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'WVRMTNJ', :arrival => nil, :departure => nil, :pass => '0649', :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => false, :activity_tf => false, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil },
+      { :tiploc_code => 'WVRMPTN', :arrival => '0651', :departure => nil, :pass => nil, :public_arrival => nil, :public_departure => nil, :platform => nil, :line => nil, :path => nil, :activity_tb => false, :activity_t => false, :activity_tf => true, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil }
+    ]
+
+    vstp_schedule.first.locations.order(:id).each do |loc|
+
+      sch_loc = loc_expected.shift
+      sch_loc.keys.each do |k,v|
+        loc[k].should eql(sch_loc[k])
+      end
+
+    end
+
+  end
+
 
   it "should process a VSTP DELETE message"
 
