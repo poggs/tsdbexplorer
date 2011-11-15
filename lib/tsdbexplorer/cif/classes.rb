@@ -212,6 +212,8 @@ module TSDBExplorer
         self.catering_code = nil if self.catering_code == ""
         self.service_branding = nil if self.service_branding == ""
 
+        self.data_source = "CIF"
+
       end
 
       def merge_bx_record(bx_record)
@@ -222,7 +224,6 @@ module TSDBExplorer
         self.atoc_code = bx_record.atoc_code
         self.ats_code = bx_record.ats_code
         self.rsid = bx_record.rsid
-        self.data_source = bx_record.data_source
 
       end
 

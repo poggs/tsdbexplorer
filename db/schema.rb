@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111026173101) do
+ActiveRecord::Schema.define(:version => 20111115082743) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -71,9 +71,9 @@ ActiveRecord::Schema.define(:version => 20111026173101) do
     t.string   "atoc_code",                 :limit => 2
     t.string   "ats_code",                  :limit => 1
     t.string   "rsid",                      :limit => 8
-    t.string   "data_source",               :limit => 1
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "data_source",               :limit => 16
   end
 
   add_index "basic_schedules", ["runs_fr"], :name => "index_basic_schedules_on_runs_fr"
@@ -212,9 +212,9 @@ ActiveRecord::Schema.define(:version => 20111026173101) do
     t.string   "atoc_code",                 :limit => 2
     t.string   "ats_code",                  :limit => 1
     t.string   "rsid",                      :limit => 8
-    t.string   "data_source",               :limit => 1
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "data_source",               :limit => 16
   end
 
   add_index "daily_schedules", ["train_identity_unique"], :name => "index_daily_schedules_on_train_identity_unique"

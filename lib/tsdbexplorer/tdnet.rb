@@ -368,6 +368,7 @@ module TSDBExplorer
             vstp[:transaction_type] = doc_child_2.attributes['transaction_type'].text
 
             basic_schedule = Hash.new
+            basic_schedule[:data_source] = "VSTP"
             basic_schedule[:uuid] = UUID.generate
 
             days_run = doc_child_2.attributes['schedule_days_runs'].text.split(//)

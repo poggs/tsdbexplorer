@@ -177,6 +177,7 @@ describe "lib/tsdbexplorer/cif.rb" do
     BasicSchedule.count.should eql(1)
     BasicSchedule.first.atoc_code.should eql('LM')
     BasicSchedule.first.ats_code.should eql('Y')
+    BasicSchedule.first.data_source.should eql('CIF')
     Location.count.should eql(18)
     Location.first.tiploc_code.should eql('EUSTON')
     Location.last.tiploc_code.should eql('NMPTN')

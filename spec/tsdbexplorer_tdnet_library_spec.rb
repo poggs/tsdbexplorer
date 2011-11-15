@@ -638,7 +638,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     vstp_message.status.should eql(:ok)
     vstp_message.message.should include('Created VSTP schedule for train 20203 running from 20111114 to 20111114 as 5Z51')
 
-    bs_expected = { :train_uid => '20203', :train_identity => '5Z51', :uic_code => '', :atoc_code => '', :category => 'EE', :headcode => nil, :portion_id => nil, :service_code => '24605004', :power_type => 'EMU', :timing_load => '', :speed => '', :operating_characteristics => nil, :train_class => "", :sleepers => nil, :reservations => '0', :catering_code => nil, :service_branding => nil, :status => '1', :stp_indicator => 'N',  :runs_from => Date.parse('2011-11-14'), :runs_to => Date.parse('2011-11-14'), :runs_mo => true, :runs_tu => false, :runs_we => false, :runs_th => false, :runs_fr => false, :runs_sa => false, :runs_su => false, :ats_code => 'N', :bh_running => nil }
+    bs_expected = { :train_uid => '20203', :train_identity => '5Z51', :uic_code => '', :atoc_code => '', :category => 'EE', :headcode => nil, :portion_id => nil, :service_code => '24605004', :power_type => 'EMU', :timing_load => '', :speed => '', :operating_characteristics => nil, :train_class => "", :sleepers => nil, :reservations => '0', :catering_code => nil, :service_branding => nil, :status => '1', :stp_indicator => 'N',  :runs_from => Date.parse('2011-11-14'), :runs_to => Date.parse('2011-11-14'), :runs_mo => true, :runs_tu => false, :runs_we => false, :runs_th => false, :runs_fr => false, :runs_sa => false, :runs_su => false, :ats_code => 'N', :bh_running => nil, :data_source => 'VSTP' }
 
     vstp_schedule = BasicSchedule.find_all_by_train_uid('20203')
     vstp_schedule.count.should eql(1)
