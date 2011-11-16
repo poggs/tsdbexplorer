@@ -19,35 +19,31 @@
 
  <thead>
   <tr>
-   <th>&nbsp;</th>
-   <th>&nbsp;</th>
-   <th colspan="3">Arrival</th>
-   <th colspan="3">Departure</th>
-  </tr>
-  <tr>
    <th>Location</th>
-   <th>Platform</th>
-   <th>WTT</th>
-   <th>Public</th>
-   <th>WTT</th>
-   <th>Public</th>
+   <th>Pfm</th>
+   <th>Line</th>
+   <th>Path</th>
+   <th>Arrival</th>
+   <th>WTT Arr</th>
+   <th>Pass</th>
+   <th>Departure</th>
+   <th>WTT Dep</th>
+   <th>Performance</th>
   </tr>
  </thead>
  <tbody>
   <% @as_run.locations.each do |l| %>
    <tr>
     <td><%= tidy_text(decode_tiploc(l)) %></td>
-    <td><%=raw l.platform || "&nbsp;" %></td>
-    <% if l.pass? %>
-     <td colspan="4" style="text-align: center;">PASS <%= l.pass %></td>
-    <% else %>
-     <td><%= time_only(l.arrival) %></td>
-     <td><%= time_only(l.public_arrival) %></td>
-     <td><%= time_only(l.actual_arrival) %></td>
-     <td><%= time_only(l.departure) %></td>
-     <td><%= time_only(l.public_departure) %></td>
-     <td><%= time_only(l.actual_departure) %></td>
-    <% end %>
+    <td><%= l.platform %></td>
+    <td><%= l.line %></td>
+    <td><%= l.path %></td>
+    <td><%= time_only(l.public_arrival) %></td>
+    <%= format_time(l, 'arrival') %>
+    <%= format_time(l, 'pass') %>
+    <td><%= time_only(l.public_departure) %></td>
+    <%= format_time(l, 'departure') %>
+    <td><%= calculate_variation(l) %></td>
    </tr>
   <% end %>
  </tbody>

@@ -237,8 +237,59 @@ describe ScheduleHelper do
     output.should eql('Arrived 2 minutes late')
   end
 
-  it "should display the arrival performance when there is no departure performance"
-  it "should display 'No report' when no information has been received for a location"
+  it "should display 'Passed 2 minutes early' for a location where the actual passing time is 2 minutes earlier then the scheduled passing time" do
+    location = DailyScheduleLocation.new(:pass => Time.parse('2011-10-30 09:00:00'), :actual_pass => Time.parse('2011-10-30 08:58:00'))
+    output = calculate_variation(location)
+    output.should eql('Passed 2 minutes early')
+  end
+
+  it "should display 'Passed 1 minute early' for a location where the actual passing time is 1 minute earlier than the scheduled passing time" do
+    location = DailyScheduleLocation.new(:pass => Time.parse('2011-10-30 09:00:00'), :actual_pass => Time.parse('2011-10-30 08:59:00'))
+    output = calculate_variation(location)
+    output.should eql('Passed 1 minute early')
+  end
+
+  it "should display 'Passed half a minute early' for a location where the actual passing time is half a minute earlier than the scheduled passing time" do
+    location = DailyScheduleLocation.new(:pass => Time.parse('2011-10-30 09:00:00'), :actual_pass => Time.parse('2011-10-30 08:59:30'))
+    output = calculate_variation(location)
+    output.should eql('Passed half a minute early')
+  end
+
+  it "should display 'Passed on-time' for a location where the actual passing time is the same as the scheduled passing time" do
+    location = DailyScheduleLocation.new(:pass => Time.parse('2011-10-30 09:00:00'), :actual_pass => Time.parse('2011-10-30 09:00:00'))
+    output = calculate_variation(location)
+    output.should eql('Passed on-time')
+  end
+
+  it "should display 'Passed half a minute late' for a location where the actual passing time is half a minute later than the scheduled passing time" do
+    location = DailyScheduleLocation.new(:pass => Time.parse('2011-10-30 09:00:00'), :actual_pass => Time.parse('2011-10-30 09:00:30'))
+    output = calculate_variation(location)
+    output.should eql('Passed half a minute late')
+  end
+
+  it "should display 'Passed 1 minute late' for a location where the actual passing time is 1 minute later than the scheduled passing time" do
+    location = DailyScheduleLocation.new(:pass => Time.parse('2011-10-30 09:00:00'), :actual_pass => Time.parse('2011-10-30 09:01:00'))
+    output = calculate_variation(location)
+    output.should eql('Passed 1 minute late')
+  end
+
+  it "should display 'Passed 2 minutes late' for a location where the actual passing time is 2 minutes later than the scheduled passing time" do
+    location = DailyScheduleLocation.new(:pass => Time.parse('2011-10-30 09:00:00'), :actual_pass => Time.parse('2011-10-30 09:02:00'))
+    output = calculate_variation(location)
+    output.should eql('Passed 2 minutes late')
+  end
+
+  it "should display the arrival performance when there is no departure performance" do
+    location = DailyScheduleLocation.new(:public_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 09:00:00'), :public_departure => Time.parse('2011-10-30 09:05:00'))
+    output = calculate_variation(location)
+    output.should eql('Arrived on-time')
+  end
+
+  it "should display 'No report' when no information has been received for a location" do
+    location = DailyScheduleLocation.new(:pass => Time.parse('2011-10-30 09:00:00'), :actual_pass => nil)
+    output = calculate_variation(location)
+    output.should eql('No report')
+  end
 
   it "should display 'Cancelled' for a location where the train no longer calls at this location" do
     location = DailyScheduleLocation.new(:cancelled => true)
