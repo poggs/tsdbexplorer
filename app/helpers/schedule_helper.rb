@@ -308,4 +308,50 @@ module ScheduleHelper
 
   end
 
+
+  # Calculate the variation between an arrival and departure time
+
+  def calculate_variation(loc)
+
+    a_or_d = nil
+    e_or_l = nil
+
+    variation = nil
+
+    if loc.cancelled?
+      variation = "Cancelled"
+    else
+
+      if !loc.actual_departure.nil?
+
+        varn = loc.public_departure - loc.actual_departure
+
+        if varn < -30
+          e_or_l = 'late'
+        elsif varn > 30
+          e_or_l = 'early'
+        end
+
+        variation = "Departed " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(varn)} #{e_or_l}")
+
+      elsif !loc.actual_arrival.nil?
+
+        varn = loc.public_arrival - loc.actual_arrival
+
+        if varn < -30
+          e_or_l = 'late'
+        elsif varn > 30
+          e_or_l = 'early'
+        end
+
+        variation = "Arrived " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(varn)} #{e_or_l}")
+
+      end
+
+    end
+
+    return variation
+
+  end
+
 end

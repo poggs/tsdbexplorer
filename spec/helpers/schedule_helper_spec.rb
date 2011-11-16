@@ -153,4 +153,97 @@ describe ScheduleHelper do
     output.should match(/class="actual late"/)
   end
 
+  it "should display 'Departed 2 minutes late' for a location where the actual departure time is 2 minutes later than the public departure time" do
+    location = DailyScheduleLocation.new(:public_departure => Time.parse('2011-10-30 09:00:00'), :actual_departure => Time.parse('2011-10-30 09:02:00'))
+    output = calculate_variation(location)
+    output.should eql('Departed 2 minutes late')
+  end
+
+  it "should display 'Departed 1 minute late' for a location where the actual departure time is 1 minute later than the public departure time" do
+    location = DailyScheduleLocation.new(:public_departure => Time.parse('2011-10-30 09:00:00'), :actual_departure => Time.parse('2011-10-30 09:01:00'))
+    output = calculate_variation(location)
+    output.should eql('Departed 1 minute late')
+  end
+
+  it "should display 'Departed on-time' for a location where the actual departure time is half a minute later than public departure time" do
+    location = DailyScheduleLocation.new(:public_departure => Time.parse('2011-10-30 09:00:00'), :actual_departure => Time.parse('2011-10-30 09:00:30'))
+    output = calculate_variation(location)
+    output.should eql('Departed on-time')
+  end
+
+  it "should display 'Departed on-time' for a location where the actual departure time is the same as the public departure time" do
+    location = DailyScheduleLocation.new(:public_departure => Time.parse('2011-10-30 09:00:00'), :actual_departure => Time.parse('2011-10-30 09:00:00'))
+    output = calculate_variation(location)
+    output.should eql('Departed on-time')
+  end
+
+  it "should display 'Departed on-time' for a location where the actual departure time is half a minute earlier than public departure time" do
+    location = DailyScheduleLocation.new(:public_departure => Time.parse('2011-10-30 09:00:00'), :actual_departure => Time.parse('2011-10-30 08:59:30'))
+    output = calculate_variation(location)
+    output.should eql('Departed on-time')
+  end
+
+  it "should display 'Departed 1 minute early' for a location where the actual departure time is 1 minute earlier than the public departure time" do
+    location = DailyScheduleLocation.new(:public_departure => Time.parse('2011-10-30 09:00:00'), :actual_departure => Time.parse('2011-10-30 08:59:00'))
+    output = calculate_variation(location)
+    output.should eql('Departed 1 minute early')
+  end
+
+  it "should display 'Departed 2 minutes early' for a loction where the actual departure time is 2 minutes earlier than the public departure time'" do
+    location = DailyScheduleLocation.new(:public_departure => Time.parse('2011-10-30 09:00:00'), :actual_departure => Time.parse('2011-10-30 08:58:00'))
+    output = calculate_variation(location)
+    output.should eql('Departed 2 minutes early')
+  end
+
+  it "should display 'Arrived 2 minutes early' for a location where the actual arrival time is 2 minutes earlier then the public arrival time" do
+    location = DailyScheduleLocation.new(:public_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 08:58:00'))
+    output = calculate_variation(location)
+    output.should eql('Arrived 2 minutes early')
+  end
+
+  it "should display 'Arrived 1 minute early' for a location where the actual arrival time is 1 minute earlier than the public arrival time" do
+    location = DailyScheduleLocation.new(:public_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 08:59:00'))
+    output = calculate_variation(location)
+    output.should eql('Arrived 1 minute early')
+  end
+
+  it "should display 'Arrived on-time' for a location where the actual arrival time is half a minute earlier than the public arrival time" do
+    location = DailyScheduleLocation.new(:public_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 08:59:30'))
+    output = calculate_variation(location)
+    output.should eql('Arrived on-time')
+  end
+
+  it "should display 'Arrived on-time' for a location where the actual arrival time is the same as the public arrival time" do
+    location = DailyScheduleLocation.new(:public_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 09:00:00'))
+    output = calculate_variation(location)
+    output.should eql('Arrived on-time')
+  end
+
+  it "should display 'Arrived on-time' for a location where the actual arrival time is half a minute later than the public arrival time" do
+    location = DailyScheduleLocation.new(:public_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 09:00:30'))
+    output = calculate_variation(location)
+    output.should eql('Arrived on-time')
+  end
+
+  it "should display 'Arrived 1 minute late' for a location where the actual arrival time is 1 minute later than the public arrival time" do
+    location = DailyScheduleLocation.new(:public_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 09:01:00'))
+    output = calculate_variation(location)
+    output.should eql('Arrived 1 minute late')
+  end
+
+  it "should display 'Arrived 2 minutes late' for a location where the actual arrival time is 2 minutes later than the public arrival time" do
+    location = DailyScheduleLocation.new(:public_arrival => Time.parse('2011-10-30 09:00:00'), :actual_arrival => Time.parse('2011-10-30 09:02:00'))
+    output = calculate_variation(location)
+    output.should eql('Arrived 2 minutes late')
+  end
+
+  it "should display the arrival performance when there is no departure performance"
+  it "should display 'No report' when no information has been received for a location"
+
+  it "should display 'Cancelled' for a location where the train no longer calls at this location" do
+    location = DailyScheduleLocation.new(:cancelled => true)
+    output = calculate_variation(location)
+    output.should =~ /Cancelled/
+  end
+
 end

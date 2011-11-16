@@ -59,6 +59,7 @@
    <th style="text-align: center;">Platform</th>
    <th>Arrival</th>
    <th>Departure</th>
+   <th>Performance</th>
   </tr>
  </thead>
  <tbody>
@@ -69,6 +70,7 @@
      <td style="text-align: center;"><%=raw l.platform || "&nbsp;" %></td>
      <%= format_time(l, 'arrival') %>
      <%= format_time(l, 'departure') %>
+     <td><%= calculate_variation(l) %></td>
     </tr>
    <% end %>
   <% end %>
