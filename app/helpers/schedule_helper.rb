@@ -223,14 +223,19 @@ module ScheduleHelper
 
   # Return the scheduled, expected or actual time for the arrival, passing or departure time
 
-  def format_time(location, type)
+  def format_time(location, type, public_or_wtt)
 
     html_class = nil
     value = nil
 
     if ['arrival', 'pass', 'departure'].include? type
 
-      scheduled = location.send(type)
+      if public_or_wtt == :public
+        scheduled = location.send('public_' + type)
+      else
+        scheduled = location.send(type)
+      end
+
       expected = location.send("expected_" + type)
       actual = location.send("actual_" + type)
 

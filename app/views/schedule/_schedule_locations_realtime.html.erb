@@ -39,10 +39,10 @@
     <td><%= l.line %></td>
     <td><%= l.path %></td>
     <td><%= time_only(l.public_arrival) %></td>
-    <%= format_time(l, 'arrival') %>
-    <%= format_time(l, 'pass') %>
+    <%= format_time(l, 'arrival', :wtt) %>
+    <%= format_time(l, 'pass', :wtt) %>
     <td><%= time_only(l.public_departure) %></td>
-    <%= format_time(l, 'departure') %>
+    <%= format_time(l, 'departure', :wtt) %>
     <td><%= calculate_variation(l) %></td>
    </tr>
   <% end %>
@@ -64,8 +64,8 @@
     <tr>
      <td><%= tidy_text(decode_tiploc(l)) %></td>
      <td style="text-align: center;"><%=raw l.platform || "&nbsp;" %></td>
-     <%= format_time(l, 'arrival') %>
-     <%= format_time(l, 'departure') %>
+     <%= format_time(l, 'arrival', :public) %>
+     <%= format_time(l, 'departure', :public) %>
      <td><%= calculate_variation(l) %></td>
     </tr>
    <% end %>
