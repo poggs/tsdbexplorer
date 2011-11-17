@@ -332,7 +332,7 @@ module ScheduleHelper
           e_or_l = 'early'
         end
 
-        variation = "Departed " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(varn)} #{e_or_l}")
+        variation = "Departed " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(loc.public_departure, loc.actual_departure, true)} #{e_or_l}")
 
       elsif !loc.actual_arrival.nil?
 
@@ -344,7 +344,23 @@ module ScheduleHelper
           e_or_l = 'early'
         end
 
-        variation = "Arrived " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(varn)} #{e_or_l}")
+        variation = "Arrived " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(loc.public_arrival, loc.actual_arrival, true)} #{e_or_l}")
+
+      elsif !loc.pass.nil? && !loc.actual_pass.nil?
+
+        varn = loc.pass - loc.actual_pass
+
+        if varn < 0
+          e_or_l = 'late'
+        elsif varn > 0
+          e_or_l = 'early'
+        end
+
+        variation = "Passed " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(loc.pass, loc.actual_pass, true)} #{e_or_l}")
+
+      else
+
+        variation = "No report"
 
       end
 
