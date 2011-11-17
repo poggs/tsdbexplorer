@@ -1,0 +1,54 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIABGLELE00244800AABERGELE & PENSARN        40073   0AGLABERGELE & PENSN        
+TIBANGOR 00247100JBANGOR (GWYNEDD)          40036   0BNGBANGOR GWYNEDD          
+TIBESTTSB08124001YBEESTON CASTLE & T. S. B. 42113   0                           
+TIBODORGN00243500BBODORGAN                  40017   0BORBODORGAN                
+TICBAY   01245100YCOLWYN BAY                40071   0CWBCOLWYN BAY              
+TICHST   00241200YCHESTER                   403202830CTRCHESTER                 
+TICHSTRSJ48241208DCHESTER SOUTH JN.         40238   0                           
+TICREWE  00124300JCREWE                     421402835CRECREWE                   
+TICREWESW48124305XCREWE STEEL WORKS         42117   0                           
+TIFLINT  00251300LFLINT                     40125   0FLNFLINT                   
+TIGRWN   00243600GGAERWEN                   40028   0                           
+TIHLWLJN 08251500UHOLYWELL JN               40123   0                           
+TIHLYH   00243700LHOLYHEAD                  40001   0HHDHOLYHEAD                
+TILANDUDJ32248500NLLANDUDNO JUNCTION        40050   0LLJLLANDUDNO JN            
+TILFPW   00246700JLLANFAIRPWLL              40030   0LPGLLANFAIRPWLL            
+TIMENAIBG16246701KMENAI BRIDGE              40031   0                           
+TIPNMNMWR00249400PPENMAENMAWR               40042   0PMWPENMAENMAWR             
+TIPSTA   00252100WPRESTATYN                 40101   0PRTPRESTATYN               
+TIRCKCLFH32242701FROCKCLIFFE HALL           40127   0                           
+TIRHOSNGR00254400XRHOSNEIGR                 40013   0RHORHOSNEIGR               
+TIRHYL   00246100CRHYL                      40076   0RHLRHYL                    
+TISHOTTON00254600BSHOTTON                   40209   0SHTSHOTTON                 
+TISLNYJN 08241207CSALTNEY JN                40220   0                           
+TITYCROES02243900UTY CROES                  40015   0TYCTY CROES                
+TIVALLEY 00244000GVALLEY                    40012   0VALVALLEY                  
+BSNP830511105221112040000001 PXX1D162212122340000 DMUE   100      S S T        P
+BX         AWY                                                                  
+LOCREWE   1327 132710        TB                                                 
+LICREWESW           1329H00000000                                               
+LIBESTTSB           1336H00000000                                               
+LICHST    1345 1402      134714023  DML   T                                     
+LICHSTRSJ           1403 00000000                                               
+LISLNYJN            1405 00000000                                               
+LISHOTTON 1410 1411      14101411         T                                     
+LIRCKCLFH           1413H00000000                                               
+LIFLINT   1416 1417      14161417         T                                     
+LIHLWLJN            1421H00000000                                               
+LIPSTA    1429H1430H     14301430         T                                     
+LIRHYL    1435H1436H     14361436         T                                     
+LIABGLELE 1441H1442H     14421442         T                                     
+LICBAY    1449H1450H     14501450         T                                     
+LILANDUDJ 1455 1457      145514573        T                                     
+LIPNMNMWR           1503H00000000                                               
+LIBANGOR  1512 1514      15121514         T                                     
+LIMENAIBG           1517H00000000                                               
+LILFPW    1520 1520H     15201520         R                                     
+LIGRWN              1524 00000000                                               
+LIBODORGN 1530 1530H     15301530         R                                     
+LITYCROES 1534 1534H     15341534         R                                     
+LIRHOSNGR 1537 1537H     15371537         R                                     
+LIVALLEY  1542H1543      15431543         R           3                         
+LTHLYH    1552 15572     TF                                                     
+ZZ

@@ -1,0 +1,32 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIAYRR   00946300LAYR                       08618   0AYRAYR                     
+TIBARASIE00946600DBARASSIE                  08411   0BSSBARASSIE                
+TIBARASIJ32946662ABARASSIE JN               08413   0                           
+TIDALRY  00948300CDALRY                     08101   0DLYDALRY                   
+TIELDRSLI00964869CELDERSLIE                 07112   0                           
+TIIRVN   00950800FIRVINE                    08401   0IRVIRVINE                  
+TIJOHNSTN00964800UJOHNSTONE                 07105   0JHNJOHNSTONE SCLYDE        
+TIKILWNNG00951700HKILWINNING                08105   0KWNKILWINNING              
+TILCHWNCH00965500NLOCHWINNOCH               07101   0LHWLOCHWINNOCH             
+TINWTOA  12957100ZNEWTON-ON-AYR             08605   0NOANEWTON ON AYR           
+TIPSLYGST24968300BPAISLEY GILMOUR STREET    07140   0PYGPAISLEY GIL ST          
+TIPWCK   00954300WPRESTWICK TOWN            08523   0PTWPRESTWICK SCLYDE        
+TIPWCKAPT56954400NPRESTWICK INT. AIRPORT    08521   0PRAPRESTWICK INT AP        
+TITROON  00956200RTROON                     08519   0TRNTROON                   
+BSNG460771105221112040000001 POU2K39    113573015 EMU    075                   P
+BX         SRY                                                                  
+LOPSLYGST 2347 00003         TBN                                                
+LIELDRSLI           2349H00000000                                               
+LIJOHNSTN 2351 2351H     000000002        N D                                   
+LILCHWNCH           2356H00000000                                               
+LIDALRY             0001H00000000                                               
+LIKILWNNG 0004H0005      000000004        D N                                   
+LIIRVN    0008H0009      00000000         N D                                   
+LIBARASIE 0013 0013H     00000000         D N                                   
+LIBARASIJ           0014 00000000                                               
+LITROON   0016 0016H     00000000         D N                                   
+LIPWCKAPT 0020 0020H     00000000         D N                                   
+LIPWCK    0022 0022H     00000000         D N                                   
+LINWTOA             0025H00000000                        H                      
+LTAYRR    0028 00003N    TFN                                                    
+ZZ

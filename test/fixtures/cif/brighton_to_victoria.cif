@@ -1,0 +1,50 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIBALCMTJ48549201VBALCOMBE TUNNEL JN        87927   0                           
+TIBALCOMB00549200UBALCOMBE                  87963   0BABBALCOMBE                
+TIBALHAM 00539900VBALHAM                    87222   0BALBALHAM                  
+TIBRGHTN 00526800WBRIGHTON                  87980   0BTNBRIGHTON                
+TIBURGESH32548300ZBURGESS HILL              87971   0BUGBURGESS HILL            
+TICLPHMJC48559569FCLAPHAM JUNCTION          87219   0                           
+TIEARLSWD00541400UEARLSWOOD (SURREY)        87903   0ELDEARLSWOOD SURREY        
+TIECROYDN01535500TEAST CROYDON              87701   0ECREAST CROYDON            
+TIGTWK   02541600WGATWICK AIRPORT           87911   0GTWGATWICK AIRPORT         
+TIHASOCKS00548900DHASSOCKS                  87973   0HSKHASSOCKS                
+TIHORLEY 00536500EHORLEY                    87909   0HORHORLEY                  
+TIHYWRDSH32549000LHAYWARDS HEATH            87967   0HHEHAYWARDS HEATH          
+TIKEYMERJ32548361PKEYMER JN                 87972   0XKM                        
+TIPRSP   04528500HPRESTON PARK              87975   0PRPPRESTON PARK            
+TIPURLEY 00537900WPURLEY                    87801   0PURPURLEY                  
+TIREDHILL00547800XREDHILL                   877222958RDHREDHILL                 
+TISCROYDN01541000BSOUTH CROYDON             87704   0SCYSOUTH CROYDON           
+TISELHRST00543400MSELHURST                  87637   0SRSSELHURST                
+TISNSTJN 09543060KSTOATS NEST JN.           87901   0XJS                        
+TITHBDGS 02549100QTHREE BRIDGES             87920   0TBDTHREE BRIDGES           
+TIVICTRIC32542603YLONDON VICTORIA           87201   0                           
+TIWNDMLBJ48535503AWINDMILL BRIDGE JN        87700   0                           
+TIWVLSFLD00534100QWIVELSFIELD               87969   0WVFWIVELSFIELD             
+BSNW521321105221112040000001 POO2A61    124664004 EMU    100      B S          P
+BX         SNY                                                                  
+LOBRGHTN  2302 23027         TB           H                                     
+LIPRSP    2305H2306      230623062        T                                     
+LIHASOCKS 2312 2312H     23122312         T                                     
+LIBURGESH 2315H2316H     23162316         T                                     
+LIKEYMERJ           2318 00000000                                               
+LIWVLSFLD 2318H2319      23192319         T                                     
+LIHYWRDSH 2323 2324      232323243        T                                     
+LIBALCOMB 2329 2329H     23292329         T                                     
+LIBALCMTJ           2332H00000000   SL                  1H                      
+LITHBDGS  2336 2343      233623432        T                                     
+LIGTWK    2346H2348      234723482        T                                     
+LIHORLEY  2350 2350H     23502350   SL    T                                     
+LIEARLSWD           2355 00000000                                               
+LIREDHILL 2356H0001H     235700012        T                                     
+LISNSTJN            0008H00000000                                               
+LIPURLEY  0010H0011      001100113        T                                     
+LISCROYDN           0014 00000000                                               
+LIECROYDN 0015H0016H     001600163        T                                     
+LIWNDMLBJ           0017H00000000                                               
+LISELHRST 0019H0020H     000000004  FL    S                                     
+LIBALHAM            0025H00000000                                               
+LICLPHMJC 0028H0029H     0029002912       T           1                         
+LTVICTRIC 0036H003718    TF                                                     
+ZZ

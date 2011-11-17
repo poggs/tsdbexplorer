@@ -262,11 +262,42 @@ describe "lib/tsdbexplorer/cif.rb" do
     london_euston.activity_tb.should be_true
   end
 
-  it "should set the activity_d column on locations where the train stops to set down passengers only"
-  it "should set the activity_u column on locations where the train stops to pick up passengers only"
-  it "should set the activity_n column on locations where the stop is unadvertised"
-  it "should set the activity_r column on locations where the train stops only when required"
-  it "should set the activity_s column on locations where the train stops for railway personnel only"  
+  it "should set the activity_d column on locations where the train stops to set down passengers only" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/pickup_and_setdown.cif')
+    schedule = BasicSchedule.where(:train_uid => 'P64024').first
+    watford_junction = schedule.locations.where(:tiploc_code => 'WATFDJ').first
+    watford_junction.activity_d.should be_true
+  end
+
+  it "should set the activity_u column on locations where the train stops to pick up passengers only" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/pickup_and_setdown.cif')
+    schedule = BasicSchedule.where(:train_uid => 'P64437').first
+    watford_junction = schedule.locations.where(:tiploc_code => 'WATFDJ').first
+    watford_junction.activity_u.should be_true
+  end
+
+  it "should set the activity_n column on locations where the stop is unadvertised" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/paisley_to_ayr.cif')
+    schedule = BasicSchedule.where(:train_uid => 'G46077').first
+    johnston = schedule.locations.where(:tiploc_code => 'JOHNSTN').first
+    johnston.activity_n.should be_true
+    prestwick = schedule.locations.where(:tiploc_code => 'PWCK').first
+    prestwick.activity_n.should be_true
+  end
+
+  it "should set the activity_r column on locations where the train stops only when required" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/crewe_to_holyhead.cif')
+    schedule = BasicSchedule.where(:train_uid => 'P83051').first
+    watford_junction = schedule.locations.where(:tiploc_code => 'LFPW').first
+    watford_junction.activity_r.should be_true
+  end
+
+  it "should set the activity_s column on locations where the train stops for railway personnel only" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/brighton_to_victoria.cif')
+    schedule = BasicSchedule.where(:train_uid => 'W52132').first
+    watford_junction = schedule.locations.where(:tiploc_code => 'SELHRST').first
+    watford_junction.activity_s.should be_true
+  end
 
   it "should set the activity_t column on locations where the train stops to pick up and set down passengers" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
