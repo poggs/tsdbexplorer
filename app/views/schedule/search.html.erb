@@ -8,7 +8,7 @@
  <p>We found more than one schedule that matched - did you mean one of these?</p>
 
  <ul>
-  <% @schedule.each do |s| %>
+  <% @schedule.sort { |a,b| a.atoc_code <=> b.atoc_code }.each do |s| %>
    <% if params[:date].nil? %>
     <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %></li>
    <% else %>
