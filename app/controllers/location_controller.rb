@@ -61,6 +61,11 @@ class LocationController < ApplicationController
 
       @schedule = Location.where(:tiploc_code => @location.tiploc_code)
 
+      # Only show passenger services if we are not in advanced mode
+
+      @schedule = @schedule.only_passenger if session[:mode] != 'advanced'
+
+
       # Handle windows which span midnight
 
       if @range[:from].midnight == @range[:to].midnight
