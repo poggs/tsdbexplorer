@@ -26,7 +26,7 @@ describe DailyScheduleLocation do
     record.should_not be_valid
   end
 
-  it "should have a method which identifies if the location should be publically advertised" do
+  it "should have a method which identifies if the location should be publicly advertised" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/pickup_and_setdown.cif')
     activation = TSDBExplorer::TDnet::process_trust_message('000120110717075016TRUST               TSIA                                721G02MD17201107170750167241020110717085000P644372022051100000020041211000000CO1G02M000007241020110717085000AN6522100001   ')
 
