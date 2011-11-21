@@ -58,4 +58,50 @@ describe DailySchedule do
     train.origin.tiploc_code.should eql('BROXBRN')
   end
 
+  it "should have a method which returns the last location details for this train" do
+    DailySchedule.new.should respond_to(:last_location)
+  end
+
+  it "should return the originating location when reporting the last location of a train which has not yet departed its origin" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/dalston_junction_to_new_cross.cif')
+    TSDBExplorer::TDnet::process_trust_message('000120111114085058TRUST               TSIA                                529E19MF14201111140850585207420111114095000L966952023051100000020091211000000CO9E19M000005207420111114095000AN3022218000   ')
+    daily_schedule = DailySchedule.runs_on_by_uid_and_date('L96695', '2011-11-14').first
+    daily_schedule.last_location.should be_nil
+  end
+
+  it "should return the originating location when reporting the last location of a train which has left its origin" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/dalston_junction_to_new_cross.cif')
+    TSDBExplorer::TDnet::process_trust_message('000120111114085058TRUST               TSIA                                529E19MF14201111140850585207420111114095000L966952023051100000020091211000000CO9E19M000005207420111114095000AN3022218000   ')
+    TSDBExplorer::TDnet::process_trust_message('000320111114095018TRUST               SMART                               529E19MF1420111114095000520742011111409500020111114095000     00000000000000DDA  D  31529E19MF14222180003030000 52078001 Y   52074Y')
+    daily_schedule = DailySchedule.runs_on_by_uid_and_date('L96695', '2011-11-14').first
+    daily_schedule.last_location.should eql(daily_schedule.locations.where(:tiploc_code => 'DALS').first)
+  end
+
+  it "should return the first calling point when reporting the last location of a train which has arrived at its first calling point" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/dalston_junction_to_new_cross.cif')
+    TSDBExplorer::TDnet::process_trust_message('000120111114085058TRUST               TSIA                                529E19MF14201111140850585207420111114095000L966952023051100000020091211000000CO9E19M000005207420111114095000AN3022218000   ')
+    TSDBExplorer::TDnet::process_trust_message('000320111114095018TRUST               SMART                               529E19MF1420111114095000520742011111409500020111114095000     00000000000000DDA  D  31529E19MF14222180003030000 52078001 Y   52074Y')
+    TSDBExplorer::TDnet::process_trust_message('000320111114095057TRUST               SMART                               529E19MF1420111114095100520782011111409510020111114095100     00000000000000AAA  D   0529E19MF14222180003030000 52080001     00000Y')
+    daily_schedule = DailySchedule.runs_on_by_uid_and_date('L96695', '2011-11-14').first
+    daily_schedule.last_location.should eql(daily_schedule.locations.where(:tiploc_code => 'HAGGERS').first)
+  end
+
+  it "should return the first calling point when reporting the last location of a train which has departed its first calling point" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/dalston_junction_to_new_cross.cif')
+    TSDBExplorer::TDnet::process_trust_message('000120111114085058TRUST               TSIA                                529E19MF14201111140850585207420111114095000L966952023051100000020091211000000CO9E19M000005207420111114095000AN3022218000   ')
+    TSDBExplorer::TDnet::process_trust_message('000320111114095018TRUST               SMART                               529E19MF1420111114095000520742011111409500020111114095000     00000000000000DDA  D  31529E19MF14222180003030000 52078001 Y   52074Y')
+    TSDBExplorer::TDnet::process_trust_message('000320111114095057TRUST               SMART                               529E19MF1420111114095100520782011111409510020111114095100     00000000000000AAA  D   0529E19MF14222180003030000 52080001     00000Y')
+    TSDBExplorer::TDnet::process_trust_message('000320111114095219TRUST               SMART                               529E19MF1420111114095100520782011111409510020111114095130     00000000000000DDA  D   1529E19MF14222180003030000 52080002     00000Y')
+    daily_schedule = DailySchedule.runs_on_by_uid_and_date('L96695', '2011-11-14').first
+    daily_schedule.last_location.should eql(daily_schedule.locations.where(:tiploc_code => 'HAGGERS').first)
+  end
+
+  it "should return the terminating location when reporting the last location of a train which has terminated" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/dalston_junction_to_new_cross.cif')
+    TSDBExplorer::TDnet::process_trust_message('000120111114085058TRUST               TSIA                                529E19MF14201111140850585207420111114095000L966952023051100000020091211000000CO9E19M000005207420111114095000AN3022218000   ')
+    TSDBExplorer::TDnet::process_trust_message('000320111114100847TRUST               SMART                               529E19MF1420111114101000883922011111410120020111114101100     00000000000000TAA  D   0529E19MF14222180003030001E     000YY   88392Y')
+    daily_schedule = DailySchedule.runs_on_by_uid_and_date('L96695', '2011-11-14').first
+    daily_schedule.last_location.should eql(daily_schedule.locations.where(:tiploc_code => 'NWCRELL').first)
+  end
+
 end

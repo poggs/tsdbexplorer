@@ -1,0 +1,30 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TICANALJ 16065105ZCANAL JUNCTION (NEW CROSS)87578   0                           
+TICNDAW  00165900UCANADA WATER              87568   0ZCWCANADA WATER            
+TIDALS   00144300WDALSTON JUNCTION STN ELL  52074   0DLJDALSTON JUNCTION        
+TIHAGGERS00102200XHAGGERSTON                52078   0HGGHAGGERSTON              
+TIHOXTON 00102300ZHOXTON                    52080   0HOXHOXTON                  
+TINWCRELL00515002UNEW CROSS ELL             88392   0                           
+TIROLTSTJ00065106TROLT STREET JUNCTION      87580   0                           
+TIRTHERHI00103900KROTHERHITHE               87566   0ROEROTHERHITHE             
+TISHADWEL00108200KSHADWELL                  52088   0SDESHADWELL                
+TISHRDHST00102400BSHOREDITCH HIGH STREET    52082   0SDCSHOREDTCH HGH ST        
+TISURREYQ00108300PSURREY QUAYS              87572   0SQESURREY QUAYS            
+TIWAPPING00108500CWAPPING                   52090   0WPEWAPPING                 
+TIWCHAPEL00076300ZWHITECHAPEL               52084   0ZWLWHITECHAPEL UND         
+BSNL966951105231112091111100 POO9E19    122218000 EMU375 075D     S            P
+BX         LOY                                                                  
+LODALS    0950 09503         TB                                                 
+LIHAGGERS 0951 0951H     09510951         T                                     
+LIHOXTON  0953 0953H     09530953         T                                     
+LISHRDHST 0955H0956      09560956         T                                     
+LIWCHAPEL 0957H0958H     09580958         T                                     
+LISHADWEL 1000 1000H     100010002        T                                     
+LIWAPPING 1002 1002H     10021002         T                                     
+LIRTHERHI 1003H1004      10041004         T                                     
+LICNDAW   1005 1006      100510063        T                                     
+LISURREYQ 1007 1007H     10071007         T                                     
+LICANALJ            1009 00000000                                               
+LIROLTSTJ           1009H00000000                                               
+LTNWCRELL 1011 1012      TF                                                     
+ZZ

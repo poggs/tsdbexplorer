@@ -297,6 +297,9 @@ module TSDBExplorer
 
       point.save!
 
+      schedule.last_location = point.seq
+      schedule.save!
+
       return Struct.new(:status, :message).new(:ok, 'Processed movement type ' + event_type + ' for train ' + train_identity + ' at ' + point.tiploc.tps_description + ' on ' + timestamp.strftime("%Y-%m-%d %H:%M"))
 
     end

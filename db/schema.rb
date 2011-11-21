@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111115082743) do
+ActiveRecord::Schema.define(:version => 20111121180307) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(:version => 20111115082743) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "data_source",               :limit => 16
+    t.integer  "last_location"
   end
 
   add_index "daily_schedules", ["train_identity_unique"], :name => "index_daily_schedules_on_train_identity_unique"

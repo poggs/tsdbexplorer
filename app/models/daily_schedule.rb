@@ -53,4 +53,18 @@ class DailySchedule < ActiveRecord::Base
     self.locations.last.actual_arrival.nil? ? false : true
   end
 
+
+  # Return a DailyScheduleLocation referring to the last location at which this train was seen
+
+  def last_location
+
+    if read_attribute(:last_location).nil?
+      nil
+    else
+      self.locations.where(:seq => read_attribute(:last_location)).first
+    end
+
+  end
+
+
 end
