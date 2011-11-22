@@ -62,21 +62,16 @@ describe ApplicationHelper do
     decode_reservations('$').should eql('$: Unknown')
   end
 
-  it "should convert a Tiploc object in to text" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
-    decode_tiploc(Tiploc.first).should eql('London Euston')
+  it "should return the description for a Location object referencing a known TIPLOC" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    location = Location.where(:tiploc_code => 'EUSTON').first
+    decode_tiploc(location).should eql('LONDON EUSTON')
   end
-
-  it "should convert a Tiploc object in to text" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
-    decode_tiploc(Tiploc.first).should eql('London Euston')
-  end
-
-  it "should return the description for a Location object referencing a known TIPLOC"
 
   it "should return the Tiploc code for a Location object referring to an unknown TIPLOC" do
-    location = Location.new(:tiploc_code => 'EUSTON')
-    decode_tiploc(location).should eql('EUSTON')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
+    location = Location.new(:tiploc_code => 'WATFDJ')
+    decode_tiploc(location).should eql('WATFDJ')
   end
 
   it "should tidy up text with railway jargon and abbreviations" do
@@ -105,8 +100,6 @@ describe ApplicationHelper do
   it "should return the DA code when asked to decode an unknown DA code" do
     da_to_text('99').should eql('delay causation code 99')
   end
-
-  it "should return the days of the week a service runs as text"
 
   it "should display the simplest representation of the time between two dates" do
     date_range(Time.parse('2011-01-01 09:00:00'), Time.parse('2011-01-01 10:00:00')).should eql('between 0900 and 1000 on Saturday 01 January 2011')
