@@ -329,7 +329,9 @@ module ScheduleHelper
 
       if !loc.actual_departure.nil?
 
-        varn = loc.public_departure - loc.actual_departure
+        departure = loc.public_departure.nil? ? loc.departure : loc.public_departure
+
+        varn = departure - loc.actual_departure
 
         if varn < -30
           e_or_l = 'late'
@@ -337,11 +339,13 @@ module ScheduleHelper
           e_or_l = 'early'
         end
 
-        variation = "Departed " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(loc.public_departure, loc.actual_departure, true)} #{e_or_l}")
+        variation = "Departed " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(departure, loc.actual_departure, true)} #{e_or_l}")
 
       elsif !loc.actual_arrival.nil?
 
-        varn = loc.public_arrival - loc.actual_arrival
+        arrival = loc.public_arrival.nil? ? loc.arrival : loc.public_arrival
+
+        varn = arrival - loc.actual_arrival
 
         if varn < -30
           e_or_l = 'late'
@@ -349,7 +353,7 @@ module ScheduleHelper
           e_or_l = 'early'
         end
 
-        variation = "Arrived " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(loc.public_arrival, loc.actual_arrival, true)} #{e_or_l}")
+        variation = "Arrived " + (e_or_l.nil? ? "on-time" : "#{distance_of_time_in_words(arrival, loc.actual_arrival, true)} #{e_or_l}")
 
       elsif !loc.pass.nil? && !loc.actual_pass.nil?
 

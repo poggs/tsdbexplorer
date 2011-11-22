@@ -297,4 +297,16 @@ describe ScheduleHelper do
     output.should =~ /Cancelled/
   end
 
+  it "should calculate the variation for a departure point where there is no public time" do
+    location = DailyScheduleLocation.new(:departure => Time.parse('2011-10-30 10:00:00'), :actual_departure => Time.parse('2011-10-30 10:00:00'))
+    output = calculate_variation(location)
+    output.should eql('Departed on-time')
+  end
+
+  it "should calculate the variation for an arrival point where there is no public time" do
+    location = DailyScheduleLocation.new(:arrival => Time.parse('2011-10-30 10:00:00'), :actual_arrival => Time.parse('2011-10-30 10:00:00'))
+    output = calculate_variation(location)
+    output.should eql('Arrived on-time')
+  end
+
 end
