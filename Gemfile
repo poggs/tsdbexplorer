@@ -8,6 +8,7 @@ gem 'amqp'
 gem 'rake', '0.9.2'
 gem 'ruby-progressbar', '>= 0.0.10'
 gem 'memcache', '>= 1.2.13'
+gem 'redis', '2.2.2'
 
 group :test do
   gem 'cucumber-rails'
