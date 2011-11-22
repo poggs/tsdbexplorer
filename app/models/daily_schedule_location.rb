@@ -35,10 +35,7 @@ class DailyScheduleLocation < ActiveRecord::Base
   # set-down points
 
   def is_public?
-    [:activity_tb, :activity_tf, :activity_t, :activity_d, :activity_u].each do |a|
-      return true if self.send(a) == true
-    end
-    return false
+    self.public_departure || self.public_arrival
   end
 
 
