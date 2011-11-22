@@ -238,7 +238,14 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     calling_point_departure.actual_departure.should eql(Time.parse('2010-12-12 18:51:00'))
   end
 
-  it "should record the source of an automatically generated movement correctly"
+  it "should record the source of an automatically generated movement correctly" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
+    activation.status.should eql(:ok)
+    depart_wfj_automatic = TSDBExplorer::TDnet::process_trust_message('000320101212184913TRUST               SMART                               722N53MW1220101212184900710402010121218500020101212185000     00000000000000AAA  D  80722N53MW12222090002929001E71011002 Y   71040Y')
+    depart_wfj_location = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first.locations.where(:tiploc_code => 'WATFDJ').first
+    depart_wfj_location.event_source.should eql('A')
+  end
 
   it "should record the source of a manually input movement correctly" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line.cif')
