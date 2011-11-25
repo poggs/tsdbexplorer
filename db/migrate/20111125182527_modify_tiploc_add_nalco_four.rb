@@ -14,24 +14,17 @@
 #  You should have received a copy of the GNU General Public License along
 #  with TSDBExplorer.  If not, see <http://www.gnu.org/licenses/>.
 #
-#  $Id: tiploc.rb 109 2011-04-19 21:03:03Z pwh $
+#  $Id$
 #
 
-=begin rdoc
+class ModifyTiplocAddNalcoFour < ActiveRecord::Migration
 
-A model object to represent a TIPLOC and its associated data
+  def self.up
+    add_column :tiplocs, :nalco_four, :string, :limit => 4
+  end
 
-=end
-
-class Tiploc < ActiveRecord::Base
-
-  belongs_to :location, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
-
-
-  # Return all locations with the same base TIPLOC as the specified TIPLOC
-
-  def find_related
-    return Tiploc.where(:nalco_four => self.nalco[0..3])
+  def self.down
+    remove_column :tiplocs, :nalco_four
   end
 
 end

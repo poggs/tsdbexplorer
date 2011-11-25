@@ -25,9 +25,24 @@ describe Tiploc do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
     london_euston = Tiploc.first
-    expected_data = { :tiploc_code => 'EUSTON', :nalco => '144400', :tps_description => 'LONDON EUSTON', :stanox => '72410', :crs_code => 'EUS', :description => 'LONDON EUSTON' }
+    expected_data = { :tiploc_code => 'EUSTON', :nalco => '144400', :nalco_four => '1444', :tps_description => 'LONDON EUSTON', :stanox => '72410', :crs_code => 'EUS', :description => 'LONDON EUSTON' }
     expected_data.each do |k,v|
       london_euston.send(k).should eql(v)
+    end
+
+  end
+
+  it "should return all TIPLOC records which share the same NLC base as a TIPLOC" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/reading_locations.cif')
+    location = Tiploc.find_by_tiploc_code('RDNGSTN')
+    related_locations = location.find_related
+    related_locations.count.should eql(7)
+
+    reading_tiplocs = [ 'RDNGCE', 'RDNGSTN', 'RDNGTMD', 'RDNGWTR', 'REDG535', 'REDGDMR', 'REDGDMU' ]
+
+    related_locations.each do |l|
+      reading_tiplocs.should include(l.tiploc_code)
     end
 
   end

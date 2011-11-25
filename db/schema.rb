@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111121180307) do
+ActiveRecord::Schema.define(:version => 20111125182527) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -376,6 +376,7 @@ ActiveRecord::Schema.define(:version => 20111121180307) do
     t.float   "geo_lat"
     t.float   "geo_lon"
     t.boolean "is_public"
+    t.string  "nalco_four",      :limit => 4
   end
 
   add_index "tiplocs", ["crs_code"], :name => "index_tiplocs_on_crs_code"

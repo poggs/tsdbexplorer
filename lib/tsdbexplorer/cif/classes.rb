@@ -48,14 +48,15 @@ module TSDBExplorer
 
     class TiplocRecord
 
-      attr_reader :action, :tiploc_code, :new_tiploc, :nalco, :tps_description, :stanox, :crs_code, :description
-      attr_accessor :action, :tiploc_code, :new_tiploc, :nalco, :tps_description, :stanox, :crs_code, :description
+      attr_reader :action, :tiploc_code, :new_tiploc, :nalco, :nalco_four, :tps_description, :stanox, :crs_code, :description
+      attr_accessor :action, :tiploc_code, :new_tiploc, :nalco, :nalco_four, :tps_description, :stanox, :crs_code, :description
 
       def initialize(record)
 
         self.action = record[1..1]
         self.tiploc_code = record[2..8].strip
         self.nalco = record[11..16]
+        self.nalco_four = record[11..14]
         self.tps_description = record[18..43]
         self.stanox = record[44..48]
         self.crs_code = record[53..55]

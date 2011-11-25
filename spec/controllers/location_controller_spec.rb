@@ -146,6 +146,14 @@ describe LocationController do
     response.body.should redirect_to(:controller => 'main', :action => 'index')
   end
 
-  it "should "
+
+  # Station groupings
+
+  it "should include associated TIPLOCs when given a CRS code where the base NLC matches several locations" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    get :index, :location => 'WFJ', :date => '2011-05-23', :time => '09:00'
+    response.body.should =~ /St. Albans Abbey/
+    response.body.should =~ /London Euston/
+  end
 
 end

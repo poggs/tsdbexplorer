@@ -87,7 +87,7 @@ module TSDBExplorer
 
       stats = {:schedule=>{:insert=>0, :amend=>0, :delete=>0}, :tiploc=>{:insert=>0, :amend=>0, :delete=>0}, :association=>{:insert=>0, :amend=>0, :delete=>0}}
 
-      pending = { 'Tiploc' => { :cols => [ :tiploc_code, :nalco, :tps_description, :stanox, :crs_code, :description ], :rows => [] },
+      pending = { 'Tiploc' => { :cols => [ :tiploc_code, :nalco, :nalco_four, :tps_description, :stanox, :crs_code, :description ], :rows => [] },
                   'BasicSchedule' => { :cols => [ :uuid, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source ], :rows => [] },
                   'Location' => { :cols => [ :basic_schedule_uuid, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_tb, :activity_tf, :activity_d, :activity_u, :activity_n, :activity_r, :activity_s, :activity_t ], :rows => [] } }
       start_time = Time.now
@@ -130,7 +130,7 @@ module TSDBExplorer
             amend_record = Tiploc.find_by_tiploc_code(record.tiploc_code)
             raise "Unknown TIPLOC '#{record.tiploc_code}' found in TA record" if amend_record.nil?
 
-            [ :tiploc_code, :nalco, :tps_description, :stanox, :crs_code, :description ].each do |field|
+            [ :tiploc_code, :nalco, :nalco_four, :tps_description, :stanox, :crs_code, :description ].each do |field|
               amend_record[field] = record.send(field)
             end
 

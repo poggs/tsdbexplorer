@@ -1,0 +1,30 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIRDGLNJ 20686711RREADING LANE JN           52043   0                           
+TIRDNG12800314251MREADING SIG. TR128        00000   0                           
+TIRDNG14700314252NREADING SIG. TR147        00000   0                           
+TIRDNG14800314250LREADING SIG. TR148        00000   0                           
+TIRDNG33200314249RREADING SIG. TR332        00000   0                           
+TIRDNG37900314253XREADING SIG. TR379        00000   0                           
+TIRDNG38700314264YREADING SIG. TR387        00000   0                           
+TIRDNG4AB48312800MREADING                   742362957RDZ                        
+TIRDNG50800314261PREADING SIG. TR508        00000   0                           
+TIRDNG52400314296GREADING SIG. TR524        74244   0                           
+TIRDNG53400314260XREADING SIG. TR534        00000   0                           
+TIRDNGCE 00314994QREADING PLANT DEPOT CE    74255   0                           
+TIRDNGMLE56314258ZREADING MAIN LINE EAST    00000   0                           
+TIRDNGMLW56314257YREADING MAIN LINE WEST    74241   0                           
+TIRDNGNJN24314256RREADING NEW JN            74235   0                           
+TIRDNGSJN24314254PREADING SPUR JN           74234   0                           
+TIRDNGSTN00314900WREADING                   742372957RDGREADING                 
+TIRDNGTMD08314916RREADING T.M.D.            74259   0                           
+TIRDNGWTR00314963GREADING PLANT DEPOT WTR   74238   0                           
+TIREDG53500314914PREADING SIG. TR535        74242   0                           
+TIREDGDMR00314958WREADING DMU REVERSAL      74243   0                           
+TIREDGDMU08314961EREADING D.M.U.D.          74239   0                           
+TIREDGGPK00099600WREADING GREEN PARK        00000   0RGP                        
+TIREDGJNY00316101GREADING WST JN NEW YD GBRF74263   0                           
+TIREDGWCV56316057VREADING WEST CURVE        74257   0                           
+TIREDGWJN24316059BREADING WEST JN           74260   0                           
+TIREDGWST08316000AREADING WEST              74249   0RDWREADING WEST            
+TIREDGWYD08316100FREADING WEST JN. N.Y.     74261   0                           
+ZZ

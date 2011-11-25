@@ -1,0 +1,64 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIWATFDJ 16140200UWATFORD JUNCTION          710402991WFJWATFORD JUNCTION        
+TIWATFJDC56140207FWATFORD JUNCTION DC       72000   0                           
+TIWATFDN 16140300DWATFORD NORTH             71039   0WFNWATFORD NORTH           
+TIGRSTH  08155900KGARSTON (HERTFORDSHIRE)   71038   0GSNGARSTON HERTS           
+TIBCWD   02156000YBRICKET WOOD              71036   0BWOBRICKET WOOD            
+TIHOWWOOD04156300KHOW WOOD                  71034   0HWWHOW WOOD  HERTS         
+TIPKST   02156100APARK STREET               71032   0PKTPARK STREET             
+TISTALBNA34156200FST ALBANS ABBEY           71030   0SAAST ALBANS ABBEY         
+TIWATFDHS48145500CWATFORD HIGH STREET       72002   0WFHWATFORD HIGH ST         
+TIBUSHYDC56139501TBUSHEY DC                 72001   0                           
+TICRPNDPK16144200DCARPENDERS PARK           72004   0CPKCARPENDERS PARK         
+TIHTCHEND08139800LHATCH END                 72005   0HTEHATCH END               
+TIHEDSTNL32143400GHEADSTONE LANE            72006   0HDLHEADSTONE LANE          
+TIHROWDC 28139701HHARROW & WEALDSTONE D.C.  72017   0                           
+TIKTON   00139900QKENTON                    72008   0KNTKENTON                  
+TISKENTON01145300PSOUTH KENTON              72009   0SOKSOUTH KENTON            
+TINWEMBLY01142200MNORTH WEMBLEY             72010   0NWBNORTH WEMBLEY           
+TIWMBYDC 24142309DWEMBLEY CENTRAL DC        72020   0                           
+TISTNBGPK16145400TSTONEBRIDGE PARK          72031   0SBPSTONEBRIDGE PARK        
+TIHARLSDN00152100YHARLESDEN                 72033   0HDNHARLESDEN               
+TIWLSDNJL48145800RWILLESDEN JN LOW LEVEL    72277   0WJL                        
+TIKENSLG 16144700FKENSAL GREEN              72272   0KNLKENSAL GREEN            
+TIQPRKJ  00141902ZQUEEN'S PARK JUNCTION     72309   0                           
+TIQPRK   01141900RQUEEN'S PARK (LONDON)     72311   0QPWQUEENS PK LONDON        
+TIKLBRNHR48141500TKILBURN HIGH ROAD         72313   0KBNKILBURN HIGH RD         
+TISHMPSTD01145100FSOUTH HAMPSTEAD           72314   0SOHSOUTH HAMPSTEAD         
+TICMDNJN 08136701JCAMDEN JN                 72315   0                           
+TICMDNSTH08144005UCAMDEN SOUTH JN           72316   0                           
+TIEUSTON 00144400NLONDON EUSTON             724102893EUSLONDON EUSTON           
+BSNP458301105231110211111100 POO2F11    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  0901 090111        TB                                                 
+LIWATFDN  0903H0904      09030903         T                                     
+LIGRSTH   0906 0906H     09060906         T                                     
+LIBCWD    0909 0909H     09090909         T                                     
+LIHOWWOOD 0911 0911H     09110911         T                                     
+LIPKST    0913H0914      09130913         T               1                     
+LTSTALBNA 0917 0917      TF
+BSNL940231105231112091111100 POO2C13    122216000 EMU313 075D     S            P
+BX         LOY                                                                  
+LOWATFJDC 0900 09004  DC     TB                                                 
+LIWATFDHS 0902H0903      09030903         T                                     
+LIBUSHYDC 0905 0905H     09050905         T                                     
+LICRPNDPK 0908 0908H     09080908         T                                     
+LIHTCHEND 0911 0911H     09110911         T                                     
+LIHEDSTNL 0913 0913H     09130913         T                                     
+LIHROWDC  0915H0916H     09160916         T                                     
+LIKTON    0918H0919      09190919         T                                     
+LISKENTON 0920H0921      09210921         T                                     
+LINWEMBLY 0922H0923      09230923         T                                     
+LIWMBYDC  0924H0925H     09250925         T                                     
+LISTNBGPK 0927H0928      09280928         T                                     
+LIHARLSDN 0930 0930H     09300930         T                                     
+LIWLSDNJL 0932 0933      093209331        T                                     
+LIKENSLG  0935 0935H     09350935         T                                     
+LIQPRKJ             0937 00000000                                               
+LIQPRK    0937H0938H     09380938         T                                     
+LIKLBRNHR 0940 0940H     09400940         T                                     
+LISHMPSTD 0942 0942H     09420942         T           1 1                       
+LICMDNJN            0946H00000000   B                                           
+LICMDNSTH           0947 00000000                                               
+LTEUSTON  0950 09509     TF
+ZZ

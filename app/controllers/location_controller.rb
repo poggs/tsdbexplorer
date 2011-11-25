@@ -29,6 +29,8 @@ class LocationController < ApplicationController
       @location = Tiploc.find_by_tiploc_code(params[:location].upcase)
     end
 
+    @related_locations = @location.find_related.collect { |x| x.tiploc_code } unless @location.nil?
+
     if @location.nil?
       render 'common/error', :status => :not_found, :locals => { :message => "We can't find the location '#{params[:location] || params[:location_text]}'" } and return
     else
@@ -59,7 +61,7 @@ class LocationController < ApplicationController
       @range[:from] = @datetime - early_range
       @range[:to] = @datetime + late_range
 
-      @schedule = Location.where(:tiploc_code => @location.tiploc_code)
+      @schedule = Location.where(:tiploc_code => @related_locations)
 
       # Only show passenger services if we are not in advanced mode
 
