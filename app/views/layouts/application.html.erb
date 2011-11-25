@@ -2,9 +2,9 @@
 <html>
  <head>
   <title>Open Train Times<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
-  <%= stylesheet_link_tag :all %>
+  <%= stylesheet_link_tag 'application' %>
   <%= yield(:head) %>
-  <%= javascript_include_tag "tsdbexplorer", "jquery-1.6.4.min", "jquery-ui-1.8.12.custom.min", "jquery.twisty" %>
+  <%= javascript_include_tag 'application' %>
   <%= javascript_include_tag @additional_js.join(",") unless @additional_js.nil? %>
   <%= csrf_meta_tag %>
   <%= yield(:script) %>
