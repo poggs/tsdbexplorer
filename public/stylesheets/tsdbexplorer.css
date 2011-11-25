@@ -36,6 +36,10 @@ body,html {
   border-radius: 5px;
 }
 
+#page.wide {
+  width: 100%;
+}
+
 #header {
   font-size: 3.5em;
   text-align: center;
