@@ -380,4 +380,12 @@ describe "lib/tsdbexplorer/cif.rb" do
   it "should process a complete schedule from a CIF file"
   it "should process an update extract from a CIF file"
 
+
+  # Timetable administration
+
+  it "should record the details of a CIF file imported"
+  it "should allow the next-in-sequence CIF file to be imported"
+  it "should not allow an out-of-sequence CIF file to be imported"
+  it "should not allow a CIF file with a date in the past to be imported"
+
 end
