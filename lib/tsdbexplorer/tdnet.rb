@@ -86,13 +86,17 @@ module TSDBExplorer
     
       elsif msg[:message_type] == "CC"
 
-        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:to_berth]}", msg[:td_identity])
+        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:to_berth]}", msg[:train_description])
 
         result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Interposed train #{msg[:train_description]} in berth #{msg[:to_berth]}")
 
       elsif msg[:message_type] == "CT"
 
         result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Heartbeat received")
+
+      else
+
+        result = Struct.new(:status, :message).new(:ok, "Unsupported message type #{msg[:message_type]} received")
 
       end
 
