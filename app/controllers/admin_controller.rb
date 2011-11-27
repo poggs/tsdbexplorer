@@ -20,6 +20,7 @@
 class AdminController < ApplicationController
 
   def index
+
     @stats = Hash.new
     @stats[:tiplocs] = Tiploc.count
     @stats[:basic_schedules] = BasicSchedule.count
@@ -29,6 +30,10 @@ class AdminController < ApplicationController
 
     @stats[:cifs_imported] = CifFile.count
     @stats[:last_cif_import] = CifFile.maximum(:created_at)
+
+    @stats[:redis_version] = $REDIS.info['redis_version']
+    @stats[:td_berths] = $REDIS.keys('TD:*').count
+
   end
 
 end
