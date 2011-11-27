@@ -63,6 +63,37 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   end
 
 
+  # SMART message processing
+
+  it "should process a SMART step message" do
+    response = TSDBExplorer::TDnet::process_smart_message('<CA_MSG>WYCA034003384L37094248</CA_MSG>')
+    response.status.should eql(:ok)
+    response.message.should eql('WY: Moved train 4L37 from berth 0340 to berth 0338')
+  end
+
+  it "should process a SMART cancel message" do
+    response = TSDBExplorer::TDnet::process_smart_message('<CB_MSG>NNCBAPP14L37074109</CB_MSG>')
+    response.status.should eql(:ok)
+    response.message.should eql('NN: Cancelled train 4L37 in berth APP1')
+  end
+
+  it "should process a SMART interpose message" do
+    response = TSDBExplorer::TDnet::process_smart_message('<CC_MSG>WJCCUSSA4L37093316</CC_MSG>')
+    response.status.should eql(:ok)
+    response.message.should eql('WJ: Interposed train 4L37 in berth USSA')
+  end
+
+  it "should process a SMART heartbeat message" do
+    response = TSDBExplorer::TDnet::process_smart_message('<CT_MSG>LSCT0413041259</CT_MSG>')
+    response.status.should eql(:ok)
+    response.message.should eql('LS: Heartbeat received')
+  end
+
+  it "should process a SMART equipment status (SF) message"
+  it "should process a SMART equipment base scan (SG) message"
+  it "should process a SMART equipment base scan (SH) message"
+
+
   # TRUST message data (raw)
 
   it "should process a TRUST Train Activation message" do

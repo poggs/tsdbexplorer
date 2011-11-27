@@ -65,6 +65,42 @@ module TSDBExplorer
     end
 
 
+    # Process a SMART raw TD message
+
+    def TDnet.process_smart_message(raw_message)
+
+      msg = parse_smart_message(raw_message)
+
+      if msg[:message_type] == "CA"
+
+        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:from_berth]}", "    ")
+        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:to_berth]}", msg[:train_description])
+
+        result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Moved train #{msg[:train_description]} from berth #{msg[:from_berth]} to berth #{msg[:to_berth]}")
+
+      elsif msg[:message_type] == "CB"
+
+        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:from_berth]}", "    ")
+
+        result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Cancelled train #{msg[:train_description]} in berth #{msg[:from_berth]}")
+    
+      elsif msg[:message_type] == "CC"
+
+        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:to_berth]}", msg[:td_identity])
+
+        result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Interposed train #{msg[:train_description]} in berth #{msg[:to_berth]}")
+
+      elsif msg[:message_type] == "CT"
+
+        result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Heartbeat received")
+
+      end
+
+      return result
+
+    end
+
+
     # Process a TRUST message
 
     def TDnet.process_trust_message(raw_message)
