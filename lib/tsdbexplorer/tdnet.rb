@@ -21,7 +21,7 @@ module TSDBExplorer
 
   module TDnet
 
-    # Parse a SMARTS raw TD Message and return the content as a Hash
+    # Parse a SMART raw TD Message and return the content as a Hash
 
     def TDnet.parse_smart_message(message)
 
@@ -67,7 +67,7 @@ module TSDBExplorer
 
     # Process a TRUST message
 
-   def TDnet.process_trust_message(raw_message)
+    def TDnet.process_trust_message(raw_message)
 
       message = parse_raw_message(raw_message)
 
