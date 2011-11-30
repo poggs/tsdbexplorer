@@ -383,7 +383,19 @@ describe "lib/tsdbexplorer/cif.rb" do
 
   # Timetable administration
 
-  it "should record the details of a CIF file imported"
+  it "should record the details of a CIF file imported" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+
+    expected_data = { :file_ref => 'DFTESTA', :extract_timestamp => Time.parse('1970-01-01 00:00:00'), :start_date => Date.parse('1970-01-01'), :end_date => Date.parse('1970-01-01'), :update_indicator => 'F', :file_mainframe_identity => 'TPS.UDFTEST.PD700101', :mainframe_username => 'DFTEST' }
+    data = CifFile.first
+
+    expected_data.each do |k,v|
+      data[k].should eql(v)
+    end
+
+  end
+
   it "should allow the next-in-sequence CIF file to be imported"
   it "should not allow an out-of-sequence CIF file to be imported"
   it "should not allow a CIF file with a date in the past to be imported"

@@ -83,6 +83,22 @@ module TSDBExplorer
       puts "+--------------------------------------------------------------------------"
 
 
+      # Create a CifFile record, which will be saved when importing is complete
+
+      if header_data.date_of_extract[4..5].to_i >= 70
+        century = '19'
+      else
+        century = '20'
+      end
+
+      extract_timestamp = Time.parse(header_data.date_of_extract[0..1] + "-" + header_data.date_of_extract[2..3] + "-" + century + header_data.date_of_extract[4..5] + " " + header_data.time_of_extract[0..1] + ":" + header_data.time_of_extract[2..3] + ":00")
+       
+      start_date = Date.parse(header_data.user_extract_start_date[0..1] + "-" + header_data.user_extract_start_date[2..3] + "-" + century + header_data.user_extract_start_date[4..5])
+      end_date = Date.parse(header_data.user_extract_end_date[0..1] + "-" + header_data.user_extract_end_date[2..3] + "-" + century + header_data.user_extract_end_date[4..5])
+
+      cif_file_record = CifFile.new(:file_ref => header_data.current_file_ref, :extract_timestamp => extract_timestamp, :start_date => start_date, :end_date => end_date, :update_indicator => header_data.update_indicator, :file_mainframe_identity => header_data.file_mainframe_identity, :mainframe_username => header_data.mainframe_username)
+
+
       # Initialize a set of statistics to return to the calling function
 
       stats = {:schedule=>{:insert=>0, :amend=>0, :delete=>0}, :tiploc=>{:insert=>0, :amend=>0, :delete=>0}, :association=>{:insert=>0, :amend=>0, :delete=>0}}
@@ -289,6 +305,11 @@ module TSDBExplorer
       pbar.finish
 
       pending = process_pending(pending)
+
+
+      # Save the record of this CIF file
+
+      cif_file_record.save
 
       return stats
 
