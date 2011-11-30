@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111125182527) do
+ActiveRecord::Schema.define(:version => 20111130215704) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -89,13 +89,16 @@ ActiveRecord::Schema.define(:version => 20111125182527) do
   add_index "basic_schedules", ["uuid"], :name => "index_basic_schedules_on_uuid"
 
   create_table "cif_files", :force => true do |t|
-    t.string   "file_ref",          :limit => 7
+    t.string   "file_ref",                :limit => 7
     t.datetime "extract_timestamp"
     t.date     "start_date"
     t.date     "end_date"
     t.string   "update_indicator"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "file_mainframe_identity", :limit => 20
+    t.string   "mainframe_username",      :limit => 6
+    t.date     "extract_date"
   end
 
   create_table "daily_schedule_locations", :force => true do |t|
