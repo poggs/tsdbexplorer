@@ -1,7 +1,13 @@
-<%= render :partial => 'schedule_header', :locals => { :schedule => @schedule } %>
+<h1>Schedule cancelled</h1>
 
-<% if @as_run.nil? %>
- <%= render :partial => 'schedule_locations' %>
+<p>This schedule does not run on <%= Date.parse(params[:date]) %>.</p>
+
+<% if @schedule.stp_indicator == "C" %>
 <% else %>
- <%= render :partial => 'schedule_locations_realtime' %>
+ <%= render :partial => 'schedule_header', :locals => { :schedule => @schedule } %>
+ <% if @as_run.nil? %>
+  <%= render :partial => 'schedule_locations' %>
+ <% else %>
+  <%= render :partial => 'schedule_locations_realtime' %>
+ <% end %>
 <% end %>
