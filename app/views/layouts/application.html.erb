@@ -8,7 +8,7 @@
   <%= javascript_include_tag @additional_js.join(",") unless @additional_js.nil? %>
   <%= csrf_meta_tag %>
   <%= yield(:script) %>
-  <link rel="shortcut icon" href="<%= url_for '/images/favicon.png' %>" />
+  <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
  </head>
  <body>
 
