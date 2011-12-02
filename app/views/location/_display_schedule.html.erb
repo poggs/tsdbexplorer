@@ -7,7 +7,7 @@
   </td>
   <td><%= s.public_arrival %></td>
   <td><%= tidy_text(decode_tiploc(s.basic_schedule.origin)) %></td>
-  <td><%= s.platform %></td>
+  <td><%= s.platform %><% if s.platform && s.line %> / <% end %><%= s.line %></td>
   <td><%= tidy_text(decode_tiploc(s.basic_schedule.terminate)) %></td>
   <td><%= s.public_departure %></td>
  </tr>

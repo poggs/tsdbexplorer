@@ -11,39 +11,43 @@
  <div id="schedule_flash">Real-time information is not yet available for this train.</div>
 <% end %>
 
-<table>
+<table id="schedule">
 
 <% if session[:mode] == 'advanced' %>
 
  <thead>
   <tr>
-   <th>&nbsp;</th>
-   <th>&nbsp;</th>
-   <th colspan="2">Arrival</th>
-   <th colspan="2">Departure</th>
-  </tr>
-  <tr>
-   <th>Location</th>
-   <th>Platform</th>
-   <th>WTT</th>
-   <th>Public</th>
-   <th>WTT</th>
-   <th>Public</th>
+   <th style="text-align: left;">Location</th>
+   <th>Pfm</th>
+   <th>Line</th>
+   <th>Path</th>
+   <th>WTT Arr</th>
+   <th>Arrival</th>
+   <th>WTT Dep</th>
+   <th>Departure</th>
+   <th>Eng</th>
+   <th>Pth</th>
+   <th>Perf</th>
   </tr>
  </thead>
  <tbody>
   <% @schedule.locations.each do |l| %>
    <tr>
-    <td><%= tidy_text(decode_tiploc(l)) %></td>
+    <td style="text-align: left;"><%= tidy_text(decode_tiploc(l)) %></td>
     <td><%=raw l.platform || "&nbsp;" %></td>
+    <td><%= l.line %></td>
+    <td><%= l.path %></td>
     <% if l.pass? %>
-     <td colspan="4" style="text-align: center;">PASS <%= l.pass %></td>
+     <td colspan="4" style="text-align: center; background: #ddd;">PASS <%= l.pass %></td>
     <% else %>
      <td><%= l.arrival %></td>
      <td><%= l.public_arrival %></td>
      <td><%= l.departure %></td>
      <td><%= l.public_departure %></td>
     <% end %>
+    <td><%= l.engineering_allowance %></td>
+    <td><%= l.pathing_allowance %></td>
+    <td><%= l.performance_allowance %></td>
    </tr>
   <% end %>
  </tbody>
@@ -52,7 +56,7 @@
 
  <thead>
   <tr>
-   <th>Location</th>
+   <th style="text-align: left;">Location</th>
    <th>Platform</th>
    <th>Arrival</th>
    <th>Departure</th>
@@ -61,12 +65,12 @@
  <tbody>
   <% @schedule.locations.each do |l| %>
    <% if l.is_public? %>
-    <tr>
-     <td><%= tidy_text(decode_tiploc(l)) %></td>
-     <td><%=raw l.platform || "&nbsp;" %></td>
-     <td><%= l.public_arrival %></td>
-     <td><%= l.public_departure %></td>
-    </tr>
+   <tr>
+    <td style="text-align: left;"><%= tidy_text(decode_tiploc(l)) %></td>
+    <td><%=raw l.platform || "&nbsp;" %></td>
+    <td><%= l.public_arrival %></td>
+    <td><%= l.public_departure %></td>
+   </tr>
    <% end %>
   <% end %>
  </tbody>
