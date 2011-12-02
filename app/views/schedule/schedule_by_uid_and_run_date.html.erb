@@ -1,8 +1,6 @@
-<h1>Schedule cancelled</h1>
-
-<p>This schedule does not run on <%= Date.parse(params[:date]) %>.</p>
-
 <% if @schedule.stp_indicator == "C" %>
+<h1>Schedule cancelled</h1>
+<p>This schedule does not run on <%= Date.parse(params[:date]) %>.</p>
 <% else %>
  <%= render :partial => 'schedule_header', :locals => { :schedule => @schedule } %>
  <% if @as_run.nil? %>
