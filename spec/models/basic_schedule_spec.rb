@@ -137,4 +137,17 @@ describe BasicSchedule do
     schedule.is_a_ship?.should be_true
   end
 
+
+  # Schedule retrieval
+
+  it "should return all the dates a schedule is valid for, with the STP indicator" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/permanent_schedule_with_overlays.cif')
+    expected_data = { '2011-11-28' => 'P', '2011-11-29' => 'O', '2011-11-30' => 'O', '2011-12-01' => 'P', '2011-12-02' => 'P' }
+    schedule_run_dates = BasicSchedule.find_by_train_uid('L06806').date_array
+    schedule_run_dates.each do |d|
+      iso_date = d.date.to_s(:iso)
+      d.type.should eql(expected_data[iso_date]) if expected_data.has_key? iso_date
+    end
+  end
+
 end

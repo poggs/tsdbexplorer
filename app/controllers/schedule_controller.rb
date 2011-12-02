@@ -63,13 +63,12 @@ class ScheduleController < ApplicationController
 
   def schedule_by_uid
 
-    @schedule = BasicSchedule.find_by_train_uid(params[:uid])
+    @schedule = BasicSchedule.where(:train_uid => params[:uid])
 
-    if @schedule.nil?
-      render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]}." }
-    else
-      render
-    end
+    render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]}." } and return if @schedule.blank?
+
+    @date = Date.today
+    @date_array = @schedule.first.date_array
 
   end
 
@@ -79,13 +78,10 @@ class ScheduleController < ApplicationController
   def schedule_by_uid_and_run_date
 
     @schedule = BasicSchedule.runs_on_by_uid_and_date(params[:uid], params[:date]).first
-    @as_run = DailySchedule.runs_on_by_uid_and_date(params[:uid], params[:date]).first
 
-    if @schedule.nil?
-      render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]} running on #{params[:date]}.  The schedule may not be valid for this date." }
-    else
-      render
-    end
+    render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]} running on #{params[:date]}.  The schedule may not be valid for this date." } if @schedule.nil?
+
+    @as_run = DailySchedule.runs_on_by_uid_and_date(params[:uid], params[:date]).first
 
   end
 

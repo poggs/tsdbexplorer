@@ -309,4 +309,13 @@ describe ScheduleHelper do
     output.should eql('Arrived on-time')
   end
 
+  it "should decode an STP indicator character in to text" do
+    expected_data = { 'C' => 'Cancelled', 'N' => 'Short-term planned', 'O' => 'Short-term planned alteration', 'P' => 'Permanent' }
+    expected_data.each do |k,v|
+      schedule = BasicSchedule.new(:stp_indicator => k)
+      output = decode_stp_indicator(schedule)
+      output.should eql(v)
+    end
+  end
+
 end

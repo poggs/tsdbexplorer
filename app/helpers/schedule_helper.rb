@@ -379,4 +379,23 @@ module ScheduleHelper
 
   end
 
+
+  # Given a BasicSchedule, returns the schedule type
+
+  def decode_stp_indicator(schedule)
+
+    if schedule.stp_indicator == "C"
+      "Cancelled"
+    elsif schedule.stp_indicator == "N"
+      "Short-term planned"
+    elsif schedule.stp_indicator == "O"
+      "Short-term planned alteration"
+    elsif schedule.stp_indicator == "P"
+      "Permanent"
+    else
+      "Unknown"
+    end
+
+  end
+
 end

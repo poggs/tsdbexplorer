@@ -1,0 +1,120 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TILIVST  00696500XLONDON LIVERPOOL STREET   527412904LSTLONDON LIVRPL ST        
+TIBTHNLGR16696100RBETHNAL GREEN             52739   0BETBETHNAL GREEN           
+TIHAKNYNM00686700NHACKNEY DOWNS             52736   0HACHACKNEY DOWNS           
+TICLAPTON00692600XCLAPTON                   52735   0CPTCLAPTON                 
+TICLAPTNJ32692611YCLAPTON JN                51938   0                           
+TISTJMSST18697300LST JAMES STREET           52734   0SJSST JAMES ST WSTW        
+TIWLTWCEN08695300TWALTHAMSTOW CENTRAL       52733   0WHCWALTHAMSTOW CTL         
+TIWDST   02695400CWOOD STREET               52729   0WSTWOOD STREET             
+TIHGHMSPK08691900VHIGHAMS PARK              52732   0HIPHIGHAMS PARK            
+TICHINGFD00691400TCHINGFORD                 52731   0CHICHINGFORD               
+BSNL068061105231112091111100 POO2T52    121910000 EMU315 075D     S            P
+BX         LEY                                                                  
+LOLIVST   1233 12332  S      TB                                                 
+LIBTHNLGR 1236 1236H     12361236   FL S  T X                                   
+LIHAKNYNM 1240 1240H     124012402        T                                     
+LICLAPTON 1242H1243      12431243         T                                     
+LICLAPTNJ           1244 00000000                                               
+LISTJMSST 1246 1246H     12461246         T                                     
+LIWLTWCEN 1248 1248H     12481248         T                                     
+LIWDST    1250 1250H     12501250         T                                     
+LIHGHMSPK 1253 1253H     12531253         T           1                         
+LTCHINGFD 1259 12592     TF
+BSNL068061110111110120110000 POO2T52    121910000 EMU315 075D     S            O
+BX         LEY                                                                  
+LOLIVST   1233 12332  S      TB                                                 
+LIBTHNLGR 1236 1236H     12361236   S  S  T             1                       
+LIHAKNYNM 1241 1241H     124012404        T X                                   
+LICLAPTON 1243H1244      12431243         T                                     
+LICLAPTNJ           1245 00000000                                               
+LISTJMSST 1247 1247H     12461246         T                                     
+LIWLTWCEN 1249 1249H     12481248         T                                     
+LIWDST    1251 1251H     12501250         T                                     
+LIHGHMSPK 1254 1254H     12531253         T           1                         
+LTCHINGFD 1300 13002     TF
+BSNL068061110181110190110000 POO2T52    121910000 EMU315 075D     S            O
+BX         LEY                                                                  
+LOLIVST   1233 12332  S      TB                                                 
+LIBTHNLGR 1236 1236H     12361236   S  S  T             1                       
+LIHAKNYNM 1241 1241H     124012404        T X                                   
+LICLAPTON 1243H1244      12431243         T                                     
+LICLAPTNJ           1245 00000000                                               
+LISTJMSST 1247 1247H     12461246         T                                     
+LIWLTWCEN 1249 1249H     12481248         T                                     
+LIWDST    1251 1251H     12501250         T                                     
+LIHGHMSPK 1254 1254H     12531253         T           1                         
+LTCHINGFD 1300 13002     TF
+BSNL068061110251110260110000 POO2T52    121910000 EMU315 075D     S            O
+BX         LEY                                                                  
+LOLIVST   1233 12332  S      TB                                                 
+LIBTHNLGR 1236 1236H     12361236   S  S  T             1                       
+LIHAKNYNM 1241 1241H     124012404        T X                                   
+LICLAPTON 1243H1244      12431243         T                                     
+LICLAPTNJ           1245 00000000                                               
+LISTJMSST 1247 1247H     12461246         T                                     
+LIWLTWCEN 1249 1249H     12481248         T                                     
+LIWDST    1251 1251H     12501250         T                                     
+LIHGHMSPK 1254 1254H     12531253         T           1                         
+LTCHINGFD 1300 13002     TF
+BSNL068061111011111020110000 POO2T52    121910000 EMU315 075D     S            O
+BX         LEY                                                                  
+LOLIVST   1233 12332  S      TB                                                 
+LIBTHNLGR 1236 1236H     12361236   S  S  T             1                       
+LIHAKNYNM 1241 1241H     124012404        T X                                   
+LICLAPTON 1243H1244      12431243         T                                     
+LICLAPTNJ           1245 00000000                                               
+LISTJMSST 1247 1247H     12461246         T                                     
+LIWLTWCEN 1249 1249H     12481248         T                                     
+LIWDST    1251 1251H     12501250         T                                     
+LIHGHMSPK 1254 1254H     12531253         T           1                         
+LTCHINGFD 1300 13002     TF
+BSNL068061111151111160110000 POO2T52    121910000 EMU315 075D     S            O
+BX         LEY                                                                  
+LOLIVST   1233 12332  S      TB                                                 
+LIBTHNLGR 1236 1236H     12361236      S  T             1                       
+LIHAKNYNM 1241 1241H     124012404        T X                                   
+LICLAPTON 1243H1244      12431243         T                                     
+LICLAPTNJ           1245 00000000                                               
+LISTJMSST 1247 1247H     12461246         T                                     
+LIWLTWCEN 1249 1249H     12481248         T                                     
+LIWDST    1251 1251H     12501250         T                                     
+LIHGHMSPK 1254 1254H     12531253         T           1                         
+LTCHINGFD 1300 13002     TF
+BSNL068061111221111230110000 POO2T52    121910000 EMU315 075D     S            O
+BX         LEY                                                                  
+LOLIVST   1233 12332  S      TB                                                 
+LIBTHNLGR 1236 1236H     12361236      S  T             1                       
+LIHAKNYNM 1241 1241H     124012404        T X                                   
+LICLAPTON 1243H1244      12431243         T                                     
+LICLAPTNJ           1245 00000000                                               
+LISTJMSST 1247 1247H     12461246         T                                     
+LIWLTWCEN 1249 1249H     12481248         T                                     
+LIWDST    1251 1251H     12501250         T                                     
+LIHGHMSPK 1254 1254H     12531253         T           1                         
+LTCHINGFD 1300 13002     TF
+BSNL068061111291111300110000 POO2T52    121910000 EMU315 075D     S            O
+BX         LEY                                                                  
+LOLIVST   1233 12332  S      TB                                                 
+LIBTHNLGR 1236 1236H     12361236      S  T             1                       
+LIHAKNYNM 1241 1241H     124012404        T X                                   
+LICLAPTON 1243H1244      12431243         T                                     
+LICLAPTNJ           1245 00000000                                               
+LISTJMSST 1247 1247H     12461246         T                                     
+LIWLTWCEN 1249 1249H     12481248         T                                     
+LIWDST    1251 1251H     12501250         T                                     
+LIHGHMSPK 1254 1254H     12531253         T           1                         
+LTCHINGFD 1300 13002     TF
+BSNL068061112061112070110000 POO2T52    121910000 EMU315 075D     S            O
+BX         LEY                                                                  
+LOLIVST   1233 12332  S      TB                                                 
+LIBTHNLGR 1236 1236H     12361236      S  T             1                       
+LIHAKNYNM 1241 1241H     124012404        T X                                   
+LICLAPTON 1243H1244      12431243         T                                     
+LICLAPTNJ           1245 00000000                                               
+LISTJMSST 1247 1247H     12461246         T                                     
+LIWLTWCEN 1249 1249H     12481248         T                                     
+LIWDST    1251 1251H     12501250         T                                     
+LIHGHMSPK 1254 1254H     12531253         T           1                         
+LTCHINGFD 1300 13002     TF
+ZZ

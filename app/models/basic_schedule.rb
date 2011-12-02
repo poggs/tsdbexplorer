@@ -60,4 +60,35 @@ class BasicSchedule < ActiveRecord::Base
     ['S', '4'].include? self.status
   end
 
+
+  # Return all dates every schedule under a specified UID runs with the type of schedule (Permanent, Overlay, Cancellation or Short-Term Planned)
+
+  def date_array
+
+    # Retrieve all the schedules with this UID
+
+    all_schedules = BasicSchedule.where(:train_uid => self.train_uid)
+
+    runs_on = Hash.new
+    day_mapping = { 0 => 'runs_su', 1 => 'runs_mo', 2 => 'runs_tu', 3 => 'runs_we', 4 => 'runs_th', 5 => 'runs_fr', 6 => 'runs_sa' }
+
+    all_schedules.each do |s|
+      valid_range = s.runs_from..s.runs_to
+      valid_range.each do |d|
+        if s.send(day_mapping[d.wday])
+          runs_on[d] = s.stp_indicator if runs_on[d].nil? || runs_on[d] == 'P'
+        end
+      end
+    end
+
+    run_array = Array.new
+
+    runs_on.each do |k,v|
+      run_array.push Struct.new(:date, :type).new(k, v)
+    end
+
+    return run_array
+
+  end
+
 end

@@ -1,0 +1,8 @@
+<div id="technical_detail">
+ <ul>
+  <li>Runs <%= run_details(schedule) %></li>
+  <li>Schedule originated from <%= schedule.data_source %></li>
+  <li><%= decode_train_category(schedule.category) %> service</li>
+  <% unless schedule.operating_characteristics.nil? %><li><%= decode_operating_characteristics(schedule.operating_characteristics) %></li><% end %>
+ </ul>
+</div>

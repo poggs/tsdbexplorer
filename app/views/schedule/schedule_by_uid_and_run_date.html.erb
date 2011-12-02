@@ -1,4 +1,4 @@
-<%= render :partial => 'schedule_header' %>
+<%= render :partial => 'schedule_header', :locals => { :schedule => @schedule } %>
 
 <% if @as_run.nil? %>
  <%= render :partial => 'schedule_locations' %>

@@ -1,18 +1,8 @@
 <div id="service_detail">
- <div id="mode"><%= mode_icon_for(@schedule.status) %></div>
- <% if session[:mode] == "advanced" && @schedule.is_a_train? %><div id="identity"><%= @schedule.train_identity %></div><% end %>
- <div id="headline"><%= time_only(@schedule.origin.public_departure) || @schedule.origin.departure %> <%= tidy_text(decode_tiploc(@schedule.origin)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate)) %></div>
-<% unless @schedule.atoc_code == 'ZZ' %>
- <div id="operator"><%= decode_toc(@schedule.atoc_code) %></div>
+ <div id="mode"><%= mode_icon_for(schedule.status) %></div>
+ <% if session[:mode] == "advanced" && schedule.is_a_train? %><div id="identity"><%= schedule.train_identity %></div><% end %>
+ <div id="headline"><%= time_only(schedule.origin.public_departure) || schedule.origin.departure %> <%= tidy_text(decode_tiploc(schedule.origin)) %> to <%= tidy_text(decode_tiploc(schedule.terminate)) %></div>
+<% unless schedule.atoc_code == 'ZZ' %>
+ <div id="operator"><%= decode_toc(schedule.atoc_code) %></div>
 <% end %>
 </div>
-
-<div id="technical_detail">
- <ul>
-  <li>Runs <%= run_details(@schedule) %></li>
-  <li>Schedule originated from <%= @schedule.data_source %></li>
-  <li><%= decode_train_category(@schedule.category) %> service</li>
-  <% unless @schedule.operating_characteristics.nil? %><li><%= decode_operating_characteristics(@schedule.operating_characteristics) %></li><% end %>
- </ul>
-</div>
-
