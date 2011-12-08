@@ -20,7 +20,7 @@
 
 <ul>
  <% @schedule.each do |s| %>
- <li><%= decode_stp_indicator(s) %> schedule - <%= link_to run_details(s), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :date => s.runs_from.to_s(:iso) %></li>
+ <li><%= decode_stp_indicator(s, :F) %> schedule - <%= link_to run_details(s), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :date => s.runs_from.to_s(:iso) %></li>
 <% end %>
 </ul>
 

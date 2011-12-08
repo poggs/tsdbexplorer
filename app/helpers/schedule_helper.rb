@@ -380,20 +380,16 @@ module ScheduleHelper
   end
 
 
-  # Given a BasicSchedule, returns the schedule type
+  # Given a BasicSchedule, returns the schedule type as either an abbreviation ('A') or full-text ('F')
 
-  def decode_stp_indicator(schedule)
+  def decode_stp_indicator(schedule, type)
 
-    if schedule.stp_indicator == "C"
-      "Cancelled"
-    elsif schedule.stp_indicator == "N"
-      "Short-term planned"
-    elsif schedule.stp_indicator == "O"
-      "Short-term planned alteration"
-    elsif schedule.stp_indicator == "P"
-      "Permanent"
+    mapping = { 'C' => { :A => 'CAN', :F => 'Cancelled' }, 'N' => { :A => 'STP', :F => 'Short-term planned' }, 'O' => { :A => 'VAR', :F => 'Short-term planned alteration' }, 'P' => { :A => 'WTT', :F => 'Permanent' } }
+
+    if mapping.has_key? schedule.stp_indicator
+      mapping[schedule.stp_indicator][type]
     else
-      "Unknown"
+      nil
     end
 
   end

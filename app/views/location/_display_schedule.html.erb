@@ -2,7 +2,7 @@
  <tr>
   <td>
    <%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :date => @datetime.to_s(:yyyymmdd) %>
-   <% if advanced_mode? %><%= s.basic_schedule.train_identity %><% end %>
+   <% if advanced_mode? %><%= s.basic_schedule.train_identity %> <%= decode_stp_indicator(s.basic_schedule.stp_indicator, :A) %><% end %>
    <% if s.basic_schedule.realtime_for(params[:date]) %>&nbsp;<%= image_tag 'tick.png', :alt => 'Real-time information available' %><% end %>
   </td>
   <td><%= s.public_arrival %></td>
