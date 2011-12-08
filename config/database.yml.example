@@ -1,0 +1,23 @@
+common: &common
+  adapter: postgresql
+  encoding: utf8
+  template: template1
+  pool: 5
+
+development:
+  <<: *common
+  username: tsdbexplorer_development
+  password: DEVELOPMENT_PASSWORD
+  database: tsdbexplorer_development
+
+test:
+  <<: *common
+  username: tsdbexplorer_test
+  password: TEST_PASSWORD
+  database: tsdbexplorer_test
+
+production:
+  <<: *common
+  username: tsdbexplorer_production
+  password: PRODUCTION_PASSWORD
+  database: tsdbexplorer_production

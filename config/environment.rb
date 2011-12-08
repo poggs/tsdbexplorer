@@ -19,8 +19,48 @@
 
 require File.expand_path('../application', __FILE__)
 require 'tsdbexplorer'
-
 require 'yaml'
-$CONFIG = YAML.load(File.open('config/tsdbexplorer.yml'))
+
+required_files = [ 'config/tsdbexplorer.yml', 'config/database.yml' ]
+
+found_files = Array.new
+missing_files = Array.new
+
+required_files.each do |f|
+  if File.exists? f
+    found_files.push f
+  else
+    missing_files.push f
+  end
+end
+
+unless missing_files.empty?
+  puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  puts
+  puts "The following files were not found:"
+  puts
+  missing_files.collect { |f| puts "  * #{f}" }
+  puts
+  puts "Please copy the example files from the config/ directory and edit them"
+  puts
+  puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  raise  
+end
+
+begin
+
+  $CONFIG = YAML.load(File.open('config/tsdbexplorer.yml'))
+
+rescue Errno::ENOENT
+
+  puts "****************************************************************************"
+  puts "*                                                                          *"
+  puts "*  Please copy config/tsdbexplorer.yml.example to config/tsdbexplorer.yml  *"
+  puts "*                                                                          *"
+  puts "****************************************************************************"
+
+  raise
+
+end
 
 Tsdbexplorer::Application.initialize!
