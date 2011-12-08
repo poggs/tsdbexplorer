@@ -10,5 +10,6 @@
   <td><%= s.platform %><% if advanced_mode? %><% if s.platform && s.line %> / <% end %><%= s.line %><% end %></td>
   <td><%= tidy_text(decode_tiploc(s.basic_schedule.terminate)) %></td>
   <td><%= s.public_departure %></td>
+  <td><% if advanced_mode? %><%= s.basic_schedule.atoc_code %><% else %><%= decode_toc(s.basic_schedule.atoc_code) %><% end %></td>
  </tr>
 <% end %>
