@@ -205,6 +205,7 @@ module ApplicationHelper
                       'DC' => '(DC)',
                       'D.C.' => '(DC)',
                       'DN' => 'Down',
+                      'DBS' => 'DBS',
                       'DRS' => '(DRS)',
                       'ELL' => '(East London Line)',
                       'BDG' => 'Bridge',
@@ -234,6 +235,7 @@ module ApplicationHelper
                       'T.M.D' => 'TMD',
                       'T&R.S.M.D' => 'T&RSMD',
                       'T.&R.S.M.D.' => 'T&RSMD',
+                      'U.R.S.' => 'Up Reception Siding',
                       'W' => 'West',
                       'E' => 'East',
                       'S.B.' => 'Signal Box',
@@ -255,12 +257,12 @@ module ApplicationHelper
 
         # Some locations are in brackets - these require special treatment
 
-        brackets = part.match(/^\((.+)\)/)
+        brackets = part.match(/\((\w+)/)
 
         if brackets.nil?
           new_words.push part.capitalize
         else
-          new_words.push "(" + brackets[1].capitalize + ")"
+          new_words.push "(" + brackets[1].capitalize
         end
 
       end
