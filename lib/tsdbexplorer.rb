@@ -20,6 +20,7 @@
 require 'tsdbexplorer/tdnet.rb'
 require 'tsdbexplorer/cif.rb'
 require 'tsdbexplorer/geography.rb'
+require 'tsdbexplorer/schedule.rb'
 
 module TSDBExplorer
 
@@ -62,25 +63,12 @@ module TSDBExplorer
 
   def TSDBExplorer.yymmdd_to_date(date)
 
-    formatted_date = nil
-
-    unless date.nil? || date.blank?
-
-      yy = date.slice(0,2).to_i
-      mm = date.slice(2,2).to_i
-      dd = date.slice(4,2).to_i
-
-      if yy >= 60 && yy <= 99
-        century = 19
-      else
-        century = 20
-      end
-
-      formatted_date = century.to_s + yy.to_s.rjust(2,"0") + "-" + mm.to_s.rjust(2,"0") + "-" + dd.to_s.rjust(2,"0")
-
+    if date == "999999"
+      nil
+    else 
+      century = date[0..1].to_i >= 60 && date[0..1].to_i <= 99 ? "19" : "20"
+      century + date[0..1] + "-" + date[2..3] + "-" + date[4..5]           
     end
-
-    return formatted_date
 
   end
 
@@ -103,20 +91,6 @@ module TSDBExplorer
     end
 
     return century.to_s + yy.to_s.rjust(2,"0") + "-" + mm.to_s.rjust(2,"0") + "-" + dd.to_s.rjust(2,"0")
-
-  end
-
-
-  # Converts a string in the format DDMMYY in to a string in the format
-  # YYMMDD.
-
-  def TSDBExplorer.ddmmyy_to_yymmdd(date)
-
-    dd = date.slice(0,2).to_i
-    mm = date.slice(2,2).to_i
-    yy = date.slice(4,2).to_i
-
-    return yy.to_s.rjust(2,"0") + mm.to_s.rjust(2,"0") + dd.to_s.rjust(2,"0")
 
   end
 

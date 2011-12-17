@@ -92,15 +92,6 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
-  it "should convert a date in DDMMYY format to YYMMDD" do
-
-    TSDBExplorer.ddmmyy_to_yymmdd("010160").should eql("600101")
-    TSDBExplorer.ddmmyy_to_yymmdd("311299").should eql("991231")
-    TSDBExplorer.ddmmyy_to_yymmdd("010100").should eql("000101")
-    TSDBExplorer.ddmmyy_to_yymmdd("311259").should eql("591231")
-
-  end
-
   it "should convert a time in HHMM to HH:MM" do
 
     TSDBExplorer.normalise_time("0000").should eql("00:00")
