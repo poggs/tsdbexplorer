@@ -1,8 +1,17 @@
 <% schedule.sort { |a,b| TSDBExplorer::train_sort(a,b) }.each do |s| %>
  <tr>
-  <td>
-   <%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :date => @datetime.to_s(:yyyymmdd) %>
-   <% if advanced_mode? %><%= s.basic_schedule.train_identity %> <%= decode_stp_indicator(s.basic_schedule, :A) %><% end %>
+  <% if advanced_mode? %>
+   <td><%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :date => @datetime.to_s(:yyyymmdd) %> <%= s.basic_schedule.train_identity %> <%= decode_stp_indicator(s.basic_schedule, :A) %></td>
+   <td><%= s.public_arrival %><% if s.arrival %> (<%= raw tidy_wtt_time(s.arrival) %>)<% end %></td>
+   <td><%= tidy_text(decode_tiploc(s.basic_schedule.origin)) %></td>
+   <td><%= s.platform %></td>
+   <td><%= s.line %></td>
+   <td><%= s.path %></td>
+   <td><%= tidy_text(decode_tiploc(s.basic_schedule.terminate)) %></td>
+   <td><%= s.public_departure %><% if s.departure %> (<%= raw tidy_wtt_time(s.departure) %>)<% end %></td>
+   <td><%= s.basic_schedule.atoc_code %></td>
+  <% else %>
+  <td><%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :date => @datetime.to_s(:yyyymmdd) %>
    <% if s.basic_schedule.realtime_for(params[:date]) %>&nbsp;<%= image_tag 'tick.png', :alt => 'Real-time information available' %><% end %>
   </td>
   <td><%= s.public_arrival %></td>
@@ -10,6 +19,7 @@
   <td><%= s.platform %><% if advanced_mode? %><% if s.platform && s.line %> / <% end %><%= s.line %><% end %></td>
   <td><%= tidy_text(decode_tiploc(s.basic_schedule.terminate)) %></td>
   <td><%= s.public_departure %></td>
-  <td><% if advanced_mode? %><%= s.basic_schedule.atoc_code %><% else %><%= decode_toc(s.basic_schedule.atoc_code) %><% end %></td>
+  <td><%= decode_toc(s.basic_schedule.atoc_code) %></td>
  </tr>
+ <% end %>
 <% end %>

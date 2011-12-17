@@ -1,26 +1,29 @@
 <h1>Administration</h1>
 
-<h2>Statistics</h2>
+<div class="row">
+ <div class="span5">
+  <h2>Schedules</h2>
+  <ul>
+   <li><%= @stats[:tiplocs] %> timing point locations are known</li>
+   <li><%= @stats[:basic_schedules] %> schedules are known, covering the period from <%= @stats[:earliest_schedule] %> to <%= @stats[:latest_schedule] %></li>
+   <li><%= @stats[:daily_schedules] %> as-run schedules have been compiled</li>
+  </ul>
+ </div>
 
+ <div class="span5">
+  <h2>In-memory store</h2>
+  <ul>
+   <li>Daemon version <%= @stats[:redis_version] %></li>
+   <li>Holding state for <%= @stats[:td_berths] %> berths</li>
+  </ul>
+ </div>
 
-<h3>Database</h3>
+ <div class="span5">
+  <h2>Timetable</h2>
+  <ul>
+   <li><%= @stats[:cifs_imported] %> CIF <%=  %> imported</li>
+   <% if @stats[:cifs_imported] > 0 %><li>The last CIF file was imported on <%= @stats[:last_cif_import] %></li><% end %>
+  </ul>
+ </div>
+</div>
 
-<ul>
- <li><%= @stats[:tiplocs] %> timing point locations are known</li>
- <li><%= @stats[:basic_schedules] %> schedules are known, covering the period from <%= @stats[:earliest_schedule] %> to <%= @stats[:latest_schedule] %></li>
- <li><%= @stats[:daily_schedules] %> as-run schedules have been compiled</li>
-</ul>
-
-<h3>Redis</h3>
-
-<ul>
- <li>Daemon version <%= @stats[:redis_version] %></li>
- <li>Holding state for <%= @stats[:td_berths] %> berths</li>
-</ul>
-
-<h3>Timetable</h3>
-
-<ul>
- <li><%= @stats[:cifs_imported] %> CIF files have been imported</li>
- <% if @stats[:cifs_imported] > 0 %><li>The last CIF file was imported on <%= @stats[:last_cif_import] %></li><% end %>
-</ul>

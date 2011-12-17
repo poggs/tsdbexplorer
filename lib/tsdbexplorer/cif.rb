@@ -17,7 +17,6 @@
 #  $Id$
 #
 
-require 'tsdbexplorer/tdnet.rb'
 require 'tsdbexplorer/cif/classes.rb'
 
 module TSDBExplorer
@@ -360,7 +359,7 @@ module TSDBExplorer
 
       pending.keys.each do |model_object|
 
-        Rails.logger.silence do
+        Rails.logger.silencer do
           eval(model_object).import pending[model_object][:cols], pending[model_object][:rows], :validate => false
         end
 

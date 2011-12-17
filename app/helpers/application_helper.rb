@@ -262,7 +262,7 @@ module ApplicationHelper
         if brackets.nil?
           new_words.push part.capitalize
         else
-          new_words.push "(" + brackets[1].capitalize
+          new_words.push "(" + brackets[1].capitalize + ")"
         end
 
       end
@@ -423,6 +423,19 @@ module ApplicationHelper
     end
 
     return text
+
+  end
+
+
+  # Formats a WTT time in to either HHMM, or HHMM with a half HTML entity appended
+
+  def tidy_wtt_time(t)
+
+    if t[4] == " "
+      t[0..3]
+    else
+      t[0..3] + "&half;"
+    end
 
   end
 

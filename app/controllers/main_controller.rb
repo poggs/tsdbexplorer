@@ -26,6 +26,10 @@ class MainController < ApplicationController
     @time = Time.now
     redirect_to :action => 'setup' if BasicSchedule.count == 0
 
+    @stats = Hash.new
+    @stats[:earliest_schedule] = BasicSchedule.minimum(:runs_from)
+    @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to)
+
   end
 
 
@@ -43,5 +47,10 @@ class MainController < ApplicationController
   def disclaimer
   end
 
+
+  # Display the about page
+
+  def about
+  end
 
 end

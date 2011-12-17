@@ -1,40 +1,37 @@
-<%= render :partial => 'common/twisty_javascript'%>
-
-<h1>Services at <%= tidy_text(@location.tps_description) %></h1>
-<h2>Between <%= date_range(@range[:from], @range[:to]) %></h2>
-
-<% if session[:mode] == "advanced" %>
- <div class="twisty closed">
-  <div>Technical information</div>
-  <div>
-   <ul>
-    <li><strong>TIPLOC:</strong> <%= @location.tiploc_code %></li>
-    <li><strong>CRS:</strong> <%= @location.crs_code %></li>
-    <li><strong>NALCO:</strong> <%= @location.nalco %></li>
-    <li><strong>STANOX:</strong> <%= @location.stanox %></li>
-   </ul>
-  </div>
- </div>
-
- <p></p>
-<% end %>
+<div class="page-header">
+  <h1>Services at <%= tidy_text(@location.tps_description) %><br /><small>Between <%= date_range(@range[:from], @range[:to]) %></small></h1>
+</div>
 
 <div>
- <div style="text-align: left; float: left;"><%= link_to "< 1h earlier", :date => (@datetime - 1.hour).to_s(:yyyymmdd), :time => (@datetime - 1.hour).to_s(:hhmm_colon) %></div>
- <div style="text-align: right;"><%= link_to "1h later >", :date => (@datetime + 1.hour).to_s(:yyyymmdd), :time => (@datetime + 1.hour).to_s(:hhmm_colon) %></div>
+ <div style="text-align: left; float: left;"><%= link_to "< 1h earlier", { :date => (@datetime - 1.hour).to_s(:yyyymmdd), :time => (@datetime - 1.hour).to_s(:hhmm_colon) }, { :class => 'btn primary' } %></div>
+ <div style="text-align: right;"><%= link_to "1h later >", { :date => (@datetime + 1.hour).to_s(:yyyymmdd), :time => (@datetime + 1.hour).to_s(:hhmm_colon) }, { :class => 'btn primary' } %></div>
 </div>
 
 <table>
  <thead>
+ <% if advanced_mode? %>
   <tr>
    <th>Info</th>
-   <th>Arrival</th>
+   <th>Arr (WTT)</th>
    <th>From</th>
-   <th>Pfm</th>
+   <th>Plat</th>
+   <th>Line</th>
+   <th>Path</th>
    <th>To</th>
-   <th>Departure</th>
+   <th>Dep (WTT)</th>
    <th>Operator</th>
   </tr>
+ <% else %>
+ <tr>
+  <th>Info</th>
+  <th>Arrival</th>
+  <th>From</th>
+  <th>Plat.</th>
+  <th>To</th>
+  <th>Departure</th>
+  <th>Operator</th>
+ </tr>
+ <% end %>
  </thead>
  <tbody>
   <% if @schedule_a || @schedule_b %>

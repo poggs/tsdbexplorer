@@ -1,14 +1,5 @@
-<%= content_for :script do %>
- <script type="text/javascript">
-  $(document).ready( function() {
-   $("tr:nth-child(odd)").addClass("odd");
-   $('div.twisty').twisty();
-  });
- </script>
-<% end %>
-
 <% if @schedule.is_a_train? %>
- <div id="schedule_flash">Real-time information is not yet available for this train.</div>
+ <div class="alert-message info">Real-time information is not yet available for this train.</div>
 <% end %>
 
 <table id="schedule">
@@ -21,30 +12,24 @@
    <th>Pfm</th>
    <th>Line</th>
    <th>Path</th>
-   <th>WTT Arr</th>
-   <th>Arrival</th>
-   <th>WTT Dep</th>
-   <th>Departure</th>
+   <th>Arrival (Public)</th>
+   <th>Pass</th>
+   <th>Departure (Public)</th>
    <th>Eng</th>
-   <th>Pth</th>
+   <th>Path</th>
    <th>Perf</th>
   </tr>
  </thead>
  <tbody>
   <% @schedule.locations.each do |l| %>
-   <tr>
-    <td style="text-align: left;"><%= tidy_text(decode_tiploc(l)) %></td>
-    <td><%=raw l.platform || "&nbsp;" %></td>
+   <%= tag :tr, :style => l.pass.nil? ? nil : 'background: #eee;' %>
+    <td><%= tidy_text(decode_tiploc(l)) %></td>
+    <td><%=raw l.platform %></td>
     <td><%= l.line %></td>
     <td><%= l.path %></td>
-    <% if l.pass? %>
-     <td colspan="4" style="text-align: center; background: #ddd;">PASS <%= l.pass %></td>
-    <% else %>
-     <td><%= l.arrival %></td>
-     <td><%= l.public_arrival %></td>
-     <td><%= l.departure %></td>
-     <td><%= l.public_departure %></td>
-    <% end %>
+    <td><%= raw tidy_wtt_time(l.arrival) if l.arrival? %><% if l.public_arrival %>&nbsp;(<%= l.public_arrival %>)<% end %></td>
+    <td><%= l.pass %></td>
+    <td><%= raw tidy_wtt_time(l.departure) if l.departure? %><% if l.public_departure %>&nbsp;(<%= l.public_departure %>)<% end %></td>
     <td><%= l.engineering_allowance %></td>
     <td><%= l.pathing_allowance %></td>
     <td><%= l.performance_allowance %></td>
@@ -56,10 +41,10 @@
 
  <thead>
   <tr>
-   <th style="text-align: left;">Location</th>
+   <th>Location</th>
    <th>Platform</th>
-   <th>Arrival</th>
-   <th>Departure</th>
+   <th>Arrives</th>
+   <th>Departs</th>
   </tr>
  </thead>
  <tbody>

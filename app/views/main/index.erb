@@ -1,19 +1,61 @@
-<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'text', :controller => 'location', :action => 'search', :min_length => 3 } %>
+<h1>Search</h1>
 
-<div id="search">
- <form action="<%= url_for :controller => 'location', :action => 'search' %>">
-  <p>Show me services at <input type="text" id="text" name="text" value="<%= params[:location] %>"> on <input type="text" name="date" size="11" value="<%= @time.strftime('%Y-%m-%d') %>"/> at <input type="text" name="time" size="4" value="<%= @time.strftime('%H:%M') %>"/> <input type="submit" value="Go" /></p>
- </form>
+<div class="alert-message info">
+ <p><strong>We currently have data for services running between <%= @stats[:earliest_schedule] %> and <%= @stats[:latest_schedule] %></strong></p>
 </div>
 
-<br />
+<div class="row">
+ <div class="span8">
+  <section id="search_by_location">
+   <h2>Search by location</h2>
+   <p>Just answer these three questions:</p>
+   <form action="<%= url_for :controller => 'location', :action => 'search' %>">
+    <fieldset>
+     <div class="clearfix">
+      <label for="location">Which station?</label>
+      <div class="input">
+       <input class="large" id="location" name="text" size="24" type="text">
+      </div>
+      <label for="date">What date?</label>
+      <div class="input">
+       <input class="medium" id="date" name="date" size="11" type="text" value="<%= @time.strftime('%Y-%m-%d') %>">
+      </div>
+      <label for="time">...and what time?</label>
+      <div class="input">
+       <input class="mini" id="time" name="time" size="4" value="<%= @time.strftime('%H:%M') %>">
+      </div>
+      <div class="actions">
+        <button type="submit" class="btn primary">Search</button>
+      </div>
+     </fieldset>
+    </div>
+   </form>
+  </section>
 
 <% if advanced_mode? %>
-
-<div id="search">
- <form action="<%= url_for :controller => 'schedule', :action => 'search' %>">
-  <p>Show me train <input type="text" id="schedule" name="schedule" value="<%= params[:schedule] %>" /> on <input type="text" name="date" size="11" value="<%= @time.strftime('%Y-%m-%d') %>"/> <input type="submit" value="Go" /></p>
- </form>
-</div>
-
+ <div class="span8">
+  <section id="technical_search">
+   <h2>Technical search</h2>
+   <p>Enter the train ID or schedule UID and a date</p>
+   <form action="<%= url_for :controller => 'schedule', :action => 'search' %>">
+    <fieldset>
+     <div class="clearfix">
+      <label for="schedule">What's the ID or UID?</label>
+      <div class="input">
+       <input class="small" id="schedule" name="schedule" size="6">
+      </div>
+      <label for="date">...and which date?</label>
+      <div class="input">
+       <input class="medium" id="date" name="date" size="11" value="<%= @time.strftime('%Y-%m-%d') %>" >
+      </div>
+      <div class="actions">
+        <button type="submit" class="btn primary">Search</button>
+      </div>
+     </div>
+    </fieldset>
+   </form>
+  </section>
+ </div>
 <% end %>
+
+</div>

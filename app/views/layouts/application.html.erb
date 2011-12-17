@@ -5,41 +5,60 @@
   <%= stylesheet_link_tag 'application' %>
   <%= yield(:head) %>
   <%= javascript_include_tag 'application' %>
-  <%= javascript_include_tag @additional_js.join(",") unless @additional_js.nil? %>
+  <%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'nav_location', :controller => 'location', :action => 'search', :min_length => 3 } %>
   <%= csrf_meta_tag %>
   <%= yield(:script) %>
   <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
  </head>
- <body>
+ <body style="padding-top: 60px;">
 
-  <div id="header">
-   <div>Open Train Times<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></div>
+  <div class="topbar" data-scrollspy="scrollspy">
+   <div class="topbar-inner">
+    <div class="container">
+     <a class="brand" href="http://www.openraildata.com/times/">Open Train Times<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></a>
+
+     <ul class="nav">
+      <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
+      <li class="dropdown" data-dropdown="dropdown">
+       <a href="#" class="dropdown-toggle">Options</a>
+       <ul class="dropdown-menu">
+        <%= tag 'li' %><%= link_to advanced_mode? == false ? 'Show technical' : 'Hide technical', :controller => 'application', :action => 'toggle_mode' %></li>
+        <li class="divider"></li>
+        <li><a href="#">Show non-passenger trains</a></li>
+       </ul>
+      </li>
+     </ul>
+
+     <ul class="nav secondary-nav">
+      <li>
+       <form class="pull-left" action="<%= url_for :controller => 'location', :action => 'search' %>">
+        <input type="text" class="span3" name="text" id="nav_location" placeholder="Show trains at..." value="<%= params[:location] %>" /> on <input type="text" class="span2" name="date" id="nav_date" placeholder="on..." value="<%= Date.today.strftime('%Y-%m-%d') %>" />
+        <button class="btn" type="submit">Search</button>
+       </form>
+      </li>
+     </ul>
+
+    </div>
+   </div>
   </div>
 
-<% if @full_page %>
-  <div id="page" class="wide">
-<% else %>
-  <div id="page">
-<% end %>
+  <div class="container">
 
-   <div id="body"> 
+   <div class="content">
     <% if flash[:warn] %>
-     <div class="flash warn"><%= flash[:warn] %></div>
+    <span class="label warning"><%= flash[:warn] %></span>
     <% end %>
     <%= yield %>
    </div>
 
-   <div id="footer">
-    <a href="http://github.com/poggs/tsdbexplorer">Open Train Times</a> is &copy;2011 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a>. Data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>.  Please read the important information in the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %>.
-    <span style="float: right;">
-     <% if advanced_mode? %>
-      <%= link_to (image_tag 'modes/normal.png', :alt => 'Change to Normal Mode'), :controller => 'main', :action => 'toggle_mode' %>
-     <% else %>
-      <%= link_to (image_tag 'modes/advanced.png', :alt => 'Change to Advanced Mode'), :controller => 'main', :action => 'toggle_mode' %>
-     <% end %>
-    </span>
-   </div>
   </div>
+
+  <footer class="footer">
+   <div class="container">
+    <p class="pull-right"><a href="#">Back to top</a></p>
+    <p><a href="http://github.com/poggs/tsdbexplorer">Open Train Times</a> is &copy;2011 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a>. The data is provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>, and you should read the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %></p>
+   </div>
+  </footer>
 
  </body>
 </html>

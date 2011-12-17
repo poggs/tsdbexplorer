@@ -1,8 +1,28 @@
-<div id="service_detail">
- <div id="mode"><%= mode_icon_for(schedule.status) %></div>
- <% if session[:mode] == "advanced" && schedule.is_a_train? %><div id="identity"><%= schedule.train_identity %></div><% end %>
- <div id="headline"><%= time_only(schedule.origin.public_departure) || schedule.origin.departure %> <%= tidy_text(decode_tiploc(schedule.origin)) %> to <%= tidy_text(decode_tiploc(schedule.terminate)) %></div>
-<% unless schedule.atoc_code == 'ZZ' %>
- <div id="operator"><%= decode_toc(schedule.atoc_code) %></div>
-<% end %>
+<div class="row">
+ <div class="span1"><%= mode_icon_for(schedule.status) %></div>
+ <div class="span12"><h1><%= time_only(schedule.origin.public_departure) || schedule.origin.departure %> <%= tidy_text(decode_tiploc(schedule.origin)) %> to <%= tidy_text(decode_tiploc(schedule.terminate)) %><br /><small>Operated by <%= decode_toc(schedule.atoc_code) %></small></h1></div>
 </div>
+<% if session[:mode] == "advanced" && schedule.is_a_train? %>
+<div class="row">
+ <div class="span4">
+  <h2>Technical</h2>
+  <ul>
+   <li>Train <strong><%= schedule.train_identity %></strong></li>
+   <li><%= decode_stp_indicator(schedule, :F) %> <%= schedule.data_source %> schedule <strong><%= schedule.train_uid %></strong></li>
+   <li><%= schedule.power_type %><%= schedule.timing_load %> timed at <%= schedule.speed %>mph</li>
+  </ul>
+ </div>
+ <div class="span4">
+  <h2>Service</h2>
+  <ul>
+   <li><%= decode_train_category(schedule.category) %></li>
+   <li><%= decode_train_class(schedule.train_class) %></li>
+   <li><%= decode_reservations(schedule.reservations) %></li>
+  </ul>
+ </div>
+ <div class="span8">
+   <h2>Performance</h2>
+   <p>Not yet available</p>
+ </div>
+</div>
+<% end %>

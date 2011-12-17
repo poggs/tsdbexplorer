@@ -213,6 +213,9 @@ module TSDBExplorer
         return Struct.new(:status, :message).new(:error, 'No schedule found for activation of train ' + uid)
       end
 
+
+      # Create a DailySchedule record for this train
+
       ds_record = Hash.new
 
       DailySchedule.new.attributes.keys.each do |attr|
@@ -225,20 +228,25 @@ module TSDBExplorer
 
       DailySchedule.create!(ds_record)
 
+
+      # Create a list of locations and arrival/passing/departure times for each
+
       location_list = Array.new
 
-      schedule.locations.each do |location|
+      schedule.locations.each do |l|
 
         dsl_record = Hash.new
 
         DailyScheduleLocation.new.attributes.keys.each do |attr|
-          dsl_record[attr] = location[attr]
+
+          dsl_record[attr] = l[attr]
         end
 
         dsl_record[:daily_schedule_uuid] = ds_record[:uuid]
 
-        [ :arrival, :public_arrival, :pass, :departure, :public_departure ].each do |time_attr|
-          dsl_record[time_attr] = Time.parse(run_date.to_s + " " + TSDBExplorer::normalise_time(location[time_attr])) unless location[time_attr].nil? || location[time_attr].blank?
+        [ :arrival, :public_arrival, :pass, :departure, :public_departure ].each do |t|
+          point_time = Time.parse(run_date.to_s + " " + TSDBExplorer::normalise_time(l[t])) unless l[t].nil? || l[t].blank?
+          dsl_record[t] = point_time
         end
 
         location_list << DailyScheduleLocation.new(dsl_record)

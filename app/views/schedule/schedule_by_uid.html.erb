@@ -1,14 +1,18 @@
-<div id="service_detail">
- <div id="mode"><%= mode_icon_for(@schedule.first.status) %></div>
- <div id="headline">Schedule <%= params[:uid] %></div>
-<% unless @schedule.first.atoc_code == 'ZZ' %>
- <div id="operator"><%= decode_toc(@schedule.first.atoc_code) %></div>
-<% end %>
+<div class="row">
+ <div class="span14"><h1>Schedule <%= @schedule.first.train_uid %><br /><small>Operated by <%= decode_toc(@schedule.first.atoc_code) %></small></h1></div>
 </div>
 
-<%= render :partial => 'technical_detail', :locals => { :schedule => @schedule.first } %>
+<% if advanced_mode? %>
+ <%= render :partial => 'technical_detail', :locals => { :schedule => @schedule.first } %>
+<% end %>
 
-<div id="calendar">
+<ul>
+ <% @schedule.each do |s| %>
+ <li><%= decode_stp_indicator(s, :F) %> schedule - <%= link_to run_details(s), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :date => s.runs_from.to_s(:iso) %></li>
+<% end %>
+</ul>
+
+<div class="span6">
  <%= calendar_for @date_array, :year => @date.year, :month => @date.month do |calendar| %>
   <%= calendar.head('Su', 'M', 'T', 'W', 'Th', 'F', 'S') %>
   <%= calendar.day(:day_method => :date) do |date, schedule| %>
@@ -18,10 +22,5 @@
  <% end %>
 </div>
 
-<ul>
- <% @schedule.each do |s| %>
- <li><%= decode_stp_indicator(s, :F) %> schedule - <%= link_to run_details(s), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :date => s.runs_from.to_s(:iso) %></li>
-<% end %>
-</ul>
 
 

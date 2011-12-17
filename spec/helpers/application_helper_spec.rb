@@ -106,4 +106,12 @@ describe ApplicationHelper do
     date_range(Time.parse('2011-01-01 23:00:00'), Time.parse('2011-01-02 01:00:00')).should eql('between 2300 on Saturday 01 January 2011 and 0100 on Sunday 02 January 2011')
   end
 
+  it "should trim a trailing space from WTT timings for a whole minute" do
+    tidy_wtt_time('1800 ').should eql('1800')
+  end
+
+  it "should append a half-sign to WTT timings with a half-minute appended" do
+    tidy_wtt_time('1800H').should eql('1800&half;')
+  end
+
 end
