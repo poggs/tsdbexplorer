@@ -26,7 +26,6 @@ gem 'nokogiri', '>= 1.5.0'
 gem 'uuid', '>= 2.3.4'
 gem 'amqp', '>= 0.8.3'
 gem 'ruby-progressbar', '>= 0.0.10'
-gem 'memcache', '>= 1.2.13'
 gem 'redis', '>= 2.2.2'
 gem 'activerecord-import', '>= 0.2.8'
 
