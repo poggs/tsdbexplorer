@@ -7,11 +7,13 @@
  </script>
 <% end %>
 
-<% if @as_run.departed_origin? %>
- <div id="schedule_flash">Real-time information is available for this train, and is shown below.</div>
-<% else %>
- <div id="schedule_flash">Real-time information will be available for this train when it has departed <%= tidy_text(decode_tiploc(@as_run.origin)) %>.</div>
+<div class="alert-message info">
+ <% if @as_run.departed_origin? %>
+  Real-time information is available for this train, and is shown below
+ <% else %>
+  Real-time information will be shown for this train after it has departed <%= tidy_text(decode_tiploc(@as_run.origin)) %>
 <% end %>
+</div>
 
 <table>
 
