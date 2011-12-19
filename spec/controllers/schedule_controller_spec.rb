@@ -25,7 +25,7 @@ describe ScheduleController do
 
   it "should display a planned schedule originating from CIF in advanced mode" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    session[:mode] == "advanced"
+    session[:mode] = "advanced"
     get :schedule_by_uid, :uid => 'C43391', :date => '2010-12-12'
     response.code.should eql("200")
     response.body.should =~ /originated from CIF/
@@ -35,7 +35,7 @@ describe ScheduleController do
     vstp_data = File.open('test/fixtures/tdnet/vstp_create_1.xml').read
     vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
     vstp_message.status.should eql(:ok)
-    session[:mode] == "advanced"
+    session[:mode] = "advanced"
     get :schedule_by_uid, :uid => '20203', :date => '2011-11-14'
     response.code.should eql("200")
     response.body.should =~ /originated from VSTP/
