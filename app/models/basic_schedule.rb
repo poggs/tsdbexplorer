@@ -32,10 +32,6 @@ class BasicSchedule < ActiveRecord::Base
     ['OL', 'OU', 'OO', 'OW', 'XC', 'XD', 'XI', 'XR', 'XU', 'XX', 'XD', 'XZ', 'BR', 'BS'].include? self.category
   end
 
-  def realtime_for(date)
-    DailySchedule.where(:train_uid => self.train_uid, :runs_on => date).first
-  end
-
   def origin
     self.locations.where(:location_type => 'LO').first
   end

@@ -454,6 +454,17 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   # Real-time data processing
 
+  it "should record a Redis object for an activated train" do
+
+    $REDIS.flushall
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/tdnet/train_movement_1_schedule.cif')
+    $REDIS.get('ACT:L06809:20110825').should be_nil
+    activation = TSDBExplorer::TDnet::process_trust_message('000120110824230314TRUST               TSIA                                522T52M125201108242303145274120110825010300L068092024051100000020101211000000CO2T52M000005274120110825010300AN2121910000   ')
+    $REDIS.get('ACT:L06809:20110825').should eql('522T52M125')
+
+  end
+
   it "should allow a train to be activated and record its progress" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/tdnet/train_movement_1_schedule.cif')
 

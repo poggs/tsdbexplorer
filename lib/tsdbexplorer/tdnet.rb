@@ -255,6 +255,11 @@ module TSDBExplorer
 
       DailyScheduleLocation.import(location_list)
 
+
+      # Create a Redis record to indicate this train has been activated
+
+      $REDIS.set('ACT:' + uid + ":" + run_date.gsub('-', ''), unique_train_id) 
+
       return Struct.new(:status, :message).new(:ok, 'Activated train UID ' + uid + ' on ' + run_date + ' as train identity ' + unique_train_id)
 
     end

@@ -68,13 +68,36 @@ class LocationController < ApplicationController
       @schedule = @schedule.only_passenger if session[:mode] != 'advanced'
 
 
+      # Prepare an empty array of schedules which have been activated
+
+      @realtime = Array.new
+
+
       # Handle windows which span midnight
 
       if @range[:from].midnight == @range[:to].midnight
+
         @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+
+        @schedule.each do |l|
+          @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
+        end
+
       else
+
         @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), '2359')
+
+        @schedule_a.each do |l|
+          @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
+        end
+
         @schedule_b = @schedule.runs_on(@range[:to].to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
+
+        @schedule_b.each do |l|
+          @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
+        end
+
+
       end
 
     end
