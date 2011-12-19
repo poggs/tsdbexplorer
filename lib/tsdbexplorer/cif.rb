@@ -357,15 +357,18 @@ module TSDBExplorer
 
       # Process all the pending transactions
 
+      orig_level = ActiveRecord::Base.logger.level
+      ActiveRecord::Base.logger.level = 6
+
       pending.keys.each do |model_object|
 
-        Rails.logger.silencer do
-          eval(model_object).import pending[model_object][:cols], pending[model_object][:rows], :validate => false
-        end
+        eval(model_object).import pending[model_object][:cols], pending[model_object][:rows], :validate => false
 
         pending[model_object][:rows] = []
 
       end
+
+      ActiveRecord::Base.logger.level = orig_level
 
       return pending
 
