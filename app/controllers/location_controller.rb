@@ -19,9 +19,13 @@
 
 class LocationController < ApplicationController
 
+  before_filter :validate_datetime
+
   # Display services at a particular location
   
   def index
+
+    redirect_to :action => 'index', :year => Time.now.year, :month => Time.now.month, :day => Time.now.day, :time => Time.now.strftime('%H%M') and return if @datetime.nil?
 
     if params[:location].length == 3
       @location = Tiploc.find_by_crs_code(params[:location].upcase)
@@ -33,71 +37,50 @@ class LocationController < ApplicationController
 
     if @location.nil?
       render 'common/error', :status => :not_found, :locals => { :message => "We can't find the location '#{params[:location] || params[:location_text]}'" } and return
-    else
+    end
 
-      @datetime = Time.now
+    early_range = 30.minutes
+    late_range = 1.hour
 
-      if params[:date] && params[:time]
-        begin
-          test_time = Time.parse(params[:time])  # Test the time, otherwise it'll just be replaced with 00:00:00
-          @datetime = Time.parse(params[:date] + " " + params[:time])
-        rescue
-          render 'common/error', :status => :bad_request, :locals => { :message => "We can't understand the date #{params[:date]}, or the time #{params[:time]}" } and return
-          exit
-        end
-      elsif params[:date]
-        begin
-          test_date = Date.parse(params[:date])  # Test the date, otherwise it'll just be replaced with today
-          @datetime = Time.parse(params[:date] + " " + Time.now.strftime("%H:%M:%S"))
-        rescue
-          render 'common/error', :status => :bad_request, :locals => { :message => "We can't understand the date #{params[:date]}" } and return
-        end
+    @range = Hash.new
+    @range[:from] = @datetime - early_range
+    @range[:to] = @datetime + late_range
+
+    @schedule = Location.where(:tiploc_code => @related_locations)
+
+
+    # Only show passenger services if we are not in advanced mode
+
+    @schedule = @schedule.only_passenger if session[:mode] != 'advanced'
+
+
+    # Prepare an empty array of schedules which have been activated
+
+    @realtime = Array.new
+
+
+    # Handle windows which span midnight
+
+    if @range[:from].midnight == @range[:to].midnight
+
+      @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+
+      @schedule.each do |l|
+        @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
       end
 
-      early_range = 30.minutes
-      late_range = 1.hour
+    else
 
-      @range = Hash.new
-      @range[:from] = @datetime - early_range
-      @range[:to] = @datetime + late_range
+      @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), '2359')
 
-      @schedule = Location.where(:tiploc_code => @related_locations)
+      @schedule_a.each do |l|
+        @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
+      end
 
-      # Only show passenger services if we are not in advanced mode
+      @schedule_b = @schedule.runs_on(@range[:to].to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
 
-      @schedule = @schedule.only_passenger if session[:mode] != 'advanced'
-
-
-      # Prepare an empty array of schedules which have been activated
-
-      @realtime = Array.new
-
-
-      # Handle windows which span midnight
-
-      if @range[:from].midnight == @range[:to].midnight
-
-        @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
-
-        @schedule.each do |l|
-          @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
-        end
-
-      else
-
-        @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), '2359')
-
-        @schedule_a.each do |l|
-          @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
-        end
-
-        @schedule_b = @schedule.runs_on(@range[:to].to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
-
-        @schedule_b.each do |l|
-          @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
-        end
-
-
+      @schedule_b.each do |l|
+        @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
       end
 
     end

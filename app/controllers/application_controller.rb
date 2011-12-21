@@ -39,4 +39,39 @@ class ApplicationController < ActionController::Base
               
   end
 
+
+  # Validate the date and time passed
+
+  def validate_datetime
+
+    if(params[:year] || params[:month] || params[:day] || params[:time])
+
+      begin
+        params[:time] = Time.now.strftime('%H%M') if params[:time].nil?
+        if params[:time] =~ /\d{4}/
+          @datetime = Time.gm(params[:year], params[:month], params[:day], params[:time][0..1], params[:time][2..3])
+        else
+          @datetime = nil
+        end
+      rescue
+        @datetime = nil
+      end
+
+      if @datetime.nil?
+        render 'common/error', :status => :bad_request, :locals => { :message => "Sorry, you passed an invalid date" } and return unless @datetime.is_a? DateTime
+      end
+
+    end
+
+  end
+
+
+  # Return a string in the form YYYY-MM-DD based on the parameters passed in the URL
+
+  def date_from_params
+
+    params[:year] + "-" + params[:month].rjust(2, '0') + "-" + params[:day].rjust(2, '0')
+
+  end
+
 end
