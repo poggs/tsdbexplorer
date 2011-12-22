@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  before_filter :convert_url_parameters
   helper_method :advanced_mode?
 
   # Return true if advanced mode has been selected
@@ -66,11 +67,21 @@ class ApplicationController < ActionController::Base
   end
 
 
-  # Return a string in the form YYYY-MM-DD based on the parameters passed in the URL
+  # Convert a date and/or time passed un-RESTfully in the URL in to keys in params[]
 
-  def date_from_params
+  def convert_url_parameters
 
-    params[:year] + "-" + params[:month].rjust(2, '0') + "-" + params[:day].rjust(2, '0')
+    if (params[:year].nil? && params[:month].nil? && params[:day].nil?) && !params[:date].nil? && params[:date].match(/(\d{4})\-(\d{2})\-(\d{2})/)
+      params[:year] = $1
+      params[:month] = $2
+      params[:day] = $3
+    end
+
+    if !params[:time].nil? && params[:time].match(/(\d{2})\:(\d{2})/)
+      params[:time] = $1 + $2
+    end
+
+    @date_yyyymmdd = params[:year] + "-" + params[:month] + "-" + params[:day] if (params[:year] && params[:month] && params[:year])
 
   end
 

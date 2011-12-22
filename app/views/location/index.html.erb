@@ -35,10 +35,10 @@
  </thead>
  <tbody>
   <% if @schedule_a || @schedule_b %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_a } %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_b } %>
+   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_a, :datetime => @datetime } %>
+   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_b, :datetime => @datetime + 1.day } %>
   <% else %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule } %>
+   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule, :datetime => @datetime } %>
   <% end %>
  </tbody>
 </table>

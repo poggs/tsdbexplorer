@@ -108,6 +108,8 @@ class LocationController < ApplicationController
 
       @matches = Tiploc.find(:all, :conditions => conditions, :limit => 25)
 
+      redirect_to :action => 'index', :location => term.upcase, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] if @matches.length == 1
+
     end
 
   end
