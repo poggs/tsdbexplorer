@@ -16,12 +16,9 @@
       <div class="input">
        <input class="large" id="location" name="text" size="24" type="text">
       </div>
-      <label for="date">What date?</label>
+      <label for="date">What date and time?</label>
       <div class="input">
-       <input class="medium" id="date" name="date" size="11" type="text" value="<%= @time.strftime('%Y-%m-%d') %>">
-      </div>
-      <label for="time">...and what time?</label>
-      <div class="input">
+       <input class="small" id="date" name="date" size="11" type="text" value="<%= @time.strftime('%Y-%m-%d') %>">
        <input class="mini" id="time" name="time" size="4" value="<%= @time.strftime('%H:%M') %>">
       </div>
       <div class="actions">
@@ -36,7 +33,7 @@
  <div class="span8">
   <section id="technical_search">
    <h2>Technical search</h2>
-   <p>Enter the train ID or schedule UID and a date</p>
+   <p>Do you want to search for a train by ID or headcode?  Enter it here!</p>
    <form action="<%= url_for :controller => 'schedule', :action => 'search' %>">
     <fieldset>
      <div class="clearfix">
