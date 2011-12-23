@@ -8,7 +8,7 @@
 
 <ul>
  <% @schedule.each do |s| %>
- <li><%= decode_stp_indicator(s, :F) %> schedule - <%= link_to run_details(s), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :date => s.runs_from.to_s(:iso) %></li>
+ <li><%= decode_stp_indicator(s, :F) %> schedule - <%= link_to run_details(s), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :year => s.runs_from.year, :month => s.runs_from.month, :day => s.runs_from.day %></li>
 <% end %>
 </ul>
 
@@ -17,7 +17,7 @@
   <%= calendar.head('Su', 'M', 'T', 'W', 'Th', 'F', 'S') %>
   <%= calendar.day(:day_method => :date) do |date, schedule| %>
    <%= date.day %>
-   <div style="text-align: center;"><%= link_to schedule.first.type, :action => 'schedule_by_uid_and_run_date', :date => date.to_s(:iso) unless schedule.length == 0 %></div>
+   <div style="text-align: center;"><%= link_to schedule.first.type, :action => 'schedule_by_uid_and_run_date', :year => date.year, :month => date.month, :day => date.day unless schedule.length == 0 %></div>
   <% end %>
  <% end %>
 </div>
