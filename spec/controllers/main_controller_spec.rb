@@ -34,4 +34,21 @@ describe MainController do
     response.body.should =~ /You will need some CIF timetable data/
   end
 
+  it "should show a message when the site is in to maintenance mode" do
+    TSDBExplorer::Realtime::set_maintenance_mode('Test message')
+    get :index
+    response.code.should eql("503")
+    response.body.should include('Test message')
+    response.should render_template('common/maintenance_mode')
+  end
+                     
+  it "should not show a message when the site is taken out of maintenance mode" do
+    TSDBExplorer::Realtime::set_maintenance_mode('Test message')
+    TSDBExplorer::Realtime::clear_maintenance_mode
+    get :index
+    response.code.should_not eql("503")
+    response.body.should_not include('Test message')
+    response.should_not render_template('common/maintenance_mode')
+  end
+
 end

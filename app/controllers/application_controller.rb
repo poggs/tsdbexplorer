@@ -21,8 +21,19 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  before_filter :in_maintenance_mode?
   before_filter :convert_url_parameters
   helper_method :advanced_mode?
+
+
+  # Identify if the site is in maintenance mode, and if so, display a holding page
+
+  def in_maintenance_mode?
+
+    render 'common/maintenance_mode', :status => :service_unavailable, :locals => { :reason => $REDIS.get('OTT:SYSTEM:MAINT') } and return if $REDIS.get('OTT:SYSTEM:MAINT')
+
+  end
+
 
   # Return true if advanced mode has been selected
   

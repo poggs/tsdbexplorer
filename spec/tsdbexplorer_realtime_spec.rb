@@ -19,14 +19,14 @@
 
 require 'spec_helper'
 
-describe AdminController do
+describe "lib/tsdbexplorer/realtime.rb" do
 
-  it "should display a page of statistics" do
-    get :index
+  it "should put the site in to maintenance mode" do
+    TSDBExplorer::Realtime::set_maintenance_mode('Test message')
   end
 
-  it "should display an administration page for timetable data" do
-    get :timetable
+  it "should take the site out of maintenance mode" do
+    TSDBExplorer::Realtime::clear_maintenance_mode
   end
-
+  
 end

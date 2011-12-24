@@ -17,16 +17,24 @@
 #  $Id$
 #
 
-require 'spec_helper'
+module TSDBExplorer
 
-describe AdminController do
+  module Realtime
 
-  it "should display a page of statistics" do
-    get :index
-  end
+    # Put the site in to maintenance mode
 
-  it "should display an administration page for timetable data" do
-    get :timetable
+    def Realtime.set_maintenance_mode(reason)
+      $REDIS.set('OTT:SYSTEM:MAINT', reason)
+    end
+
+
+    # Take the site out of maintenance mode
+
+    def Realtime.clear_maintenance_mode
+      $REDIS.del('OTT:SYSTEM:MAINT')
+    end
+
   end
 
 end
+
