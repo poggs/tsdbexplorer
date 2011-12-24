@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  before_filter :convert_url_parameters
   helper_method :advanced_mode?
 
   # Return true if advanced mode has been selected
@@ -37,6 +38,51 @@ class ApplicationController < ActionController::Base
     session[:mode] = (session[:mode] == 'advanced' ? 'normal' : 'advanced')
     redirect_to :back
               
+  end
+
+
+  # Validate the date and time passed
+
+  def validate_datetime
+
+    if(params[:year] || params[:month] || params[:day] || params[:time])
+
+      begin
+        params[:time] = Time.now.strftime('%H%M') if params[:time].nil?
+        if params[:time] =~ /\d{4}/
+          @datetime = Time.gm(params[:year], params[:month], params[:day], params[:time][0..1], params[:time][2..3])
+        else
+          @datetime = nil
+        end
+      rescue
+        @datetime = nil
+      end
+
+      if @datetime.nil?
+        render 'common/error', :status => :bad_request, :locals => { :message => "Sorry, you passed an invalid date" } and return unless @datetime.is_a? DateTime
+      end
+
+    end
+
+  end
+
+
+  # Convert a date and/or time passed un-RESTfully in the URL in to keys in params[]
+
+  def convert_url_parameters
+
+    if (params[:year].nil? && params[:month].nil? && params[:day].nil?) && !params[:date].nil? && params[:date].match(/(\d{4})\-(\d{2})\-(\d{2})/)
+      params[:year] = $1
+      params[:month] = $2
+      params[:day] = $3
+    end
+
+    if !params[:time].nil? && params[:time].match(/(\d{2})\:(\d{2})/)
+      params[:time] = $1 + $2
+    end
+
+    @date_yyyymmdd = params[:year] + "-" + params[:month] + "-" + params[:day] if (params[:year] && params[:month] && params[:year])
+
   end
 
 end

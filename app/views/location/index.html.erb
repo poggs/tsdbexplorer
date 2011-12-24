@@ -3,8 +3,8 @@
 </div>
 
 <div>
- <div style="text-align: left; float: left;"><%= link_to "< 1h earlier", { :date => (@datetime - 1.hour).to_s(:yyyymmdd), :time => (@datetime - 1.hour).to_s(:hhmm_colon) }, { :class => 'btn primary' } %></div>
- <div style="text-align: right;"><%= link_to "1h later >", { :date => (@datetime + 1.hour).to_s(:yyyymmdd), :time => (@datetime + 1.hour).to_s(:hhmm_colon) }, { :class => 'btn primary' } %></div>
+ <div style="text-align: left; float: left;"><%= link_to "< 1h earlier", { :year => (@datetime - 1.hour).year, :month => (@datetime - 1.hour).month, :day => (@datetime - 1.hour).day, :time => (@datetime - 1.hour).to_s(:hhmm) }, { :class => 'btn primary' } %></div>
+ <div style="text-align: right;"><%= link_to "1h later >", { :year => (@datetime + 1.hour).year, :month => (@datetime + 1.hour).month, :day => (@datetime + 1.hour).day, :time => (@datetime + 1.hour).to_s(:hhmm) }, { :class => 'btn primary' } %></div>
 </div>
 
 <table>
@@ -35,10 +35,10 @@
  </thead>
  <tbody>
   <% if @schedule_a || @schedule_b %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_a } %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_b } %>
+   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_a, :datetime => @datetime } %>
+   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_b, :datetime => @datetime + 1.day } %>
   <% else %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule } %>
+   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule, :datetime => @datetime } %>
   <% end %>
  </tbody>
 </table>

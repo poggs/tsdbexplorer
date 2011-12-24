@@ -12,7 +12,7 @@
    <% if params[:date].nil? %>
     <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %></li>
    <% else %>
-    <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :date => params[:date] %></li>
+    <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %></li>
    <% end %>
   <% end %>
  </ul>

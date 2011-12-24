@@ -9,7 +9,7 @@
  <ul>
   <% @matches.each do |m| %>
   <% next unless !m.crs_code.blank? %>
-  <li><%= link_to "#{m.crs_code}: #{tidy_text(m.tps_description)}", :controller => 'location', :location => m.crs_code, :date => params[:date], :time => params[:time] %></li>
+  <li><%= link_to "#{m.crs_code}: #{tidy_text(m.tps_description)}", :controller => 'location', :location => m.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %></li>
   <% end %>
  </ul>
 

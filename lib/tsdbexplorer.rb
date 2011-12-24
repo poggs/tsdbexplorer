@@ -20,7 +20,6 @@
 require 'tsdbexplorer/tdnet.rb'
 require 'tsdbexplorer/cif.rb'
 require 'tsdbexplorer/geography.rb'
-require 'tsdbexplorer/schedule.rb'
 
 module TSDBExplorer
 

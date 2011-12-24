@@ -1,12 +1,3 @@
-<%= content_for :script do %>
- <script type="text/javascript">
-  $(document).ready( function() {
-   $("tr:nth-child(odd)").addClass("odd");
-   $('div.twisty').twisty();
-  });
- </script>
-<% end %>
-
 <div class="alert-message info">
  <% if @as_run.departed_origin? %>
   Real-time information is available for this train, and is shown below
@@ -41,10 +32,10 @@
     <td><%= l.line %></td>
     <td><%= l.path %></td>
     <td><%= time_only(l.public_arrival) %></td>
-    <%= format_time(l, 'arrival', :wtt) %>
-    <%= format_time(l, 'pass', :wtt) %>
+    <td><%= format_time(l, 'arrival', :wtt) %></td>
+    <td><%= format_time(l, 'pass', :wtt) %></td>
     <td><%= time_only(l.public_departure) %></td>
-    <%= format_time(l, 'departure', :wtt) %>
+    <td><%= format_time(l, 'departure', :wtt) %></td>
     <td><%= calculate_variation(l) %></td>
    </tr>
   <% end %>
@@ -66,8 +57,8 @@
     <tr>
      <td><%= tidy_text(decode_tiploc(l)) %></td>
      <td style="text-align: center;"><%=raw l.platform || "&nbsp;" %></td>
-     <%= format_time(l, 'arrival', :public) %>
-     <%= format_time(l, 'departure', :public) %>
+     <td><%= format_time(l, 'arrival', :public) %></td>
+     <td><%= format_time(l, 'departure', :public) %></td>
      <td><%= calculate_variation(l) %></td>
     </tr>
    <% end %>

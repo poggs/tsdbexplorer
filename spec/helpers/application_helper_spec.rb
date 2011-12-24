@@ -52,14 +52,14 @@ describe ApplicationHelper do
   end
 
   it "should convert a reservation status in to text" do
-    decode_reservations(' ').should eql('Not available')
-    decode_reservations(nil).should eql('Not available')
-    decode_reservations('A').should eql('A: Reservations compulsory')
-    decode_reservations('S').should eql('S: Reservations possible')
+    decode_reservations(' ').should eql('not available')
+    decode_reservations(nil).should eql('not available')
+    decode_reservations('A').should eql('compulsory')
+    decode_reservations('S').should eql('possible')
   end
 
   it "should gracefully handle an unknown reservation status" do
-    decode_reservations('$').should eql('$: Unknown')
+    decode_reservations('$').should eql('unknown')
   end
 
   it "should return the description for a Location object referencing a known TIPLOC" do

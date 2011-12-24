@@ -271,7 +271,7 @@ module ScheduleHelper
 
     end
 
-    return content_tag(:td, value, :class => html_class)
+    return content_tag(:span, value, :class => html_class)
 
   end
 
