@@ -1,0 +1,87 @@
+
+                     A Guide to Installing TSDBExplorer
+                     ==================================
+
+These instructions assume you're using Ubuntu 11.10 Server.  Other operating systems and GNU/Linux distributions will likely work too.
+
+NOTE: The installation of a database server is well outside the scope of this documentation.  TSDBExplorer has been developed and tested on PostgreSQL, and it's recommended you use the latest version.
+
+If you want to use sqlite3 or MySQL:
+
+ * For sqlite3, install libsqlite3-dev and replace the 'pg' gem in the Gemfile with 'sqlite3'
+ * For MySQL, install libmysqlclient-dev and replace the 'pg' gem in the Gemfile with 'mysql'
+
+After either of these steps, re-run 'bundle install'.  See http://guides.rubyonrails.org/getting_started.html#configuring-a-database for help on setting up sqlite3.
+
+
+Installing Ruby
+---------------
+
+The distribution-default version of Rails is likely to be old.  Ubuntu 11.10 ships with Rails 2.3.14 - TSDBExplorer is written in Rails 3.1!  Your version of the Ruby interpreter may also be old too.  You are recommended to use Ruby Version Manager (RVM).
+
+Follow the instructions on http://beginrescueend.com/ - or if you're impatient, just do this:
+
+1. Run the following command:
+
+     bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
+
+2. Read the instructions in the section starting "You must now complete the install by loading RVM in new shells".  Add the necessary line to your profile, log out and log in again.
+
+3. Run the following:
+
+     apt-get install readline6-dev zlib1g-dev libxml2-dev libxslt-dev libpq-dev nodejs redis-server
+
+     rvm install 1.9.2
+     rvm use 1.9.2 --default
+
+
+Installing TSDBExplorer
+-----------------------
+
+1. Create a gemset:
+
+     rvm gemset create tsdbexplorer
+
+2. Clone the git repository:
+
+     git clone git://github.com/poggs/tsdbexplorer.git
+
+3. Install the gems required for TSDBExplorer from the Gemfile:
+
+     bundle install
+
+4. Copy the example configuration files:
+
+     cp config/tsdbexplorer.yml.example config/tsdbexplorer.yml
+     cp config/database.yml.example config/database.yml
+
+5. Edit config/database.yml and configure appropriately for the database you wish to use.  Leave config/tsdbexplorer.yml as-is.
+
+6. Set up the database:
+
+     rake db:setup
+
+9. Start the WEBrick server using 'rails server', and browse to http://localhost:3000/.  Replace 'localhost' with the hostname or IP address of the server you're running Rails on.
+
+
+Loading timetable data
+----------------------
+
+As of December 2011, ATOC publish weekly timetable data on their site, http://data.atoc.org.uk/.  The .MCA file within the latest archive contains timetable data in CIF format, broadly equivalent to the data available through Network Rail.
+
+If you wish to filter the CIF data to only include specific TOCs, edit extra/split-cif.rb and change the 'toc_code' variable to be a list of the TOCs you are interested in.  For more than one TOC, separate the TOC code with a comma, for example:
+
+  toc_code = ['LO', 'LM']
+
+Next, pass the file through extra/split-cif.rb and redirect the output to another file:
+
+  cat /tmp/TTISF569.MCA | extra/split-cif.rb > LO.CIF
+
+The file LO.CIF will contain all TIPLOC data, plus schedules for the selected TOC.
+
+Regardless of whether you have a partial or full extract of the data, run 'rails console' and import the CIF file as follows:
+
+  TSDBExplorer::CIF::process_cif_file('LO.CIF')
+
+This can take a long time, especially if you're using sqlite as a backend database.  Once it's done, you're up and running!
+

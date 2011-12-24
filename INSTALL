@@ -1,0 +1,26 @@
+
+                           Installing TSDBExplorer
+                           =======================
+
+TSDBExplorer is a Ruby on Rails application.  If you're not familiar with
+Rails, please read INSTALL-GUIDE.txt for some hand-holding.
+
+In addition to this Rails application, you'll also need:
+
+ * A database - PostgreSQL is the only actively supported version, although
+   you may have success with MySQL or even sqlite.  If you do, please let me
+   know!
+
+ * Some timetable data in CIF format.  It has been announced that this data
+   will be made available by the end of 2011.  See www.openraildata.info
+   where updates will be posted.
+
+ * Real-time TRUST data.  Again, this has been announced as being available
+   from April 2012 - when it is available, check www.openraildata.info.
+
+Start the Rails server, visit http://localhost:3000/ and you'll be talked
+through the necessary steps.
+
+
+Peter Hicks (peter.hicks@poggs.co.uk)
+December 2011
