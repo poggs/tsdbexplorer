@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
 
     @date_yyyymmdd = params[:year] + "-" + params[:month] + "-" + params[:day] if (params[:year] && params[:month] && params[:year])
 
-    @date_human = Date.parse(@date_yyyymmdd)
+    @date_human = Date.parse(@date_yyyymmdd) if @date_yyyymmdd
 
   end
 
