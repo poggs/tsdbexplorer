@@ -17,4 +17,42 @@
 #  $Id$
 #
 
+
+# Check the Redis server hostname and port have been specified
+
+unless $CONFIG['REDIS_SERVER']['hostname'] && $CONFIG['REDIS_SERVER']['port']
+  puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  puts
+  puts "No Redis configuration specified - ensure the following lines are included"
+  puts "in config/tsdbexplorer.yml:"
+  puts
+  puts "  REDIS_SERVER:"
+  puts "    hostname: redis.example.com"
+  puts "    port: 12345"
+  puts
+  puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  raise 
+end
+
+
+# Connect to the Redis server
+
 $REDIS = Redis.new(:host => $CONFIG['REDIS_SERVER']['hostname'], :port => $CONFIG['REDIS_SERVER']['port'])
+
+
+# Select the correct database so we don't accidentally clobber production
+# data if we run unit tests on the production server within the test
+# environment!
+
+redis_db = { 'development' => 0, 'test' => 1, 'production' => 2 }
+
+if redis_db.has_key? Rails.env
+  $REDIS.select(redis_db[Rails.env])
+else
+  raise "Cannot select Redis database - unknown Rails environment #{Rails.env}"
+end
+
+
+# Flush the Redis database if we're running in the test environment
+
+$REDIS.flushdb if Rails.env == "test"
