@@ -36,4 +36,31 @@ class AdminController < ApplicationController
 
   end
 
+
+  # Perform administration on timetable data
+
+  def timetable
+
+    @all_timetables = Hash.new
+
+    tt_dir = Dir.open($CONFIG['TIMETABLE']['path'])
+
+    tt_dir.each do |t|
+
+      next if File.directory? t
+
+      if tt_file = File.open($CONFIG['TIMETABLE']['path'] + "/" + t)
+        header = TSDBExplorer::CIF::parse_record(tt_file.readline)
+        info = Hash.new
+        info[:filename] = t
+        info[:file_mainframe_identity] = header.file_mainframe_identity
+        info[:extract_type] = header.update_indicator
+        info[:imported] = true if CifFile.where(:file_mainframe_identity => header.file_mainframe_identity).count > 0
+        @all_timetables[t] = info
+      end
+
+    end
+
+  end
+
 end

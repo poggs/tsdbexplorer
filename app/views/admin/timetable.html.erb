@@ -1,0 +1,25 @@
+<%= render :partial => 'common/twisty_javascript' %>
+<h1>Timetable Administration</h1>
+
+<p>There are <%= @all_timetables.count %> timetable files in <%= $CONFIG['TIMETABLE']['path'] %>:</p>
+
+<table class="zebra-striped condensed-table">
+ <thead>
+  <tr>
+   <th>Filename</th>
+   <th>Mainframe identity</th>
+   <th>Type</th>
+   <th>Imported</th>
+  </tr>
+ </thead>
+ <tbody>
+  <% @all_timetables.keys.sort.each do |t| %>
+   <tr>
+    <td><%= t %></td>
+    <td><%= @all_timetables[t][:file_mainframe_identity] %></td>
+    <td><%= @all_timetables[t][:extract_type] %></td>
+    <td><%= @all_timetables[t][:imported] && image_tag('tick.png', :alt => 'Real-time information available') %></td>
+   </tr>
+  <% end %>
+ </tbody>
+</table>
