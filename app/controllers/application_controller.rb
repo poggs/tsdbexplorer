@@ -21,8 +21,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
-  before_filter :in_maintenance_mode?
   before_filter :calculate_stats
+  before_filter :in_maintenance_mode?
   before_filter :convert_url_parameters
   helper_method :advanced_mode?
 
