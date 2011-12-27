@@ -5,7 +5,7 @@
   <%= stylesheet_link_tag 'application' %>
   <%= yield(:head) %>
   <%= javascript_include_tag 'application' %>
-  <%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'nav_location', :controller => 'location', :action => 'search', :min_length => 3 } %>
+  <%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'text', :controller => 'location', :action => 'search', :min_length => 3 } %>
   <%= csrf_meta_tag %>
   <%= yield(:script) %>
   <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
