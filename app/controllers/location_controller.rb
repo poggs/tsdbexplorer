@@ -103,12 +103,12 @@ class LocationController < ApplicationController
       if term.length == 3
         conditions = [ 'crs_code = ?', term.upcase ]
       else
-        conditions = [ 'tiploc_code LIKE ? OR tps_description LIKE ?', '%' + term.upcase + '%', '%' + term.upcase + '%' ]
+        conditions = [ 'tiploc_code LIKE ? OR description LIKE ? OR tps_description LIKE ?', '%' + term.upcase + '%', '%' + term.upcase + '%', '%' + term.upcase + '%' ]
       end
 
       @matches = Tiploc.find(:all, :conditions => conditions, :limit => 25)
 
-      redirect_to :action => 'index', :location => term.upcase, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] if @matches.length == 1
+      redirect_to :action => 'index', :location => @matches.first.tiploc_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] if @matches.length == 1 && request.format != "json"
 
     end
 
