@@ -1,13 +1,9 @@
 <h1>Search</h1>
 
-<div class="alert-message info">
- <p><strong>We currently have data for services running between <%= @stats[:earliest_schedule] %> and <%= @stats[:latest_schedule] %></strong></p>
-</div>
-
 <div class="row">
  <div class="span8">
   <section id="search_by_location">
-   <h2>Search by location</h2>
+   <h2>By location</h2>
    <p>Just answer these three questions:</p>
    <form action="<%= url_for :controller => 'location', :action => 'search' %>">
     <fieldset>
@@ -32,7 +28,7 @@
 <% if advanced_mode? %>
  <div class="span8">
   <section id="technical_search">
-   <h2>Technical search</h2>
+   <h2>By technical information</h2>
    <p>Do you want to search for a train by ID or headcode?  Enter it here!</p>
    <form action="<%= url_for :controller => 'schedule', :action => 'search' %>">
     <fieldset>

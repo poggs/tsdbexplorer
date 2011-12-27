@@ -53,7 +53,8 @@
   <footer class="footer">
    <div class="container">
     <p class="pull-right"><a href="#">Back to top</a></p>
-    <p><a href="http://github.com/poggs/tsdbexplorer">Open Train Times</a> is &copy;2011 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a>. The data is provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>, and you should read the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %></p>
+    <p><a href="http://github.com/poggs/tsdbexplorer">Open Train Times</a> is &copy;2011 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a> using data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a> and <a href="http://www.atoc.org/">RSP</a>.</p> 
+    <p>Schedules are available for dates up to <%= @stats[:latest_schedule] %>. Please read the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %> to understand the limitations of this site.</p>
    </div>
   </footer>
 
