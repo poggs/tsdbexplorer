@@ -114,4 +114,19 @@ describe ApplicationHelper do
     tidy_wtt_time('1800H').should eql('1800&half;')
   end
 
+  it "should display the platform, line and path for a location with all three set" do
+    location = Location.new(:platform => '1', :line => 'SL')
+    format_platform_and_line(location).should eql('Plat 1, SL')
+  end
+
+  it "should display the platform for a location without a line or path specified" do
+    location = Location.new(:platform => '1')
+    format_platform_and_line(location).should eql('Plat 1')
+  end
+
+  it "should display the line for a location without a platform or path specified" do
+    location = Location.new(:line => 'SL')
+    format_platform_and_line(location).should eql('SL')
+  end
+
 end

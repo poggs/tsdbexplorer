@@ -450,4 +450,19 @@ module ApplicationHelper
 
   end
 
+
+  # Formats the platform and line in to text
+
+  def format_platform_and_line(loc)
+
+    if loc.platform && loc.line
+      "Plat #{loc.platform}, #{loc.line}"
+    elsif loc.platform
+      "Plat #{loc.platform}"
+    elsif loc.line
+      "#{loc.line}"
+    end
+
+  end
+
 end
