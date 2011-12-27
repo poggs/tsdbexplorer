@@ -309,14 +309,6 @@ ActiveRecord::Schema.define(:version => 20111130215704) do
     t.datetime "updated_at"
   end
 
-  create_table "service_codes", :force => true do |t|
-    t.string   "service_code", :limit => 8
-    t.string   "atoc_code",    :limit => 2
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "td_areas", :force => true do |t|
     t.string   "td_area",    :limit => 2
     t.text     "name"
