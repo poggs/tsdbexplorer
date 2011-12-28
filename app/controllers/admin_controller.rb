@@ -37,12 +37,6 @@ class AdminController < ApplicationController
     @status[:train_describer_feed] = TSDBExplorer::Realtime::Status.train_describer_feed
     @status[:trust_feed] = TSDBExplorer::Realtime::Status.trust_feed
 
-
-
-    @stats[:cifs_imported] = CifFile.count
-    @stats[:last_cif_import] = CifFile.maximum(:created_at)
-
-
   end
 
 
@@ -53,11 +47,11 @@ class AdminController < ApplicationController
     @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
 
     @stats = Hash.new
+    @stats[:cifs_imported] = CifFile.count
     @stats[:tiplocs] = Tiploc.count
-    @stats[:basic_schedules] = BasicSchedule.count
+    @stats[:basic_schedules] = BasicSchedule.count || "0"
     @stats[:earliest_schedule] = BasicSchedule.minimum(:runs_from)
     @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to)
-    @stats[:daily_schedules] = DailySchedule.count
 
     @all_timetables = Hash.new
 
@@ -89,10 +83,10 @@ class AdminController < ApplicationController
     @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
 
     @stats = Hash.new
-    @stats[:trust_messages] = $REDIS.get('STATS:TRUST:PROCESSED')
-    @stats[:td_messages] = $REDIS.get('STATS:TD:PROCESSED')
-    @stats[:vstp_messages] = $REDIS.get('STATS:VSTP:PROCESSED')
-    @stats[:tsr_messages] = $REDIS.get('STATS:TSR:PROCESSED')
+    @stats[:trust_messages] = $REDIS.get('STATS:TRUST:PROCESSED') || "0"
+    @stats[:td_messages] = $REDIS.get('STATS:TD:PROCESSED') || "0"
+    @stats[:vstp_messages] = $REDIS.get('STATS:VSTP:PROCESSED') || "0"
+    @stats[:tsr_messages] = $REDIS.get('STATS:TSR:PROCESSED') || "0"
 
   end
 

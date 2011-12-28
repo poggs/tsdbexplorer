@@ -42,12 +42,21 @@ module TSDBExplorer
         last_extract = CifFile.last
         limit = 2.days
 
-        if last_extract.extract_timestamp.to_i < limit.to_i
+        if last_extract.nil?
           status = :error
-          message = "Last extract file #{CifFile.last.file_mainframe_identity} imported more than #{limit} seconds ago"
+          message = "No CIF files have been imported"
         else
-          status = :ok
-          message = "Last extract file #{CifFile.last.file_mainframe_identity} imported less than #{limit} seconds ago"
+
+          last_data_from = Time.now - last_extract.extract_timestamp
+
+          if last_data_from > limit
+            status = :error
+            message = "Last extract imported was #{CifFile.last.file_mainframe_identity} on #{last_extract.extract_timestamp.to_s}"
+          else
+            status = :ok
+            message = "Last extract imported was #{CifFile.last.file_mainframe_identity} on #{last_extract.extract_timestamp.to_s}"
+          end
+
         end
 
         return Struct.new(:status, :message).new(status, message)
