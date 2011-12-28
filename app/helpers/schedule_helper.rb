@@ -324,7 +324,7 @@ module ScheduleHelper
     variation = nil
 
     if loc.cancelled?
-      variation = "Cancelled"
+      variation = content_tag(:span, "Cancelled", :class => 'label important')
     else
 
       if !loc.actual_departure.nil?
