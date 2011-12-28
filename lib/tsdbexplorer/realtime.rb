@@ -56,7 +56,7 @@ module TSDBExplorer
 
       def Status.train_describer_feed
 
-        last_update = $REDIS.get('STATS:TD:UPDATE')
+        last_update = $REDIS.get('STATS:TD:UPDATE').to_i
         limit = 30.seconds
 
         if last_update.nil?
@@ -76,7 +76,7 @@ module TSDBExplorer
 
       def Status.trust_feed
 
-        last_update = $REDIS.get('STATS:TRUST:UPDATE')
+        last_update = $REDIS.get('STATS:TRUST:UPDATE').to_i
         limit = 2.minutes
 
         if last_update.nil?
