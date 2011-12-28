@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 #
 #  This file is part of TSDBExplorer.
 #
@@ -27,32 +27,104 @@ log = Logger.new(STDOUT)
 log.formatter = proc { |severity,datetime,progname,msg| "#{datetime} #{severity}\t#{msg}\n" }
 log.level = 1
 
-log.info "TSDBExplorer TRUST subscriber starting"
+log.info "Starting TSDBExplorer AMQP subscriber"
 
 ['hostname', 'username', 'password', 'vhost'].each do |config_key|
   raise "Missing AMQP_SERVER parameter '#{config_key}' in config/tsdbexplorer.yml" unless $CONFIG['AMQP_SERVER'].has_key? config_key
 end
 
-log.info "Connecting to AMQP server #{$CONFIG['AMQP_SERVER']['hostname']} as user #{$CONFIG['AMQP_SERVER']['username']}"
 
-AMQP.start(:host => $CONFIG['AMQP_SERVER']['hostname'], :username => $CONFIG['AMQP_SERVER']['username'], :password => $CONFIG['AMQP_SERVER']['password'], :vhost => $CONFIG['AMQP_SERVER']['vhost']) do |connection|
+# Set up log files for each feed
 
-  log.debug "Connected to AMQP server"
+trust_logger = Logger.new('trust.log', 'daily')
+trust_logger.level = Logger::DEBUG
 
-  channel = AMQP::Channel.new(connection)
-  queue = channel.queue($CONFIG['AMQP_SERVER']['username'] + ".trust", :durable => true)
-  exchange = channel.fanout("tdnet.exch.trust", :durable => true)
+td_logger = Logger.new('td.log', 'daily')
+td_logger.level = Logger::DEBUG
 
-  log.debug "Polling for TRUST messages"
+vstp_logger = Logger.new('vstp.log', 'daily')
+vstp_logger.level = Logger::DEBUG
 
-  queue.bind(exchange).subscribe do |metadata, payload|
+tsr_logger = Logger.new('tsr.log', 'daily')
+tsr_logger.level = Logger::DEBUG
 
-    msg = TSDBExplorer::TDnet::process_trust_message(payload)
 
-    if msg.status == :ok
-      log.debug msg.message
-    else
-      log.warn msg.message
+# Connect to the AMQP server
+
+amqp_config = $CONFIG['AMQP_SERVER']
+
+log.info "Connecting to AMQP server as amqp://#{amqp_config['username']}@#{amqp_config['hostname']}/"
+
+EventMachine.run do
+
+  AMQP.connect(:host => amqp_config['hostname'], :username => amqp_config['username'], :password => amqp_config['password'], :vhost => amqp_config['vhost']) do |connection|
+
+    log.info "Connected to #{amqp_config['hostname']}"    
+
+    channel = AMQP::Channel.new(connection)
+
+    trust_exchange = channel.fanout('tdnet.exch.trust', :durable => true)
+    channel.queue(amqp_config['username'] + ".trust", :durable => true).bind(trust_exchange).subscribe do |payload|
+
+      trust_logger.debug payload
+
+      trust_message = TSDBExplorer::TDnet::process_trust_message(payload)
+
+      if trust_message.status == :ok
+        log.debug trust_message.message
+      else
+        log.warn trust_message.message
+      end
+
+      $REDIS.incr('STATS:TRUST:PROCESSED')
+      $REDIS.set('STATS:TRUST:UPDATE', Time.now.to_i)
+
+    end
+
+    vstp_exchange = channel.fanout('tdnet.exch.vstp', :durable => true)
+    channel.queue(amqp_config['username'] + ".vstp", :durable => true).bind(vstp_exchange).subscribe do |payload|
+
+      vstp_logger.debug payload
+
+      begin
+
+        vstp_message = TSDBExplorer::TDnet::process_vstp_message(payload)
+
+        if vstp_message.status == :ok
+          log.debug vstp_message.message
+        else
+          log.warn vstp_message.message
+        end
+
+        $REDIS.incr('STATS:VSTP:PROCESSED')
+        $REDIS.set('STATS:VSTP:UPDATE', Time.now.to_i)
+
+      rescue
+
+        log.debug "Failed to parse a VSTP message"
+
+      end
+
+    end
+
+    tsr_exchange = channel.fanout('tdnet.exch.tsr', :durable => true)
+    channel.queue(amqp_config['username'] + ".tsr", :durable => true).bind(tsr_exchange).subscribe do |payload|
+
+      tsr_logger.debug payload
+
+      $REDIS.incr('STATS:TSR:PROCESSED')
+      $REDIS.set('STATS:TSR:UPDATE', Time.now.to_i)
+
+    end
+
+    td_exchange = channel.fanout('tdnet.exch.td', :durable => true)
+    channel.queue(amqp_config['username'] + ".td", :durable => true).bind(td_exchange).subscribe do |payload|
+
+      td_logger.debug payload
+
+      $REDIS.incr('STATS:TD:PROCESSED')
+      $REDIS.set('STATS:TD:UPDATE', Time.now.to_i)
+
     end
 
   end
