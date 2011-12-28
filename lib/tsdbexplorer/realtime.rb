@@ -34,6 +34,68 @@ module TSDBExplorer
       $REDIS.del('OTT:SYSTEM:MAINT')
     end
 
+
+    module Status
+
+      def Status.timetable_feed
+
+        last_extract = CifFile.last
+        limit = 2.days
+
+        if last_extract.extract_timestamp.to_i < limit.to_i
+          status = :error
+          message = "Last extract file #{CifFile.last.file_mainframe_identity} imported more than #{limit} seconds ago"
+        else
+          status = :ok
+          message = "Last extract file #{CifFile.last.file_mainframe_identity} imported less than #{limit} seconds ago"
+        end
+
+        return Struct.new(:status, :message).new(status, message)
+
+      end
+
+      def Status.train_describer_feed
+
+        last_update = $REDIS.get('STATS:TD:UPDATE')
+        limit = 30.seconds
+
+        if last_update.nil?
+          status = :unknown
+          message = "No TD updates processed"
+        elsif last_update < (Time.now.to_i - limit)
+          status = :error
+          message = "No TD updates received for the past #{limit} seconds"
+        else
+          status = :ok
+          message = "Last TD update processed #{Time.now.to_i - last_update} seconds ago"
+        end
+
+        return Struct.new(:status, :message).new(status, message)
+
+      end
+
+      def Status.trust_feed
+
+        last_update = $REDIS.get('STATS:TRUST:UPDATE')
+        limit = 2.minutes
+
+        if last_update.nil?
+          status = :unknown
+          message = "No TRUST updates processed"
+        elsif last_update < (Time.now.to_i - limit)
+          status = :error
+          message = "No TRUST updates received for the past #{limit} seconds"
+        else
+          status = :ok
+          message = "Last TRUST update processed #{Time.now.to_i - last_update} seconds ago"
+        end
+
+        return Struct.new(:status, :message).new(status, message)
+
+      end
+
+    end
+
   end
 
 end

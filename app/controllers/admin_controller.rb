@@ -19,7 +19,38 @@
 
 class AdminController < ApplicationController
 
+  # Redirect to the overview page
+
   def index
+    redirect_to :action => 'overview'
+  end 
+
+
+  # Overview page
+
+  def overview
+
+    @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
+
+    @status = Hash.new
+    @status[:timetable_feed] = TSDBExplorer::Realtime::Status.timetable_feed()
+    @status[:train_describer_feed] = TSDBExplorer::Realtime::Status.train_describer_feed
+    @status[:trust_feed] = TSDBExplorer::Realtime::Status.trust_feed
+
+
+
+    @stats[:cifs_imported] = CifFile.count
+    @stats[:last_cif_import] = CifFile.maximum(:created_at)
+
+
+  end
+
+
+  # Timetable Administration
+
+  def timetable
+
+    @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
 
     @stats = Hash.new
     @stats[:tiplocs] = Tiploc.count
@@ -27,19 +58,6 @@ class AdminController < ApplicationController
     @stats[:earliest_schedule] = BasicSchedule.minimum(:runs_from)
     @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to)
     @stats[:daily_schedules] = DailySchedule.count
-
-    @stats[:cifs_imported] = CifFile.count
-    @stats[:last_cif_import] = CifFile.maximum(:created_at)
-
-    @stats[:redis_version] = $REDIS.info['redis_version']
-    @stats[:td_berths] = $REDIS.keys('TD:*').count
-
-  end
-
-
-  # Perform administration on timetable data
-
-  def timetable
 
     @all_timetables = Hash.new
 
@@ -60,6 +78,32 @@ class AdminController < ApplicationController
       end
 
     end
+
+  end
+
+
+  # Real-Time
+
+  def realtime
+
+    @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
+
+    @stats = Hash.new
+    @stats[:trust_messages] = $REDIS.get('STATS:TRUST:PROCESSED')
+    @stats[:td_messages] = $REDIS.get('STATS:TD:PROCESSED')
+    @stats[:vstp_messages] = $REDIS.get('STATS:VSTP:PROCESSED')
+    @stats[:tsr_messages] = $REDIS.get('STATS:TSR:PROCESSED')
+
+  end
+
+
+  # In-Memory Database
+
+  def memory
+
+    @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
+
+    @redis = $REDIS.info
 
   end
 

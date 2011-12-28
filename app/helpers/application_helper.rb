@@ -465,4 +465,21 @@ module ApplicationHelper
 
   end
 
+
+  # Display
+
+  def status_data_for(status)
+
+    if status.status == :ok
+      icon = 'tick.png'
+    elsif status.status == :error
+      icon = 'cross.png'
+    else
+      icon = 'question.png'
+    end
+
+    (image_tag icon) + " " + status.message
+
+  end
+
 end
