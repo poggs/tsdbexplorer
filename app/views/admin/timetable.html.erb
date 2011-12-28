@@ -17,6 +17,9 @@
 <div class="row">
  <div class="span16">
   <h2>Schedule extracts</h2>
+
+  <% if $CONFIG['TIMETABLE'] %>
+
   <ul>
    <li>There are <%= @all_timetables.count %> timetable files in <%= $CONFIG['TIMETABLE']['path'] %></li>
   </ul>
@@ -41,5 +44,12 @@
     <% end %>
    </tbody>
   </table>
+
+  <% else %>
+   <p>
+    <div class="alert-message warning">No timetable directory has been specified in the configuration file</div>
+   </p>
+  <% end %>
+
  </div>
 </div>

@@ -64,6 +64,12 @@ describe AdminController do
     end
   end
 
+  it "should display a notice if the timetable path is not set in tsdbexplorer.yml" do
+    $CONFIG['TIMETABLE'] = nil
+    get :timetable
+    response.body.should =~ /No timetable directory has been specified in the configuration file/
+  end
+
   it "should show 0 when no CIF files have been imported" do
     get :timetable
     response.body.should =~ /0 CIF files have been imported/

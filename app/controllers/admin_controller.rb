@@ -33,7 +33,7 @@ class AdminController < ApplicationController
     @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
 
     @status = Hash.new
-    @status[:timetable_feed] = TSDBExplorer::Realtime::Status.timetable_feed()
+    @status[:timetable_feed] = TSDBExplorer::Realtime::Status.timetable_feed
     @status[:train_describer_feed] = TSDBExplorer::Realtime::Status.train_describer_feed
     @status[:trust_feed] = TSDBExplorer::Realtime::Status.trust_feed
 
@@ -43,7 +43,7 @@ class AdminController < ApplicationController
   # Timetable Administration
 
   def timetable
-
+$CONFIG['TIMETABLE'] = nil
     @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
 
     @stats = Hash.new
@@ -55,20 +55,25 @@ class AdminController < ApplicationController
 
     @all_timetables = Hash.new
 
-    tt_dir = Dir.open($CONFIG['TIMETABLE']['path'])
 
-    tt_dir.each do |t|
+    if $CONFIG['TIMETABLE']
 
-      next if File.directory? t
+      tt_dir = Dir.open($CONFIG['TIMETABLE']['path'])
 
-      if tt_file = File.open($CONFIG['TIMETABLE']['path'] + "/" + t)
-        header = TSDBExplorer::CIF::parse_record(tt_file.readline)
-        info = Hash.new
-        info[:filename] = t
-        info[:file_mainframe_identity] = header.file_mainframe_identity
-        info[:extract_type] = header.update_indicator
-        info[:imported] = true if CifFile.where(:file_mainframe_identity => header.file_mainframe_identity).count > 0
-        @all_timetables[t] = info
+      tt_dir.each do |t|
+
+        next if File.directory? t
+
+        if tt_file = File.open($CONFIG['TIMETABLE']['path'] + "/" + t)
+          header = TSDBExplorer::CIF::parse_record(tt_file.readline)
+          info = Hash.new
+          info[:filename] = t
+          info[:file_mainframe_identity] = header.file_mainframe_identity
+          info[:extract_type] = header.update_indicator
+          info[:imported] = true if CifFile.where(:file_mainframe_identity => header.file_mainframe_identity).count > 0
+          @all_timetables[t] = info
+        end
+
       end
 
     end
