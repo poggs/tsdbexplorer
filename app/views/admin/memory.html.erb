@@ -1,0 +1,20 @@
+<h1>Administration: In-Memory Database</h1>
+
+<%= render :partial => 'common/pills' %>
+
+<div class="row">
+ <div class="span8">
+  <h2>Statistics</h2>
+  <ul>
+   <li>Daemon version <%= @redis['redis_version'] %> on <%= @redis['arch_bits'] %>-bit architecture</li>
+   <li>Up for <%= @redis['uptime_in_seconds'] %> seconds</li>
+  </ul>
+ </div>
+ <div class="span8">
+  <h2>Resouurces</h2>
+  <ul>
+   <li>Holding <%= @redis['used_memory_human'] %> memory</li>
+   <li>Processed <%= @redis['total_commands_processed'] %> commands</li>
+  </ul>
+ </div>
+</div>

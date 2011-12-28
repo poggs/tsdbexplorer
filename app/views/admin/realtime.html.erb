@@ -1,0 +1,16 @@
+<h1>Administration: Real-Time</h1>
+
+<%= render :partial => 'common/pills' %>
+
+<div class="row">
+ <div class="span16">
+  <h2>Statistics</h2>
+  <ul>
+   <li><%= @stats[:trust_messaages] %> TRUST messages procesed</li>
+   <li><%= @stats[:td_messages] %> train describer messages procesed</li>
+   <li><%= @stats[:vstp_messages] %> VSTP messages procesed</li>
+   <li><%= @stats[:tsr_messages] %> TSR messages procesed</li>
+  </ul>
+ </div>
+</div>
+
