@@ -89,6 +89,18 @@ class AdminController < ApplicationController
     @stats = Hash.new
 
     @stats[:trust_messages] = $REDIS.get('STATS:TRUST:PROCESSED') || "0"
+    @stats[:trust_activations] = $REDIS.hget('STATS:TRUST', '0001')
+    @stats[:trust_cancellations] = $REDIS.hget('STATS:TRUST', '0002')
+    @stats[:trust_movements] = $REDIS.hget('STATS:TRUST', '0003')
+    @stats[:trust_unidentified_trains] = $REDIS.hget('STATS:TRUST', '0004')
+    @stats[:trust_train_reinstatements] = $REDIS.hget('STATS:TRUST', '0005')
+    @stats[:trust_change_of_origins] = $REDIS.hget('STATS:TRUST', '0006')
+    @stats[:trust_change_of_identities] = $REDIS.hget('STATS:TRUST', '0007')
+    @stats[:trust_change_of_locations] = $REDIS.hget('STATS:TRUST', '0008')
+
+    [ :trust_messages, :trust_activations, :trust_cancellations, :trust_movements, :trust_unidentified_trains, :trust_train_reinstatements, :trust_change_of_origins, :trust_change_of_identities, :trust_change_of_locations ].each do |m|
+      @stats[m.to_sym] = "0" if @stats[m.to_sym].nil?
+    end
 
     @stats[:td_messages] = $REDIS.get('STATS:TD:PROCESSED') || "0"
     @stats[:td_areas] = $REDIS.keys('TD:*:BERTHS').count

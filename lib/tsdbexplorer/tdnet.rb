@@ -166,6 +166,8 @@ module TSDBExplorer
           result = Struct.new(:status, :message).new(:warn, "Received unsupported message type #{message[:message_type]}")
       end
 
+      $REDIS.hincrby('STATS:TRUST', message[:message_type], 1)
+
       return result
 
     end

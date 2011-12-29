@@ -136,6 +136,54 @@ describe AdminController do
     response.body.should =~ /1 TRUST messages processed/
   end
 
+  it "should show the number of TRUST activations processed" do
+    TSDBExplorer::TDnet::process_trust_message('000120060208122136TRUST               TOPS                NETWORK9E00000001214567890200702081221060725720070208100000C126642005121200000020060609000000VP1M99M002300725720060208110000AN6522112001001')
+    get :realtime
+    response.body.should =~ /1 activations/
+  end
+
+  it "should show the number of TRUST cancellations processed" do
+    TSDBExplorer::TDnet::process_trust_message('000220110701065918TRUST               TRUST DA            #QHPA004LWED    522W10M601201107010659005274120110701063000     00000000000000C522W10M60121940001M52121C   ')
+    get :realtime
+    response.body.should =~ /1 train cancellations/
+  end
+
+  it "should show the number of TRUST movements processed" do
+    TSDBExplorer::TDnet::process_trust_message('000320060105100109TRUST               SDR                 #CF1CV26VDVF    121456789020070104101525421402007010410152620060104101527     00000000000000TAM    AA01214567890223400007171000      000YY7JK42140Y')
+    get :realtime
+    response.body.should =~ /1 train movements/
+  end
+
+  it "should show the number of TRUST unidentified train reports processed" do
+    TSDBExplorer::TDnet::process_trust_message('000420060105100109ABCDEFGHIJKLMNOPQMMMABCDEFGHIJKLMNOPQNNNAAAABBCCCCCCDDEE12342007030210152512345AUF12AA  ')
+    get :realtime
+    response.body.should =~ /1 unidentified trains/
+  end
+
+  it "should show the number of TRUST train reinstatement reports processed" do
+    TSDBExplorer::TDnet::process_trust_message('000520060208160404TRUST               SDR                 #CF1CV26VDVF    1214567890200703061604004214020070306144800     00000000000000651F45MN08223000036671R899')
+    get :realtime
+    response.body.should =~ /1 train reinstatements/
+  end
+
+  it "should show the number of TRUST change-of-origin reports processed" do
+    TSDBExplorer::TDnet::process_trust_message('000620060208162531TRUST               TRUST DA            #CF1CV26LUAM    1214567890200703021625006531120060302151800     20070302162500129456789922108001AA0671O8MV')
+    get :realtime
+    response.body.should =~ /1 change-of-origin/
+  end
+
+  it "should show the number of TRUST change-of-identity reports processed" do
+    TSDBExplorer::TDnet::process_trust_message('000720060209060142TRUST               TOPS                        CY99996 121456789020070302152714422X112Q08422P182Q0822320003005')
+    get :realtime
+    response.body.should =~ /1 change-of-identity/
+  end
+
+  it "should show the number of TRUST change-of-location reports processed" do
+    TSDBExplorer::TDnet::process_trust_message('000820060105100109ABCDEFGHIJKLMNOPQMMMABCDEFGHIJKLMNOPQNNNAAAABBCCCCCCDDEE121456789020070302101525123452007030210152612345200601041015261214567890ABCDEFGHABC')
+    get :realtime
+    response.body.should =~ /1 change-of-location/
+  end
+
   it "should show 0 when no TD messages have been processed" do
     $REDIS.del('STATS:TD:PROCESSED')
     get :realtime
