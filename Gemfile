@@ -28,6 +28,7 @@ gem 'amqp', '>= 0.8.3'
 gem 'ruby-progressbar', '>= 0.0.10'
 gem 'redis', '>= 2.2.2'
 gem 'activerecord-import', '>= 0.2.8'
+gem 'proj4rb', '>= 0.4.3'
 
 
 # Environment-specific gems

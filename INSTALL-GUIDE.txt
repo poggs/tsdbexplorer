@@ -29,7 +29,7 @@ Follow the instructions on http://beginrescueend.com/ - or if you're impatient, 
 
 3. Run the following:
 
-     apt-get install readline6-dev zlib1g-dev libxml2-dev libxslt-dev libpq-dev nodejs redis-server
+     apt-get install readline6-dev zlib1g-dev libxml2-dev libxslt-dev libpq-dev nodejs redis-server libproj-dev
 
      rvm install 1.9.2
      rvm use 1.9.2 --default

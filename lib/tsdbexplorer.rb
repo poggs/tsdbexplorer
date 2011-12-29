@@ -21,6 +21,9 @@ require 'tsdbexplorer/tdnet.rb'
 require 'tsdbexplorer/cif.rb'
 require 'tsdbexplorer/geography.rb'
 require 'tsdbexplorer/realtime.rb'
+require 'tsdbexplorer/rsp.rb'
+
+require 'proj4'
 
 module TSDBExplorer
 
@@ -192,6 +195,26 @@ module TSDBExplorer
     end 
 
     return a[cmp_a] <=> b[cmp_b]
+
+  end
+
+
+  # Convert OSGB36 coordinates (eastings/northing) to WGS84 coordinates
+  # (longitude/latitude)
+
+  def TSDBExplorer.osgb36_to_wgs84(easting, northing)
+
+    srcPoint = Proj4::Point.new(easting, northing)
+
+    srcProj = Proj4::Projection.new('+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs')
+    dstProj = Proj4::Projection.new('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+
+    dstPoint = srcProj.transform(dstProj, srcPoint)
+
+    latitude = dstPoint.lat * (180 / Math::PI).to_f
+    longitude = dstPoint.lon * (180 / Math::PI).to_f
+
+    return({ :latitude => latitude, :longitude => longitude })
 
   end
 
