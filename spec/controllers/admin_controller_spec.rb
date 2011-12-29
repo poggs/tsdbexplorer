@@ -110,6 +110,12 @@ describe AdminController do
     response.body.should =~ /covering the period from Sunday 12th December 2010 to Sunday 15th May 2011/
   end
 
+  it "should show details of the last CIF file imported" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :timetable
+    response.body.should =~ /The last CIF file imported was DFTESTA generated on Wednesday 31st December 1969, 23:00/
+  end
+
   it "should display a real-time information page" do
     get :realtime
     response.code.should eql('200')

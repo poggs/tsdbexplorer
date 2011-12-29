@@ -53,6 +53,13 @@ class AdminController < ApplicationController
     @stats[:earliest_schedule] = BasicSchedule.minimum(:runs_from)
     @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to)
 
+    if CifFile.count > 0
+      last_cif_import = CifFile.last
+      @stats[:last_cif_import] = "The last CIF file imported was #{last_cif_import.file_ref} generated on #{last_cif_import.extract_timestamp.to_s(:human)}"
+    else
+      @stats[:last_cif_import] = "No CIF files have been imported"
+    end
+
     @all_timetables = Hash.new
 
     if $CONFIG['TIMETABLE']

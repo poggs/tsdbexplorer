@@ -9,7 +9,7 @@
    <li><%= @stats[:cifs_imported] %> CIF files have been imported</li>
    <li><%= @stats[:tiplocs] %> timing point locations are known</li>
    <li><%= @stats[:basic_schedules] %> schedules are known, covering the period from <%= @stats[:earliest_schedule] %> to <%= @stats[:latest_schedule] %></li>
-   <% if @stats[:cifs_imported] %><li>The last CIF file was imported on <%= @stats[:last_cif_import] %></li><% end %>
+   <% if @stats[:cifs_imported] %><li><%= @stats[:last_cif_import] %></li><% end %>
   </ul>
  </div>
 </div>
