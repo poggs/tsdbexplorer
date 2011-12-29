@@ -43,7 +43,7 @@ class AdminController < ApplicationController
   # Timetable Administration
 
   def timetable
-$CONFIG['TIMETABLE'] = nil
+
     @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
 
     @stats = Hash.new
@@ -54,7 +54,6 @@ $CONFIG['TIMETABLE'] = nil
     @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to)
 
     @all_timetables = Hash.new
-
 
     if $CONFIG['TIMETABLE']
 
@@ -88,9 +87,22 @@ $CONFIG['TIMETABLE'] = nil
     @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
 
     @stats = Hash.new
+
     @stats[:trust_messages] = $REDIS.get('STATS:TRUST:PROCESSED') || "0"
+
     @stats[:td_messages] = $REDIS.get('STATS:TD:PROCESSED') || "0"
+    @stats[:td_areas] = $REDIS.keys('TD:*:BERTHS').count
+    @stats[:td_message_ca] = $REDIS.hget('STATS:TD', 'CA')
+    @stats[:td_message_cb] = $REDIS.hget('STATS:TD', 'CB')
+    @stats[:td_message_cc] = $REDIS.hget('STATS:TD', 'CC')
+    @stats[:td_message_ct] = $REDIS.hget('STATS:TD', 'CT')
+
+    [ :td_message_ca, :td_message_cb, :td_message_cc, :td_message_ct ].each do |m|
+      @stats[m.to_sym] = "0" if @stats[m.to_sym].nil?
+    end
+
     @stats[:vstp_messages] = $REDIS.get('STATS:VSTP:PROCESSED') || "0"
+
     @stats[:tsr_messages] = $REDIS.get('STATS:TSR:PROCESSED') || "0"
 
   end

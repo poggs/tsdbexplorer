@@ -122,6 +122,14 @@ EventMachine.run do
 
       td_logger.debug payload
 
+      td_message = TSDBExplorer::TDnet::process_smart_message(payload)
+
+      if td_message.status == :ok
+        log.debug td_message.message
+      else
+        log.warn td_message.message
+      end
+
       $REDIS.incr('STATS:TD:PROCESSED')
       $REDIS.set('STATS:TD:UPDATE', Time.now.to_i)
 

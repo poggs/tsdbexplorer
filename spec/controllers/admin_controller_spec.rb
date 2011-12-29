@@ -25,6 +25,7 @@ describe AdminController do
 
   before(:each) do
     @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
+    $REDIS.flushdb
   end
 
   it "should redirect to the overview page" do
@@ -138,19 +139,75 @@ describe AdminController do
   it "should show 0 when no TD messages have been processed" do
     $REDIS.del('STATS:TD:PROCESSED')
     get :realtime
-    response.body.should =~ /0 train describer messages processed/
+    response.body.should =~ /0 TD messages processed/
   end
 
   it "should show 0 when no TD messages have been processed" do
     $REDIS.set('STATS:TD:PROCESSED', 0)
     get :realtime
-    response.body.should =~ /0 train describer messages processed/
+    response.body.should =~ /0 TD messages processed/
   end
 
   it "should show the number of TD messages processed" do
-    $REDIS.set('STATS:TD:PROCESSED', 1)
+    TSDBExplorer::TDnet::process_smart_message('<CT_MSG>ZZCT0000000000</CT_MSG>')
     get :realtime
-    response.body.should =~ /1 train describer messages processed/
+    response.body.should =~ /1 TD messages processed/
+    TSDBExplorer::TDnet::process_smart_message('<CT_MSG>ZZCT0001000100</CT_MSG>')
+    get :realtime
+    response.body.should =~ /2 TD messages processed/
+  end
+
+  it "should show the number of TD areas for which information has been received" do
+    TSDBExplorer::TDnet::process_smart_message('<CA_MSG>ZZCA000100029Z99000001</CA_MSG>')
+    get :realtime
+    response.body.should =~ /1 TD areas tracked/
+    TSDBExplorer::TDnet::process_smart_message('<CA_MSG>YYCA100110028Z88000002</CA_MSG>')
+    get :realtime
+    response.body.should =~ /2 TD areas tracked/
+  end
+
+  it "should show 0 when no CA, CB, CC or CT messages have been processed" do
+    get :realtime
+    response.body.should =~ /0 CA messages/
+    response.body.should =~ /0 CB messages/
+    response.body.should =~ /0 CC messages/
+    response.body.should =~ /0 CT messages/
+  end
+
+  it "should show the number of CA messages processed" do
+    TSDBExplorer::TDnet::process_smart_message('<CA_MSG>ZZCA000100029Z99000001</CA_MSG>')
+    get :realtime
+    response.body.should =~ /1 CA messages/
+    TSDBExplorer::TDnet::process_smart_message('<CA_MSG>YYCA100110028Z88000002</CA_MSG>')
+    get :realtime
+    response.body.should =~ /2 CA messages/
+  end
+
+  it "should show the number of CB messages processed" do
+    TSDBExplorer::TDnet::process_smart_message('<CB_MSG>ZZCB00019Z99000001</CB_MSG>')
+    get :realtime
+    response.body.should =~ /1 CB messages/
+    TSDBExplorer::TDnet::process_smart_message('<CB_MSG>ZZCB00028Z88000002</CB_MSG>')
+    get :realtime
+    response.body.should =~ /2 CB messages/
+  end
+
+  it "should show the number of CC messages processed" do
+    TSDBExplorer::TDnet::process_smart_message('<CC_MSG>ZZCCFOO00001000001</CC_MSG>')
+    get :realtime
+    response.body.should =~ /1 CC messages/
+    TSDBExplorer::TDnet::process_smart_message('<CC_MSG>ZZCCBAR00002000002</CC_MSG>')
+    get :realtime
+    response.body.should =~ /2 CC messages/
+  end
+
+  it "should show the number of CT messages processed" do
+    TSDBExplorer::TDnet::process_smart_message('<CT_MSG>ZZCT0001000100</CT_MSG>')
+    get :realtime
+    response.body.should =~ /1 CT messages/
+    TSDBExplorer::TDnet::process_smart_message('<CT_MSG>ZZCT0002000200</CT_MSG>')
+    get :realtime
+    response.body.should =~ /2 CT messages/
   end
 
   it "should show 0 when no VSTP messages have been processed" do

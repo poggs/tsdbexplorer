@@ -71,34 +71,68 @@ module TSDBExplorer
 
       msg = parse_smart_message(raw_message)
 
+      td_identity = msg[:td_identity]
+
       if msg[:message_type] == "CA"
 
-        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:from_berth]}", "    ")
-        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:to_berth]}", msg[:train_description])
+        # CA: Berth Step
 
-        result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Moved train #{msg[:train_description]} from berth #{msg[:from_berth]} to berth #{msg[:to_berth]}")
+        $REDIS.hset('TD:' + td_identity + ':BERTHS', msg[:from_berth], '    ')
+        $REDIS.hset('TD:' + td_identity + ':BERTHS', msg[:to_berth], msg[:train_description])
+
+        result = Struct.new(:status, :message).new(:ok, "#{td_identity}: Moved train #{msg[:train_description]} from berth #{msg[:from_berth]} to berth #{msg[:to_berth]}")
 
       elsif msg[:message_type] == "CB"
 
-        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:from_berth]}", "    ")
+        # CB: Berth Cancel
 
-        result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Cancelled train #{msg[:train_description]} in berth #{msg[:from_berth]}")
+        $REDIS.hset('TD:' + td_identity + ':BERTHS', msg[:from_berth], "    ")
+
+        result = Struct.new(:status, :message).new(:ok, "#{td_identity}: Cancelled train #{msg[:train_description]} in berth #{msg[:from_berth]}")
     
       elsif msg[:message_type] == "CC"
 
-        $REDIS.set("TD:#{msg[:td_identity]}:#{msg[:to_berth]}", msg[:train_description])
+        # CC: Berth Interpose
 
-        result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Interposed train #{msg[:train_description]} in berth #{msg[:to_berth]}")
+        $REDIS.hset('TD:' + td_identity + ':BERTHS', msg[:to_berth], msg[:train_description])
+
+        result = Struct.new(:status, :message).new(:ok, "#{td_identity}: Interposed train #{msg[:train_description]} in berth #{msg[:to_berth]}")
 
       elsif msg[:message_type] == "CT"
 
-        result = Struct.new(:status, :message).new(:ok, "#{msg[:td_identity]}: Heartbeat received")
+        # CT: Heartbeat
+
+        $REDIS.set('TD:' + td_identity + ':STATS:HEARTBEAT', Time.now.to_i)
+
+        result = Struct.new(:status, :message).new(:ok, "#{td_identity}: Heartbeat received")
+
+      elsif msg[:message_type] == "SF"
+
+        # SF: Equipment Status
+
+        result = Struct.new(:status, :message).new(:ok, "#{td_identity}: Equipment Status (SF) message not yet supported")
+
+      elsif msg[:message_type] == "SG"
+
+        # SG: Equipment Base Scan
+
+        result = Struct.new(:status, :message).new(:ok, "#{td_identity}: Equipment Base Scan (SG) message not yet supported")
+
+      elsif msg[:message_type] == "SH"
+
+        # SH: Equipment Base Scan Sequence End
+
+        result = Struct.new(:status, :message).new(:ok, "#{td_identity}: Equipment Base Scan Sequence End message not yet supported")
 
       else
 
-        result = Struct.new(:status, :message).new(:ok, "Unsupported message type #{msg[:message_type]} received")
+        result = Struct.new(:status, :message).new(:error, "Unsupported message type #{msg[:message_type]} received")
 
       end
+
+      $REDIS.incr('STATS:TD:PROCESSED')
+      $REDIS.hincrby('STATS:TD', msg[:message_type], 1)
+      $REDIS.hincrby('TD:' + td_identity + ':STATS', msg[:message_type], 1)
 
       return result
 
