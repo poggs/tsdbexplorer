@@ -230,11 +230,13 @@ module ScheduleHelper
 
     if ['arrival', 'pass', 'departure'].include? type
 
+      scheduled = nil
+
       if public_or_wtt == :public
         scheduled = location.send('public_' + type)
-      else
-        scheduled = location.send(type)
       end
+
+      scheduled = location.send(type) if scheduled.nil?
 
       expected = location.send("expected_" + type)
       actual = location.send("actual_" + type)
