@@ -89,9 +89,23 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     response.message.should eql('LS: Heartbeat received')
   end
 
-  it "should process a SMART equipment status (SF) message"
-  it "should process a SMART equipment base scan (SG) message"
-  it "should process a SMART equipment base scan (SH) message"
+  it "should process a SMART equipment status (SF) message" do
+    response = TSDBExplorer::TDnet::process_smart_message('<SF_MSG>WJSF0220235954</SF_MSG>')
+    response.status.should eql(:ok)
+    response.message.should eql('WJ: Equipment Status (SF) message not yet supported')
+  end
+
+  it "should process a SMART equipment base scan (SG) message" do
+    response = TSDBExplorer::TDnet::process_smart_message('<SG_MSG>LRSG0000000000000001</SG_MSG>')
+    response.status.should eql(:ok)
+    response.message.should eql('LR: Equipment Base Scan (SG) message not yet supported')
+  end
+
+  it "should process a SMART equipment base scan (SH) message" do
+    response = TSDBExplorer::TDnet::process_smart_message('<SH_MSG>LRSH140F000000000002</SH_MSG>')
+    response.status.should eql(:ok)
+    response.message.should eql('LR: Equipment Base Scan Sequence End message not yet supported')
+  end
 
 
   # TRUST message data (raw)
