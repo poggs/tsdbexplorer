@@ -1,4 +1,4 @@
-HDTPS.UDFTEST.PD7001010101700000DFTESTBDFTESTAUA010170010170                    
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
 BSNC431581105081105080000001 PXX1U302130122330000 EMU350 100      B            O
 BX         LMY                                                                  
 LOCREWE   1138 11383         TB                                                 

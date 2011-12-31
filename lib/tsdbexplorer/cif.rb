@@ -27,32 +27,33 @@ module TSDBExplorer
 
     def CIF.parse_record(record)
 
-      result = Hash.new
-      result[:record_identity] = record[0..1]
+      unless record.blank?
 
-      # Process the record using the built-in Class parser
+        record_identity = record[0..1]
 
-      if result[:record_identity] == "HD"
-        result = TSDBExplorer::CIF::HeaderRecord.new(record)
-      elsif result[:record_identity] == "BS"
-        result = TSDBExplorer::CIF::BasicScheduleRecord.new(record)
-      elsif result[:record_identity] == "BX"
-        result = TSDBExplorer::CIF::BasicScheduleExtendedRecord.new(record)
-      elsif result[:record_identity] == "TI" || result[:record_identity] == "TA" || result[:record_identity] == "TD"
-        result = TSDBExplorer::CIF::TiplocRecord.new(record)
-      elsif result[:record_identity] == "LO" || result[:record_identity] == "LI" || result[:record_identity] == "LT"
-        result = TSDBExplorer::CIF::LocationRecord.new(record)
-      elsif result[:record_identity] == "AA"
-        result = TSDBExplorer::CIF::AssociationRecord.new(record)
-      elsif result[:record_identity] == "CR"
-        result = TSDBExplorer::CIF::ChangeEnRouteRecord.new(record)
-      elsif result[:record_identity] == "ZZ"
-        # End of File
-      else
-        raise "Unsupported record type '#{result[:record_identity]}'"
+        # Process the record using the built-in Class parser
+
+        if record_identity == "HD"
+          TSDBExplorer::CIF::HeaderRecord.new(record)
+        elsif record_identity == "BS"
+          TSDBExplorer::CIF::BasicScheduleRecord.new(record)
+        elsif record_identity == "BX"
+          TSDBExplorer::CIF::BasicScheduleExtendedRecord.new(record)
+        elsif record_identity == "TI" || record_identity == "TA" || record_identity == "TD"
+          TSDBExplorer::CIF::TiplocRecord.new(record)
+        elsif record_identity == "LO" || record_identity == "LI" || record_identity == "LT"
+          TSDBExplorer::CIF::LocationRecord.new(record)
+        elsif record_identity == "AA"
+          TSDBExplorer::CIF::AssociationRecord.new(record)
+        elsif record_identity == "CR"
+          TSDBExplorer::CIF::ChangeEnRouteRecord.new(record)
+        elsif record_identity == "ZZ"
+          # End of File
+        else
+          Struct.new(:status, :message).new(:error, "Unsupported record type '#{record_identity}' found")
+        end
+
       end
-
-      return result
 
     end
 
@@ -60,6 +61,9 @@ module TSDBExplorer
     # Process a CIF file
 
     def CIF.process_cif_file(filename)
+
+      return Struct.new(:status, :message).new(:error, "CIF file #{filename} does not exist") unless File.exist? filename
+      return Struct.new(:status, :message).new(:error, "CIF file #{filename} not readable") unless File.readable? filename
 
       cif_data = File.open(filename)
       file_size = File.size(filename)
@@ -70,7 +74,29 @@ module TSDBExplorer
       # The first line of the CIF file must be an HD record
 
       header_data = TSDBExplorer::CIF::parse_record(cif_data.first)
-      raise "Expecting an HD record at the start of #{filename} - found a '#{header_data[:record_identity]}' record" unless header_data.is_a? TSDBExplorer::CIF::HeaderRecord
+
+      return header_data if header_data.is_a? Class
+      return Struct.new(:status, :message).new(:error, "No CIF HD record found at the beginning of #{filename}") unless header_data.is_a? TSDBExplorer::CIF::HeaderRecord
+
+
+      # If this is extract references a 'last file reference', ensure the
+      # last file imported has the same identity
+
+      last_file_record = CifFile.last
+
+      if header_data.update_indicator == "F"
+
+        num_basic_schedules = BasicSchedule.count
+        num_locations = Location.count
+        num_tiplocs = Tiploc.count
+
+        if(num_basic_schedules != 0 || num_locations != 0 || num_tiplocs != 0)
+          return Struct.new(:status, :message).new(:error, "Full extract #{header_data.current_file_ref} may only be applied to an empty database - there are #{num_tiplocs} TIPLOCs and #{num_basic_schedules} schedules")
+        end
+
+      elsif last_file_record.nil? || (last_file_record.file_ref != header_data.last_file_ref)
+        return Struct.new(:status, :message).new(:error, "CIF update #{header_data.current_file_ref} must be applied after file #{header_data.last_file_ref}")
+      end
 
 
       # Display data from the CIF header record
@@ -120,6 +146,8 @@ module TSDBExplorer
 
         record = TSDBExplorer::CIF::parse_record(cif_data.gets)
 
+        return record if record.is_a? Struct
+
         pbar.set(cif_data.pos)
 
         if record.is_a? TSDBExplorer::CIF::TiplocRecord
@@ -140,10 +168,10 @@ module TSDBExplorer
 
             # TIPLOC Amend
 
-            raise "TIPLOC Amend record not allowed in a full extract" if header_data.update_indicator == "F"
+            return Struct.new(:status, :message).new(:error, "TIPLOC Amend (TA) record not allowed in a CIF full extract") if header_data.update_indicator == "F"
 
             amend_record = Tiploc.find_by_tiploc_code(record.tiploc_code)
-            raise "Unknown TIPLOC '#{record.tiploc_code}' found in TA record" if amend_record.nil?
+            return Struct.new(:status, :message).new(:error, "Unknown TIPLOC '#{record.tiploc_code}' found in TA record") if amend_record.nil?
 
             [ :tiploc_code, :nalco, :nalco_four, :tps_description, :stanox, :crs_code, :description ].each do |field|
               amend_record[field] = record.send(field)
@@ -157,10 +185,10 @@ module TSDBExplorer
 
             # TIPLOC Delete
 
-            raise "TIPLOC Delete record not allowed in a full extract" if header_data.update_indicator == "F"
+            return Struct.new(:status, :message).new(:error, "TIPLOC Delete (TD) record not allowed in a CIF full extract") if header_data.update_indicator == "F"
 
             deletion_record = Tiploc.find_by_tiploc_code(record.tiploc_code)
-            raise "Unknown TIPLOC '#{record.tiploc_code}' found in TD record" if deletion_record.nil?
+            return Struct.new(:status, :message).new(:error, "Unknown TIPLOC '#{record.tiploc_code}' found in TD record") if deletion_record.nil?
             deletion_record.destroy
 
             stats[:tiploc][:delete] = stats[:tiploc][:delete] + 1
@@ -181,10 +209,10 @@ module TSDBExplorer
 
           if record.transaction_type == "R"
 
-            raise "Basic Schedule 'revise' record not allowed in a full extract" if header_data.update_indicator == "F"
+            return Struct.new(:status, :message).new(:error, "Basic Schedule revise (BSR) record not allowed in a CIF full extract") if header_data.update_indicator == "F"
 
             deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record.train_uid, :runs_from => record.runs_from })
-            raise "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}" if deletion_record.nil?
+            return Struct.new(:status, :message).new(:error, "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}") if deletion_record.nil?
 
             deletion_record.destroy
 
@@ -226,7 +254,7 @@ module TSDBExplorer
                 next if cif_record[0..1] == "CR" # TODO: Remove change-en-route hack
                 location_record = TSDBExplorer::CIF::parse_record(cif_record)
                 location_record.seq = seq
-                raise "Record was parsed as a '#{location_record.class}', expecting a TSDBExplorer::CIF::LocationRecord" unless location_record.is_a? TSDBExplorer::CIF::LocationRecord
+                Struct.new(:status, :message).new("Record was parsed as a '#{location_record.class}', expecting a TSDBExplorer::CIF::LocationRecord") unless location_record.is_a? TSDBExplorer::CIF::LocationRecord
                 location_record.basic_schedule_uuid = uuid
                 loc_records << location_record
 
@@ -246,10 +274,10 @@ module TSDBExplorer
 
           elsif record.transaction_type == "D"
 
-            raise "Basic Schedule 'delete' record not allowed in a full extract" if header_data.update_indicator == "F"
+            return Struct.new(:status, :message).new(:error, "Basic Schedule Delete (BSD) record not allowed in a CIF full extract") if header_data.update_indicator == "F"
 
             deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record.train_uid, :runs_from => record.runs_from })
-            raise "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}" if deletion_record.nil?
+            return Struct.new(:status, :message).new(:error, "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]}") if deletion_record.nil?
 
             deletion_record.destroy
 
@@ -257,7 +285,7 @@ module TSDBExplorer
 
           else
 
-            raise "Unknown BS transaction type #{record[:transaction_type]}"
+            return Struct.new(:status, :message).new(:error, "Unknown BS transaction type #{record.transaction_type} found")
 
           end
 
@@ -310,7 +338,12 @@ module TSDBExplorer
 
       cif_file_record.save
 
-      return stats
+
+      # Calculate stats
+
+      stats_text = "Schedules: #{stats[:schedule][:insert]} inserted, #{stats[:schedule][:amend]} amended, #{stats[:schedule][:delete]} deleted.  TIPLOCs: #{stats[:tiploc][:insert]} inserted, #{stats[:tiploc][:amend]} amended, #{stats[:tiploc][:delete]} deleted.  Associations: #{stats[:association][:insert]} inserted, #{stats[:association][:amend]} amended, #{stats[:association][:delete]} deleted"
+
+      return Struct.new(:status, :message).new(:ok, "Import complete. " + stats_text)
 
     end
 

@@ -70,8 +70,10 @@ describe BasicSchedule do
   end
 
   it "should return a schedule and all alterations where a permanent schedule and an overlay exists" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part1.cif')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part2.cif')
+    result_1 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part1.cif')
+    result_1.status.should eql(:ok)
+    result_2 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part2.cif')
+    result_2.status.should eql(:ok)
     schedule = BasicSchedule.all_schedules_by_uid('C43158')
     schedule.count.should eql(2)
     schedule.first.stp_indicator.should eql('P')
@@ -79,7 +81,8 @@ describe BasicSchedule do
   end
 
   it "should return only a schedule where an STP schedule and no alterations exist" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_stp_overlay_part2.cif')
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_stp_schedule.cif')
+    result.status.should eql(:ok)
     schedule = BasicSchedule.all_schedules_by_uid('C43158')
     schedule.count.should eql(1)
     schedule.first.stp_indicator.should eql('O')

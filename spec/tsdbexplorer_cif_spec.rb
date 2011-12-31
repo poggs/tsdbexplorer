@@ -48,6 +48,16 @@ describe "lib/tsdbexplorer/cif.rb" do
 
   # Record parsing
 
+  it "should return nil when passed a nil record" do
+    result = TSDBExplorer::CIF::parse_record(nil)
+    result.should be_nil
+  end
+
+  it "should return nil when passed a blank record" do
+    result = TSDBExplorer::CIF::parse_record("")
+    result.should be_nil
+  end
+
   it "should correctly parse a CIF 'AA' record" do
     expected_data = {:transaction_type=>'N', :main_train_uid=>'G31230', :assoc_train_uid=>'G31665', :association_start_date=>Date.parse('2011-05-22'), :association_end_date=>Date.parse('2011-12-04'), :association_mo=>0, :association_tu=>0, :association_we=>0, :association_th=>0, :association_fr=>0, :association_sa=>0, :association_su=>1, :category=>'NP', :date_indicator => 'S', :location=>'LEEDS', :base_location_suffix=>nil, :assoc_location_suffix=>nil, :diagram_type=>'T', :stp_indicator=>'P'}
     parsed_record = TSDBExplorer::CIF::parse_record('AANG31230G316651105221112040000001NPSLEEDS    TO                               P')
@@ -100,20 +110,29 @@ describe "lib/tsdbexplorer/cif.rb" do
   # File parsing - error and edge conditions
 
   it "should handle gracefully a nonexistent CIF file" do
-    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/DOES_NOT_EXIST.cif') }.should raise_error
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/DOES_NOT_EXIST.cif')
+    result.status.should eql(:error)
+    result.message.should =~ /CIF file test\/fixtures\/cif\/DOES_NOT_EXIST.cif does not exist/
   end
 
   it "should reject an empty CIF file" do
-    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/blank_file.cif') }.should raise_error
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/blank_file.cif')
+    result.status.should eql(:error)
+    result.message.should =~ /No CIF HD record found at the beginning of test\/fixtures\/cif\/blank_file.cif/
   end
 
   it "should reject a CIF file with an unknown record" do
-    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/unknown_record_type.cif') }.should raise_error
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/unknown_record_type.cif')
+    result.status.should eql(:error)
+    result.message.should =~ /Unsupported record type '9Z' found/
   end
 
   it "should permit a CIF file with only an HD and ZZ record" do
-    expected_data = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/header_and_trailer.cif').should eql(expected_data)
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/header_and_trailer.cif')
+    result.status.should eql(:ok)
+    result.message.should =~ /TIPLOCs: 0 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Schedules: 0 inserted, 0 amended, 0 deleted/
   end
 
 
@@ -122,8 +141,11 @@ describe "lib/tsdbexplorer/cif.rb" do
   it "should process TI records from a CIF file" do
 
     Tiploc.all.count.should eql(0)
-    expected_data = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif').should eql(expected_data)
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
+    result.status.should eql(:ok)
+    result.message.should =~ /TIPLOCs: 1 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Schedules: 0 inserted, 0 amended, 0 deleted/  
     Tiploc.all.count.should eql(1)
     
     expected_record = {:crs_code=>"EUS", :tps_description=>"LONDON EUSTON", :stanox=>"72410", :nalco=>"144400", :tiploc_code=>"EUSTON", :description=>"LONDON EUSTON"}
@@ -136,14 +158,25 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should not allow TA records in a CIF full extract" do
-    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_full.cif') }.should raise_error
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_full.cif')
+    result.status.should eql(:error)
+    result.message.should =~ /TIPLOC Amend \(TA\) record not allowed in a CIF full extract/
   end
 
   it "should process TA records from a CIF file" do
-    expected_data_part_1 = {:tiploc=>{:insert=>1, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_part1.cif').should eql(expected_data_part_1)
-    expected_data_part_2 = {:tiploc=>{:insert=>0, :delete=>0, :amend=>1}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_part2.cif').should eql(expected_data_part_2)
+
+    result_1 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_part1.cif')
+    result_1.status.should eql(:ok)
+    result_1.message.should =~ /TIPLOCs: 1 inserted, 0 amended, 0 deleted/
+    result_1.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result_1.message.should =~ /Schedules: 0 inserted, 0 amended, 0 deleted/  
+    Tiploc.count.should eql(1)
+    
+    result_2 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ta_part2.cif')
+    result_2.status.should eql(:ok)
+    result_2.message.should =~ /TIPLOCs: 0 inserted, 1 amended, 0 deleted/
+    result_2.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result_2.message.should =~ /Schedules: 0 inserted, 0 amended, 0 deleted/  
     Tiploc.count.should eql(1)
 
     expected_record = {:description=>"SMITHAM", :stanox=>"87705", :crs_code=>"SMI", :tiploc_code=>"SMITHAM", :tps_description=>"SMITHAM", :nalco=>"638600"}
@@ -156,24 +189,41 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should not allow TD records in a CIF full extract" do
-    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_full.cif') }.should raise_error
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_full.cif')
+    result.status.should eql(:error)
+    result.message.should =~ /TIPLOC Delete \(TD\) record not allowed in a CIF full extract/
   end
 
   it "should process TD records from a CIF file" do
-    expected_data_part_1 = {:tiploc=>{:insert=>2, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_part1.cif').should eql(expected_data_part_1)
-    expected_data_part_2 = {:tiploc=>{:insert=>0, :delete=>1, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_part2.cif').should eql(expected_data_part_2)
+
+    result_1 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_part1.cif')
+    result_1.status.should eql(:ok)
+    result_1.message.should =~ /TIPLOCs: 2 inserted, 0 amended, 0 deleted/
+    result_1.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result_1.message.should =~ /Schedules: 0 inserted, 0 amended, 0 deleted/  
+    Tiploc.count.should eql(2)
+
+    result_2 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_td_part2.cif')
+    result_2.status.should eql(:ok)
+    result_2.message.should =~ /TIPLOCs: 0 inserted, 0 amended, 1 deleted/
+    result_2.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result_2.message.should =~ /Schedules: 0 inserted, 0 amended, 0 deleted/  
     Tiploc.count.should eql(1)
     Tiploc.find_by_tiploc_code('WATFDJ').should_not be_nil
+
   end
 
 
   # Basic Schedule (New) record processing
 
   it "should process BS 'new' records in a CIF full extract" do
-    expected_data_part_1 = {:tiploc=>{:insert=>18, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif').should eql(expected_data_part_1)
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+
+    result.status.should eql(:ok)
+    result.message.should =~ /TIPLOCs: 18 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Schedules: 1 inserted, 0 amended, 0 deleted/
+
     BasicSchedule.count.should eql(1)
     BasicSchedule.first.atoc_code.should eql('LM')
     BasicSchedule.first.ats_code.should eql('Y')
@@ -184,8 +234,16 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should process BS 'new' records in a CIF update extract" do
-    expected_data_part_1 = {:tiploc=>{:insert=>18, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_updateextract.cif').should eql(expected_data_part_1)
+    result_1 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_updateextract_part1.cif')
+    result_1.status.should eql(:ok)
+
+    result_2 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_updateextract_part2.cif')
+    result_2.status.should eql(:ok)
+    result_2.status.should eql(:ok)
+    result_2.message.should =~ /TIPLOCs: 18 inserted, 0 amended, 0 deleted/
+    result_2.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result_2.message.should =~ /Schedules: 1 inserted, 0 amended, 0 deleted/
+                
     BasicSchedule.count.should eql(1)
     Location.count.should eql(18)
     Location.first.tiploc_code.should eql('EUSTON')
@@ -193,37 +251,64 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should not allow BS 'delete' records in a CIF full extract" do
-    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_fullextract.cif') }.should raise_error
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_fullextract.cif')
+    result.status.should eql(:error)
+    result.message.should =~ /Basic Schedule Delete \(BSD\) record not allowed in a CIF full extract/
   end
 
   it "should process BS 'delete' records in a CIF update extract" do
-    expected_data_part_1 = {:tiploc=>{:insert=>5, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part1.cif').should eql(expected_data_part_1)
+    result_1 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part1.cif')
+
+    result_1.status.should eql(:ok)
+    result_1.message.should =~ /TIPLOCs: 5 inserted, 0 amended, 0 deleted/
+    result_1.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result_1.message.should =~ /Schedules: 1 inserted, 0 amended, 0 deleted/
+
     BasicSchedule.count.should eql(1)
     Location.count.should eql(5)
-    expected_data_part_2 = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>1, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part2.cif').should eql(expected_data_part_2)
+
+    result_2 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_delete_part2.cif')
+    result_2.status.should eql(:ok)
+    result_2.message.should =~ /TIPLOCs: 0 inserted, 0 amended, 0 deleted/
+    result_2.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result_2.message.should =~ /Schedules: 0 inserted, 0 amended, 1 deleted/
+
     BasicSchedule.count.should eql(0)
     Location.count.should eql(0)
   end
 
   it "should not allow BS 'revise' records in a CIF full extract" do
-    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_fullextract.cif') }.should raise_error
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_fullextract.cif')
+    result.status.should eql(:error)
+    result.message.should =~ /Basic Schedule revise \(BSR\) record not allowed in a CIF full extract/
   end
 
   it "should process BS 'revise' records in a CIF update extract" do
     expected_data_part_1 = {:tiploc=>{:insert=>13, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_part1.cif').should eql(expected_data_part_1)
+    result_1 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_part1.cif')
+    result_1.status.should eql(:ok)
+    result_1.message.should =~ /TIPLOCs: 13 inserted, 0 amended, 0 deleted/
+    result_1.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result_1.message.should =~ /Schedules: 1 inserted, 0 amended, 0 deleted/
+
     BasicSchedule.count.should eql(1)
     Location.count.should eql(13)
+
     expected_data_part_2 = {:tiploc=>{:insert=>0, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>0, :delete=>0, :amend=>1}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_part2.cif').should eql(expected_data_part_2)
+    result_2 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_revise_part2.cif')
+    result_2.status.should eql(:ok)
+    result_2.message.should =~ /TIPLOCs: 0 inserted, 0 amended, 0 deleted/
+    result_2.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result_2.message.should =~ /Schedules: 0 inserted, 1 amended, 0 deleted/
+
     BasicSchedule.count.should eql(1)
     Location.count.should eql(13)
   end
 
   it "should not allow unknown BS record transaction types in a CIF extract" do
-    lambda { TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_invalid.cif') }.should raise_error
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_invalid.cif')
+    result.status.should eql(:error)
+    result.message.should =~ /Unknown BS transaction type Z found/
   end
 
   it "should strip white space from the power type and timing load columns" do
@@ -355,7 +440,12 @@ describe "lib/tsdbexplorer/cif.rb" do
 
   it "should handle schedules for buses" do
     expected_data = {:tiploc=>{:insert=>3, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_bus.cif').should eql(expected_data)
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_bus.cif')
+    result.status.should eql(:ok)
+    result.message.should =~ /TIPLOCs: 3 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Schedules: 1 inserted, 0 amended, 0 deleted/
+
     basic_schedule = BasicSchedule.first
     basic_schedule.train_identity.should eql('0B00')
     basic_schedule.status.should eql('B')
@@ -365,8 +455,12 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should handle schedules for ships" do
-    expected_data = {:tiploc=>{:insert=>2, :delete=>0, :amend=>0}, :association=>{:insert=>0, :delete=>0, :amend=>0}, :schedule=>{:insert=>1, :delete=>0, :amend=>0}}
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_ship.cif').should eql(expected_data)
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_ship.cif')
+    result.status.should eql(:ok)
+    result.message.should =~ /TIPLOCs: 2 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Associations: 0 inserted, 0 amended, 0 deleted/
+    result.message.should =~ /Schedules: 1 inserted, 0 amended, 0 deleted/
+
     basic_schedule = BasicSchedule.first
     basic_schedule.train_identity.should eql('0S00')
     basic_schedule.status.should eql('S')
@@ -396,8 +490,22 @@ describe "lib/tsdbexplorer/cif.rb" do
 
   end
 
-  it "should allow the next-in-sequence CIF file to be imported"
-  it "should not allow an out-of-sequence CIF file to be imported"
-  it "should not allow a CIF file with a date in the past to be imported"
+  it "should allow the next-in-sequence CIF file to be imported" do
+    result_a = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/ordering/DFTESTA.CIF')
+    result_a.status.should eql(:ok)
+    result_b = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/ordering/DFTESTB.CIF')
+    result_b.status.should eql(:ok)
+  end
+
+  it "should not allow an out-of-sequence CIF update file to be imported" do
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/ordering/DFTESTB.CIF')
+    result.status.should eql(:error)
+    result.message.should eql('CIF update DFTESTB must be applied after file DFTESTA')
+  end
+
+  it "should allow an out-of-sequence CIF full extract file to be imported" do
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/ordering/DFTESTC.CIF')
+    result.status.should eql(:ok)
+  end
 
 end
