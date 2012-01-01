@@ -21,13 +21,6 @@ require 'spec_helper'
 
 describe Location do
 
-  it "should allow multiple activities to occur at a location" do
-
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/london_to_leeds.cif')
-    euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('G31191', '2011-05-22').first
-pending
-  end
-
   it "should identify locations that that are not for picking up or setting down passengers" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')

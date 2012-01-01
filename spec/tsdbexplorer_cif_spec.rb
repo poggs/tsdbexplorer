@@ -469,12 +469,6 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
 
-  # Schedule processing
-
-  it "should process a complete schedule from a CIF file"
-  it "should process an update extract from a CIF file"
-
-
   # Timetable administration
 
   it "should record the details of a CIF file imported" do
