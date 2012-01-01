@@ -147,7 +147,7 @@ module TSDBExplorer
 
       case message[:message_type]
         when "0001"   # Train activation
-          result = process_trust_activation(message[:train_uid], message[:schedule_origin_depart_timestamp].strftime('%Y-%m-%d'), message[:train_id])
+          result = process_trust_activation(message)
         when "0002"   # Train cancellation
           result = process_trust_cancellation(message[:train_id], message[:train_cancellation_timestamp], message[:cancellation_reason_code])
         when "0003"   # Train movement
@@ -239,15 +239,35 @@ module TSDBExplorer
     # today), and if the schedule is found, a clone of it and the calling
     # points will be created in the Daily tables.
 
-    def TDnet.process_trust_activation(uid, run_date, unique_train_id)
+    def TDnet.process_trust_activation(message)
 
-      uid.strip!
+      uid = message[:train_uid].strip
+      run_date = message[:schedule_origin_depart_timestamp].to_s(:yyyymmdd)
 
       schedule = BasicSchedule.runs_on_by_uid_and_date(uid, run_date).first
 
-      if schedule.nil?
-        return Struct.new(:status, :message).new(:error, 'No schedule found for activation of train ' + uid)
+      if schedule.nil? || schedule == []
+        return Struct.new(:status, :message).new(:error, "#{message[:source_system_id]} #{message[:original_data_source]} failed to activate #{TSDBExplorer::schedule_source_to_text(message[:schedule_source])} schedule #{uid} - schedule does not apply on #{message[:schedule_origin_depart_timestamp].to_s(:yyyymmdd)}")
       end
+
+      unique_train_id = message[:train_id]
+      train_id = unique_train_id[2..5]
+
+      schedule_origin_location = Tiploc.where(:stanox => message[:schedule_origin_stanox]).first
+
+      if schedule_origin_location.nil? || schedule == []
+        return Struct.new(:status, :message).new(:error, "#{message[:source_system_id]} #{message[:original_data_source]} failed to activate #{TSDBExplorer::schedule_source_to_text(message[:schedule_source])} schedule #{uid} - origin STANOX #{message[:schedule_origin_stanox]} not known")
+      end
+
+      schedule_origin = schedule_origin_location.tiploc_code
+      schedule_origin_departure = message[:schedule_origin_depart_timestamp].to_s(:iso)
+      schedule_source = message[:schedule_source]
+
+
+      # TRUST may have a bug where the STP indicator is set to 'O' for both 'P'
+      # and 'O' schedules.  We take the source therefore from the CIF file
+
+      schedule_type = TSDBExplorer::schedule_type_to_text(schedule.stp_indicator)
 
 
       # Create a DailySchedule record for this train
@@ -296,7 +316,7 @@ module TSDBExplorer
 
       $REDIS.set('ACT:' + uid + ":" + run_date.gsub('-', ''), unique_train_id) 
 
-      return Struct.new(:status, :message).new(:ok, 'Activated train UID ' + uid + ' on ' + run_date + ' as train identity ' + unique_train_id)
+      return Struct.new(:status, :message).new(:ok, "#{message[:source_system_id]} #{message[:original_data_source]} successfully activated #{TSDBExplorer::schedule_source_to_text(message[:schedule_source])} #{schedule_type} schedule #{uid} for #{schedule.atoc_code? ? 'TOC ' + schedule.atoc_code : 'an unknown TOC'}, departing #{schedule_origin} at #{schedule_origin_departure} as #{train_id} (#{unique_train_id})")
 
     end
 

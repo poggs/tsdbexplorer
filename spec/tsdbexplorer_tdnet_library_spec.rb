@@ -162,54 +162,71 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   # TRUST message handling
 
   it "should process a train activation message" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
-    activation.status.should eql(:ok)
-    activation.message.should match(/C43391/)
-    activation.message.should match(/722N53MW12/)
-    ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
-    ds.train_uid.should eql('C43391')
-    ds.train_identity_unique.should eql('722N53MW12')
-    ds.last_location.should be_nil
-    ds.locations.count.should eql(18)
-    first_location_data = { :location_type => "LO", :activity_tb => true, :tiploc_code => "EUSTON", :tiploc_instance => nil, :arrival => nil, :public_arrival => nil, :expected_arrival => nil, :actual_arrival => nil, :platform => '10', :actual_platform => nil, :line => 'C', :actual_line => nil, :pass => nil, :expected_pass => nil, :actual_pass => nil, :path => nil, :departure => Time.parse('2010-12-12 18:34:00'), :public_departure => Time.parse('2010-12-12 18:34:00'), :expected_departure => nil, :actual_departure => nil, :engineering_allowance => nil, :pathing_allowance => nil, :performance_allowance => nil, :cancelled => nil, :cancellation_reason => nil, :cancellation_timestamp => nil }
-    first_location = ds.locations.first
-    first_location_data.each do |k,v|
-      first_location.send(k.to_sym).should eql(v)
-    end
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/highbury_to_west_croydon.cif')
+    result = TSDBExplorer::TDnet::process_trust_message('000120111231043501TRUST               TSIA                                529C02M531201112310435015205320111231053500L759262017121100000020210712000000CO9C02M000005205320111231053500AN3022215003   ')
+    result.status.should eql(:ok)
+  end
+
+  it "should create a daily schedule and locations, copied from the basic schedule and locations" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/highbury_to_west_croydon.cif')
+    result = TSDBExplorer::TDnet::process_trust_message('000120111231043501TRUST               TSIA                                529C02M531201112310435015205320111231053500L759262017121100000020210712000000CO9C02M000005205320111231053500AN3022215003   ')
+    ds = DailySchedule.runs_on_by_uid_and_date('L75926', '2011-12-31').first
+    ds.train_uid.should eql('L75926')
+    ds.train_identity_unique.should eql('529C02M531')
+    ds.locations.count.should eql(24)
+    ds.locations.first.tiploc_code.should eql('HIGHBYA')
+    ds.locations.first.departure.should eql(DateTime.parse('2011-12-31 05:35:00'))
+    ds.locations.last.tiploc_code.should eql('WCROYDN')
+    ds.locations.last.arrival.should eql(DateTime.parse('2011-12-31 06:28:00'))
+  end
+
+  it "should report details of a successfully activated a CIF WTT train" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/highbury_to_west_croydon.cif')
+    result = TSDBExplorer::TDnet::process_trust_message('000120111231043501TRUST               TSIA                                529C02M531201112310435015205320111231053500L759262017121100000020210712000000CO9C02M000005205320111231053500AN3022215003   ')
+    result.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule L75926 for TOC LO, departing HIGHBYA at 2011-12-31 05:35:00 as 9C02 \(529C02M531\)/
+  end
+
+  it "should report details of a successfully activated a CIF STP train" do
+    # NOTE: The TRUST activation message may not be accurate, as the schedule has the train
+    #       starting from Shadwell on this date
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/highbury_to_west_croydon.cif')
+    result = TSDBExplorer::TDnet::process_trust_message('000120120317043501TRUST               TSIA                                529C02M531201203170435015205320120317053500L759262017121100000020210712000000CN9C02M000005205320120317053500AN3022215003   ')
+    result.message.should =~ /TRUST TSIA successfully activated CIF VAR schedule L75926 for TOC LO, departing HIGHBYA at 2012-03-17 05:35:00 as 9C02 \(529C02M531\)/
+  end
+
+  it "should report details of a successfully activated a VSTP train"
+
+  it "should allow a TSDB/ITPS cancelled train to be activated as it will be cancelled with reason code PD automatically" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/highbury_to_west_croydon.cif')
+    result = TSDBExplorer::TDnet::process_trust_message('000120120204043549TRUST               TSIA                                529C02M504201202040435495205320120204053500L759262026121100000020301211000000CC9C02M000005205320120204053500AN3022215003   ')
+    result.message.should =~ /TRUST TSIA successfully activated CIF CAN schedule L75926 for an unknown TOC, departing HIGHBYA at 2012-02-04 05:35:00 as 9C02 \(529C02M504\)/
+  end
+
+  it "should return an error when attempting to activate a train for a nonexistent schedule" do
+    result = TSDBExplorer::TDnet::process_trust_message('000120111231043501TRUST               TSIA                                529C02M531201112310435015205320111231053500L759262017121100000020210712000000CO9C02M000005205320111231053500AN3022215003   ')
+    result.message.should =~ /TRUST TSIA failed to activate CIF schedule L75926/
   end
 
   it "should set the expected arrival and departure times of an activated train to the scheduled arrival and departure times"
 
   it "should not allow a train activation message for a date on which the schedule does not exist" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-13', '722N53MW13')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101213161531TRUST               TSIA                                722N53MW12201012131615317241020101213183400C433912016071100000020160711000000CP2N53M000007241020101213183400AN3022214000   ')
     activation.status.should eql(:error)
-    activation.message.should match(/C43391/)
-    ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-13').first
-    ds.should be_nil
-  end
-
-  it "should not allow a train activation message for a date on which the schedule is cancelled" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_cancel.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2011-01-19', '722N53MW19')
-    activation.status.should eql(:error)
-    activation.message.should match(/C43391/)
-    ds = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-19').first
-    ds.should be_nil
+    activation.message.should =~ /TRUST TSIA failed to activate CIF schedule C43391/
   end
 
   it "should handle a train activation message for an unknown train" do
-    activation = TSDBExplorer::TDnet::process_trust_activation('Z12345', '2011-01-01', '009Z99MA01')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101213161531TRUST               TSIA                                722N53MW12201012131615317241020101213183400C433912016071100000020160711000000CP2N53M000007241020101213183400AN3022214000   ')
     activation.status.should eql(:error)
-    activation.message.should match(/Z12345/)
-    DailySchedule.all.count.should eql(0)
+    activation.message.should =~ /TRUST TSIA failed to activate CIF schedule C43391/
   end
 
   it "should process a train cancellation message" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615317241020101212183400C433912016071100000020160711000000CP2N53M000007241020101212183400AN3022214000   ')
     activation.status.should eql(:ok)
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule C43391 for TOC LM, departing EUSTON at 2010-12-12 18:34:00 as 2N53 \(722N53MW12\)/
     cancellation = TSDBExplorer::TDnet::process_trust_cancellation('722N53MW12', Time.parse('2010-12-12 18:15:00'), 'M4')
     cancellation.status.should eql(:ok)
     cancellation.message.should match(/722N53MW12/)
@@ -231,8 +248,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process a train movement message for a departure from an the originating station" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615315222620101212183400C433912016071100000020160711000000CP2N53M000005222620101212183400AN3022214000   ')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615317241020101212183400C433912016071100000020160711000000CP2N53M000007241020101212183400AN3022214000   ')
     activation.status.should eql(:ok)
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule C43391 for TOC LM, departing EUSTON at 2010-12-12 18:34:00 as 2N53 \(722N53MW12\)/
     movement = TSDBExplorer::TDnet::process_trust_message('000320101212183424TRUST               SMART                               722N53MW1220101212183400724102010121218340020101212183400     00000000000000DDA  U  23722N53MW26222140003030000 52219001 Y   72410Y')
     movement.status.should eql(:ok)
     movement.message.should match(/722N53MW12/)
@@ -247,8 +265,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process a train movement message for a passing point" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615315222620101212183400C433912016071100000020160711000000CP2N53M000005222620101212183400AN3022214000   ')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615317241020101212183400C433912016071100000020160711000000CP2N53M000007241020101212183400AN3022214000   ')
     activation.status.should eql(:ok)
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule C43391 for TOC LM, departing EUSTON at 2010-12-12 18:34:00 as 2N53 \(722N53MW12\)/
     movement_1 = TSDBExplorer::TDnet::process_trust_message('000320101212183617TRUST               SMART                               722N53MW1220101212183600723160000000000000020101212183700     00000000000000DDA  DC  1722N53MX12222090002929001E72315000     00000Y')
     movement_1.status.should eql(:ok)
     movement_1.message.should match(/722N53MW12/)
@@ -263,8 +282,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process a train movement message for a calling point" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615317241020101212183400C433912016071100000020160711000000CP2N53M000007241020101212183400AN3022214000   ')
     activation.status.should eql(:ok)
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule C43391 for TOC LM, departing EUSTON at 2010-12-12 18:34:00 as 2N53 \(722N53MW12\)/
     movement_1 = TSDBExplorer::TDnet::process_trust_message('000320101212184913TRUST               SMART                               722N53MW1220101212184900710402010121218500020101212185000     00000000000000AAA  D  80722N53MW12222090002929001E71011002 Y   71040Y')
     movement_1.status.should eql(:ok)
     movement_1.message.should match(/722N53MW12/)
@@ -285,8 +305,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should record the source of an automatically generated movement correctly" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615317241020101212183400C433912016071100000020160711000000CP2N53M000007241020101212183400AN3022214000   ')
     activation.status.should eql(:ok)
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule C43391 for TOC LM, departing EUSTON at 2010-12-12 18:34:00 as 2N53 \(722N53MW12\)/
     depart_wfj_automatic = TSDBExplorer::TDnet::process_trust_message('000320101212184913TRUST               SMART                               722N53MW1220101212184900710402010121218500020101212185000     00000000000000AAA  D  80722N53MW12222090002929001E71011002 Y   71040Y')
     depart_wfj_location = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first.locations.where(:tiploc_code => 'WATFDJ').first
     depart_wfj_location.event_source.should eql('A')
@@ -294,22 +315,24 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should record the source of a manually input movement correctly" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('P45779', '2011-07-17', '712F02MC17')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120111231040159TRUST               TSIA                                712F03M631201112310401597104020111231060100C517892017121100000020201012000000CO2F03M000007104020111231060100AN2922213000   ')
     activation.status.should eql(:ok)
-    depart_saa_manual = TSDBExplorer::TDnet::process_trust_message('000320110718003245TRUST               SDR                 #QRP3750V3HK    712F02MC1720110717082800710302011071708280020110717082800     00000000000000DDM       712F02MC17222130002929000 71032003 Y   71030N')
-    depart_saa_location = DailySchedule.runs_on_by_uid_and_date('P45779', '2011-07-17').first.locations.where(:tiploc_code => 'STALBNA').first
-    depart_saa_location.event_source.should eql('M')
-    arrive_wfj_manual = TSDBExplorer::TDnet::process_trust_message('000320110718003330TRUST               SDR                 #QRP3750V3HK    712F02MC1720110717084400710402011071708440020110717084400     00000000000000TAM      0712F02MC17222130002929000      000YY   71040Y')
-    arrive_wfj_location = DailySchedule.runs_on_by_uid_and_date('P45779', '2011-07-17').first.locations.where(:tiploc_code => 'WATFDJ').first
-    arrive_wfj_location.event_source.should eql('M')
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule C51789 for TOC LM, departing WATFDJ at 2011-12-31 06:01:00 as 2F03 \(712F03M631\)/
+    depart_wfj_manual = TSDBExplorer::TDnet::process_trust_message('000320120101011351TRUST               SDR                 #QRP4099VRX6    712F03M63120111231060100710402011123106010020111231060100     00000000000000DDM       712F03M631222130002929000 71039002 Y   71040Y')
+    depart_wfj_location = DailySchedule.runs_on_by_uid_and_date('C51789', '2011-12-31').first.locations.where(:tiploc_code => 'WATFDJ').first
+    depart_wfj_location.event_source.should eql('M')
+    arrive_saa_manual = TSDBExplorer::TDnet::process_trust_message('000320120101011424TRUST               SDR                 #QRP4099VRX6    712F03M63120111231061700710302011123106170020111231061700     00000000000000TAM      0712F03M631222130002929000      000YY   71030N')
+    arrive_saa_location = DailySchedule.runs_on_by_uid_and_date('C51789', '2011-12-31').first.locations.where(:tiploc_code => 'STALBNA').first
+    arrive_saa_location.event_source.should eql('M')
   end
 
   it "should handle an off-route movement for a train"
 
   it "should process a train movement message for an arrival at the terminating station and set the Terminated flag" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    activation = TSDBExplorer::TDnet::process_trust_activation('C43391', '2010-12-12', '722N53MW12')
+    activation = TSDBExplorer::TDnet::process_trust_message('000120101212161531TRUST               TSIA                                722N53MW12201012121615317241020101212183400C433912016071100000020160711000000CP2N53M000007241020101212183400AN3022214000   ')
     activation.status.should eql(:ok)
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule C43391 for TOC LM, departing EUSTON at 2010-12-12 18:34:00 as 2N53 \(722N53MW12\)/
     movement = TSDBExplorer::TDnet::process_trust_message('000320101212194309TRUST               SMART                               722N53MW1220101212194400701002010121219460020101212194600     00000000000000TAA  D3 30722N53MW12222090002929002E     000YY   70100Y')
     movement.status.should eql(:ok)
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
@@ -345,7 +368,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
     activation = TSDBExplorer::TDnet::process_trust_message('000120110720160618TRUST               TSIA                                522Y01MW20201107201606175222620110720180600L951262023051100000020091211000000CO2Y01M000005222620110720180600AN3022214000   ')
     activation.status.should eql(:ok)
-    activation.message.should include('Activated train UID L95126 on 2011-07-20 as train identity 522Y01MW20')
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule L95126 for TOC LO, departing STFD at 2011-07-20 18:06:00 as 2Y01 \(522Y01MW20\)/
 
     cancellation = TSDBExplorer::TDnet::process_trust_message('000220110720181920TRUST               TRUST DA            #QHPA017LMWB    522Y01MW20201107201819005222620110720180600     00000000000000C522Y01MW2022214000M53030C   ')
     cancellation.status.should eql(:ok)
@@ -391,7 +414,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
     activation = TSDBExplorer::TDnet::process_trust_message('000120110723163915TRUST               TSIA                                512O03MX23201107231639155170220110723183900L059852028051100000020101211000000CO2O03M000005170220110723183900AN2121920000   ')
     activation.status.should eql(:ok)
-    activation.message.should include('Activated train UID L05985 on 2011-07-23')
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule L05985 for TOC LE, departing HERTFDE at 2011-07-23 18:39:00 as 2O03 \(512O03MX23\)/
 
     coo_broxbourne = TSDBExplorer::TDnet::process_trust_message('000620110723185333TRUST               TRUST DA                    LSHH    512O03MX23201107231853005172220110723185430                   512O03MX2321920000XR2121O   ')
     train_2O03 = DailySchedule.runs_on_by_uid_and_date('L05985', '2011-07-23').first
@@ -484,7 +507,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
     activation = TSDBExplorer::TDnet::process_trust_message('000120110824230314TRUST               TSIA                                522T52M125201108242303145274120110825010300L068092024051100000020101211000000CO2T52M000005274120110825010300AN2121910000   ')
     activation.status.should eql(:ok)
-    activation.message.should include('Activated train UID L06809 on 2011-08-25 as train identity 522T52M125')
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule L06809 for TOC LE, departing LIVST at 2011-08-25 01:03:00 as 2T52 \(522T52M125\)/
     DailySchedule.count.should eql(1)
     first_schedule = DailySchedule.first
     first_schedule_expected = { :runs_on => Date.parse('2011-08-25'), :cancelled => nil, :cancellation_timestamp => nil, :cancellation_reason => nil, :status => "P", :train_uid => "L06809", :category => "OO", :train_identity => "2T52", :train_identity_unique => "522T52M125", :headcode => nil, :service_code => "21910000", :portion_id => nil, :power_type => "EMU", :timing_load => "317", :speed => "100", :operating_characteristics => "D", :train_class => "S", :sleepers => nil, :reservations => nil, :catering_code => nil, :service_branding => nil, :stp_indicator => "P", :uic_code => nil, :atoc_code => "LE", :ats_code => "Y", :rsid => nil, :data_source => 'CIF' }
@@ -785,12 +808,15 @@ describe "lib/tsdbexplorer/tdnet.rb" do
 
   it "should process the activation of a VSTP train" do
 
+    tiploc_data = TSDBExplorer::CIF::process_cif_file('test/fixtures/tdnet/tiplocs_for_vstp_foo_to_rdc.cif')
+    tiploc_data.status.should eql(:ok)
+
     vstp_data = File.open('test/fixtures/tdnet/vstp_four_oaks_to_redditch.xml')
     vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
 
     activation = TSDBExplorer::TDnet::process_trust_message('000120111114082848TRUST               TSIA                                652T192D14201111140828486560120111114083500 202632014111100000020141111000000VN2T192202636560120111114083500MN2922272000   ')
     activation.status.should eql(:ok)
-    activation.message.should include('Activated train UID 20263 on 2011-11-14 as train identity 652T192D14')
+    activation.message.should =~ /TRUST TSIA successfully activated VSTP STP schedule 20263 for an unknown TOC, departing FOUROKS at 2011-11-14 08:35:00 as 2T19 \(652T192D14\)/
 
   end
 

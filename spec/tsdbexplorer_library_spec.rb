@@ -184,4 +184,16 @@ describe "lib/tsdbexplorer.rb" do
 
   end
 
+  it "should convert a TRUST activation schedule source in to text" do
+    TSDBExplorer::schedule_source_to_text('C').should eql('CIF')
+    TSDBExplorer::schedule_source_to_text('V').should eql('VSTP')
+  end
+
+  it "should convert a TRUST activation schedule type in to text" do
+    TSDBExplorer::schedule_type_to_text('P').should eql('WTT')
+    TSDBExplorer::schedule_type_to_text('N').should eql('STP')
+    TSDBExplorer::schedule_type_to_text('O').should eql('VAR')
+    TSDBExplorer::schedule_type_to_text('C').should eql('CAN')
+  end
+
 end

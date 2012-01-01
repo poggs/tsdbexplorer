@@ -1,0 +1,80 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIANERLEY00539700MANERLEY                   87644   0ANZANERLEY                 
+TIBROCKLY00540400XBROCKLEY                  87629   0BCYBROCKLEY                
+TICANALJ 16065105ZCANAL JUNCTION (NEW CROSS)87578   0                           
+TICARLHFH00211836HCARLISLE H WAPPING SDG FHH09163   0                           
+TICARLHWS56211835GCARLISLE HIGH WAPPING SDGS09160   0                           
+TICNDAW  00165900UCANADA WATER              87568   0ZCWCANADA WATER            
+TICNNB   00144100UCANONBURY                 52048   0CNNCANONBURY               
+TIDALS   00144300WDALSTON JUNCTION STN ELL  52074   0DLJDALSTON JUNCTION        
+TIEDGHDWG28216912XEDGE HILL DOWN WAPPING    36174   0XDG                        
+TIFORESTH32536200MFOREST HILL               87627   0FOHFOREST HILL             
+TIHAGGERS00102200XHAGGERSTON                52078   0HGGHAGGERSTON              
+TIHAGGXO 00102201PHAGGERSTON CROSSOVER      52076   0                           
+TIHIGHBYA00686600WHIGHBURY & ISLINGTON      52053   0HII                        
+TIHONROPK24541800YHONOR OAK PARK            87628   0HPAHONOR OAK PARK          
+TIHOXTON 00102300ZHOXTON                    52080   0HOXHOXTON                  
+TINEWXGEL00534505YNEW CROSS GATE STATION ELL87603   0                           
+TINEWXNJN00534504RNEW CROSS GATE NORTH JCN  87588   0                           
+TINORWDJ 16537600QNORWOOD JUNCTION          87643   0NWDNORWOOD JUNCTION        
+TIPENEW  08537800DPENGE WEST                87645   0PNWPENGE WEST              
+TIRTHERHI00103900KROTHERHITHE               87566   0ROEROTHERHITHE             
+TISELHGRJ00543436EGLOUCESTER ROAD JUNCTION  87648   0XGU                        
+TISHADWEL00108200KSHADWELL                  52088   0SDESHADWELL                
+TISHADXO 00108201LSHADWELL CROSSOVER        52086   0                           
+TISHRDHST00102400BSHOREDITCH HIGH STREET    52082   0SDCSHOREDTCH HGH ST        
+TISURREYQ00108300PSURREY QUAYS              87572   0SQESURREY QUAYS            
+TISYDENHM00543700ESYDENHAM                  87626   0SYDSYDENHAM                
+TIWAPPING00108500CWAPPING                   52090   0WPEWAPPING                 
+TIWCHAPEL00076300ZWHITECHAPEL               52084   0ZWLWHITECHAPEL UND         
+TIWCROYDN01541100GWEST CROYDON              87651   0WCYWEST CROYDON            
+BSNL759261112171207210000010 POO9C02    122215003 EMU375 075D     S            P
+BX         LOY                                                                  
+LOHIGHBYA 0535 05351  ELL    TB                                                 
+LICNNB    0536H0537      053705372        T                                     
+CRDALS    OO9C02    122218000 EMU375 075D     S                                 
+LIDALS    0539 0540      053905404        T                                     
+LIHAGGERS 0541 0541H     054105412        T                                     
+LIHOXTON  0543 0543H     054305432        T                                     
+LISHRDHST 0545H0546      054605462        T                                     
+LIWCHAPEL 0547H0548H     05480548         T                                     
+LISHADWEL 0550 0550H     055005502        T                                     
+LIWAPPING 0552 0552H     055205522        T                                     
+LIRTHERHI 0553H0554      05540554         T                                     
+LICNDAW   0555 0556      055505563        T                                     
+LISURREYQ 0557 0557H     055705572        T                                     
+LICANALJ            0559 00000000                                               
+LINEWXNJN           0600 00000000                                               
+CRNEWXGEL OO9C02    122215003 EMU375 075D     S                                 
+LINEWXGEL 0600H0602      06010602   SL    T                                     
+LIBROCKLY 0604 0604H     060406042        T                                     
+LIHONROPK 0607 0607H     060706072        T                                     
+LIFORESTH 0609H0610      061006102        T                                     
+LISYDENHM 0612 0612H     061206122        T                                     
+LIPENEW   0614H0615      061506152        T                                     
+LIANERLEY 0616H0617      061706172        T                                     
+LINORWDJ  0619H0620      061806185        T             4                       
+LISELHGRJ           0626 00000000                                               
+LTWCROYDN 0628 06304     TF                                                     
+BSNL759261202041202110000010            1                                      C
+BSNL759261203171203170000010 POO9C02    122218000 EMU375 075D     S            O
+BX         LOY                                                                  
+LOSHADWEL 0550 05502         TB                                                 
+LIWAPPING 0552 0552H     055205522        T                                     
+LIRTHERHI 0553H0554      05540554         T                                     
+LICNDAW   0555 0556      055505562        T                                     
+LISURREYQ 0557 0557H     055705572        T                                     
+LICANALJ            0559 00000000                                               
+LINEWXNJN           0600 00000000                                               
+CRNEWXGEL OO9C02    122215003 EMU375 075D     S                                 
+LINEWXGEL 0600H0602      06010602   SL    T                                     
+LIBROCKLY 0604 0604H     060406042        T                                     
+LIHONROPK 0607 0607H     060706072        T                                     
+LIFORESTH 0609H0610      061006102        T                                     
+LISYDENHM 0612 0612H     061206122        T                                     
+LIPENEW   0614H0615      061506152        T                                     
+LIANERLEY 0616H0617      061706172        T                                     
+LINORWDJ  0619H0620      061806185        T             4                       
+LISELHGRJ           0626 00000000                                               
+LTWCROYDN 0628 06334     TF                                                     
+ZZ

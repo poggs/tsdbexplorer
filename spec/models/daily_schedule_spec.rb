@@ -51,7 +51,7 @@ describe DailySchedule do
 
     activation = TSDBExplorer::TDnet::process_trust_message('000120110723163915TRUST               TSIA                                512O03MX23201107231639155170220110723183900L059852028051100000020101211000000CO2O03M000005170220110723183900AN2121920000   ')
     activation.status.should eql(:ok)
-    activation.message.should include('Activated train UID L05985 on 2011-07-23')
+    activation.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule L05985 for TOC LE, departing HERTFDE at 2011-07-23 18:39:00 as 2O03 \(512O03MX23\)/
 
     coo_broxbourne = TSDBExplorer::TDnet::process_trust_message('000620110723185333TRUST               TRUST DA                    LSHH    512O03MX23201107231853005172220110723185430                   512O03MX2321920000XR2121O   ')
     train = DailySchedule.runs_on_by_uid_and_date('L05985', '2011-07-23').first

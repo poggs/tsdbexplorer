@@ -218,4 +218,36 @@ module TSDBExplorer
 
   end
 
+
+  # Convert a TRUST activation schedule source in to text
+
+  def TSDBExplorer.schedule_source_to_text(s)
+
+    if s == "C"
+      "CIF"
+    elsif s == "V"
+      "VSTP"
+    else
+      nil
+    end
+
+  end
+
+
+  # Convert a TRUST activation schedule type in to text
+
+  def TSDBExplorer.schedule_type_to_text(t)
+
+    if t == "P"
+      "WTT"
+    elsif t == "N"
+      "STP"
+    elsif t == "O"
+      "VAR"
+    elsif t == "C"
+      "CAN"
+    end
+
+  end
+
 end
