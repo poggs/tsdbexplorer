@@ -2,8 +2,8 @@
                                 TSDB Explorer
                                 =============
 
-TSDB Explorer is an application used to process CIF timetable data from
-Network Rail and allow it to be queried by a web browser.
+TSDB Explorer is an application used to process CIF timetable data from ATOC
+and Network Rail and allow it to be queried by a web browser.
 
 TSDB Explorer is licenced under the GPL:
 

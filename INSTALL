@@ -11,12 +11,11 @@ In addition to this Rails application, you'll also need:
    you may have success with MySQL or even sqlite.  If you do, please let me
    know!
 
- * Some timetable data in CIF format.  It has been announced that this data
-   will be made available by the end of 2011.  See www.openraildata.info
-   where updates will be posted.
+ * Some timetable data in CIF format.  This is available from ATOC's Rail
+   Industry Data site at http://data.atoc.org/.
 
- * Real-time TRUST data.  Again, this has been announced as being available
-   from April 2012 - when it is available, check www.openraildata.info.
+ * Real-time TRUST data.  This data should be available from around April
+   2012.  Check www.openraildata.info for further details.
 
 Start the Rails server, visit http://localhost:3000/ and you'll be talked
 through the necessary steps.
