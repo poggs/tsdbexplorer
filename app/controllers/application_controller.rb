@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
   def calculate_stats
 
     @stats = Hash.new
-    @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to)
+    @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to) unless BasicSchedule.count == 0
 
   end
 
