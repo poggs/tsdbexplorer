@@ -2,10 +2,11 @@
                                 TSDB Explorer
                                 =============
 
-TSDB Explorer is an application used to process CIF timetable data from ATOC
-and Network Rail and allow it to be queried by a web browser.
+TSDB Explorer is an application used to process train data and visualise it
+through a web browser.
 
-TSDB Explorer is licenced under the GPL:
+TSDB Explorer and Open Train Times are Copyright (c)2011-2012 Peter Hicks,
+and the code is licenced under the GPL:
 
   TSDB Explorer is free software: you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the Free
