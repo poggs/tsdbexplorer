@@ -321,7 +321,7 @@ describe AdminController do
 
   it "should show the amount of memory in use" do
     get :memory
-    response.body.should =~ /Holding .+K memory/
+    response.body.should =~ /Holding .+ memory/
   end
 
   it "should show the number of commands processed" do
