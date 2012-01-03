@@ -156,4 +156,21 @@ describe LocationController do
     response.body.should =~ /London Euston/
   end
 
+
+  # Show only trains to and from
+
+  it "should only show trains which later call at at a specified location" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HOWWOOD'
+    response.body.should =~ /C51784/
+    response.body.should_not =~ /C51786/
+  end
+
+  it "should only show trains which have called previously at a specified location" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WATFDJ'
+    response.body.should =~ /C51786/
+    response.body.should_not =~ /C51784/
+  end
+
 end

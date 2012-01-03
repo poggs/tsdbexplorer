@@ -26,8 +26,8 @@ class Location < ActiveRecord::Base
 
   # The 'between' scope will ignore passing times.  The 'passes_between' scope will include passing times.
 
-  scope :between, lambda { |from_time,to_time| where('(arrival BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time) }
-  scope :passes_between, lambda { |from_time,to_time| where('(arrival BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time, from_time, to_time) }
+  scope :between, lambda { |from_time,to_time| where('(locations.arrival BETWEEN ? AND ?) OR (locations.departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time) }
+  scope :passes_between, lambda { |from_time,to_time| where('(locations.arrival BETWEEN ? AND ?) OR (locations.pass BETWEEN ? AND ?) OR (locations.departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time, from_time, to_time) }
 
   scope :runs_on, lambda { |date| joins('JOIN basic_schedules ON locations.basic_schedule_uuid = basic_schedules.uuid').where('? BETWEEN basic_schedules.runs_from AND basic_schedules.runs_to', date).where([ 'basic_schedules.runs_su', 'basic_schedules.runs_mo', 'basic_schedules.runs_tu', 'basic_schedules.runs_we', 'basic_schedules.runs_th', 'basic_schedules.runs_fr', 'basic_schedules.runs_sa' ][Date.parse(date).wday] => true ).where('stp_indicator IN (SELECT MIN(stp_indicator) FROM basic_schedules AS bs2 WHERE train_uid = basic_schedules.train_uid AND ? BETWEEN runs_from AND runs_to)', date) }
   scope :only_passenger, lambda { where("category IN ('OL', 'OU', 'OO', 'OW', 'XC', 'XD', 'XI', 'XR', 'XU', 'XX', 'XD', 'XZ', 'BR', 'BS')") }
@@ -76,12 +76,22 @@ class Location < ActiveRecord::Base
   # Return trains arriving or departing between the specified times
 
   scope :calls_between, lambda { |from_time,to_time|
-    where('(arrival BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time)
+    where('(locations.arrival BETWEEN ? AND ?) OR (locations.departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time)
   }
 
   scope :passes_between, lambda { |from_time,to_time|
-    where('(arrival BETWEEN ? AND ?) OR (pass BETWEEN ? AND ?) OR (departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time, from_time, to_time)
+    where('(locations.arrival BETWEEN ? AND ?) OR (locations.pass BETWEEN ? AND ?) OR (locations.departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time, from_time, to_time)
   }
 
+
+  # Limits search to trains travelling to or from a particular location
+
+  scope :runs_to, lambda { |loc|
+    joins('LEFT JOIN locations l2 ON locations.basic_schedule_uuid = l2.basic_schedule_uuid').where('l2.tiploc_code = ? AND locations.seq < l2.seq', loc)
+  }
+
+  scope :runs_from, lambda { |loc|
+    joins('LEFT JOIN locations l2 ON locations.basic_schedule_uuid = l2.basic_schedule_uuid').where('l2.tiploc_code = ? AND locations.seq > l2.seq', loc)
+  }
 
 end

@@ -1,0 +1,279 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIWATFDJ 16140200UWATFORD JUNCTION          710402991WFJWATFORD JUNCTION        
+TIWATFDN 16140300DWATFORD NORTH             71039   0WFNWATFORD NORTH           
+TIGRSTH  08155900KGARSTON (HERTFORDSHIRE)   71038   0GSNGARSTON HERTS           
+TIBCWD   02156000YBRICKET WOOD              71036   0BWOBRICKET WOOD            
+TIHOWWOOD04156300KHOW WOOD                  71034   0HWWHOW WOOD  HERTS         
+TIPKST   02156100APARK STREET               71032   0PKTPARK STREET             
+TISTALBNA34156200FST ALBANS ABBEY           71030   0SAAST ALBANS ABBEY         
+BSNC517841112111210210000001 POO2F01    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  0807 080711        TB                                                 
+LIWATFDN  0809H0810      08090809         T                                     
+LIGRSTH   0812 0812H     08120812         T                                     
+LIBCWD    0815 0815H     08150815         T                                     
+LIHOWWOOD 0817 0817H     08170817         T                                     
+LIPKST    0819H0820      08190819         T               1                     
+LTSTALBNA 0823 0823      TF                                                     
+BSNC517861112111210210000001 POO2F02    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 0828 0828          TB                                                 
+LIPKST    0831 0831H     08310831         T                                     
+LIHOWWOOD 0833 0833H     08330833         T                                     
+LIBCWD    0835H0836      08360836         T                                     
+LIGRSTH   0838H0839      08390839         T                                     
+LIWATFDN  0841 0841H     08410841         T               1                     
+LTWATFDJ  0844 084411    TF                                                     
+BSNC517921112111210210000001 POO2F03    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  0907 090711        TB                                                 
+LIWATFDN  0909H0910      09090909         T                                     
+LIGRSTH   0912 0912H     09120912         T                                     
+LIBCWD    0915 0915H     09150915         T                                     
+LIHOWWOOD 0917 0917H     09170917         T                                     
+LIPKST    0919H0920      09190919         T               1                     
+LTSTALBNA 0923 0923      TF                                                     
+BSNC517981112111210210000001 POO2F04    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 0928 0928          TB                                                 
+LIPKST    0931 0931H     09310931         T                                     
+LIHOWWOOD 0933 0933H     09330933         T                                     
+LIBCWD    0935H0936      09360936         T                                     
+LIGRSTH   0938H0939      09390939         T                                     
+LIWATFDN  0941 0941H     09410941         T               1                     
+LTWATFDJ  0944 094411    TF                                                     
+BSNC518041112111210210000001 POO2F05    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1020 102011        TB                                                 
+LIWATFDN  1022H1023      10221022         T                                     
+LIGRSTH   1025 1025H     10251025         T                                     
+LIBCWD    1028 1028H     10281028         T                                     
+LIHOWWOOD 1030 1030H     10301030         T                                     
+LIPKST    1032H1033      10321032         T               1                     
+LTSTALBNA 1036 1036      TF                                                     
+BSNC518101112111210210000001 POO2F06    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1042 1042          TB                                                 
+LIPKST    1045 1045H     10451045         T                                     
+LIHOWWOOD 1047 1047H     10471047         T                                     
+LIBCWD    1049H1050      10501050         T                                     
+LIGRSTH   1052H1053      10531053         T                                     
+LIWATFDN  1055 1055H     10551055         T               1                     
+LTWATFDJ  1058 105811    TF                                                     
+BSNC518171112111210210000001 POO2F07    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1120 112011        TB                                                 
+LIWATFDN  1122H1123      11221122         T                                     
+LIGRSTH   1125 1125H     11251125         T                                     
+LIBCWD    1128 1128H     11281128         T                                     
+LIHOWWOOD 1130 1130H     11301130         T                                     
+LIPKST    1132H1133      11321132         T               1                     
+LTSTALBNA 1136 1136      TF                                                     
+BSNC518231112111210210000001 POO2F08    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1142 1142          TB                                                 
+LIPKST    1145 1145H     11451145         T                                     
+LIHOWWOOD 1147 1147H     11471147         T                                     
+LIBCWD    1149H1150      11501150         T                                     
+LIGRSTH   1152H1153      11531153         T                                     
+LIWATFDN  1155 1155H     11551155         T               1                     
+LTWATFDJ  1158 115811    TF                                                     
+BSNC518291112111210210000001 POO2F09    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1207 120711        TB                                                 
+LIWATFDN  1209H1210      12091209         T                                     
+LIGRSTH   1212 1212H     12121212         T                                     
+LIBCWD    1215 1215H     12151215         T                                     
+LIHOWWOOD 1217 1217H     12171217         T                                     
+LIPKST    1219H1220      12191219         T               1                     
+LTSTALBNA 1223 1223      TF                                                     
+BSNC518351112111210210000001 POO2F10    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1228 1228          TB                                                 
+LIPKST    1231 1231H     12311231         T                                     
+LIHOWWOOD 1233 1233H     12331233         T                                     
+LIBCWD    1235H1236      12361236         T                                     
+LIGRSTH   1238H1239      12391239         T                                     
+LIWATFDN  1241 1241H     12411241         T               1                     
+LTWATFDJ  1244 124411    TF                                                     
+BSNC518411112111210210000001 POO2F11    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1307 130711        TB                                                 
+LIWATFDN  1309H1310      13091309         T                                     
+LIGRSTH   1312 1312H     13121312         T                                     
+LIBCWD    1315 1315H     13151315         T                                     
+LIHOWWOOD 1317 1317H     13171317         T                                     
+LIPKST    1319H1320      13191319         T               1                     
+LTSTALBNA 1323 1323      TF                                                     
+BSNC518471112111210210000001 POO2F12    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1328 1328          TB                                                 
+LIPKST    1331 1331H     13311331         T                                     
+LIHOWWOOD 1333 1333H     13331333         T                                     
+LIBCWD    1335H1336      13361336         T                                     
+LIGRSTH   1338H1339      13391339         T                                     
+LIWATFDN  1341 1341H     13411341         T               1                     
+LTWATFDJ  1344 134411    TF                                                     
+BSNC518531112111210210000001 POO2F13    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1407 140711        TB                                                 
+LIWATFDN  1409H1410      14091409         T                                     
+LIGRSTH   1412 1412H     14121412         T                                     
+LIBCWD    1415 1415H     14151415         T                                     
+LIHOWWOOD 1417 1417H     14171417         T                                     
+LIPKST    1419H1420      14191419         T               1                     
+LTSTALBNA 1423 1423      TF                                                     
+BSNC518591112111210210000001 POO2F14    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1428 1428          TB                                                 
+LIPKST    1431 1431H     14311431         T                                     
+LIHOWWOOD 1433 1433H     14331433         T                                     
+LIBCWD    1435H1436      14361436         T                                     
+LIGRSTH   1438H1439      14391439         T                                     
+LIWATFDN  1441 1441H     14411441         T               1                     
+LTWATFDJ  1444 144411    TF                                                     
+BSNC518651112111210210000001 POO2F15    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1507 150711        TB                                                 
+LIWATFDN  1509H1510      15091509         T                                     
+LIGRSTH   1512 1512H     15121512         T                                     
+LIBCWD    1515 1515H     15151515         T                                     
+LIHOWWOOD 1517 1517H     15171517         T                                     
+LIPKST    1519H1520      15191519         T               1                     
+LTSTALBNA 1523 1523      TF                                                     
+BSNC518711112111210210000001 POO2F16    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1528 1528          TB                                                 
+LIPKST    1531 1531H     15311531         T                                     
+LIHOWWOOD 1533 1533H     15331533         T                                     
+LIBCWD    1535H1536      15361536         T                                     
+LIGRSTH   1538H1539      15391539         T                                     
+LIWATFDN  1541 1541H     15411541         T               1                     
+LTWATFDJ  1544 154411    TF                                                     
+BSNC518771112111210210000001 POO2F17    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1607 160711        TB                                                 
+LIWATFDN  1609H1610      16091609         T                                     
+LIGRSTH   1612 1612H     16121612         T                                     
+LIBCWD    1615 1615H     16151615         T                                     
+LIHOWWOOD 1617 1617H     16171617         T                                     
+LIPKST    1619H1620      16191619         T               1                     
+LTSTALBNA 1623 1623      TF                                                     
+BSNC518831112111210210000001 POO2F18    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1628 1628          TB                                                 
+LIPKST    1631 1631H     16311631         T                                     
+LIHOWWOOD 1633 1633H     16331633         T                                     
+LIBCWD    1635H1636      16361636         T                                     
+LIGRSTH   1638H1639      16391639         T                                     
+LIWATFDN  1641 1641H     16411641         T               1                     
+LTWATFDJ  1644 164411    TF                                                     
+BSNC518871112111210210000001 POO2F19    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1707 170711        TB                                                 
+LIWATFDN  1709H1710      17091709         T                                     
+LIGRSTH   1712 1712H     17121712         T                                     
+LIBCWD    1715 1715H     17151715         T                                     
+LIHOWWOOD 1717 1717H     17171717         T                                     
+LIPKST    1719H1720      17191719         T               1                     
+LTSTALBNA 1723 1723      TF                                                     
+BSNC518911112111210210000001 POO2F20    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1728 1728          TB                                                 
+LIPKST    1731 1731H     17311731         T                                     
+LIHOWWOOD 1733 1733H     17331733         T                                     
+LIBCWD    1735H1736      17361736         T                                     
+LIGRSTH   1738H1739      17391739         T                                     
+LIWATFDN  1741 1741H     17411741         T               1                     
+LTWATFDJ  1744 174411    TF                                                     
+BSNC518971112111210210000001 POO2F21    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1807 180711        TB                                                 
+LIWATFDN  1809H1810      18091809         T                                     
+LIGRSTH   1812 1812H     18121812         T                                     
+LIBCWD    1815 1815H     18151815         T                                     
+LIHOWWOOD 1817 1817H     18171817         T                                     
+LIPKST    1819H1820      18191819         T               1                     
+LTSTALBNA 1823 1823      TF                                                     
+BSNC519031112111210210000001 POO2F22    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1828 1828          TB                                                 
+LIPKST    1831 1831H     18311831         T                                     
+LIHOWWOOD 1833 1833H     18331833         T                                     
+LIBCWD    1835H1836      18361836         T                                     
+LIGRSTH   1838H1839      18391839         T                                     
+LIWATFDN  1841 1841H     18411841         T               1                     
+LTWATFDJ  1844 184411    TF                                                     
+BSNC519091112111210210000001 POO2F23    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  1907 190711        TB                                                 
+LIWATFDN  1909H1910      19091909         T                                     
+LIGRSTH   1912 1912H     19121912         T                                     
+LIBCWD    1915 1915H     19151915         T                                     
+LIHOWWOOD 1917 1917H     19171917         T                                     
+LIPKST    1919H1920      19191919         T               1                     
+LTSTALBNA 1923 1923      TF                                                     
+BSNC519151112111210210000001 POO2F24    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 1928 1928          TB                                                 
+LIPKST    1931 1931H     19311931         T                                     
+LIHOWWOOD 1933 1933H     19331933         T                                     
+LIBCWD    1935H1936      19361936         T                                     
+LIGRSTH   1938H1939      19391939         T                                     
+LIWATFDN  1941 1941H     19411941         T               1                     
+LTWATFDJ  1944 194411    TF                                                     
+BSNC519211112111210210000001 POO2F25    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  2007 200711        TB                                                 
+LIWATFDN  2009H2010      20092009         T                                     
+LIGRSTH   2012 2012H     20122012         T                                     
+LIBCWD    2015 2015H     20152015         T                                     
+LIHOWWOOD 2017 2017H     20172017         T                                     
+LIPKST    2019H2020      20192019         T               1                     
+LTSTALBNA 2023 2023      TF                                                     
+BSNC519271112111210210000001 POO2F26    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 2028 2028          TB                                                 
+LIPKST    2031 2031H     20312031         T                                     
+LIHOWWOOD 2033 2033H     20332033         T                                     
+LIBCWD    2035H2036      20362036         T                                     
+LIGRSTH   2038H2039      20392039         T                                     
+LIWATFDN  2041 2041H     20412041         T               1                     
+LTWATFDJ  2044 204411    TF                                                     
+BSNC519331112111210210000001 POO2F27    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  2102 210211        TB                                                 
+LIWATFDN  2104H2105      21042104         T                                     
+LIGRSTH   2107 2107H     21072107         T                                     
+LIBCWD    2110 2110H     21102110         T                                     
+LIHOWWOOD 2112 2112H     21122112         T                                     
+LIPKST    2114H2115      21142114         T               1                     
+LTSTALBNA 2118 2118      TF                                                     
+BSNC519391112111210210000001 POO2F28    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 2123 2123          TB                                                 
+LIPKST    2126 2126H     21262126         T                                     
+LIHOWWOOD 2128 2128H     21282128         T                                     
+LIBCWD    2130H2131      21312131         T                                     
+LIGRSTH   2133H2134      21342134         T                                     
+LIWATFDN  2136 2136H     21362136         T               1                     
+LTWATFDJ  2139 213911    TF                                                     
+BSNC519451112111210210000001 POO2F29    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOWATFDJ  2204 220411        TB                                                 
+LIWATFDN  2206H2207      22062206         T                                     
+LIGRSTH   2209 2209H     22092209         T                                     
+LIBCWD    2212 2212H     22122212         T                                     
+LIHOWWOOD 2214 2214H     22142214         T                                     
+LIPKST    2216H2217      22162216         T               1                     
+LTSTALBNA 2220 2220      TF                                                     
+BSNC519511112111210210000001 POO2F30    122213000 EMU321 100      B            P
+BX         LMY                                                                  
+LOSTALBNA 2225 2225          TB                                                 
+LIPKST    2228 2228H     22282228         T                                     
+LIHOWWOOD 2230 2230H     22302230         T                                     
+LIBCWD    2232H2233      22332233         T                                     
+LIGRSTH   2235H2236      22362236         T                                     
+LIWATFDN  2238 2238H     22382238         T               1                     
+LTWATFDJ  2241 224111    TF                                                     
+ZZ
