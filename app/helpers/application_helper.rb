@@ -68,7 +68,7 @@ module ApplicationHelper
       "ES" => "Eurostar",
       "FC" => "First Capital Connect",
       "GC" => "Grand Central",
-      "GR" => "National Express East Coast",
+      "GR" => "East Coast",
       "GW" => "First Great Western",
       "GX" => "Gatwick Express",
       "HC" => "Heathrow Connect",
