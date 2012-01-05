@@ -10,8 +10,7 @@
   <%= yield(:script) %>
   <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
  </head>
- <body style="padding-top: 60px;">
-
+ <body>
   <div class="topbar" data-scrollspy="scrollspy">
    <div class="topbar-inner">
     <div class="container">
@@ -25,21 +24,13 @@
        </ul>
       </li>
      </ul>
-
-     <ul class="nav secondary-nav">
-      <li>
-       <form class="pull-left" action="<%= url_for :controller => 'location', :action => 'search' %>">
-        <input type="text" class="span3" name="text" id="text" placeholder="Show trains at..." value="<%= params[:location] %>" /> on <input type="text" class="span2" name="date" id="date" placeholder="on..." value="<%= Date.today.strftime('%Y-%m-%d') %>" />
-        <button class="btn" type="submit">Search</button>
-       </form>
-      </li>
-     </ul>
-
     </div>
    </div>
   </div>
 
-  <div class="container">
+  <%= yield(:jumbotron) %>
+
+  <div class="container" style="padding-top: 64px;">
 
    <div class="content">
     <% if flash[:warn] %>

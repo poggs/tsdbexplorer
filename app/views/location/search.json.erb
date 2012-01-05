@@ -1,1 +1,1 @@
-<%= raw @matches.collect { |m| { :id => m.tiploc_code, :label => tidy_text(m.tps_description), :value => m.tiploc_code } }.to_json %>
+<%= raw @matches.collect { |m| { :id => m.tiploc_code, :label => tidy_text(m.tps_description), :value => m.tps_description } }.to_json %>

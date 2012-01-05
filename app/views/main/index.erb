@@ -1,54 +1,34 @@
-<h1>Search</h1>
-
-<div class="row">
- <div class="span8">
-  <section id="search_by_location">
-   <h2>By location</h2>
-   <p>Just answer these three questions:</p>
+<%= content_for :jumbotron do %>
+<header class="jumbotron masthead" id="overview">
+ <div class="inner">
+  <div class="container">
+   <h1>Open Train Times</h1>
+   <p class="lead">
+    Real-time train information using Open Data.
+   </p>
+   <%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'location', :controller => 'location', :action => 'search', :min_length => 3 } %>
    <form action="<%= url_for :controller => 'location', :action => 'search' %>">
-    <fieldset>
-     <div class="clearfix">
-      <label for="location">Which station?</label>
-      <div class="input">
-       <input class="large" id="location" name="text" size="24" type="text">
-      </div>
-      <label for="date">What date and time?</label>
-      <div class="input">
-       <input class="small" id="date" name="date" size="11" type="text" value="<%= @time.strftime('%Y-%m-%d') %>">
-       <input class="mini" id="time" name="time" size="4" value="<%= @time.strftime('%H:%M') %>">
-      </div>
-      <div class="actions">
-        <button type="submit" class="btn primary">Search</button>
-      </div>
-     </fieldset>
-    </div>
+    <p class="example">
+     Show me trains at <input class="large" id="location" name="location" size="24" type="text">
+     <button type="submit" class="btn primary">Search</button>
+    </p>
    </form>
-  </section>
-
-<% if advanced_mode? %>
- <div class="span8">
-  <section id="technical_search">
-   <h2>By technical information</h2>
-   <p>Do you want to search for a train by ID or headcode?  Enter it here!</p>
-   <form action="<%= url_for :controller => 'schedule', :action => 'search' %>">
-    <fieldset>
-     <div class="clearfix">
-      <label for="schedule">What's the ID or UID?</label>
-      <div class="input">
-       <input class="small" id="schedule" name="schedule" size="6">
-      </div>
-      <label for="date">...and which date?</label>
-      <div class="input">
-       <input class="medium" id="date" name="date" size="11" value="<%= @time.strftime('%Y-%m-%d') %>" >
-      </div>
-      <div class="actions">
-        <button type="submit" class="btn primary">Search</button>
-      </div>
-     </div>
-    </fieldset>
-   </form>
-  </section>
+  </div>
  </div>
+</header>
 <% end %>
 
+<div class="row">
+ <div class="span-one-third">
+  <h1>What?</h1>
+  <p>We're using Open Data to bring you train information.  Right now, we have timetables, real-time running information and historical data.  We're working to bring you more.</p>
+ </div>
+ <div class="span-one-third">
+  <h1>Why?</h1>
+  <p>To help you make even better travel decisions!  We can't make your train always run on time, but we promise to be as clear and honest as is possible.</p>
+ </div>
+ <div class="span-one-third">
+  <h1>Who?</h1>
+  <p>This site is designed, built and maintained by <a href="http://blog.poggs.com/">Peter Hicks</a>.  The <a href="http://github.com/poggs/tsdbexplorer/">source code is available</a> on <a href="http://www.github.com/">GitHub</a> and you're free to use it for non-commercial purposes.</p>
+ </div>
 </div>

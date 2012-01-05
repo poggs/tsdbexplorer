@@ -54,6 +54,11 @@ class LocationController < ApplicationController
     @schedule = @schedule.only_passenger if session[:mode] != 'advanced'
 
 
+    # Optionally limit the search to trains travelling to a particular location
+
+    @schedule = @schedule.runs_to(params[:to]) if params[:to]
+
+
     # Prepare an empty array of schedules which have been activated
 
     @realtime = Array.new
@@ -92,7 +97,7 @@ class LocationController < ApplicationController
 
   def search
 
-    term = params[:term] || params[:text]
+    term = params[:term] || params[:location]
 
     redirect_to :controller => 'main', :action => 'index' and return if term.blank?
 
