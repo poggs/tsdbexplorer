@@ -24,4 +24,7 @@ A model object representing a station name, as defined by ATOC/RSP
 =end
 
 class StationName < ActiveRecord::Base
+
+  scope :find_related, lambda { |crs_code| select('station_names.tiploc_code, station_names.station_name').where(:crs_code => crs_code) }
+
 end

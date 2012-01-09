@@ -1,15 +1,20 @@
 <h1>Select a location</h1>
 
-<p>Your entered <strong><%= params[:location] %></strong>, but we couldn't find an exact match.</p>
+<p>Your searched for <strong><%= params[:term] %></strong>, but we couldn't find an exact match.</p>
 
 <% unless @matches.blank? %>
 
- <p>Did you mean one of these?</p>
+ <p>Maybe you meant one of these...</p>
 
  <ul>
   <% @matches.each do |m| %>
-  <% next unless !m.crs_code.blank? %>
-  <li><%= link_to "#{m.crs_code}: #{tidy_text(m.tps_description)}", :controller => 'location', :location => m.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %></li>
+  <li>
+  <% if m.is_a? Tiploc %>
+   <%= link_to "#{tidy_text(m.tps_description)} #{m.crs_code.blank? ? '(' + m.tiploc_code + ')' : '(' + m.crs_code + ')' }", :controller => 'location', :location => m.tiploc_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %>
+  <% else %>
+   <%= link_to "#{tidy_text(m.station_name)} (#{m.crs_code})", :controller => 'location', :location => m.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %>
+  <% end %>
+  </li>
   <% end %>
  </ul>
 

@@ -27,17 +27,39 @@ class LocationController < ApplicationController
 
     redirect_to :action => 'index', :year => Time.now.year, :month => Time.now.month, :day => Time.now.day, :time => Time.now.strftime('%H%M') and return if @datetime.nil?
 
+
+    # Work out which TIPLOCs we're interested in
+
     if params[:location].length == 3
-      @location = Tiploc.find_by_crs_code(params[:location].upcase)
+
+      # If a three-character location has been entered, try to find an exact
+      # match, and if not, redirect to the search page (unless we're in
+      # advanced mode)
+
+      tiplocs = StationName.find_related(params[:location].upcase)
+      redirect_to :action => 'search', :term => params[:location] and return if tiplocs.blank? && !advanced_mode?
+      @location = tiplocs.first.station_name
+
+    elsif advanced_mode?
+
+      # If we're in advanced mode, try to match on a TIPLOC if the CRS code
+      # match didn't work.  If the TIPLOC isn't found, redirect to the
+      # search page
+
+      tiplocs = Tiploc.where(:tiploc_code => params[:location].upcase)
+      redirect_to :action => 'search', :term => params[:location] and return if tiplocs.blank?
+      @location = tiplocs.first.tps_description
+
     else
-      @location = Tiploc.find_by_tiploc_code(params[:location].upcase)
+
+      # If we haven't found a match, redirect to the search page
+
+      redirect_to :action => 'search', :term => params[:location] and return
+
     end
 
-    @related_locations = @location.find_related.collect { |x| x.tiploc_code } unless @location.nil?
 
-    if @location.nil?
-      render 'common/error', :status => :not_found, :locals => { :message => "We can't find the location '#{params[:location] || params[:location_text]}'" } and return
-    end
+    # Work out the start and end of the time range we're interested in
 
     early_range = 30.minutes
     late_range = 1.hour
@@ -46,7 +68,10 @@ class LocationController < ApplicationController
     @range[:from] = @datetime - early_range
     @range[:to] = @datetime + late_range
 
-    @schedule = Location.where(:tiploc_code => @related_locations)
+
+    # Limit our search only to relevant TIPLOCs
+
+    @schedule = Location.where([ 'locations.tiploc_code IN (?)', tiplocs.collect(&:tiploc_code) ])
 
 
     # Only show passenger services if we are not in advanced mode
@@ -97,24 +122,31 @@ class LocationController < ApplicationController
 
   def search
 
-    term = params[:term] || params[:location]
+    term = params[:term]
 
-    redirect_to :controller => 'main', :action => 'index' and return if term.blank?
+    # Redirect to the main page if we're called without any search parameters
 
-    matches = Array.new
+    if term.nil?
+      render :json => Array.new and return if request.format.json?
+      redirect_to :root and return if request.format.html?
+    end
 
-    unless term.nil?
+    term.upcase!
 
-      if term.length == 3
-        conditions = [ 'crs_code = ?', term.upcase ]
-      else
-        conditions = [ 'tiploc_code LIKE ? OR description LIKE ? OR tps_description LIKE ?', '%' + term.upcase + '%', '%' + term.upcase + '%', '%' + term.upcase + '%' ]
-      end
+    # If we've not been called as JSON, and there an exact match on the CRS code, redirect to the location page
 
-      @matches = Tiploc.find(:all, :conditions => conditions, :limit => 25)
+    crs_match = StationName.where([ 'crs_code = ? AND cate_type != 9', term ])
+    redirect_to :action => 'index', :location => crs_match.first.crs_code and return if crs_match.length == 1 && request.format.html?
 
-      redirect_to :action => 'index', :location => @matches.first.tiploc_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] if @matches.length == 1 && request.format != "json"
 
+    # Check for a match on station name
+
+    @matches = StationName.where([ 'station_name LIKE ? AND cate_type != 9', '%' + term + '%' ])
+    redirect_to :action => 'index', :location => @matches.first.crs_code and return if @matches.length == 1 && request.format.html?
+
+    respond_to do |format|
+      format.json { render :format => :json }
+      format.html
     end
 
   end

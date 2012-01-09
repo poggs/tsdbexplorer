@@ -20,5 +20,13 @@
 require 'spec_helper'
 
 describe StationName do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  it "should return a list of related TIPLOCs, given a CRS code" do
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    related = StationName.find_related('WFJ').collect { |s| s.tiploc_code }
+    related.should have_exactly(2).items
+    related.should include('WATFDJ')
+    related.should include('WATFJDC')
+  end
+
 end
