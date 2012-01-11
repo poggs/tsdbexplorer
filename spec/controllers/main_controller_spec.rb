@@ -65,4 +65,14 @@ describe MainController do
     response.body.should_not =~ /Schedules are available for dates up to/
   end
 
+  it "should show a date selector on the main page" do
+    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    result.status.should eql(:ok)
+    get :index
+    response.code.should eql("200")
+    response.body.should =~ /Today/
+  end
+
+  it "should show a time selector on the main page"
+
 end

@@ -10,6 +10,13 @@
    <form action="<%= url_for :controller => 'location', :action => 'search' %>">
     <p class="example">
      Show me trains at <input class="large" id="term" name="term" size="24" type="text">
+     <select name="date" class="span5">
+      <% @dates.each do |d| %>
+       <option value="<%= d[:yyyymmdd] %>"><%= d[:human] %></option>
+      <% end %>
+     </select>
+     at
+     <input class="small" id="time" name="time" size="4" type="text" />
      <button type="submit" class="btn primary">Search</button>
     </p>
    </form>
