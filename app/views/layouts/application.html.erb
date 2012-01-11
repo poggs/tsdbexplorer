@@ -7,6 +7,7 @@
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tag %>
   <%= yield(:script) %>
+  <%= render :partial => 'common/analytics' rescue nil %>
   <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
  </head>
  <body>
