@@ -1,0 +1,6 @@
+/*
+ *  UI-specific overrides for Bootstrap and other things which we might want
+ *  to change without affecting the original source
+ */
+
+footer p { margin-bottom: 1px; }
