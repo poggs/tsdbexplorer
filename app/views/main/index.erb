@@ -16,7 +16,7 @@
       <% end %>
      </select>
      at
-     <input class="small" id="time" name="time" size="4" type="text" />
+     <input class="small" id="time" name="time" size="4" type="text" value="<%= @time.to_s(:hhmm_colon) %>" />
      <button type="submit" class="btn primary">Search</button>
     </p>
    </form>
