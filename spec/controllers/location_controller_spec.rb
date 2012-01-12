@@ -165,6 +165,25 @@ describe LocationController do
     JSON.parse(response.body).should eql(Array.new)
   end
 
+  it "should, in normal mode, report if no matches for a search string were found" do
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    get :search, :term => 'FOOBARBAZ'
+    response.body.should =~ /We couldn't find any location that matched/
+    response.body.should =~ /FOOBARBAZ/
+  end
+
+  it "should, in normal mode, report if more than one match was found for a search string" do
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    get :search, :term => 'WATF'
+    response.body.should =~ /We couldn't find an exact match for/
+    response.body.should =~ /WATF/
+    response.body.should =~ /Watford High Street/
+    response.body.should =~ /Watford Junction/
+    response.body.should =~ /Watford North/
+  end
+
   it "should, in normal mode, match CRS codes from the MSNF" do
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')

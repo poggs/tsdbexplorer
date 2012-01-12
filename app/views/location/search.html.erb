@@ -1,10 +1,12 @@
 <h1>Select a location</h1>
 
-<p>Your searched for <strong><%= params[:term] %></strong>, but we couldn't find an exact match.</p>
+<% if @matches.blank? %>
 
-<% unless @matches.blank? %>
+ <p>We couldn't find any location that matched <strong><%= params[:term] %></strong>.</p>
 
- <p>Maybe you meant one of these...</p>
+<% else @matches.blank? %>
+
+ <p>We couldn't find an exact match for <strong><%= params[:term] %></strong> - did you mean one of these?</p>
 
  <ul>
   <% @matches.each do |m| %>
