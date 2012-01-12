@@ -135,13 +135,15 @@ class LocationController < ApplicationController
 
     # If we've not been called as JSON, and there an exact match on the CRS code, redirect to the location page
 
-    crs_match = StationName.where([ 'crs_code = ? AND cate_type != 9', term ])
-    redirect_to :action => 'index', :location => crs_match.first.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if crs_match.length == 1 && request.format.html?
+    @root_matches = StationName.where('cate_type != 9')
+
+    @matches = @root_matches.where([ 'crs_code = ?', term ])
+    redirect_to :action => 'index', :location => @matches.first.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
 
 
     # Check for a match on station name
 
-    @matches = StationName.where([ 'station_name LIKE ? AND cate_type != 9', '%' + term + '%' ])
+    @matches = @root_matches.where([ 'crs_code = ? OR station_name LIKE ?', term, '%' + term + '%' ])
     redirect_to :action => 'index', :location => @matches.first.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
 
     respond_to do |format|

@@ -162,8 +162,21 @@ describe LocationController do
 
   it "should return an empty JSON array when no search string is passed and the format is JSON" do
     get 'search.json'
-    JSON.parse(response.body).should eql(Array.new)
+    matches = JSON.parse(response.body)
+    matches.should eql(Array.new)
   end
+
+  it "should return a JSON array containing the exact match CRS code when passed a CRS code and the format is JSON" do
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    get 'search', :format => :json, :term => 'WFJ'
+    matches = JSON.parse(response.body)
+    matches.length.should eql(1)
+    matches[0]['id'].should eql('WFJ')
+    matches[0]['label'].should eql('Watford Junction')
+    matches[0]['value'].should eql('Watford Junction')
+  end
+
 
   it "should, in normal mode, report if no matches for a search string were found" do
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
@@ -205,13 +218,13 @@ describe LocationController do
     response.body.should_not =~ /Watford Junction/
   end
 
-#  it "should match CRS codes from the MSNF in advanced mode" do
-#    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-#    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-#    session[:mode] = 'advanced'
-#    get :search, :term => 'WFJ'
-#    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
-#  end
+  it "should match CRS codes from the MSNF in advanced mode" do
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    session[:mode] = 'advanced'
+    get :search, :term => 'WFJ'
+    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
+  end
 
 #  it "should match CRS codes from the CIF file in advanced mode" do
 #    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/empty.msn')
@@ -235,12 +248,6 @@ describe LocationController do
 #    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'ACC'
 #  end
 
-#  it "should match on both an exact CRS code and a matched name from CIF if the format is JSON" do
-#    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
-#    get 'search.json', :term => 'ACC'
-#    response.body.should =~ /Acton Central/
-#    response.body.should =~ /Accrington/
-#  end
 
 #  it "should return an exact match for a CRS code from the MSNF even if a location with a longer matched name exists" do
 #    pending
