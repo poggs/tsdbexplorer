@@ -34,6 +34,8 @@ class ScheduleController < ApplicationController
 
     redirect_to :root and return if params[:by].nil? || params[:term].blank?
 
+    params[:term].upcase!
+
     @schedule = BasicSchedule
 
     @schedule = @schedule.runs_on(params[:date]) if params[:year] && params[:month] && params[:day]

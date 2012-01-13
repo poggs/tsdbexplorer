@@ -166,9 +166,21 @@ describe ScheduleController do
     response.should redirect_to :action => 'schedule_by_uid', :uid => 'C43391'
   end
 
+  it "should allow searching for a schedule by train ID in lower-case" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :search, :by => 'train_id', :term => '2n53'
+    response.should redirect_to :action => 'schedule_by_uid', :uid => 'C43391'
+  end
+
   it "should allow searching for a schedule by train ID and date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :search, :by => 'train_id', :term => '2N53', :date => '2011-05-15'
+    response.should redirect_to :action => 'schedule_by_uid_and_run_date', :uid => 'C43391', :year => '2011', :month => '05', :day => '15'
+  end
+
+  it "should allow searching for a schedule by train ID in lower case and date" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :search, :by => 'train_id', :term => '2n53', :date => '2011-05-15'
     response.should redirect_to :action => 'schedule_by_uid_and_run_date', :uid => 'C43391', :year => '2011', :month => '05', :day => '15'
   end
 
@@ -208,9 +220,21 @@ describe ScheduleController do
     response.should redirect_to :action => 'schedule_by_uid', :uid => 'C43391'
   end
 
+  it "should allow searching for a schedule by UID in lower-case" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :search, :by => 'schedule_uid', :term => 'c43391'
+    response.should redirect_to :action => 'schedule_by_uid', :uid => 'C43391'
+  end
+
   it "should allow searching for a schedule by UID and date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :search, :by => 'schedule_uid', :term => 'C43391', :date => '2011-05-15'
+    response.should redirect_to :action => 'schedule_by_uid_and_run_date', :uid => 'C43391', :year => '2011', :month => '05', :day => '15'
+  end
+
+  it "should allow searching for a schedule by UID in lower-case and date" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :search, :by => 'schedule_uid', :term => 'c43391', :date => '2011-05-15'
     response.should redirect_to :action => 'schedule_by_uid_and_run_date', :uid => 'C43391', :year => '2011', :month => '05', :day => '15'
   end
 
