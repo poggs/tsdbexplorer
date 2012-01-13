@@ -93,6 +93,10 @@ class ApplicationController < ActionController::Base
 
   def convert_url_parameters
 
+    # If the date is blank, ignore it
+
+    params[:date] = nil if params[:date].blank?
+
 
     # Convert the date parameter in to year, month and day parameters, falling back to today
 

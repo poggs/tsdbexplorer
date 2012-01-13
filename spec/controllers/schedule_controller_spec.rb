@@ -146,6 +146,13 @@ describe ScheduleController do
     response.body.should =~ /9Z99/
   end
 
+  it "should display an error if the train ID requested does not exist and the date is blank" do
+    get :search, :by => 'train_id', :term => '9Z99', :date => ''
+    response.code.should eql('404')
+    response.body.should =~ /We couldn't find any trains/
+    response.body.should =~ /9Z99/
+  end
+
   it "should display an error if the train ID requested does not exist" do
     get :search, :by => 'train_id', :term => '9Z99'
     response.code.should eql('404')
