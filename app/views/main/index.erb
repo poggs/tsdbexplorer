@@ -19,6 +19,7 @@
      <input class="small" id="time" name="time" size="4" type="text" value="<%= @time.to_s(:hhmm_colon) %>" />
      <button type="submit" class="btn primary">Search</button>
     </p>
+    <p>...or try the <%= link_to 'advanced search', :action => 'advanced_search' %> if you're looking for even more detail about trains</p>
    </form>
   </div>
  </div>

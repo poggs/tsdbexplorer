@@ -1,21 +1,43 @@
-<h1>Select a schedule</h1>
+<div class="page-header">
+ <h1>Select a schedule</h1>
+</div>
 
-<% if @schedule.count == 0 %>
+<div class="row">
+ <div class="span16">
+  <p>We found more than one schedule that matched <strong><%= params[:term] %></strong> - please select one of the following:</p>
+ </div>
+</div>
 
- <p>We couldn't find any schedule that matched <strong><%= params[:schedule] %></strong>.  You can search for a schedule by UID (e.g. A12345) or by train identity (e.g. 2A01).</p>
-
-<% else %>
- <p>We found more than one schedule that matched - did you mean one of these?</p>
-
- <ul>
-  <% @schedule.sort { |a,b| a.atoc_code <=> b.atoc_code }.each do |s| %>
-   <% if params[:date].nil? %>
-    <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %></li>
-   <% else %>
-    <li><%= link_to "#{s.train_identity}: #{s.origin.public_departure} #{tidy_text(decode_tiploc(s.origin))} to #{tidy_text(decode_tiploc(s.terminate))} (#{s.atoc_code})", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %></li>
-   <% end %>
-  <% end %>
- </ul>
-
-<% end %>
-
+<div class="row">
+ <div class="span16">
+  <table class="condensed-table">
+   <thead>
+    <tr>
+     <th>ID / UID</th>
+     <th>Time</th>
+     <th>Origin</th>
+     <th>Destination</th>
+     <th>Time</th>
+     <th>Operator</th>
+    </tr>
+   </thead>
+   <tbody>
+    <% @schedule.sort { |a,b| a.atoc_code <=> b.atoc_code }.each do |s| %>
+     <tr>
+      <td>
+       <% if params[:date].nil? %>
+       <%= link_to s.train_identity + ' / ' + s.train_uid, :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %>
+       <% else %>
+        <%= link_to s.train_identity + ' / ' + s.train_uid, :action => 'schedule_by_uid', :uid => s.train_uid %>
+       <% end %>
+      <td><%= s.origin.public_departure %></td>
+      <td><%= tidy_text(decode_tiploc(s.origin)) %></td>
+      <td><%= tidy_text(decode_tiploc(s.terminate)) %></td>
+      <td><%= s.terminate.public_arrival %></td>
+      <td><%= decode_toc(s.atoc_code) %></td>
+     </tr>
+    <% end %>
+   </tbody>
+  </table>
+ </div>
+</div>

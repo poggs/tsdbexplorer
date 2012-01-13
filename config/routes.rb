@@ -21,6 +21,8 @@ Tsdbexplorer::Application.routes.draw do
 
   root :to => "main#index"
 
+  match '/search/advanced', :controller => 'main', :action => 'advanced_search'
+
   match '/location/search', :controller => 'location', :action => 'search'
   match '/location/:location/:year/:month/:day/:time', :controller => 'location', :action => 'index'
   match '/location/:location/:year/:month/:day', :controller => 'location', :action => 'index'

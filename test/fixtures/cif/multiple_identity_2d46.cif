@@ -1,0 +1,247 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIALBNYPK16513200PALBANY PARK               88462   0AYPALBANY PARK             
+TIASHCHRC00470000XASHCHURCH FOR TEWKESBURY  68071   0ASCASHCHURCH               
+TIASLCKTN00623300UASLOCKTON                 44517   0ALKASLOCKTON               
+TIAYLSBRY00149200PAYLESBURY                 70353   0AYSAYLESBURY               
+TIBARK10300749207WBARKING SIGNAL 1103       51531   0                           
+TIBARK10400749208JBARKING SIGNAL 1104       51531   0                           
+TIBARKADV00749210EBARKING ADVENZA FREIGHT   51513   0                           
+TIBARKG1P32749201CBARKING NO 1 PLATFORM     51531   0                           
+TIBARKG2100749212GBARKING SIGNAL BK 21      00000   0                           
+TIBARKG7P32749211FBARKING NO7 PLATFORM      51531   0                           
+TIBARKGLT48051400NBARKING L.T.              51532   0ZBKBARKING UND             
+TIBARKING00749200BBARKING                   51531   0BKGBARKING                 
+TIBARKNGJ00749209KBARKING STATION JUNCTION  51530   0                           
+TIBARKUPJ00749202DBARKING UPNEY JUNCTION    51529   0                           
+TIBENFLET00743900RBENFLEET                  51014   0BEFBENFLEET                
+TIBEXLEY 00509300FBEXLEY                    88463   0BXYBEXLEY                  
+TIBLUANCR04514801HBLUE ANCHOR (KENT)        88412   0                           
+TIBRBY   00143700UBRONDESBURY               72415   0BSYBRONDESBURY             
+TIBROXBNJ32681213FBROXBOURNE JN             51720   0                           
+TIBROXBRN00681200VBROXBOURNE                51722   0BXBBROXBOURNE              
+TIBTHNLGR16696100RBETHNAL GREEN             52739   0BETBETHNAL GREEN           
+TIBUSHYDC56139501TBUSHEY DC                 72001   0                           
+TIBYSTJN 10694111HBURY STREET JN            51948   0XSG                        
+TICHADHDD00744700XCHAFFORD HUNDRED          51313   0CFHCHAFFORD HUNDRED        
+TICHESHNT00681400JCHESHUNT                  51815   0CHNCHESHUNT                
+TICHLKWEL00746900PCHALKWELL                 51011   0CHWCHALKWELL               
+TICHRX   00514300ELONDON CHARING CROSS      88401   0CHXCHARING X LONDON        
+TICMDNJN 08136701JCAMDEN JN                 72315   0                           
+TICMDNSTH08144005UCAMDEN SOUTH JN           72316   0                           
+TICRFD   00510000HCRAYFORD                  88464   0CRYCRAYFORD                
+TICRFDSPB40510063FCRAYFORD SPUR B           88436   0                           
+TICRISTSJ32749112BCHRISTIAN STREET JN.      52707   0                           
+TICRPNDPK16144200DCARPENDERS PARK           72004   0CPKCARPENDERS PARK         
+TIDARTFD 00510100MDARTFORD                  88466   0DFDDARTFORD                
+TIDARTFDJ32510160HDARTFORD JN               88438   0XRT                        
+TIDUBLINH32048500KDUBLIN HEUSTON            00000   0DHT                        
+TIDWBY   00832600TDEWSBURY                  18438   0DEWDEWSBURY                
+TIEDIDBRY01294900XEAST DIDSBURY             32524   0EDYEAST DIDSBURY           
+TIEDMNGRN00694100DEDMONTON GREEN            51949   0EDREDMONTON GREEN          
+TIEJSTNGB01518766HEASTERN JN (SITTINGBOURNE)89139   0                           
+TIETILBRY01747100FEAST TILBURY              51130   0ETLEAST TILBURY            
+TIEUST10200144443FEUSTON SIG WM102          72405   0                           
+TIEUST10400144442EEUSTON SIG WM104          72407   0                           
+TIEUST28400144439WEUSTON SIG WM284          72409   0                           
+TIEUST28600144430VEUSTON SIG WM286          72397   0                           
+TIEUST30800144419CEUSTON SIG WM308          72396   0                           
+TIEUST31000144418BEUSTON SIG WM310          72395   0                           
+TIEUST47300144412YEUSTON SIG WM473          72394   0                           
+TIEUST48800144410QEUSTON SIG WM488          72393   0                           
+TIEUST50100144409VEUSTON SIG WM501          72392   0                           
+TIEUST51000144407TEUSTON SIG WM510          72391   0                           
+TIEUST51200144404REUSTON SIG WM512          72390   0                           
+TIEUSTBAL00144457MEUSTON BALLAST            72411   0                           
+TIEUSTBOR56144401XEUSTON BACKING OUT ROADS  72404   0                           
+TIEUSTDCN56144402PEUSTON DOWN CARR SHED NECK72403   0                           
+TIEUSTNHS48144406ZEUSTON H.S.               72408   0                           
+TIEUSTON 00144400NLONDON EUSTON             724102893EUSLONDON EUSTON           
+TIEUSTRES56144463LEUSTON R.E.S.             72402   0XEN                        
+TIEUSTUCS56144405YEUSTON UP CARRIAGE SHED   72406   0XEU                        
+TIFENCHRS32749000XLONDON FENCHURCH STREET   52711   0FSTLONDON FENCHH ST        
+TIGASFCTJ36749111AGAS FACTORY JN            52703   0                           
+TIGNHT   00513800VGREENHITHE FOR BLUEWATER  88699   0GNHGREENHITHE              
+TIGNRSBRY00558800JGUNNERSBURY               87138   0GUNGUNNERSBURY             
+TIGRAYS  00744300RGRAYS                     51311   0GRYGRAYS                   
+TIGRVSEND00517200TGRAVESEND                 88721   0GRVGRAVESEND CTRL          
+TIHAKNYNM00686700NHACKNEY DOWNS             52736   0HACHACKNEY DOWNS           
+TIHARLSDN00152100YHARLESDEN                 72033   0HDNHARLESDEN               
+TIHEDSTNL32143400GHEADSTONE LANE            72006   0HDLHEADSTONE LANE          
+TIHERTFDE32681800GHERTFORD EAST             51702   0HFEHERTFORD EAST           
+TIHROWDC 28139701HHARROW & WEALDSTONE D.C.  72017   0                           
+TIHTCHEND08139800LHATCH END                 72005   0HTEHATCH END               
+TIHTHRGRN08510700ZHITHER GREEN              88451   0HGRHITHER GREEN            
+TIKENSLG 16144700FKENSAL GREEN              72272   0KNLKENSAL GREEN            
+TIKLBRNHR48141500TKILBURN HIGH ROAD         72313   0KBNKILBURN HIGH RD         
+TIKMSLY  00520500TKEMSLEY                   89109   0KMLKEMSLEY                 
+TIKTON   00139900QKENTON                    72008   0KNTKENTON                  
+TILEEE   00511000XLEE                       88453   0LEELEE                     
+TILEWISHM00505100NLEWISHAM                  88415   0LEWLEWISHAM                
+TILHONSEA10744600JLEIGH-ON-SEA              51013   0LESLEIGH ON SEA            
+TILIMHSE 00749100ZLIMEHOUSE                 52705   0LHSLIMEHOUSE               
+TILIVST  00696500XLONDON LIVERPOOL STREET   527412904LSTLONDON LIVRPL ST        
+TILNDNBDE40514803JLONDON BRIDGE             87601   0                           
+TIMOTNGHM00511800WMOTTINGHAM                88457   0MTGMOTTINGHAM              
+TIMTRPLTJ32514267BMETROPOLITAN JN           88400   0XMK                        
+TINKENTEJ49515064YNORTH KENT EAST JN        88409   0XKE                        
+TINRTHFLT00512000UNORTHFLEET                88709   0NFLNORTHFLEET              
+TINWCROSS02515000ZNEW CROSS                 88410   0NWXNEW CROSS               
+TINWCRTHJ56515001TTANNERS HILL JUNCTION (NX)88429   0                           
+TINWELTHM02511900NNEW ELTHAM                88459   0NEHNEW ELTHAM              
+TINWEMBLY01142200MNORTH WEMBLEY             72010   0NWBNORTH WEMBLEY           
+TIOCKENDN00745100XOCKENDON                  51309   0OCKOCKENDON                
+TIPITSEA 00745200ZPITSEA                    51016   0PSEPITSEA                  
+TIPITSEAD32745202UPITSEA DOWN SIDING        51015   0                           
+TIPITSEAU00745201TPITSEA UP SIDING          51017   0                           
+TIPKBGJN 10505962EPARKS BRIDGE JN           88447   0XPY                        
+TIPLOCKTN00867000MPLOCKTON                  01073   0PLKPLOCKTON                
+TIQPRK   01141900RQUEEN'S PARK (LONDON)     72311   0QPWQUEENS PK LONDON        
+TIQPRKJ  00141902ZQUEEN'S PARK JUNCTION     72309   0                           
+TIQUENBRO00517600RQUEENBOROUGH              89124   0QBRQUEENBOROUGH            
+TIRPLLASW00743811QBARKING FREIGHT DEPOT     51518   0                           
+TIRPLLEP200743717RRIPPLE LANE YD BARKING EP251515   0                           
+TIRYEHOUS00682000ZRYE HOUSE                 51717   0RYHRYE HOUSE               
+TISBURY  00694700KSOUTHBURY                 51944   0SBUSOUTHBURY               
+TISEVNSIS08693100ZSEVEN SISTERS             51955   0SVSSEVEN SISTERS           
+TISHMPSTD01145100FSOUTH HAMPSTEAD           72314   0SOHSOUTH HAMPSTEAD         
+TISHRNSOS48518400XSHEERNESS-ON-SEA          89137   0SSSSHEERNESS ON SEA        
+TISHRWBY 00438700PSHREWSBURY                642242965SHRSHREWSBURY              
+TISIDC53800512502CSIDCUP SIGNAL NK1538      00000   0                           
+TISIDCUP 00512500ASIDCUP                    88461   0SIDSIDCUP                  
+TISIDCUPS00512501BSIDCUP SIDING             88460   0                           
+TISKENTON01145300PSOUTH KENTON              72009   0SOKSOUTH KENTON            
+TISLEHOPE00745800DSTANFORD-LE-HOPE          51023   0SFOSTANFORD LE HOPE        
+TISLSBRY 00566300ESALISBURY                 86122   0SALSALISBURY               
+TISMARGRT00682100BST MARGARETS (HERTS)      51711   0SMTST MARGARETS HTS        
+TISPAROAD04514807NSPA ROAD JN               88408   0XSU                        
+TISPHEADJ32512025JSPRINGHEAD JUNCTION (CTRL)88711   0                           
+TISTALNAP56154804CNAPSBURY                  63205   0                           
+TISTCR   02524800RSTONE CROSSING            88697   0SCGSTONE CROSSING          
+TISTHCENT04745600QSOUTHEND CENTRAL          51007   0SOCSOUTHEND CENTRAL        
+TISTNBGPK16145400TSTONEBRIDGE PARK          72031   0SBPSTONEBRIDGE PARK        
+TISTNGBRN00518700GSITTINGBOURNE             89144   0SITSITTINGBOURNE           
+TISTOCTON00797500LSTOCKTON                  15223   0STKSTOCKTON                
+TISWALE  00524900VSWALE                     89111   0SWLSWALE                   
+TISWNSCMB00515600DSWANSCOMBE                88705   0SWMSWANSCOMBE              
+TITHBLDSG32694900TTHEOBALDS GROVE           51940   0TEOTHEOBALDS GROVE         
+TITHMSHVJ32745920XTHAMES HAVEN JN           51121   0                           
+TITISBURY00579800PTISBURY                   82335   0TISTISBURY                 
+TITLBYTWN08746200DTILBURY TOWN              51203   0TILTILBURY TOWN            
+TITURKYST16695200PTURKEY STREET             51942   0TURTURKEY STREET           
+TIUPMNSTR00746400NUPMINSTER                 51351   0UPMUPMINSTER               
+TIWARE   00682400QWARE                      51707   0WARWARE HERTS              
+TIWATFDHS48145500CWATFORD HIGH STREET       72002   0WFHWATFORD HIGH ST         
+TIWATFJDC56140207FWATFORD JUNCTION DC       72000   0                           
+TIWCLIFF 00747600HWESTCLIFF                 51009   0WCFWESTCLIFF               
+TIWDNSBRY00466000VWEDNESBURY                00000   0                           
+TIWHAMHL 25747405CWEST HAM HIGH LEVEL       52702   0XHH                        
+TIWLOE   04515800NLONDON WATERLOO (EAST)    88402   0WAELONDON WATRLOO E        
+TIWLSDNJL48145800RWILLESDEN JN LOW LEVEL    72277   0WJL                        
+TIWMBYDC 24142309DWEMBLEY CENTRAL DC        72020   0                           
+TIWRYSBRY00567300LWRAYSBURY                 87108   0WRYWRAYSBURY               
+TIWTHRCKJ33744314BWEST THURROCK JN          51321   0                           
+BSNL049141105221112040000001 POO2D46    121912000 EMU315 075D     S            P
+BX         LEY                                                                  
+LOLIVST   1422 14223  S      TB                                                 
+LIBTHNLGR           1425 00000000   S  S                                        
+LIHAKNYNM 1428H1429      142914294        T                                     
+LISEVNSIS 1433H1434      143414342        T                                     
+LIEDMNGRN 1438 1438H     14381438         T                                     
+LIBYSTJN            1440 00000000                                               
+LISBURY   1441H1442      14421442         T                                     
+LITURKYST 1444H1445      14451445         T                                     
+LITHBLDSG 1447 1447H     14471447         T             2                       
+CRCHESHNT OO2D46    121920000 EMU315 075D     S                                 
+LICHESHNT 1452 1452H     145214522        T                                     
+LIBROXBRN 1456H1457      145714573        T                                     
+LIBROXBNJ           1459 00000000                                               
+LIRYEHOUS 1500 1500H     15001500         T                                     
+LISMARGRT 1503 1503H     15031503         T                                     
+LIWARE    1507 1507H     15071507         T           2                         
+LTHERTFDE 1514 15142     TF                                                     
+BSNL105001105221112040000001 POO2D46    124936004 EMU357 100D     S            P
+BX         CCY                                                                  
+LOFENCHRS 1850 18503  FL     TB                                                 
+LICRISTSJ           1852 00000000                                               
+LILIMHSE  1854 1854H     18541854         T                                     
+LIGASFCTJ           1856H00000000                                               
+LIWHAMHL  1859 1859H     18591859         T                                     
+LIBARKING 1904 1904H     190419044        T                                     
+LIUPMNSTR 1912 1912H     191219122        T                                     
+LIOCKENDN 1917H1918      191819181        T                                     
+LICHADHDD 1921 1921H     19211921         T                                     
+LIWTHRCKJ           1923H00000000                                               
+LIGRAYS   1925 1925H     192519252        T                                     
+LITLBYTWN 1928 1928H     19281928         T                                     
+LIETILBRY 1933H1934      19341934         T                                     
+LITHMSHVJ           1936 00000000                                               
+LISLEHOPE 1937 1937H     19371937         T               1                     
+LIPITSEA  1944H1945H     194519453        T                                     
+LIBENFLET 1948H1949      19491949         T                                     
+LILHONSEA 1953 1953H     19531953         T                                     
+LICHLKWEL 1955H1956      19561956         T                                     
+LIWCLIFF  1958 1958H     19581958         T               1                     
+LTSTHCENT 2002 20044     TF                                                     
+BSNL941441105221112040000001 POO2D46    122216000 EMU313 075D     S            P
+BX         LOY                                                                  
+LOEUSTON  2247 22479  C      TB                                                 
+LICMDNSTH           2250 00000000                                               
+LICMDNJN            2250H00000000   DC                                          
+LISHMPSTD 2252H2253      22532253         T                                     
+LIKLBRNHR 2254 2254H     22542254         T                                     
+LIQPRK    2256 2256H     22562256         T                                     
+LIQPRKJ             2257 00000000                                               
+LIKENSLG  2258 2258H     22582258         T                                     
+LIWLSDNJL 2300H2301      230123013        T                                     
+LIHARLSDN 2302H2303      23032303         T                                     
+LISTNBGPK 2305 2305H     23052305         T                                     
+LIWMBYDC  2307H2308      23082308         T                                     
+LINWEMBLY 2309H2310      23102310         T                                     
+LISKENTON 2311H2312      23122312         T                                     
+LIKTON    2313H2314      23142314         T                                     
+LIHROWDC  2316 2316H     23162316         T                                     
+LIHEDSTNL 2319 2319H     23192319         T                                     
+LIHTCHEND 2321 2321H     23212321         T                                     
+LICRPNDPK 2324 2324H     23242324         T                                     
+LIBUSHYDC 2327 2327H     23272327         T                                     
+LIWATFDHS 2329H2330      23302330         T           1                         
+LTWATFJDC 2334 23342     TF                                                     
+BSNW019491105221112040000001 POO2D46    124607006 EMU    090      S            P
+BX         SEY                                                                  
+LOSHRNSOS 1542 15421         TB                                                 
+LIQUENBRO 1546 1546H     15461546         T                                     
+LISWALE   1550 1550H     15501550         T                                     
+LIKMSLY   1553H1554      15541554         T                                     
+LIEJSTNGB           1556H00000000                                               
+LTSTNGBRN 1559 15593     TF                                                     
+BSNW019521105221112040000001 POO2D46    124657005 EMU    090D     S            P
+BX         SEY                                                                  
+LOGRVSEND 1502 1502UPL       TB                                                 
+LISPHEADJ           1504H00000000                                               
+LINRTHFLT 1505H1506      15061506         T                                     
+LISWNSCMB 1507H1508      15081508         T                                     
+LIGNHT    1510H1511      15111511         T                                     
+LISTCR    1512H1513      15131513         T                                     
+LIDARTFD  1516H1518      151715182  UML   T                                     
+LIDARTFDJ           1519H00000000                                               
+LICRFDSPB           1521 00000000                                               
+LICRFD    1522 1522H     15221522         T                                     
+LIBEXLEY  1525 1525H     15251525         T                                     
+LIALBNYPK 1527H1528      15281528         T                                     
+LISIDCUP  1530 1531      15301531         T                                     
+LINWELTHM 1533H1534      15341534         T                                     
+LIMOTNGHM 1536 1536H     15361536         T                                     
+LILEEE    1539 1539H     15391539         T                                     
+LIHTHRGRN 1541H1542H     15421542   SL    T                                     
+LIPKBGJN            1544H00000000      SL                                       
+LILEWISHM 1546H1548      154715481  RVL   T                                     
+LINWCRTHJ           1550 00000000   FL                                          
+LINWCROSS           1551 00000000   6                                           
+LINKENTEJ           1551H00000000                                               
+LIBLUANCR           1552H00000000                                               
+LISPAROAD           1553 00000000                                               
+LILNDNBDE 1555H1556H     155615566        T                                     
+LIMTRPLTJ           1558 00000000   FL                                          
+LIWLOE    1600 1601      16001601D        T                                     
+LTCHRX    1604 16045     TF                                                     
+ZZ

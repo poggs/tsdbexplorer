@@ -19,42 +19,73 @@
 
 class ScheduleController < ApplicationController
 
-  # Display a single schedule
+  # A dummy action to catch a request for the URL with no parameters
 
   def index
 
-    @schedule = nil
-    @schedule = BasicSchedule.find_by_uuid(params[:uuid]) if params[:uuid]
-
-    @as_run = DailySchedule.find_all_by_train_uid(@schedule.train_uid)
+    redirect_to root_url
 
   end
 
 
-  # Search for a schedule by UID or train ID
+  # Search for a schedule
 
   def search
 
+    redirect_to :root and return if params[:by].nil? || params[:term].blank?
+
     @schedule = BasicSchedule
 
-    # Optionally limit to a date
+    @schedule = @schedule.runs_on(params[:date]) if params[:year] && params[:month] && params[:day]
 
-    unless params[:date].nil?
-      @schedule = @schedule.runs_on(params[:date])
+    if params[:by] == "train_id"
+
+      @schedule = @schedule.where(:train_identity => params[:term])
+
+      if @schedule.count == 0
+
+        msg = "We couldn't find any trains with the train identity #{params[:term]}"
+        msg = msg + " running on #{Date.parse(params[:date]).to_s}" if params[:date] 
+
+        render 'common/error', :status => :not_found, :locals => { :message => msg }
+
+      elsif @schedule.count == 1
+
+        if params[:year] && params[:month] && params[:day]
+          redirect_to :action => 'schedule_by_uid_and_run_date', :uid => @schedule.first.train_uid, :year => params[:year], :month => params[:month], :day => params[:day]
+        else
+          redirect_to :action => 'schedule_by_uid', :uid => @schedule.first.train_uid
+        end
+
+      end
+
+    elsif params[:by] == "schedule_uid"
+
+      @schedule = @schedule.where(:train_uid => params[:term])
+
+      if @schedule.count == 0
+
+        msg = "We couldn't find any schedules with the UID #{params[:term]}"
+        msg = msg + " valid on #{Date.parse(params[:date]).to_s}" if params[:date] 
+
+        render 'common/error', :status => :not_found, :locals => { :message => msg } if @schedule.count == 0
+
+      elsif @schedule.count == 1
+
+        if params[:year] && params[:month] && params[:day]
+          redirect_to :action => 'schedule_by_uid_and_run_date', :uid => @schedule.first.train_uid, :year => params[:year], :month => params[:month], :day => params[:day]
+        else
+          redirect_to :action => 'schedule_by_uid', :uid => @schedule.first.train_uid
+        end
+
+      end
+
+    else
+
+      render 'common/error', :status => :bad_request, :locals => { :message => "We don't know how to search by #{params[:by]}" }
+
     end
 
-
-    # Try a regex match on the search parameters, and look up by UID or identity as appropriate
-
-    if params[:schedule].match(/^\w\d{5}$/)
-      @schedule = @schedule.find_all_by_train_uid(params[:schedule].upcase)
-    elsif params[:schedule].match(/^\d\w\d{2}$/) 
-      @schedule = @schedule.find_all_by_train_identity(params[:schedule].upcase)
-    end
-
-    # If exactly one schedule has been returned, render the schedule page, otherwise render the default list of schedules
-
-    redirect_to :controller => 'schedule', :action => 'schedule_by_uid', :uid => @schedule.first.train_uid if @schedule.count == 1
 
   end
 
