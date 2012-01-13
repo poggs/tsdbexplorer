@@ -25,16 +25,20 @@
     <% @schedule.sort { |a,b| a.atoc_code <=> b.atoc_code }.each do |s| %>
      <tr>
       <td>
-       <% if params[:date].nil? %>
-       <%= link_to s.train_identity + ' / ' + s.train_uid, :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %>
+       <% if params[:date] %>
+        <%= link_to s.train_identity + ' / ' + s.train_uid, :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %>
        <% else %>
-        <%= link_to s.train_identity + ' / ' + s.train_uid, :action => 'schedule_by_uid', :uid => s.train_uid %>
+        <%= link_to s.train_identity + ' / ' + s.train_uid, :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %>
        <% end %>
-      <td><%= s.origin.public_departure %></td>
+      <td><%= raw format_location_time(s.origin, :departure) %></td>
       <td><%= tidy_text(decode_tiploc(s.origin)) %></td>
       <td><%= tidy_text(decode_tiploc(s.terminate)) %></td>
-      <td><%= s.terminate.public_arrival %></td>
+      <td><%= raw format_location_time(s.terminate, :arrival) %></td>
       <td><%= decode_toc(s.atoc_code) %></td>
+     </tr>
+     <tr>
+      <td colspan="2">&nbsp;</td>
+      <td colspan="5" style="font-style: italic;"><%= decode_stp_indicator(s, :A) %> schedule, runs <%= run_details(s) %></td>
      </tr>
     <% end %>
    </tbody>

@@ -482,4 +482,25 @@ module ApplicationHelper
 
   end
 
+
+  # Time formatting
+
+  def format_location_time(location, type)
+
+    if [:arrival, :departure].include? type
+
+      wtt_time = location.send(type.to_s).to_s
+
+      gbtt_time = location.send('public_' + type.to_s).to_s
+
+      if gbtt_time.nil?
+        return '<span class="gbtt">' + gbtt_time + '</span> (<span class="wtt">' + tidy_wtt_time(wtt_time) + '</span>)'
+      else
+        return '<span class="wtt">' + tidy_wtt_time(wtt_time) + '</span>'
+      end
+
+    end
+
+  end
+
 end

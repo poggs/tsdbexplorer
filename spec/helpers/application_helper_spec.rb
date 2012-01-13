@@ -147,4 +147,27 @@ describe ApplicationHelper do
     status_data_for(status).should include('This is unknown')
   end
 
+
+  # Time formatting
+
+  it "should format a WTT departure time" do
+    loc = Location.new(:departure => '1000')
+    format_location_time(loc, :departure).should eql('<span class="wtt">1000</span>')
+  end
+
+  it "should format a public and WTT departure time" do
+    loc = Location.new(:departure => '1000')
+    format_location_time(loc, :departure).should eql('<span class="gbtt">1000</span> (<span class="wtt">1000</span>)')
+  end
+
+  it "should format a WTT arrival time" do
+    loc = Location.new(:arrival => '1000')
+    format_location_time(loc, :arrival).should eql('<span class="wtt">1000</span>')
+  end
+
+  it "should format a public and WTT arrival time" do
+    loc = Location.new(:arrival => '1000')
+    format_location_time(loc, :arrival).should eql('<span class="gbtt">1000</span> (<span class="wtt">1000</span>)')
+  end
+
 end
