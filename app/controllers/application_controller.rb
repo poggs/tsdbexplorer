@@ -93,17 +93,23 @@ class ApplicationController < ActionController::Base
 
   def convert_url_parameters
 
+
+    # Convert the date parameter in to year, month and day parameters, falling back to today
+
     if (params[:year].nil? && params[:month].nil? && params[:day].nil?) && !params[:date].nil? && params[:date].match(/(\d{4})\-(\d{2})\-(\d{2})/)
       params[:year] = $1
       params[:month] = $2
       params[:day] = $3
     end
 
+
+    # Convert the time parameter from HH:MM to HHMM
+
     if !params[:time].nil? && params[:time].match(/(\d{2})\:(\d{2})/)
       params[:time] = $1 + $2
     end
 
-    @date_yyyymmdd = params[:year] + "-" + params[:month] + "-" + params[:day] if (params[:year] && params[:month] && params[:year])
+    @date_yyyymmdd = params[:year] + "-" + params[:month] + "-" + params[:day] if (params[:year] && params[:month] && params[:day])
 
     begin
       @date_human = Date.parse(@date_yyyymmdd)
