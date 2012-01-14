@@ -16,9 +16,12 @@
     <div class="container">
      <%= link_to "Open Train Times" + (Rails.env != "production" ? " (" + Rails.env.titlecase + ")" : ""), { :controller => 'main', :action => 'index' }, { :class => 'brand' } %>
      <ul class="nav">
+      <li><%= link_to 'Home', :controller => 'main', :action => 'index' %></li>
       <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
+     </ul>
+     <ul class="nav secondary-nav">
       <li class="dropdown" data-dropdown="dropdown">
-       <a href="#" class="dropdown-toggle">Options</a>
+       <a href="#" class="dropdown-toggle">Settings</a>
        <ul class="dropdown-menu">
         <%= tag 'li', { :class => (advanced_mode? == false ? nil : 'active') }%><%= link_to 'Advanced mode', :controller => 'application', :action => 'toggle_mode' %></li>
        </ul>
