@@ -442,7 +442,7 @@ module ApplicationHelper
 
   def tidy_wtt_time(t)
 
-    if t[4] == " "
+    if t[4] == " " || t[4].nil?
       t[0..3]
     else
       t[0..3] + "&half;"
@@ -493,10 +493,10 @@ module ApplicationHelper
 
       gbtt_time = location.send('public_' + type.to_s).to_s
 
-      if gbtt_time.nil?
-        return '<span class="gbtt">' + gbtt_time + '</span> (<span class="wtt">' + tidy_wtt_time(wtt_time) + '</span>)'
-      else
+      if gbtt_time.blank?
         return '<span class="wtt">' + tidy_wtt_time(wtt_time) + '</span>'
+      else
+        return '<span class="gbtt">' + gbtt_time + '</span> (<span class="wtt">' + tidy_wtt_time(wtt_time) + '</span>)'
       end
 
     end

@@ -106,13 +106,6 @@ describe ApplicationHelper do
     date_range(Time.parse('2011-01-01 23:00:00'), Time.parse('2011-01-02 01:00:00')).should eql('between 2300 on Saturday 01 January 2011 and 0100 on Sunday 02 January 2011')
   end
 
-  it "should trim a trailing space from WTT timings for a whole minute" do
-    tidy_wtt_time('1800 ').should eql('1800')
-  end
-
-  it "should append a half-sign to WTT timings with a half-minute appended" do
-    tidy_wtt_time('1800H').should eql('1800&half;')
-  end
 
   it "should display the platform, line and path for a location with all three set" do
     location = Location.new(:platform => '1', :line => 'SL')
@@ -148,6 +141,21 @@ describe ApplicationHelper do
   end
 
 
+  # Working Timetable time tests
+
+  it "should trim a trailing space from WTT timings for a whole minute" do
+    tidy_wtt_time('1800 ').should eql('1800')
+  end
+
+  it "should append a half-sign to WTT timings with a half-minute appended" do
+    tidy_wtt_time('1800H').should eql('1800&half;')
+  end
+
+  it "should not append a half-sign to WTT timings which are only four characters" do
+    tidy_wtt_time('1800').should eql('1800')
+  end
+
+
   # Time formatting
 
   it "should format a WTT departure time" do
@@ -156,7 +164,7 @@ describe ApplicationHelper do
   end
 
   it "should format a public and WTT departure time" do
-    loc = Location.new(:departure => '1000')
+    loc = Location.new(:departure => '1000', :public_departure => '1000')
     format_location_time(loc, :departure).should eql('<span class="gbtt">1000</span> (<span class="wtt">1000</span>)')
   end
 
@@ -166,7 +174,7 @@ describe ApplicationHelper do
   end
 
   it "should format a public and WTT arrival time" do
-    loc = Location.new(:arrival => '1000')
+    loc = Location.new(:arrival => '1000', :public_arrival => '1000')
     format_location_time(loc, :arrival).should eql('<span class="gbtt">1000</span> (<span class="wtt">1000</span>)')
   end
 
