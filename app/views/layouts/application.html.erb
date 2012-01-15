@@ -37,7 +37,7 @@
 
    <div class="content">
     <% if flash[:warn] %>
-    <span class="label warning"><%= flash[:warn] %></span>
+    <div class="alert-message warning"><%= flash[:warn] %></div>
     <% end %>
     <%= yield %>
    </div>
