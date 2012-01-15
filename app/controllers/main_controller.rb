@@ -40,12 +40,6 @@ class MainController < ApplicationController
   end
 
 
-  # Advanced search
-
-  def advanced_search
-  end
-
-
   # Present a setup/welcome page if there are no BasicSchedules, otherwise redirect back to the main page
 
   def setup

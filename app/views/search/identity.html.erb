@@ -1,0 +1,62 @@
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'location', :controller => 'location', :action => 'search', :min_length => 3 } %>
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'came_from', :controller => 'location', :action => 'search', :min_length => 3 } %>
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'goes_to', :controller => 'location', :action => 'search', :min_length => 3 } %>
+
+<div class="page-header">
+ <h1>Search by identity</h1>
+</div>
+
+<%= render :partial => 'common/pills' %>
+
+<div class="row">
+
+ <div class="span8">
+  <h2>About the identity search</h2>
+  <p>Search for a schedule by train identity (sometimes called the headcode), or the schedule unique identifier (UID).</p>
+  <p>The date field is optional - specify it in the format YYYY-MM-DD and the results will be shown for that day only.  Leave it blank, and the entire timetable database will be searched.</p>
+  <p>If you're searching for a train identity without a date, you will probably get dozens of matches.  Consider adding a date to simplify things.</p>
+ </div>
+
+ <div class="span8">
+  <%= tag 'form', :method => 'GET', :action => (url_for :controller => 'schedule', :action => 'search') %>
+   <fieldset>
+    <legend>By ID</legend>
+    <div class="clearfix">
+     <label id="by">Search by</label>
+     <div class="input">
+      <ul class="inputs-list">
+       <li>
+        <label>
+         <input type="radio" checked name="by" value="train_id" />
+         <span>By Train Identity</span>
+        </label>
+       </li>
+       <li>
+        <label>
+         <input type="radio" name="by" value="schedule_uid" />
+         <span>By Schedule UID</span>
+        </label>
+       </li>
+      </ul>
+     </div>
+    </div>
+    <div class="clearfix">
+     <label for="term">ID/UID</label>
+     <div class="input">
+      <input class="small" id="term" name="term" size="8" type="text" />
+     </div>
+    </div>
+    <div class="clearfix">
+     <label for="date">Runs on (optional)</label>
+     <div class="input">
+      <input class="small" id="date" name="date" size="10" type="text" value="<%= @date_yyyymmdd %>" />
+     </div>
+    </div>
+    <div class="actions">
+     <button type="submit" class="btn primary">Search</button>
+    </div>
+   </fieldset>
+  </form>
+ </div>
+
+</div>

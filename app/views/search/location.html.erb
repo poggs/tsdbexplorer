@@ -1,0 +1,59 @@
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'location', :controller => 'location', :action => 'advanced_search', :min_length => 3 } %>
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'came_from', :controller => 'location', :action => 'advanced_search', :min_length => 3 } %>
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'goes_to', :controller => 'location', :action => 'advanced_search', :min_length => 3 } %>
+
+<div class="page-header">
+ <h1>Search by location</h1>
+</div>
+
+<%= render :partial => 'common/pills' %>
+
+<div class="row">
+
+ <div class="span8">
+  <h2>About the location search</h2>
+  <p>Search for trains at a particular location by entering the location name in the &quot;Show trains at&quot; box.</p>
+  <p>Restrict the search by entering a location in the &quot;...which came from&quot; and &quot;which later call at...&quot; boxes.</p>
+  <p>If you enter a three-letter code for a station, trains from associated TIPLOCs will be shown.  For example, WFJ will show trains from Watford Junction and Watford Junction (DC).  If you enter a TIPLOC, only trains for that location will be shown.</p>
+ </div>
+
+ <div class="span8">
+  <%= tag 'form', :method => 'GET', :action => (url_for :controller => 'location', :action => 'advanced_search') %>
+   <fieldset>
+    <legend>By location</legend>
+
+    <div class="clearfix">
+     <label for="term">Show trains at</label>
+     <div class="input">
+      <input class="large" id="location" name="term" type="text" />
+     </div>
+    </div>
+
+    <div class="clearfix">
+     <label for="came_from">...which came from<br />(optional)</label>
+     <div class="input">
+      <input class="large" id="came_from" name="came_from" type="text" />
+     </div>
+    </div>
+
+    <div class="clearfix">
+     <label for="goes_to">...which later call at<br />(optional)</label>
+     <div class="input">
+      <input class="large" id="goes_to" name="goes_to" type="text" />
+     </div>
+    </div>
+
+    <div class="clearfix">
+     <label for="date">on</label>
+     <div class="input">
+      <input class="small" id="date" name="date" size="10" type="text" value="<%= @date_yyyymmdd %>" />
+     </div>
+    </div>
+    <div class="actions">
+     <button type="submit" class="btn primary">Search</button>
+    </div>
+   </fieldset>
+  </form>
+ </div>
+
+</div>

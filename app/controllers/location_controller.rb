@@ -19,6 +19,7 @@
 
 class LocationController < ApplicationController
 
+  include ApplicationHelper
   before_filter :validate_datetime
 
   # Display services at a particular location
@@ -133,23 +134,120 @@ class LocationController < ApplicationController
 
     term.upcase!
 
-    # If we've not been called as JSON, and there an exact match on the CRS code, redirect to the location page
+    @matches = Array.new
 
-    @root_matches = StationName.where('cate_type != 9')
+    # Try an exact match on the CRS code if the term is three characters long
 
-    @matches = @root_matches.where([ 'crs_code = ?', term ])
+    @matches = match_msnf_on_crs(term) if term.length == 3
+
+    # If we've been called as HTML and there's exactly one match, redirect to the location page
+
     redirect_to :action => 'index', :location => @matches.first.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
 
 
-    # Check for a match on station name
+    if advanced_mode?
 
-    @matches = @root_matches.where([ 'crs_code = ? OR station_name LIKE ?', term, '%' + term + '%' ])
+      # Try an exact match on the TIPLOC code
+
+      @matches = @matches + match_cif_on_tiploc(term) if term.length > 3
+      redirect_to :action => 'index', :location => @matches.first.tiploc_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
+
+    end
+
+
+    # Check for a match on station name.
+
+    @matches = @matches + match_msnf_on_station_name(term)
+
+    # If we've been called as HTML and there's exactly one match, redirect to the location page
+
     redirect_to :action => 'index', :location => @matches.first.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
+
+
+    if advanced_mode?
+
+      # Check for a match on TPS description in the CIF data
+
+      @matches = @matches + match_cif_on_description(term)
+      redirect_to :action => 'index', :location => @matches.first.tiploc_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
+
+    end
 
     respond_to do |format|
-      format.json { render :format => :json }
+      format.json { render :json => matches_to_json(@matches) }
       format.html
     end
+
+  end
+
+  private
+
+  # Convert matches to JSON format
+
+  def matches_to_json(matches)
+
+    @json_matches = Array.new
+
+    matches.each do |m|
+      @json_matches.push(convert_match_to_json(m))
+    end
+
+    return @json_matches
+
+  end
+
+
+  # Convert a single match to JSON
+
+  def convert_match_to_json(match)
+
+    if match.is_a? StationName
+      id = match.crs_code
+      text = tidy_text(match.station_name)
+    elsif match.is_a? Tiploc
+      id = match.tiploc_code
+      text = tidy_text(match.tps_description)
+    end
+
+    text = text + ' (' + id + ')'
+
+    { :id => id, :label => text, :value => id }
+
+  end
+
+
+  # Try to match a CRS code against the MSNF
+
+  def match_msnf_on_crs(term)
+
+    StationName.where('cate_type != 9 AND crs_code = ?', term)
+
+  end
+
+
+  # Try to match a station name against the MSNF
+
+  def match_msnf_on_station_name(term)
+
+    StationName.where('cate_type != 9 AND station_name LIKE ?', '%' + term + '%')
+
+  end
+
+
+  # Try to match a TIPLOC code against the CIF data
+
+  def match_cif_on_tiploc(term)
+
+    Tiploc.where('tiploc_code = ?', term)
+
+  end
+
+
+  # Try to match a location description against the CIF data
+
+  def match_cif_on_description(term)
+
+    Tiploc.where('tps_description LIKE ?', '%' + term + '%')
 
   end
 

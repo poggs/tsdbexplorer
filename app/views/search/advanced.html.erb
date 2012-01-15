@@ -1,0 +1,21 @@
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'location', :controller => 'location', :action => 'search', :min_length => 3 } %>
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'came_from', :controller => 'location', :action => 'search', :min_length => 3 } %>
+<%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'goes_to', :controller => 'location', :action => 'search', :min_length => 3 } %>
+
+<div class="page-header">
+ <h1>Advanced search</h1>
+</div>
+
+<%= render :partial => 'common/pills' %>
+
+<div class="row">
+
+ <div class="span16">
+  <p>We have advanced search functionality available.</p>
+  <ul>
+   <li><strong>Location</strong> will allow searching based on locations, including those a train has previously called at, or will call at later in its journey.</li>
+   <li><strong>Identity</strong> lets you search for a train if you know the train identity (or headcode), or the schedule UID.</li>
+  </ul>
+ </div>
+
+</div>

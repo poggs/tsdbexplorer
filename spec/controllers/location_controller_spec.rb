@@ -161,7 +161,7 @@ describe LocationController do
   end
 
   it "should return an empty JSON array when no search string is passed and the format is JSON" do
-    get 'search.json'
+    get 'search', :format => :json
     matches = JSON.parse(response.body)
     matches.should eql(Array.new)
   end
@@ -173,10 +173,9 @@ describe LocationController do
     matches = JSON.parse(response.body)
     matches.length.should eql(1)
     matches[0]['id'].should eql('WFJ')
-    matches[0]['label'].should eql('Watford Junction')
-    matches[0]['value'].should eql('Watford Junction')
+    matches[0]['label'].should eql('Watford Junction (WFJ)')
+    matches[0]['value'].should eql('WFJ')
   end
-
 
   it "should, in normal mode, report if no matches for a search string were found" do
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
@@ -186,7 +185,28 @@ describe LocationController do
     response.body.should =~ /FOOBARBAZ/
   end
 
+  it "should, in advanced mode, report if no matches for a search string were found" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    get :search, :term => 'FOOBARBAZ'
+    response.body.should =~ /We couldn't find any location that matched/
+    response.body.should =~ /FOOBARBAZ/
+  end
+
   it "should, in normal mode, report if more than one match was found for a search string" do
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    get :search, :term => 'WATF'
+    response.body.should =~ /We couldn't find an exact match for/
+    response.body.should =~ /WATF/
+    response.body.should =~ /Watford High Street/
+    response.body.should =~ /Watford Junction/
+    response.body.should =~ /Watford North/
+  end
+
+  it "should, in normal mode, report if more than one match was found for a search string" do
+    session[:mode] = 'advanced'
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
     get :search, :term => 'WATF'
@@ -218,29 +238,21 @@ describe LocationController do
     response.body.should_not =~ /Watford Junction/
   end
 
-  it "should match CRS codes from the MSNF in advanced mode" do
+  it "should, in advanced mode, match CRS codes from the MSNF" do
+    session[:mode] = 'advanced'
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    session[:mode] = 'advanced'
     get :search, :term => 'WFJ'
     response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
   end
 
-#  it "should match CRS codes from the CIF file in advanced mode" do
-#    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/empty.msn')
-#    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/barking.cif')
-#    session[:mode] = 'advanced'
-#    get :search, :term => 'ZBK'
-#    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'ZBK'
-#  end
-
-#  it "should match TIPLOCS codes from the CIF file in advanced mode" do
-#    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-#    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-#    session[:mode] = 'advanced'
-#    get :search, :term => 'WATFDJ'
-#    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WATFDJ'
-#  end
+  it "should, in advanced mode, match TIPLOCS codes from the CIF" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    get :search, :term => 'WATFDJ'
+    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WATFDJ'
+  end
 
 #  it "should return an exact match for a CRS code from CIF even if a location with a longer matched name exists" do
 #    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
