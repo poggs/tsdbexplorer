@@ -357,4 +357,51 @@ describe LocationController do
     response.body.should_not =~ /C51784/
   end
 
+  it "should, in normal mode, support both from and to CRS locations in the same query" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
+    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WFJ'
+    response.body.should =~ /C51786/
+    response.body.should_not =~ /C51784/
+  end
+
+
+  # Concurrent From and To queries
+
+  it "should, in advanced mode, support both from and to CRS locations in the same query" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
+    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WFJ'
+    response.body.should =~ /C51786/
+    response.body.should_not =~ /C51784/
+  end
+
+  it "should, in advanced mode, support a from CRS code and a to TIPLOC in the same query" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
+    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WATFDJ'
+    response.body.should =~ /C51786/
+    response.body.should_not =~ /C51784/
+  end
+
+  it "should, in advanced mode, support a from TIPLOC and a to CRS code in the same query" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
+    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'STALBNA', :to => 'WFJ'
+    response.body.should =~ /C51786/
+    response.body.should_not =~ /C51784/
+  end
+
+  it "should, in advanced mode, support a from TIPLOC and a to TIPLOC in the same query" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
+    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'STALBNA', :to => 'WATFDJ'
+    response.body.should =~ /C51786/
+    response.body.should_not =~ /C51784/
+  end
+
 end
