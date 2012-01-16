@@ -1,8 +1,0 @@
-<% if @matches.nil? || @matches.count == 0 %>
- <%= Array.new.to_json %>
-<% elsif @matches.first.is_a? Tiploc %>
- <%= raw @matches.collect { |m| { :id => m.tiploc_code, :label => tidy_text(m.tps_description), :value => tidy_text(m.tps_description) } }.to_json %>
-<% elsif @matches.first.is_a? StationName %>
- <%= raw @matches.collect { |m| { :id => m.crs_code, :label => tidy_text(m.station_name), :value => tidy_text(m.station_name) } }.to_json %>
-<% end %>
-

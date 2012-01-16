@@ -160,18 +160,6 @@ describe ScheduleController do
     response.body.should =~ /9Z99/
   end
 
-  it "should allow searching for a schedule by train ID" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :search, :by => 'train_id', :term => '2N53'
-    response.should redirect_to :action => 'schedule_by_uid', :uid => 'C43391'
-  end
-
-  it "should allow searching for a schedule by train ID in lower-case" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :search, :by => 'train_id', :term => '2n53'
-    response.should redirect_to :action => 'schedule_by_uid', :uid => 'C43391'
-  end
-
   it "should allow searching for a schedule by train ID and date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :search, :by => 'train_id', :term => '2N53', :date => '2011-05-15'
@@ -186,7 +174,7 @@ describe ScheduleController do
 
   it "should show a list of matches if there is more than one" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/multiple_identity_2d46.cif')
-    get :search, :by => 'train_id', :term => '2D46'
+    get :search, :by => 'train_id', :term => '2D46', :date => '2011-05-22'
     response.code.should eql('200')
     response.body.should =~ /more than one schedule/
     response.body.should =~ /L10500/
@@ -212,18 +200,6 @@ describe ScheduleController do
     response.body.should =~ /We couldn't find any schedules/
     response.body.should =~ /Sunday 1st January 2012/
     response.body.should =~ /Z99999/
-  end
-
-  it "should allow searching for a schedule by UID" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :search, :by => 'schedule_uid', :term => 'C43391'
-    response.should redirect_to :action => 'schedule_by_uid', :uid => 'C43391'
-  end
-
-  it "should allow searching for a schedule by UID in lower-case" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :search, :by => 'schedule_uid', :term => 'c43391'
-    response.should redirect_to :action => 'schedule_by_uid', :uid => 'C43391'
   end
 
   it "should allow searching for a schedule by UID and date" do

@@ -3,8 +3,8 @@
 </div>
 
 <div>
- <div style="text-align: left; float: left;"><%= link_to "< 1h earlier", { :year => (@datetime - 1.hour).year, :month => (@datetime - 1.hour).month, :day => (@datetime - 1.hour).day, :time => (@datetime - 1.hour).to_s(:hhmm) }, { :class => 'btn primary' } %></div>
- <div style="text-align: right;"><%= link_to "1h later >", { :year => (@datetime + 1.hour).year, :month => (@datetime + 1.hour).month, :day => (@datetime + 1.hour).day, :time => (@datetime + 1.hour).to_s(:hhmm) }, { :class => 'btn primary' } %></div>
+ <div style="text-align: left; float: left;"><%= link_to "< 1h earlier", { :from => params[:from], :to => params[:to], :year => (@datetime - 1.hour).year, :month => (@datetime - 1.hour).month, :day => (@datetime - 1.hour).day, :time => (@datetime - 1.hour).to_s(:hhmm) }, { :class => 'btn primary' } %></div>
+ <div style="text-align: right;"><%= link_to "1h later >", { :from => params[:from], :to => params[:to], :year => (@datetime + 1.hour).year, :month => (@datetime + 1.hour).month, :day => (@datetime + 1.hour).day, :time => (@datetime + 1.hour).to_s(:hhmm) }, { :class => 'btn primary' } %></div>
 </div>
 
 <table>

@@ -23,8 +23,15 @@ Tsdbexplorer::Application.routes.draw do
 
   match '/location/search', :controller => 'location', :action => 'search'
   match '/location/advanced_search', :controller => 'location', :action => 'advanced_search'
+
+  match '/location/:location/from/:from/:year/:month/:day/:time', :controller => 'location', :action => 'index'
+  match '/location/:location/from/:from/:year/:month/:day', :controller => 'location', :action => 'index'
+  match '/location/:location/to/:to/:year/:month/:day/:time', :controller => 'location', :action => 'index'
+  match '/location/:location/to/:to/:year/:month/:day', :controller => 'location', :action => 'index'
+
   match '/location/:location/:year/:month/:day/:time', :controller => 'location', :action => 'index'
   match '/location/:location/:year/:month/:day', :controller => 'location', :action => 'index'
+
   match '/location/:location', :controller => 'location', :action => 'index'
 
   match '/schedule/search', :controller => 'schedule', :action => 'search'

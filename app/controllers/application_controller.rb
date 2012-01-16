@@ -95,30 +95,36 @@ class ApplicationController < ActionController::Base
 
     # If the date is blank, ignore it
 
-    params[:date] = nil if params[:date].blank?
+    params.delete(:date) if params[:date].blank?
 
 
-    # Convert the date parameter in to year, month and day parameters, falling back to today
+    # Use the year, month and day parameters to build the current time, falling back on the date parameter, and then the current date
 
-    if (params[:year].nil? && params[:month].nil? && params[:day].nil?) && !params[:date].nil? && params[:date].match(/(\d{4})\-(\d{2})\-(\d{2})/)
-      params[:year] = $1
-      params[:month] = $2
-      params[:day] = $3
+    @date = Date.today
+
+    begin
+      if params[:year] && params[:month] && params[:day]
+        @date = Date.civil(params[:year], params[:month], params[:day])
+      elsif params[:date]
+        @date = Date.parse(params[:date])
+        params[:year] = @date.year
+        params[:month] = @date.month.to_s.rjust(2, '0')
+        params[:day] = @date.day.to_s.rjust(2, '0')
+      end
+    rescue
     end
+
+
+    # Hold some other cached date formats
+
+    @date_yyyymmdd = @date.to_s(:yyyymmdd)
+    @date_human = @date.to_s
 
 
     # Convert the time parameter from HH:MM to HHMM
 
     if !params[:time].nil? && params[:time].match(/(\d{2})\:(\d{2})/)
       params[:time] = $1 + $2
-    end
-
-    @date_yyyymmdd = params[:year] + "-" + params[:month] + "-" + params[:day] if (params[:year] && params[:month] && params[:day])
-
-    begin
-      @date_human = Date.parse(@date_yyyymmdd)
-    rescue
-      @date_human = nil
     end
 
   end

@@ -87,11 +87,11 @@ class Location < ActiveRecord::Base
   # Limits search to trains travelling to or from a particular location
 
   scope :runs_to, lambda { |loc|
-    joins('LEFT JOIN locations l2 ON locations.basic_schedule_uuid = l2.basic_schedule_uuid').where('l2.tiploc_code = ? AND locations.seq < l2.seq', loc)
+    joins('LEFT JOIN locations l2 ON locations.basic_schedule_uuid = l2.basic_schedule_uuid').where('l2.tiploc_code IN (?) AND locations.seq < l2.seq', loc)
   }
 
   scope :runs_from, lambda { |loc|
-    joins('LEFT JOIN locations l2 ON locations.basic_schedule_uuid = l2.basic_schedule_uuid').where('l2.tiploc_code = ? AND locations.seq > l2.seq', loc)
+    joins('LEFT JOIN locations l2 ON locations.basic_schedule_uuid = l2.basic_schedule_uuid').where('l2.tiploc_code IN (?) AND locations.seq > l2.seq', loc)
   }
 
 end

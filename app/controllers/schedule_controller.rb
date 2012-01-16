@@ -38,7 +38,7 @@ class ScheduleController < ApplicationController
 
     @schedule = BasicSchedule
 
-    @schedule = @schedule.runs_on(params[:date]) if params[:year] && params[:month] && params[:day]
+    @schedule = @schedule.runs_on(@date_yyyymmdd)
 
     if params[:by] == "train_id"
 
@@ -47,7 +47,7 @@ class ScheduleController < ApplicationController
       if @schedule.count == 0
 
         msg = "We couldn't find any trains with the train identity #{params[:term]}"
-        msg = msg + " running on #{Date.parse(params[:date]).to_s}" if params[:date] 
+        msg = msg + " running on #{@date.to_s}" if @date
 
         render 'common/error', :status => :not_found, :locals => { :message => msg }
 

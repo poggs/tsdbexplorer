@@ -23,10 +23,10 @@ describe LocationController do
 
   render_views
 
-  it "should redirect to a URL which includes the current date and time" do
+  it "should display services at a location now if given no date/time on the URL" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'BLY'
-    response.should redirect_to(:action => 'index', :year => Date.today.year.to_i, :month => Date.today.month.to_i, :day => Date.today.day.to_i, :time => Time.now.strftime('%H%M'))
+    response.should redirect_to :controller => 'location', :action => 'index', :location => 'BLY',  :year => Date.today.year, :month => Date.today.month, :day => Date.today.day, :time => Time.now.strftime('%H%M')
   end
 
   it "should display services at a location when given a CRS code" do
@@ -309,7 +309,23 @@ describe LocationController do
 
   # Show only trains to and from
 
-  it "should only show trains which later call at at a specified location" do
+  it "should only show trains which later call at at a specified CRS code" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
+    get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HWW'
+    response.body.should =~ /C51784/
+    response.body.should_not =~ /C51786/
+  end
+
+  it "should not show trains which later call at at a specified TIPLOC in normal mode" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
+    get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HOWWOOD'
+    response.body.should =~ /We couldn't find the location HOWWOOD/
+  end
+
+  it "should show trains which later call at at a specified TIPLOC when in advanced mode" do
+    session[:mode] = 'advanced'
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
     get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HOWWOOD'
@@ -317,7 +333,23 @@ describe LocationController do
     response.body.should_not =~ /C51786/
   end
 
-  it "should only show trains which have called previously at a specified location" do
+  it "should only show trains which have called previously at a specified CRS code" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
+    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WFJ'
+    response.body.should =~ /C51786/
+    response.body.should_not =~ /C51784/
+  end
+
+  it "should not show trains which have called previously at a specified TIPLOC in normal mode" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
+    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WATFDJ'
+    response.body.should =~ /We couldn't find the location WATFDJ/
+  end
+
+  it "should only show trains which have called previously at a specified TIPLOC when in advanced mode" do
+    session[:mode] = 'advanced'
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WATFDJ'
