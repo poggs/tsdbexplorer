@@ -315,6 +315,8 @@ describe LocationController do
     get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HWW'
     response.body.should =~ /C51784/
     response.body.should_not =~ /C51786/
+    response.body.should =~ /Services at Watford Junction \(WFJ\)/
+    response.body.should =~ /Which are going to How Wood \(Herts\) \(HWW\)/
   end
 
   it "should not show trains which later call at at a specified TIPLOC in normal mode" do
@@ -331,14 +333,18 @@ describe LocationController do
     get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HOWWOOD'
     response.body.should =~ /C51784/
     response.body.should_not =~ /C51786/
+    response.body.should =~ /Services at Watford Junction \(WFJ\)/
+    response.body.should =~ /Which are going to How Wood \(HOWWOOD\)/
   end
 
-  it "should only show trains which have called previously at a specified CRS code" do
+  it "should only show trains which have called previously a specified CRS code" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WFJ'
     response.body.should =~ /C51786/
     response.body.should_not =~ /C51784/
+    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
+    response.body.should =~ /Which are going to Watford Junction \(WFJ\)/
   end
 
   it "should not show trains which have called previously at a specified TIPLOC in normal mode" do
@@ -355,7 +361,12 @@ describe LocationController do
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WATFDJ'
     response.body.should =~ /C51786/
     response.body.should_not =~ /C51784/
+    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
+    response.body.should =~ /Which are going to Watford Junction \(WATFDJ\)/
   end
+
+
+  # Concurrent From and To queries
 
   it "should, in normal mode, support both from and to CRS locations in the same query" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
@@ -363,10 +374,10 @@ describe LocationController do
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WFJ'
     response.body.should =~ /C51786/
     response.body.should_not =~ /C51784/
+    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
+    response.body.should =~ /Which have come from St. Albans Abbey \(SAA\)/
+    response.body.should =~ /Which are going to Watford Junction \(WFJ\)/
   end
-
-
-  # Concurrent From and To queries
 
   it "should, in advanced mode, support both from and to CRS locations in the same query" do
     session[:mode] = 'advanced'
@@ -375,6 +386,9 @@ describe LocationController do
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WFJ'
     response.body.should =~ /C51786/
     response.body.should_not =~ /C51784/
+    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
+    response.body.should =~ /Which have come from St. Albans Abbey \(SAA\)/
+    response.body.should =~ /Which are going to Watford Junction \(WFJ\)/
   end
 
   it "should, in advanced mode, support a from CRS code and a to TIPLOC in the same query" do
@@ -384,6 +398,9 @@ describe LocationController do
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WATFDJ'
     response.body.should =~ /C51786/
     response.body.should_not =~ /C51784/
+    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
+    response.body.should =~ /Which have come from St. Albans Abbey \(SAA\)/
+    response.body.should =~ /Which are going to Watford Junction \(WATFDJ\)/
   end
 
   it "should, in advanced mode, support a from TIPLOC and a to CRS code in the same query" do
@@ -393,6 +410,9 @@ describe LocationController do
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'STALBNA', :to => 'WFJ'
     response.body.should =~ /C51786/
     response.body.should_not =~ /C51784/
+    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
+    response.body.should =~ /Which have come from St. Albans Abbey \(STALBNA\)/
+    response.body.should =~ /Which are going to Watford Junction \(WFJ\)/
   end
 
   it "should, in advanced mode, support a from TIPLOC and a to TIPLOC in the same query" do
@@ -402,6 +422,9 @@ describe LocationController do
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'STALBNA', :to => 'WATFDJ'
     response.body.should =~ /C51786/
     response.body.should_not =~ /C51784/
+    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
+    response.body.should =~ /Which have come from St. Albans Abbey \(STALBNA\)/
+    response.body.should =~ /Which are going to Watford Junction \(WATFDJ\)/
   end
 
 end
