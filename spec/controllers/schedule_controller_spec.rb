@@ -160,13 +160,25 @@ describe ScheduleController do
     response.body.should =~ /9Z99/
   end
 
-  it "should allow searching for a schedule by train ID and date" do
+  it "should allow searching for a schedule by train ID and, date in the year/month/day parameters" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :search, :by => 'train_id', :term => '2N53', :date => '2011-05-15'
+    get :search, :by => 'train_id', :term => '2N53', :year => '2011', :month => '05', :day => '15'
     response.should redirect_to :action => 'schedule_by_uid_and_run_date', :uid => 'C43391', :year => '2011', :month => '05', :day => '15'
   end
 
-  it "should allow searching for a schedule by train ID in lower case and date" do
+  it "should allow searching for a schedule by train ID and date in the date parameter" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :search, :by => 'train_id', :term => '2N53', :date => '2011-05-15'
+    response.should redirect_to :action => 'schedule_by_uid_and_run_date', :uid => 'C43391', :year => '2011', :month => '05', :day => 15
+  end
+
+  it "should allow searching for a schedule by train ID in lower case, and date in the year/month/day parameters" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :search, :by => 'train_id', :term => '2n53', :year => '2011', :month => '05', :day => '15'
+    response.should redirect_to :action => 'schedule_by_uid_and_run_date', :uid => 'C43391', :year => '2011', :month => '05', :day => '15'
+  end
+
+  it "should allow searching for a schedule by train ID in lower case, and date in the date parameter" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :search, :by => 'train_id', :term => '2n53', :date => '2011-05-15'
     response.should redirect_to :action => 'schedule_by_uid_and_run_date', :uid => 'C43391', :year => '2011', :month => '05', :day => '15'
