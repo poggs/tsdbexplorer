@@ -12,9 +12,9 @@
    <th>Pfm</th>
    <th>Line</th>
    <th>Path</th>
-   <th>Arrival (Public)</th>
+   <th>Arrival</th>
    <th>Pass</th>
-   <th>Departure (Public)</th>
+   <th>Departure</th>
    <th>Eng</th>
    <th>Path</th>
    <th>Perf</th>
@@ -22,18 +22,18 @@
  </thead>
  <tbody>
   <% @schedule.locations.each do |l| %>
-   <%= tag :tr, :style => l.pass.nil? ? nil : 'background: #eee;' %>
-    <td><%= tidy_text(decode_tiploc(l)) %></td>
-    <td><%=raw l.platform %></td>
+   <%= content_tag('tr', '', { :style => l.pass.nil? ? nil : 'background: #eee;' }) do %>
+    <td><%= tidy_text(decode_tiploc(l)) %><% if advanced_mode? %>&nbsp;<%= raw format_activities(l) %><% end %></td>
+    <td><%= l.platform %></td>
     <td><%= l.line %></td>
     <td><%= l.path %></td>
-    <td><%= raw tidy_wtt_time(l.arrival) if l.arrival? %><% if l.public_arrival %>&nbsp;(<%= l.public_arrival %>)<% end %></td>
+    <td><%= raw format_location_time(l, :arrival) %></td>
     <td><%= l.pass %></td>
-    <td><%= raw tidy_wtt_time(l.departure) if l.departure? %><% if l.public_departure %>&nbsp;(<%= l.public_departure %>)<% end %></td>
+    <td><%= raw format_location_time(l, :departure) %></td>
     <td><%= l.engineering_allowance %></td>
     <td><%= l.pathing_allowance %></td>
     <td><%= l.performance_allowance %></td>
-   </tr>
+   <% end %>
   <% end %>
  </tbody>
 

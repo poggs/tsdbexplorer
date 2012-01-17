@@ -396,4 +396,30 @@ module ScheduleHelper
 
   end
 
+
+  # Return a list of activities
+
+  def format_activities(loc)
+
+    activity_hash = {
+      'L' => 'Stops to change locomotive',
+      'N' => 'Unadvertised stop',
+      'R' => 'Stops when required',
+      'OP' => 'Stops for operational reasons',
+      'RM' => 'Reversing movement',
+      'RR' => 'Stops for locomotive to run round train',
+      'S' => 'Stops for railway personnel only',
+      'TW' => 'Stops for tablet, staff or token',
+      'minusD' => 'Stops to detach vehicles',
+      'minusU' => 'Stops to attach vehicles'
+    }
+
+    activities = Array.new
+
+    activity_hash.collect { |k,v| activities.push(content_tag 'abbr', k, { :title => v }) if loc.send('activity_' + k.downcase) == true }
+
+    return activities.collect { |a| content_tag('span', a, { :class => 'label important'  }) }.join(" ")
+
+  end
+
 end
