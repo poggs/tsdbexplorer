@@ -1,20 +1,12 @@
 <% schedule.sort { |a,b| TSDBExplorer::train_sort(a,b) }.each do |s| %>
   <%= tag 'tr', { :style => s.basic_schedule.atoc_code == "ZZ" ? 'background: #eee;' : nil }, 'open' %>
   <% if advanced_mode? %>
-   <td><%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), { :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :year => datetime.year, :month => datetime.month, :day => datetime.day } %> <%= s.basic_schedule.train_identity %><br /><span class="label"><%= decode_stp_indicator(s.basic_schedule, :A) %></span></td>
-   <td>
-    <% if s.public_arrival %>Pub: <%= s.public_arrival %><% end %>
-    <% if s.public_arrival && s.arrival %><br /><% end %>
-    <% if s.arrival %>WTT: <%= raw tidy_wtt_time(s.arrival) %><% end %>
-   </td>
+   <td><%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), { :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :year => datetime.year, :month => datetime.month, :day => datetime.day } %> <%= s.basic_schedule.train_identity %></span>&nbsp;<%= decode_stp_indicator(s.basic_schedule, :A) %></td>
+   <td><%= raw format_location_time(s, :arrival) %></td>
    <td><%= tidy_text(decode_tiploc(s.basic_schedule.origin)) %></td>
    <td><%= format_platform_and_line(s) %>
    <td><%= tidy_text(decode_tiploc(s.basic_schedule.terminate)) %></td>
-   <td>
-    <% if s.public_departure %>Pub: <%= s.public_departure %><% end %>
-    <% if s.public_departure && s.departure %><br /><% end %>
-    <% if s.departure %>WTT: <%= raw tidy_wtt_time(s.departure) %><% end %>
-   </td>
+   <td><%= raw format_location_time(s, :departure) %></td>
    <td><%= s.basic_schedule.atoc_code %></td>
   <% else %>
   <td><%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :year => datetime.year, :month => datetime.month, :day => datetime.day %>
