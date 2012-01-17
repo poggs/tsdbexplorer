@@ -1,0 +1,22 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIWLSDJHL56145900VWILLESDEN JN. HIGH LEVEL  72275   0WJH                        
+TIMTRBDGJ36145733BMITRE BRIDGE JN           72237   0XMB                        
+TINPLE81801512706QNORTH POLE SIGNAL VC818   72238   0                           
+TISHPDSB 16958700KSHEPHERD'S BUSH           72242   0SPBSHEPHERDS BUSH          
+TIKENOLYM04309200TKENSINGTON (OLYMPIA)      72241   0KPAKENSNGTN OLYMPIA        
+TIWBRMPTN01887500NWEST BROMPTON             72243   0WBPWEST BROMPTON           
+TICSEAH  08958600FIMPERIAL WHARF            72245   0IMWIMPERIAL WHARF          
+TILTCHMRJ32512701LLATCHMERE JN              87205   0                           
+TICLPHMJ216559527XCLAPHAM JUNCTION          87219   0                           
+BSNL951571105221112040000001 POO2Y07    122204000 EMU375 075      S            P
+BX         LOY                                                                  
+LOWLSDJHL 2202 22025         TB                                                 
+LIMTRBDGJ           2204 00000000                                               
+LINPLE818 2205H2206H     00000000         OP                                    
+LISHPDSB  2209 2210      22092210         T                                     
+LIKENOLYM 2211H2212      221222123        T                                     
+LIWBRMPTN 2214 2214H     22142214         T                                     
+LICSEAH   2217 2217H     22172217         T                                     
+LILTCHMRJ           2220 00000000                         1                     
+LTCLPHMJ2 2223H22262     TF                                                     
+ZZ
