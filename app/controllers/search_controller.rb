@@ -19,6 +19,8 @@
 
 class SearchController < ApplicationController
 
+  caches_page :index, :advanced, :location, :identity
+
   # Search
 
   def index

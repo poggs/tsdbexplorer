@@ -19,6 +19,8 @@
 
 class MainController < ApplicationController
 
+  caches_page :index, :disclaimer, :about
+
   # Handle the front page
 
   def index
