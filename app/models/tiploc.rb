@@ -27,11 +27,4 @@ class Tiploc < ActiveRecord::Base
 
   belongs_to :location, :primary_key => :tiploc_code, :foreign_key => :tiploc_code
 
-
-  # Return all locations with the same base TIPLOC as the specified TIPLOC
-
-  def find_related
-    return Tiploc.where(:nalco_four => self.nalco[0..3])
-  end
-
 end

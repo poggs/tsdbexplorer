@@ -32,19 +32,4 @@ describe Tiploc do
 
   end
 
-  it "should return all TIPLOC records which share the same NLC base as a TIPLOC" do
-
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/reading_locations.cif')
-    location = Tiploc.find_by_tiploc_code('RDNGSTN')
-    related_locations = location.find_related
-    related_locations.count.should eql(7)
-
-    reading_tiplocs = [ 'RDNGCE', 'RDNGSTN', 'RDNGTMD', 'RDNGWTR', 'REDG535', 'REDGDMR', 'REDGDMU' ]
-
-    related_locations.each do |l|
-      reading_tiplocs.should include(l.tiploc_code)
-    end
-
-  end
-
 end
