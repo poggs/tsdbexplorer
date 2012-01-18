@@ -35,6 +35,25 @@ module TSDBExplorer
     end
 
 
+    # Cache the location database in memory
+
+    def Realtime.cache_location_database
+
+      Tiploc.all.each do |l|
+        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'description', l.tps_description)
+        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'stanox', l.stanox)
+        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'crs_code', l.crs_code)
+      end
+
+      StationName.all.each do |l|
+        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'description', l.station_name)
+        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'cate_type', l.cate_type)
+        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'crs_code', l.crs_code)
+      end
+
+    end
+
+
     module Status
 
       def Status.timetable_feed

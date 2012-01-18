@@ -53,6 +53,11 @@ module TSDBExplorer
 
       end
 
+
+      # Update the Redis caches
+
+      TSDBExplorer::Realtime::cache_location_database
+
     end
 
 

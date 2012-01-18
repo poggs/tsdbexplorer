@@ -21,6 +21,10 @@ require 'spec_helper'
 
 describe "lib/tsdbexplorer/realtime.rb" do
 
+  before(:each) do
+    $REDIS.flushdb
+  end
+
   it "should put the site in to maintenance mode" do
     TSDBExplorer::Realtime::set_maintenance_mode('Test message')
   end
@@ -28,5 +32,24 @@ describe "lib/tsdbexplorer/realtime.rb" do
   it "should take the site out of maintenance mode" do
     TSDBExplorer::Realtime::clear_maintenance_mode
   end
-  
+
+  it "should cache data from the TIPLOC table in memory" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
+    expected_data = { 'description' => 'LONDON EUSTON', 'stanox' => '72410', 'crs_code' => 'EUS' }
+    $REDIS.hgetall('TIPLOC:EUSTON').should eql(expected_data)
+  end
+
+  it "should cache data from the MSNF table in memory" do
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/london_euston.msn')
+    expected_data = { 'description' => 'LONDON EUSTON', 'crs_code' => 'EUS', 'cate_type' => '3' }
+    $REDIS.hgetall('TIPLOC:EUSTON').should eql(expected_data)
+  end
+
+  it "should update locations from the TIPLOC table with additional data from the MSNF table" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/london_euston.msn')
+    expected_data = { 'description' => 'LONDON EUSTON', 'stanox' => '72410', 'crs_code' => 'EUS', 'cate_type' => '3' }
+    $REDIS.hgetall('TIPLOC:EUSTON').should eql(expected_data)
+  end
+
 end
