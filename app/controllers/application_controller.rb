@@ -123,8 +123,10 @@ class ApplicationController < ActionController::Base
 
     # Convert the time parameter from HH:MM to HHMM
 
-    if !params[:time].nil? && params[:time].match(/(\d{2})\:(\d{2})/)
-      params[:time] = $1 + $2
+    if !params[:time].nil?
+      if params[:time].match(/(\d{2})\:(\d{2})/) || params[:time].match(/(\d{2})\.(\d{2})/)
+        params[:time] = $1 + $2
+      end
     end
 
   end
