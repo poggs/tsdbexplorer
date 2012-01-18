@@ -88,7 +88,6 @@ class ScheduleController < ApplicationController
 
     end
 
-
   end
 
 
