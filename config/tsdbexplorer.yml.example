@@ -29,3 +29,6 @@ AMQP_SERVER:
 REDIS_SERVER:
   hostname:    'localhost'
   port:        '6379'
+
+RESTRICTIONS:
+  category:    []

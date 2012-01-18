@@ -86,6 +86,7 @@ class LocationController < ApplicationController
       @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
 
       @schedule.each do |l|
+        next if l.basic_schedule.nil?
         @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
       end
 

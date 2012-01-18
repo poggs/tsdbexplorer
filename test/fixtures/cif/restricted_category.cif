@@ -1,0 +1,31 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIWLSDTMD56142413FWILLESDEN T.M.D           72271   0                           
+TIWLSDWLJ56145731VWILLESDEN WEST LONDN JN   72268   0XWI                        
+TIHARLSJN16152101ZHARLESDEN JN              72267   0                           
+TIKENSLGJ48145735DKENSAL GREEN JN           72273   0XKG                        
+TIGOSPLOK16140900KGOSPEL OAK                72419   0GPOGOSPEL OAK              
+TIJRDJ   05152401LJUNCTION ROAD JN          63640   0XJR                        
+TIUPRHLWY04152400KUPPER HOLLOWAY            63641   0UHLUPPER HOLLOWAY          
+TIHRGYPJN24601213JHARRINGAY PARK JN         51562   0                           
+TISTOTNHM01740400RSOUTH TOTTENHAM           51558   0STOSOUTH TOTTENHAM         
+TIWDGRNPK16746700FWOODGRANGE PARK           51541   0WGRWOODGRANGE PARK         
+TIBARKNGJ00749209KBARKING STATION JUNCTION  51530   0                           
+TIBARKING00749200BBARKING                   51531   0BKGBARKING                 
+TIRPLLGBF00154112XRIPPLE LANE F.L.T. (GBRF) 51523   0                           
+BSNH105561112111207220000001 FZZ0L33    155460180 D      075                   P
+BX         ZZY                                                                  
+LOWLSDTMD 1828 0000   SL     TB                                                 
+LIWLSDWLJ           1833 00000000      SL               3                       
+LIHARLSJN 1842 1847      00000000         -T                                    
+LIKENSLGJ           1852 00000000                       6                       
+LIGOSPLOK           1905 000000004                                              
+LIJRDJ              1907H00000000                                               
+LIUPRHLWY           1909 000000002                                              
+LIHRGYPJN           1911H00000000                                               
+LISTOTNHM           1915 000000002                      6                       
+LIWDGRNPK           1931 000000002                                              
+LIBARKNGJ           1933 00000000                                               
+LIBARKING           1934 000000007  GL                                          
+LTRPLLGBF 1951 0000      TF                                                     
+ZZ
+ZZ

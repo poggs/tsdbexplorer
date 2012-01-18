@@ -237,4 +237,15 @@ describe ScheduleController do
     response.body.should =~ /North Pole Signal Vc818.+OP/
   end
 
+
+  # Security
+
+  it "should not allow a schedule included in the restricted category list to be looked up by schedule UID" do
+    $CONFIG['RESTRICTIONS']['category'] = ['ZZ']
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/restricted_category.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'H10556', :year => '2011', :month => '12', :day => '11'
+    response.code.should eql('404')
+  end
+
+
 end
