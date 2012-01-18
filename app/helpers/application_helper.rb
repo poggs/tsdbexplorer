@@ -171,16 +171,21 @@ module ApplicationHelper
 
   end
 
+
+  # Decode a TIPLOC in to text, using the in-memory database where possible
+
   def decode_tiploc(obj)
 
     decoded_tiploc = nil
 
     if obj.is_a? Tiploc
       decoded_tiploc = tidy_text((obj.tps_description.blank? || obj.tps_description.nil?) ? obj.tiploc_code : obj.tps_description)
-    elsif obj.is_a? Location
-      decoded_tiploc = obj.tiploc.nil? ? obj.tiploc_code : obj.tiploc.tps_description
-    elsif obj.is_a? DailyScheduleLocation
-      decoded_tiploc = obj.tiploc.nil? ? obj.tiploc_code : obj.tiploc.tps_description
+    elsif (obj.is_a? Location) || (obj.is_a? DailyScheduleLocation)
+      decoded_tiploc = $REDIS.hget('TIPLOC:' + obj.tiploc_code, 'description')
+      if decoded_tiploc.nil?
+        logger.warn "ApplicationHelper::decode_tiploc() failed to find #{obj.tiploc_code}"
+        decoded_tiploc = obj.tiploc.nil? ? obj.tiploc_code : obj.tiploc.tps_description
+      end
     end
 
     return decoded_tiploc

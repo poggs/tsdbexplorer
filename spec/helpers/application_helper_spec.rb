@@ -21,6 +21,10 @@ require 'spec_helper'
 
 describe ApplicationHelper do
 
+  before(:each) do
+    $REDIS.flushall
+  end
+
   it "should convert a Time object representing a whole minute to HHMM format using the 24 hour clock" do    
     time_only(Time.parse('2011-01-01 09:00:00')).should eql('0900')
     time_only(Time.parse('2011-01-01 19:00:00')).should eql('1900')
