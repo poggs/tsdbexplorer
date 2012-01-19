@@ -9,9 +9,9 @@
  <thead>
   <tr>
    <th style="text-align: left;">Location</th>
+   <th>Path</th>
    <th>Pfm</th>
    <th>Line</th>
-   <th>Path</th>
    <th>Arrival</th>
    <th>Pass</th>
    <th>Departure</th>
@@ -24,9 +24,9 @@
   <% @schedule.locations.each do |l| %>
    <%= content_tag('tr', '', { :style => l.pass.nil? ? nil : 'background: #eee;' }) do %>
     <td><%= tidy_text(decode_tiploc(l)) %><% if advanced_mode? %>&nbsp;<%= raw format_activities(l) %><% end %></td>
+    <td><%= l.path %></td>
     <td><%= l.platform %></td>
     <td><%= l.line %></td>
-    <td><%= l.path %></td>
     <td><%= raw format_location_time(l, :arrival) %></td>
     <td><%= l.pass %></td>
     <td><%= raw format_location_time(l, :departure) %></td>
