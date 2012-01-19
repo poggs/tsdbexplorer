@@ -121,7 +121,7 @@ class ApplicationController < ActionController::Base
     @date_human = @date.to_s
 
 
-    # Convert the time parameter from HH:MM to HHMM
+    # Convert the time parameter from HH:MM or HH.MM to HHMM
 
     if !params[:time].nil?
       if params[:time].match(/(\d{2})\:(\d{2})/) || params[:time].match(/(\d{2})\.(\d{2})/)
