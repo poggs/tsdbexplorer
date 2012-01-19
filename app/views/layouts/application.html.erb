@@ -11,7 +11,7 @@
   <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
   <meta name="description" content="Real-time train information using Open Data" />
  </head>
- <body>
+ <body onLoad="load_handler();">
   <div class="topbar" data-scrollspy="scrollspy">
    <div class="topbar-inner">
     <div class="container">

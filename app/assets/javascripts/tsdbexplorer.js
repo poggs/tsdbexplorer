@@ -17,3 +17,22 @@
 //  $Id$
 //
 
+function load_handler() {
+
+  // Update the value of an element whose ID is 'time', if it exists
+
+  if ($('#time').length != 0) {
+
+    var current_time = new Date();
+
+    var hour = current_time.getHours();
+    if(hour < 10) { hour = "0" + hour }
+
+    var minute = current_time.getMinutes();
+    if(minute < 10) { minute = "0" + minute }
+
+    $('#time')[0].value = hour + ":" + minute;
+
+  }
+
+}
