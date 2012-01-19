@@ -46,7 +46,6 @@ describe LocationController do
   end
 
   it "should display services at a location when given a TIPLOC code in advanced mode" do
-    pending
     session[:mode] = 'advanced'
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'BLTCHLY', :year => '2010', :month => '12', :day => '12', :time => '1800'
@@ -55,7 +54,7 @@ describe LocationController do
   end
 
   it "should display services at a location when given a TIPLOC code in lower-case" do
-    pending
+    session[:mode] = 'advanced'
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'bltchly', :year => '2010', :month => '12', :day => '12', :time => '1800'
     response.code.should eql('200')
