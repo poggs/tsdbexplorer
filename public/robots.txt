@@ -1,4 +1,5 @@
 
 User-Agent: *
+Sitemap: http://www.opentraintimes.com/sitemap.xml
 Disallow: /location/
 Disallow: /schedule/
