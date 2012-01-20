@@ -91,6 +91,14 @@ describe LocationController do
     response.body.should =~ /Sunday 12 December 2010/
   end
 
+  it "should reject attempts display services at a location given a TIPLOC in normal mode" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
+    get :index, :location => 'BLTCHLY', :year => '2010', :month => '12', :day => '12'
+    response.code.should_not eql('200')
+    response.should redirect_to :action => 'search', :term => 'BLTCHLY'
+  end
+
   it "should display services at a location given a TIPLOC code and date in advanced mode" do
     session[:mode] = 'advanced'
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')

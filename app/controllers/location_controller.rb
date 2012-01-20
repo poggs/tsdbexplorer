@@ -60,14 +60,14 @@ class LocationController < ApplicationController
 
     unless params[:from].blank?
       from_tiplocs = tiplocs_for(params[:from])
-      render 'common/error', :status => :bad_request, :locals => { :message => "We couldn't find the location " + params[:from] + " that you specified in your 'from location' filter." } and return if from_tiplocs[:locations].nil?
+      render 'common/error', :status => :bad_request, :locals => { :message => "We couldn't find the location " + params[:from] + " that you specified in your 'from location' filter." } and return if from_tiplocs.nil? || from_tiplocs[:locations].nil?
       @from_location = from_tiplocs[:name]
       @schedule = @schedule.runs_from(tiplocs_for(params[:from])[:locations].collect(&:tiploc_code))
     end
 
     unless params[:to].blank?
       to_tiplocs = tiplocs_for(params[:to])
-      render 'common/error', :status => :bad_request, :locals => { :message => "We couldn't find the location " + params[:to] + " that you specified in your 'to location' filter." } and return if to_tiplocs[:locations].nil?
+      render 'common/error', :status => :bad_request, :locals => { :message => "We couldn't find the location " + params[:to] + " that you specified in your 'to location' filter." } and return if to_tiplocs.nil? || to_tiplocs[:locations].nil?
       @to_location = to_tiplocs[:name]
       @schedule = @schedule.runs_to(tiplocs_for(params[:to])[:locations].collect(&:tiploc_code))
     end
@@ -269,6 +269,13 @@ class LocationController < ApplicationController
       tiplocs = Tiploc.where(:tiploc_code => loc.upcase)
       return nil if tiplocs.blank?
       location_name = Tiploc.find_by_tiploc_code(loc.upcase).tps_description
+
+    else
+
+      # We are not in advanced mode and a location has been passed that is
+      # not a CRS code - so return nothing.
+
+      return nil
 
     end
 
