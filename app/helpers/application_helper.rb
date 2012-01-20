@@ -83,7 +83,7 @@ module ApplicationHelper
       "NT" => "Northern",
       "NY" => "North Yorkshire Moors Railway",
       "PT" => "Europorte 2",
-      "SE" => "SouthEastern",
+      "SE" => "Southeastern",
       "SN" => "Southern",
       "SR" => "Scotrail",
       "SW" => "South West Trains",
