@@ -63,71 +63,46 @@ class ApplicationController < ActionController::Base
   end
 
 
-  # Validate the date and time passed
-
-  def validate_datetime
-
-    if(params[:year] || params[:month] || params[:day] || params[:time])
-
-      begin
-        params[:time] = Time.now.strftime('%H%M') if params[:time].nil?
-        if params[:time] =~ /\d{4}/
-          @datetime = Time.gm(params[:year], params[:month], params[:day], params[:time][0..1], params[:time][2..3])
-        else
-          @datetime = nil
-        end
-      rescue
-        @datetime = nil
-      end
-
-      if @datetime.nil?
-        render 'common/error', :status => :bad_request, :locals => { :message => "Sorry, you passed an invalid date" } and return unless @datetime.is_a? DateTime
-      end
-
-    end
-
-  end
-
-
   # Convert a date and/or time passed un-RESTfully in the URL in to keys in params[]
 
   def convert_url_parameters
 
-    # If the date is blank, ignore it
-
-    params.delete(:date) if params[:date].blank?
-
-
-    # Use the year, month and day parameters to build the current time, falling back on the date parameter, and then the current date
-
     @date = Date.today
 
-    begin
-      if params[:year] && params[:month] && params[:day]
-        @date = Date.civil(params[:year].to_i, params[:month].to_i, params[:day].to_i)
-      elsif params[:date]
+    if params[:date]
+      begin
         @date = Date.parse(params[:date])
-        params[:year] = @date.year
-        params[:month] = @date.month.to_s.rjust(2, '0')
-        params[:day] = @date.day.to_s.rjust(2, '0')
-      end
-    rescue
-    end
-
-
-    # Hold some other cached date formats
-
-    @date_yyyymmdd = @date.to_s(:yyyymmdd)
-    @date_human = @date.to_s
-
-
-    # Convert the time parameter from HH:MM or HH.MM to HHMM
-
-    if !params[:time].nil?
-      if params[:time].match(/(\d{2})\:(\d{2})/) || params[:time].match(/(\d{2})\.(\d{2})/)
-        params[:time] = $1 + $2
+      rescue
       end
     end
+
+    if params[:year] && params[:month] && params[:day]
+      begin
+        @date = Date.parse(params[:year] + "-" + params[:month] + "-" + params[:day])
+      rescue
+        render 'common/error', :status => :bad_request, :locals => { :message => "Sorry, we couldn't understand the date you gave." }
+      end
+    end
+
+    if params[:time]
+      begin
+        if params[:time].blank?
+          @time = Time.parse(@date.to_s + " " + Time.now.to_s(:hhmm_colon))
+        elsif params[:time].match(/(\d{2})\:(\d{2})/) || params[:time].match(/(\d{2})\.(\d{2})/)
+          Time.parse($1 + ":" + $2)
+          @time = Time.parse(@date.to_s + " " + $1 + ":" + $2)
+        else
+          Time.parse(params[:time][0..1] + ":" + params[:time][2..3])
+          @time = Time.parse(@date.to_s + " " + params[:time][0..1] + ":" + params[:time][2..3])
+        end
+      rescue
+        render 'common/error', :status => :bad_request, :locals => { :message => "Sorry, we couldn't understand the time you gave." }
+      end
+    else
+      @time = Time.parse(@date.to_s + " " + Time.now.to_s(:hhmm_colon))
+    end
+
+    @datetime = @time
 
   end
 

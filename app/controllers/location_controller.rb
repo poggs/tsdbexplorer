@@ -20,13 +20,12 @@
 class LocationController < ApplicationController
 
   include ApplicationHelper
-  before_filter :validate_datetime
 
   # Display services at a particular location
   
   def index
 
-    redirect_to :action => 'index', :year => Time.now.year, :month => Time.now.month, :day => Time.now.day, :time => Time.now.strftime('%H%M') and return if @datetime.nil?
+    redirect_to root_url and return if params[:location].nil?
 
     tiplocs = tiplocs_for(params[:location])
     redirect_to :action => 'search', :term => params[:location] and return if tiplocs.nil?

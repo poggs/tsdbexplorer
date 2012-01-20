@@ -23,10 +23,17 @@ describe LocationController do
 
   render_views
 
+  it "should redirect to the main page if passed no parameters" do
+    get :index
+    response.should redirect_to root_url
+  end
+
   it "should display services at a location now if given no date/time on the URL" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
     get :index, :location => 'BLY'
-    response.should redirect_to :controller => 'location', :action => 'index', :location => 'BLY',  :year => Date.today.year, :month => Date.today.month, :day => Date.today.day, :time => Time.now.strftime('%H%M')
+    response.code.should eql('200')
+    response.body.should =~ /Bletchley/
   end
 
   it "should display services at a location when given a CRS code" do
@@ -108,14 +115,14 @@ describe LocationController do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'BLY', :year => 'FOO', :month => 'BAR', :day => 'BAZ'
     response.code.should eql('400')
-    response.body.should =~ /invalid date/
+    response.body.should =~ /couldn't understand the date/
   end
 
   it "should display an error if passed an invalid date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '32'
     response.code.should eql('400')
-    response.body.should =~ /invalid date/
+    response.body.should =~ /couldn't understand the date/
   end
 
   it "should display services at a location given a CRS code, date and time" do
@@ -141,14 +148,14 @@ describe LocationController do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '12', :time => 'FOOBAR'
     response.code.should eql('400')
-    response.body.should =~ /invalid date/
+    response.body.should =~ /couldn't understand the time/
   end
 
   it "should display an error if passed an invalid time" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '12', :time => '2405'
     response.code.should eql('400')
-    response.body.should =~ /invalid date/
+    response.body.should =~ /couldn't understand the time/
   end
 
 

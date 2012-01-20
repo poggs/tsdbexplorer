@@ -244,7 +244,7 @@ module TSDBExplorer
       uid = message[:train_uid].strip
       run_date = message[:schedule_origin_depart_timestamp].to_s(:yyyymmdd)
 
-      schedule = BasicSchedule.runs_on_by_uid_and_date(uid, run_date).first
+      schedule = BasicSchedule.runs_on_by_uid_and_date(uid, Date.parse(run_date)).first
 
       if schedule.nil? || schedule == []
         return Struct.new(:status, :message).new(:error, "#{message[:source_system_id]} #{message[:original_data_source]} failed to activate #{TSDBExplorer::schedule_source_to_text(message[:schedule_source])} schedule #{uid} - schedule does not apply on #{message[:schedule_origin_depart_timestamp].to_s(:yyyymmdd)}")

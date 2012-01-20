@@ -23,7 +23,7 @@ describe BasicSchedule do
 
   it "should return the origin and termating locations of a BasicSchedule" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', Date.parse('2010-12-12')).first
     schedule.origin.tiploc.tiploc_code.should eql('EUSTON')
     schedule.terminate.tiploc.tiploc_code.should eql('NMPTN')
   end
@@ -39,7 +39,7 @@ describe BasicSchedule do
 
   it "should return a specific train schedule for a specific date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', Date.parse('2010-12-12')).first
     schedule.should_not be_nil
     schedule[:train_uid].should eql('C43391')
     schedule.is_stp_cancelled?.should_not be_true
@@ -47,13 +47,13 @@ describe BasicSchedule do
 
   it "should not return a schedule on a day for which it is not valid" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-13').first
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', Date.parse('2010-12-13')).first
     schedule.should be_nil
   end
 
   it "should return a cancellation record for a schedule which is cancelled" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_cancel.cif')
-    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2011-01-09').first
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', Date.parse('2011-01-09')).first
     schedule.should_not be_nil
     schedule.is_stp_cancelled?.should be_true
   end
@@ -110,7 +110,7 @@ describe BasicSchedule do
 
   it "should identify if a schedule is for a passenger service" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', Date.parse('2010-12-12')).first
     schedule.is_passenger?.should be_true
   end
 
@@ -118,7 +118,7 @@ describe BasicSchedule do
 
   it "should identify if a schedule is for a train" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C43391', Date.parse('2010-12-12')).first
     schedule.is_a_train?.should be_true
     schedule.is_a_bus?.should be_false
     schedule.is_a_ship?.should be_false
@@ -126,7 +126,7 @@ describe BasicSchedule do
 
   it "should identify if a schedule is for a bus" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_bus.cif')
-    schedule = BasicSchedule.runs_on_by_uid_and_date('G39152', '2011-05-22').first
+    schedule = BasicSchedule.runs_on_by_uid_and_date('G39152', Date.parse('2011-05-22')).first
     schedule.is_a_train?.should be_false
     schedule.is_a_bus?.should be_true
     schedule.is_a_ship?.should be_false
@@ -134,7 +134,7 @@ describe BasicSchedule do
 
   it "should identify if a schedule is for a ship" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_ship.cif')
-    schedule = BasicSchedule.runs_on_by_uid_and_date('P87065', '2011-05-22').first
+    schedule = BasicSchedule.runs_on_by_uid_and_date('P87065', Date.parse('2011-05-22')).first
     schedule.is_a_train?.should be_false
     schedule.is_a_bus?.should be_false
     schedule.is_a_ship?.should be_true

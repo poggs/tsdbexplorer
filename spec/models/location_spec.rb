@@ -24,7 +24,7 @@ describe Location do
   it "should identify locations that that are not for picking up or setting down passengers" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
-    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', '2011-05-22').first
+    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', Date.parse('2011-05-22')).first
 
     willesden_bay_to_high_level = willesden_to_stratford.locations.where(:tiploc_code => 'WLSDLUC').first
     willesden_bay_to_high_level.is_public?.should_not be_true
@@ -36,7 +36,7 @@ describe Location do
   it "should identify locations where the train picks up passengers only" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
-    euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('P64437', '2011-05-22').first
+    euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('P64437', Date.parse('2011-05-22')).first
 
     watford_junction = euston_to_wolverhampton.locations.where(:tiploc_code => 'WATFDJ').first
     watford_junction.is_public?.should be_true
@@ -48,7 +48,7 @@ describe Location do
   it "should identify locations where the train picks up and sets down passengers" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
-    euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('P64437', '2011-05-22').first
+    euston_to_wolverhampton = BasicSchedule.runs_on_by_uid_and_date('P64437', Date.parse('2011-05-22')).first
 
     milton_keynes_central = euston_to_wolverhampton.locations.where(:tiploc_code => 'MKNSCEN').first
     milton_keynes_central.is_public?.should be_true
@@ -60,7 +60,7 @@ describe Location do
   it "should identify locations where the train sets down passengers only" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
-    wolverhampton_to_euston = BasicSchedule.runs_on_by_uid_and_date('P64027', '2011-05-22').first
+    wolverhampton_to_euston = BasicSchedule.runs_on_by_uid_and_date('P64027', Date.parse('2011-05-22')).first
 
     watford_junction = wolverhampton_to_euston.locations.where(:tiploc_code => 'WATFDJ').first
     watford_junction.is_public?.should be_true
@@ -72,7 +72,7 @@ describe Location do
   it "should return true if the schedule starts at this location" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
-    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', '2011-05-22').first
+    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', Date.parse('2011-05-22')).first
 
     willesden_ll_bay = willesden_to_stratford.locations.where(:tiploc_code => 'WLSDNJL').first
     willesden_ll_bay.is_origin?.should be_true
@@ -83,7 +83,7 @@ describe Location do
   it "should return true if the schedule finishes at this location" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_record_test.cif')
-    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', '2011-05-22').first
+    willesden_to_stratford = BasicSchedule.runs_on_by_uid_and_date('L97307', Date.parse('2011-05-22')).first
 
     stratford = willesden_to_stratford.locations.where(:tiploc_code => 'STFD').first
     stratford.is_origin?.should_not be_true

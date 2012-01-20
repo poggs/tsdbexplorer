@@ -23,11 +23,11 @@ class BasicSchedule < ActiveRecord::Base
 
   default_scope :conditions => ([ "category NOT IN (?)", $CONFIG['RESTRICTIONS']['category']])
 
-  scope :runs_on_by_uid_and_date, lambda { |uid,date| where(:train_uid => uid).where('? BETWEEN runs_from AND runs_to', date).runs_on_wday(Date.parse(date).wday).order("runs_to - runs_from").limit(1) }
+  scope :runs_on_by_uid_and_date, lambda { |uid,date| where(:train_uid => uid).where('? BETWEEN runs_from AND runs_to', date).runs_on_wday(date.wday).order("runs_to - runs_from").limit(1) }
   scope :runs_on_by_train_identity_and_date, lambda { |identity,date| where('train_identity_unique = ? AND ? BETWEEN runs_from AND runs_to', uid, date).order("runs_to - runs_from").limit(1) }
 
   scope :runs_on_wday, lambda { |wday| where([ :runs_su, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa ][wday] => true) }
-  scope :runs_on, lambda { |date| where('? BETWEEN runs_from AND runs_to', date).runs_on_wday(Date.parse(date).wday) }
+  scope :runs_on, lambda { |date| where('? BETWEEN runs_from AND runs_to', date).runs_on_wday(date.wday) }
   scope :all_schedules_by_uid, lambda { |train_uid| where(:train_uid => train_uid).order('stp_indicator DESC') }
 
   def is_passenger?
