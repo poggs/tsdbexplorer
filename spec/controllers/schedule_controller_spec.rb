@@ -207,11 +207,11 @@ describe ScheduleController do
   end
 
   it "should display an error if the schedule UID is not valid for the date requested" do
-    get :search, :by => 'schedule_uid', :term => 'Z99999', :date => '2012-01-01'
+    get :search, :by => 'schedule_uid', :term => 'Z99999', :year => '2012', :month => '01', :day => '01'
     response.code.should eql('404')
     response.body.should =~ /We couldn't find any schedules/
-    response.body.should =~ /Sunday 1st January 2012/
     response.body.should =~ /Z99999/
+    response.body.should =~ /Sunday 1st January 2012/
   end
 
   it "should allow searching for a schedule by UID and date" do

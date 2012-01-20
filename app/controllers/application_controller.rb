@@ -72,6 +72,10 @@ class ApplicationController < ActionController::Base
     if params[:date]
       begin
         @date = Date.parse(params[:date])
+        params[:year] = @date.year.to_s
+        params[:month] = @date.month.to_s.rjust(2, '0')
+        params[:day] = @date.day.to_s.rjust(2, '0')
+        params.delete(:date)
       rescue
       end
     end
@@ -87,7 +91,7 @@ class ApplicationController < ActionController::Base
     if params[:time]
       begin
         if params[:time].blank?
-          @time = Time.parse(@date.to_s + " " + Time.now.to_s(:hhmm_colon))
+          @time = Time.parse(@date.to_s + " " + Time.now.to_s(:hhmm))
         elsif params[:time].match(/(\d{2})\:(\d{2})/) || params[:time].match(/(\d{2})\.(\d{2})/)
           Time.parse($1 + ":" + $2)
           @time = Time.parse(@date.to_s + " " + $1 + ":" + $2)
@@ -99,7 +103,8 @@ class ApplicationController < ActionController::Base
         render 'common/error', :status => :bad_request, :locals => { :message => "Sorry, we couldn't understand the time you gave." }
       end
     else
-      @time = Time.parse(@date.to_s + " " + Time.now.to_s(:hhmm_colon))
+      @time = Time.parse(@date.to_s + " " + Time.now.to_s(:hhmm))
+      params[:time] = nil
     end
 
     @datetime = @time

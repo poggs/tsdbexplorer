@@ -54,7 +54,7 @@ class ScheduleController < ApplicationController
       elsif @schedule.count == 1
 
         if @date
-          redirect_to :action => 'schedule_by_uid_and_run_date', :uid => @schedule.first.train_uid, :year => @date.year.to_s, :month => @date.month.to_s.rjust(2, '0'), :day => @date.day.to_s.rjust(2, '0')
+          redirect_to :action => 'schedule_by_uid_and_run_date', :uid => @schedule.first.train_uid, :year => params[:year], :month => params[:month], :day => params[:day]
         else
           redirect_to :action => 'schedule_by_uid', :uid => @schedule.first.train_uid
         end
@@ -68,14 +68,14 @@ class ScheduleController < ApplicationController
       if @schedule.count == 0
 
         msg = "We couldn't find any schedules with the UID #{params[:term]}"
-        msg = msg + " valid on #{Date.parse(params[:date]).to_s}" if params[:date] 
+        msg = msg + " valid on #{@date}" if @date
 
         render 'common/error', :status => :not_found, :locals => { :message => msg } if @schedule.count == 0
 
       elsif @schedule.count == 1
 
         if @date
-          redirect_to :action => 'schedule_by_uid_and_run_date', :uid => @schedule.first.train_uid, :year => @date.year.to_s, :month => @date.month.to_s.rjust(2, '0'), :day => @date.day.to_s.rjust(2, '0')
+          redirect_to :action => 'schedule_by_uid_and_run_date', :uid => @schedule.first.train_uid, :year => params[:year], :month => params[:month], :day => params[:day]
         else
           redirect_to :action => 'schedule_by_uid', :uid => @schedule.first.train_uid
         end
@@ -97,7 +97,7 @@ class ScheduleController < ApplicationController
 
     @schedule = BasicSchedule.where(:train_uid => params[:uid])
 
-    render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]}." } and return if @schedule.blank?
+    render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]}.  The schedule may not be valid for this date." } and return if @schedule.blank?
 
     @date = Date.today
     @date_array = @schedule.first.date_array
@@ -111,9 +111,9 @@ class ScheduleController < ApplicationController
 
     @schedule = BasicSchedule.runs_on_by_uid_and_date(params[:uid], @date).first
 
-    render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]} running on #{@date_yyyymmdd}.  The schedule may not be valid for this date." } if @schedule.nil?
+    render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]} running on #{@date}.  The schedule may not be valid for this date." } if @schedule.nil?
 
-    @as_run = DailySchedule.runs_on_by_uid_and_date(params[:uid], @date_yyyymmdd).first
+    @as_run = DailySchedule.runs_on_by_uid_and_date(params[:uid], @date).first
 
   end
 
