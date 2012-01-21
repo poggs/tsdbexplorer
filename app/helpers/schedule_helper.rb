@@ -422,4 +422,23 @@ module ScheduleHelper
 
   end
 
+
+  # Show a location name, or "Starts here"/"Terminates here" if appropriate
+
+  def show_location_name(loc, type)
+
+    if type == :from && loc.activity_tb == true
+      "Starts here"
+    elsif type == :to && loc.activity_tf == true
+      "Terminates here"
+    else
+      if type == :from
+        tidy_text(decode_tiploc(loc.basic_schedule.origin))
+      else
+        tidy_text(decode_tiploc(loc.basic_schedule.terminate))
+      end
+    end
+
+  end
+
 end

@@ -339,4 +339,44 @@ describe ScheduleHelper do
     end
   end
 
+  it "should return Starts Here for a train which starts at this location" do
+    import = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    import.status.should eql(:ok)
+    schedule = BasicSchedule.first
+    origin_location = schedule.locations.where(:tiploc_code => 'EUSTON').first
+    text = show_location_name(origin_location, :from)
+    text.should =~ /Starts here/
+  end
+
+  it "should return the origin and terminating locations for a train which passes this location" do
+    import = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    import.status.should eql(:ok)
+    schedule = BasicSchedule.first
+    pass_location = schedule.locations.where(:tiploc_code => 'WMBY').first
+    from_text = show_location_name(pass_location, :from)
+    from_text.should =~ /London Euston/
+    to_text = show_location_name(pass_location, :to)
+    to_text.should =~ /Northampton/
+  end
+
+  it "should return the location name for a train which calls at this location" do
+    import = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    import.status.should eql(:ok)
+    schedule = BasicSchedule.first
+    call_location = schedule.locations.where(:tiploc_code => 'WATFDJ').first
+    from_text = show_location_name(call_location, :from)
+    from_text.should =~ /London Euston/
+    to_text = show_location_name(call_location, :to)
+    to_text.should =~ /Northampton/
+  end
+
+  it "should return Terminates Here for a train which terminates at this location" do
+    import = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    import.status.should eql(:ok)
+    schedule = BasicSchedule.first
+    terminate_location = schedule.locations.where(:tiploc_code => 'NMPTN').first
+    text = show_location_name(terminate_location, :to)
+    text.should =~ /Terminates here/
+  end
+
 end
