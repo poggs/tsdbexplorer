@@ -22,14 +22,13 @@
 
 Read a CIF file from STDIN and output only the scheduled operated by the specificed TOC(s).
 
-To extract the TIPLOC data from these files from a full extract named DFTESTA.CIF, use the following commands:
-
-  $ cat OUTPUT.CIF | grep "^L" | cut -c 3-9 | sort | uniq > /tmp/tiploc.regex
-  $ cat DFTESTA.CIF | grep "^TI" | egrep -f /tmp/tiploc.regex
+The extracted data will contain all TIPLOCs for all locations, including those not referenced by the schedules.
 
 =end
 
-toc_code = ['LO']
+toc_code = []
+
+raise "Please set toc_code in the script" if toc_code == Array.new
 
 schedule = Array.new
 
