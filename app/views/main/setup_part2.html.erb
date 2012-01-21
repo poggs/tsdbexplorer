@@ -1,0 +1,47 @@
+<div class="row">
+ <div class="span16">
+  <div class="well">
+   <h1>Welcome to Open Train Times!</h1>
+   <p>The following importable files have been found in <code><%= ::Rails.root.join($CONFIG['TIMETABLE']['path']) %></code>:</p>
+
+   <table class="condensed-table">
+    <thead>
+     <tr>
+      <th>Filename</th>
+      <th>Description</th>
+      <th>Provider</th>
+     </tr>
+    </thead>
+    <tbody>
+     <% @import_files.each do |f| %>
+      <tr>
+       <td><%= f[:filename] %></td>
+       <td><%= f[:description] %></td>
+       <td><%= f[:provider] %></td>
+      </tr>
+     <% end %>
+    </tbody>
+   </table>
+
+   <p>To import these files, run the following commands:</p>
+
+   <pre>
+RAILS_ENV=production rails c
+<% @import_files.each do |f| -%>
+<% if f[:data_type] == :rsp_msnf -%>
+TSDBExplorer::RSP::import_msnf('<%= f[:filename] %>')
+<% elsif f[:data_type] == :rsp_cif || f[:data_type] == :nr_cif -%>
+TSDBExplorer::CIF::process_cif_file('<%= f[:filename] %>')
+<% end -%>
+<% end -%></pre>
+
+   <p>Once you've done this, click the link below to continue.</p>
+
+   <br />
+
+   <p><%= link_to "Next >", "", { :class => "btn info" } %></p>
+
+  </div>
+ </div>
+</div>
+

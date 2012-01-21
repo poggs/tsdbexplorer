@@ -21,6 +21,10 @@ require 'spec_helper'
 
 describe MainController do
 
+  before do
+    ActionController::Base.perform_caching = true
+  end
+
   render_views
 
   it "should redirect to a setup page when called with an empty database" do
@@ -31,7 +35,7 @@ describe MainController do
   it "should show an informational page when called with an empty database" do
     get :setup
     response.code.should eql("200")
-    response.body.should =~ /You will need some CIF timetable data/
+    response.body.should =~ /To use this site, you will need the latest timetable and station names data files/
   end
 
   it "should show a message when the site is in to maintenance mode" do
