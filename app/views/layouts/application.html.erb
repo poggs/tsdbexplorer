@@ -49,7 +49,7 @@
    <div class="container">
     <p class="pull-right"><%= link_to (image_tag 'twitter_followus.png'), 'http://twitter.com/opentraintimes' %></p>
     <p><a href="http://github.com/poggs/tsdbexplorer">Open Train Times</a> is &copy;2011-2012 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a> using data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>, <a href="http://www.atoc.org/">RSP</a> and <a href="http://www.transportdirect.info/">Transport Direct</a>.</p> 
-    <p><% if @stats[:latest_schedule] %>Schedules are available for dates up to <%= @stats[:latest_schedule] %>. <% end %>Please read the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %> to understand the limitations of this site.</p>
+    <p>Please read the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %> to understand the limitations of this site.</p>
    </div>
   </footer>
 

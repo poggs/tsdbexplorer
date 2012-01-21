@@ -21,7 +21,6 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
-  before_filter :calculate_stats
   before_filter :in_maintenance_mode?
   before_filter :convert_url_parameters
   helper_method :advanced_mode?
@@ -36,16 +35,6 @@ class ApplicationController < ActionController::Base
         render 'common/maintenance_mode', :status => :service_unavailable, :locals => { :reason => $REDIS.get('OTT:SYSTEM:MAINT') } and return
       end
     end
-
-  end
-
-
-  # Calculate statistics to be included in the footer of each page
-
-  def calculate_stats
-
-    @stats = Hash.new
-    @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to) unless BasicSchedule.count == 0
 
   end
 
