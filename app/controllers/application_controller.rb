@@ -31,7 +31,11 @@ class ApplicationController < ActionController::Base
 
   def in_maintenance_mode?
 
-    render 'common/maintenance_mode', :status => :service_unavailable, :locals => { :reason => $REDIS.get('OTT:SYSTEM:MAINT') } and return if $REDIS.get('OTT:SYSTEM:MAINT')
+    unless request[:controller] == "healthcheck"
+      if $REDIS.get('OTT:SYSTEM:MAINT')
+        render 'common/maintenance_mode', :status => :service_unavailable, :locals => { :reason => $REDIS.get('OTT:SYSTEM:MAINT') } and return
+      end
+    end
 
   end
 
