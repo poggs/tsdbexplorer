@@ -49,6 +49,14 @@
       <input class="small" id="date" name="date" size="10" type="text" value="<%= @date.to_s(:yyyymmdd) %>" />
      </div>
     </div>
+
+    <div class="clearfix">
+     <label for="time">at</label>
+     <div class="input">
+      <input class="small" id="time" name="time" size="10" type="text" value="<%= @time.to_s(:hhmm_colon) %>" />
+     </div>
+    </div>
+
     <div class="actions">
      <button type="submit" class="btn primary">Search</button>
     </div>
