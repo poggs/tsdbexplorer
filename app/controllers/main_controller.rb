@@ -46,7 +46,7 @@ class MainController < ApplicationController
 
   def setup
 
-    redirect_to :action => 'index' if BasicSchedule.count > 0
+    redirect_to :action => 'index' and return if BasicSchedule.count > 0
 
     @data_files = Dir.glob(::Rails.root.join($CONFIG['TIMETABLE']['path']).to_s + "/*")
 
