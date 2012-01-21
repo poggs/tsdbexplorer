@@ -13,6 +13,7 @@ gem 'json'
 gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'
+gem 'asset_sync'
 
 
 # Javascript
