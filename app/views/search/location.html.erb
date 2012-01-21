@@ -46,7 +46,7 @@
     <div class="clearfix">
      <label for="date">on</label>
      <div class="input">
-      <input class="small" id="date" name="date" size="10" type="text" value="<%= @date %>" />
+      <input class="small" id="date" name="date" size="10" type="text" value="<%= @date.to_s(:yyyymmdd) %>" />
      </div>
     </div>
     <div class="actions">
