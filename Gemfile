@@ -18,6 +18,8 @@ gem 'uglifier'
 # Javascript
 
 gem 'jquery-rails'
+gem 'execjs'
+gem 'therubyracer'
 
 
 # Application-specific gems
