@@ -67,8 +67,8 @@ module TSDBExplorer
 
       cif_data = File.open(filename)
       file_size = File.size(filename)
-      puts "\n"
-      puts "Processing #{filename} (#{file_size} bytes)"
+
+      puts "\nProcessing #{filename} (#{file_size} bytes)" unless ::Rails.env == "test"
 
 
       # The first line of the CIF file must be an HD record
@@ -101,11 +101,13 @@ module TSDBExplorer
 
       # Display data from the CIF header record
 
-      puts "+--------------------------------------------------------------------------"
-      puts "| Importing CIF file #{header_data.current_file_ref} for #{header_data.mainframe_username}"
-      puts "| Generated on #{header_data.date_of_extract} at #{header_data.time_of_extract}"
-      puts "| Data from #{header_data.user_extract_start_date} to #{header_data.user_extract_end_date}"
-      puts "+--------------------------------------------------------------------------"
+      unless ::Rails.env == "test"
+        puts "+--------------------------------------------------------------------------"
+        puts "| Importing CIF file #{header_data.current_file_ref} for #{header_data.mainframe_username}"
+        puts "| Generated on #{header_data.date_of_extract} at #{header_data.time_of_extract}"
+        puts "| Data from #{header_data.user_extract_start_date} to #{header_data.user_extract_end_date}"
+        puts "+--------------------------------------------------------------------------"
+      end
 
 
       # Create a CifFile record, which will be saved when importing is complete
@@ -137,7 +139,7 @@ module TSDBExplorer
       # Set up a progress bar
 
       require 'progressbar' # TODO: Eliminate having to 'require' progressbar
-      pbar = ProgressBar.new(header_data.current_file_ref, file_size)
+      pbar = ProgressBar.new(header_data.current_file_ref, file_size) unless ::Rails.env == "test"
 
 
       # Iterate through the CIF file and process each record
@@ -148,7 +150,7 @@ module TSDBExplorer
 
         return record if record.is_a? Struct
 
-        pbar.set(cif_data.pos)
+        pbar.set(cif_data.pos) unless ::Rails.env == "test"
 
         if record.is_a? TSDBExplorer::CIF::TiplocRecord
 
@@ -329,7 +331,7 @@ module TSDBExplorer
 
       end
 
-      pbar.finish
+      pbar.finish unless ::Rails.env == "test"
 
       pending = process_pending(pending)
 
