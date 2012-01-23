@@ -26,11 +26,16 @@ describe "lib/tsdbexplorer/realtime.rb" do
   end
 
   it "should put the site in to maintenance mode" do
+    $REDIS.get('OTT:SYSTEM:MAINT').should be_nil
     TSDBExplorer::Realtime::set_maintenance_mode('Test message')
+    $REDIS.get('OTT:SYSTEM:MAINT').should eql('Test message')
   end
 
   it "should take the site out of maintenance mode" do
+    $REDIS.get('OTT:SYSTEM:MAINT').should be_nil
+    TSDBExplorer::Realtime::set_maintenance_mode('Test message')
     TSDBExplorer::Realtime::clear_maintenance_mode
+    $REDIS.get('OTT:SYSTEM:MAINT').should be_nil
   end
 
   it "should cache data from the TIPLOC table in memory" do

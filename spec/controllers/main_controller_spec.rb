@@ -23,6 +23,10 @@ describe MainController do
 
   render_views
 
+  before(:each) do
+    $REDIS.flushall
+  end
+
   it "should redirect to a setup page when called with an empty database" do
     get :index
     response.should redirect_to :action => :setup
@@ -35,6 +39,9 @@ describe MainController do
   end
 
   it "should show a message when the site is in to maintenance mode" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :index
+    response.code.should eql("200")
     TSDBExplorer::Realtime::set_maintenance_mode('Test message')
     get :index
     response.code.should eql("503")
@@ -43,7 +50,12 @@ describe MainController do
   end
                      
   it "should not show a message when the site is taken out of maintenance mode" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :index
+    response.code.should eql("200")
     TSDBExplorer::Realtime::set_maintenance_mode('Test message')
+    get :index
+    response.code.should eql("503")
     TSDBExplorer::Realtime::clear_maintenance_mode
     get :index
     response.code.should_not eql("503")
