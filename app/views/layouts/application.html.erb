@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html itemscope itemtype="http://schema.org/CreativeWork">
  <head>
   <title>Open Train Times<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
   <%= stylesheet_link_tag 'application' %>
@@ -8,6 +8,7 @@
   <%= csrf_meta_tag %>
   <%= yield(:script) %>
   <%= render :partial => 'common/analytics' rescue nil %>
+  <%= render :partial => 'common/google_plus' rescue nil %>
   <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
   <meta name="description" content="Real-time train information using Open Data" />
  </head>
@@ -50,6 +51,8 @@
     <p class="pull-right"><%= link_to (image_tag 'twitter_followus.png'), 'http://twitter.com/opentraintimes' %></p>
     <p><a href="http://github.com/poggs/tsdbexplorer">Open Train Times</a> is &copy;2011-2012 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a> using data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>, <a href="http://www.atoc.org/">RSP</a> and <a href="http://www.transportdirect.info/">Transport Direct</a>.</p> 
     <p>Please read the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %> to understand the limitations of this site.</p>
+    <p><!-- Fix this ugly hack -->&nbsp;</p>
+    <div class="g-plusone" data-size="small" data-annotation="inline"></div>
    </div>
   </footer>
 
