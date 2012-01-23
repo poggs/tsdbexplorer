@@ -243,44 +243,4 @@ class LocationController < ApplicationController
 
   end
 
-
-  # Return all the TIPLOCs for a specified location.  This may be a TIPLOC, in which case, validate and return the TIPLOC.  It may be a CRS code, in which case, return all the associated TIPLOCs from the MSNF
-
-  def tiplocs_for(loc)
-
-    tiplocs = nil
-
-    if loc.length == 3
-
-      # If a three-character location has been entered, try to find an exact
-      # match, and if not, redirect to the search page (unless we're in
-      # advanced mode)
-
-      tiplocs = StationName.find_related(loc.upcase)
-      return nil if tiplocs.blank? && !advanced_mode?
-      location_name = StationName.find_by_crs_code(loc.upcase).station_name
-
-    elsif advanced_mode?
-
-      # If we're in advanced mode, try to match on a TIPLOC if the CRS code
-      # match didn't work.  If the TIPLOC isn't found, redirect to the
-      # search page
-
-      tiplocs = Tiploc.where(:tiploc_code => loc.upcase)
-      return nil if tiplocs.blank?
-      location_name = Tiploc.find_by_tiploc_code(loc.upcase).tps_description
-
-    else
-
-      # We are not in advanced mode and a location has been passed that is
-      # not a CRS code - so return nothing.
-
-      return nil
-
-    end
-
-    return { :locations => tiplocs, :name => location_name }
-
-  end
-
 end
