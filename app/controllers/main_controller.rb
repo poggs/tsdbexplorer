@@ -34,7 +34,7 @@ class MainController < ApplicationController
     today = Date.today
     @dates.push({ :yyyymmdd => today.to_s(:yyyymmdd), :human => 'Today' })
 
-    (0..days_forward).to_a.each do |add_day|
+    (1..days_forward).to_a.each do |add_day|
       fwd_date = today + add_day.days
       @dates.push( :yyyymmdd => fwd_date.to_s(:yyyymmdd), :human => 'on ' + fwd_date.to_s )
     end
@@ -46,7 +46,32 @@ class MainController < ApplicationController
 
   def setup
 
-    redirect_to :action => 'index' if BasicSchedule.count > 0
+    redirect_to :action => 'index' and return if BasicSchedule.count > 0
+
+    render 'common/error', :locals => { :message => "Please set the location of the data import directory in the application configuration file" } and return unless ($CONFIG.has_key? 'DATA') && ($CONFIG['DATA'].has_key? 'path')
+
+    @data_files = Dir.glob(::Rails.root.join($CONFIG['DATA']['path']).to_s + "/*")
+
+    if @data_files.blank?
+      render 'main/setup_part1'
+    else
+
+      @import_files = Array.new
+      @components = Array.new
+
+      @data_files.each do |f|
+        if f.match(/\.MSN/)
+          @import_files.push({ :filename => f, :description => 'Master Station Names File (MSNF)', :provider => 'ATOC', :data_type => :rsp_msnf })
+        elsif f.match(/\.MCA/)
+          @import_files.push({ :filename => f, :description => 'CIF-formatted timetable data', :provider => 'ATOC', :data_type => :rsp_cif })
+        elsif f.match(/\.CIF/)
+          @import_files.push({ :filename => f, :description => 'CIF-formatted timetable data', :provider => 'Network Rail', :data_type => :nr_cif })
+        end
+      end
+
+      render 'main/setup_part2'
+
+    end
 
   end
 

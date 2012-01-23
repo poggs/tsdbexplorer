@@ -17,21 +17,5 @@
 #  $Id$
 #
 
-# Set the hostname, username and password for the AMQP server here.  Leave
-# the queue names at their default unless it's necessary to change them.
-
-AMQP_SERVER:
-  hostname:    'localhost'
-  username:    'dummy_user'
-  password:    'dummy_password'
-  vhost:       'vhost_name'
-
-REDIS_SERVER:
-  hostname:    'localhost'
-  port:        '6379'
-
-DATA:
-  path:        'import'
-
-RESTRICTIONS:
-  category:    [nil]
+module HealthcheckHelper
+end

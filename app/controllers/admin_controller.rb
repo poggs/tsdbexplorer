@@ -62,15 +62,15 @@ class AdminController < ApplicationController
 
     @all_timetables = Hash.new
 
-    if $CONFIG['TIMETABLE']
+    if ($CONFIG.has_key? 'DATA') && ($CONFIG['DATA'].has_key? 'path')
 
-      tt_dir = Dir.open($CONFIG['TIMETABLE']['path'])
+      tt_dir = Dir.open(::Rails.root.join($CONFIG['DATA']['path']))
 
       tt_dir.each do |t|
 
         next if File.directory? t
 
-        if tt_file = File.open($CONFIG['TIMETABLE']['path'] + "/" + t)
+        if tt_file = File.open(tt_dir + "/" + t)
           header = TSDBExplorer::CIF::parse_record(tt_file.readline)
           info = Hash.new
           info[:filename] = t

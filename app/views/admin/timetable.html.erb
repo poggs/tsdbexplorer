@@ -18,10 +18,10 @@
  <div class="span16">
   <h2>Schedule extracts</h2>
 
-  <% if $CONFIG['TIMETABLE'] %>
+  <% if ($CONFIG.has_key? 'DATA') && ($CONFIG['DATA'].has_key? 'path') %>
 
   <ul>
-   <li>There are <%= @all_timetables.count %> timetable files in <%= $CONFIG['TIMETABLE']['path'] %></li>
+   <li>There are <%= @all_timetables.count %> timetable files in <%= $CONFIG['DATA']['path'] %></li>
   </ul>
 
   <table class="zebra-striped condensed-table">

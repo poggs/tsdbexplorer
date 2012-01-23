@@ -28,6 +28,7 @@ class LocationController < ApplicationController
     redirect_to root_url and return if params[:location].nil?
 
     tiplocs = tiplocs_for(params[:location])
+
     redirect_to :action => 'search', :term => params[:location] and return if tiplocs.nil?
 
 
@@ -48,7 +49,7 @@ class LocationController < ApplicationController
 
     # Limit our search only to relevant TIPLOCs
 
-    @schedule = Location.where([ 'locations.tiploc_code IN (?)', tiplocs[:locations].collect(&:tiploc_code) ])
+    @schedule = Location.where([ 'locations.tiploc_code IN (?)', tiplocs[:locations] ])
 
 
     # Only show passenger services if we are not in advanced mode
@@ -62,14 +63,14 @@ class LocationController < ApplicationController
       from_tiplocs = tiplocs_for(params[:from])
       render 'common/error', :status => :bad_request, :locals => { :message => "We couldn't find the location " + params[:from] + " that you specified in your 'from location' filter." } and return if from_tiplocs.nil? || from_tiplocs[:locations].nil?
       @from_location = from_tiplocs[:name]
-      @schedule = @schedule.runs_from(tiplocs_for(params[:from])[:locations].collect(&:tiploc_code))
+      @schedule = @schedule.runs_from(tiplocs_for(params[:from])[:locations])
     end
 
     unless params[:to].blank?
       to_tiplocs = tiplocs_for(params[:to])
       render 'common/error', :status => :bad_request, :locals => { :message => "We couldn't find the location " + params[:to] + " that you specified in your 'to location' filter." } and return if to_tiplocs.nil? || to_tiplocs[:locations].nil?
       @to_location = to_tiplocs[:name]
-      @schedule = @schedule.runs_to(tiplocs_for(params[:to])[:locations].collect(&:tiploc_code))
+      @schedule = @schedule.runs_to(tiplocs_for(params[:to])[:locations])
     end
 
 
@@ -199,6 +200,9 @@ class LocationController < ApplicationController
     elsif match.is_a? Tiploc
       id = match.tiploc_code
       text = tidy_text(match.tps_description)
+    elsif match.is_a? Hash
+      id = match['crs_code']
+      text = tidy_text(match['description'])
     end
 
     text = text + ' (' + id + ')'
@@ -221,7 +225,14 @@ class LocationController < ApplicationController
 
   def match_msnf_on_station_name(term)
 
+    @matches = Array.new
+
     StationName.where('cate_type != 9 AND station_name LIKE ?', '%' + term + '%')
+    $REDIS.keys('LOCATION:MSNF:*' + term + '*').each do |s|
+      @matches.push $REDIS.hgetall(s)
+    end
+
+    return @matches
 
   end
 
@@ -240,46 +251,6 @@ class LocationController < ApplicationController
   def match_cif_on_description(term)
 
     Tiploc.where('tps_description LIKE ?', '%' + term + '%')
-
-  end
-
-
-  # Return all the TIPLOCs for a specified location.  This may be a TIPLOC, in which case, validate and return the TIPLOC.  It may be a CRS code, in which case, return all the associated TIPLOCs from the MSNF
-
-  def tiplocs_for(loc)
-
-    tiplocs = nil
-
-    if loc.length == 3
-
-      # If a three-character location has been entered, try to find an exact
-      # match, and if not, redirect to the search page (unless we're in
-      # advanced mode)
-
-      tiplocs = StationName.find_related(loc.upcase)
-      return nil if tiplocs.blank? && !advanced_mode?
-      location_name = StationName.find_by_crs_code(loc.upcase).station_name
-
-    elsif advanced_mode?
-
-      # If we're in advanced mode, try to match on a TIPLOC if the CRS code
-      # match didn't work.  If the TIPLOC isn't found, redirect to the
-      # search page
-
-      tiplocs = Tiploc.where(:tiploc_code => loc.upcase)
-      return nil if tiplocs.blank?
-      location_name = Tiploc.find_by_tiploc_code(loc.upcase).tps_description
-
-    else
-
-      # We are not in advanced mode and a location has been passed that is
-      # not a CRS code - so return nothing.
-
-      return nil
-
-    end
-
-    return { :locations => tiplocs, :name => location_name }
 
   end
 

@@ -13,6 +13,7 @@ gem 'json'
 gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'
+gem 'asset_sync'
 
 
 # Javascript
@@ -29,7 +30,7 @@ gem 'uuid', '>= 2.3.4'
 gem 'amqp', '>= 0.8.3'
 gem 'ruby-progressbar', '>= 0.0.10'
 gem 'redis', '>= 2.2.2'
-gem 'activerecord-import', '>= 0.2.8'
+gem 'activerecord-import', '>= 0.2.9'
 
 
 # Environment-specific gems

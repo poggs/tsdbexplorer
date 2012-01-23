@@ -17,21 +17,24 @@
 #  $Id$
 #
 
-# Set the hostname, username and password for the AMQP server here.  Leave
-# the queue names at their default unless it's necessary to change them.
+require 'spec_helper'
 
-AMQP_SERVER:
-  hostname:    'localhost'
-  username:    'dummy_user'
-  password:    'dummy_password'
-  vhost:       'vhost_name'
+describe HealthcheckController do
 
-REDIS_SERVER:
-  hostname:    'localhost'
-  port:        '6379'
+  render_views
 
-DATA:
-  path:        'import'
+  it "should return a healthcheck page" do
+    get :index
+    response.code.should eql("200")
+    response.body.should =~ /200 OK/
+  end
 
-RESTRICTIONS:
-  category:    [nil]
+  it "should return a 200 even if the site is in maintenance mode" do
+    TSDBExplorer::Realtime::set_maintenance_mode("test")
+    get :index
+    response.code.should eql("200")
+    response.body.should =~ /200 OK/
+    TSDBExplorer::Realtime::clear_maintenance_mode
+  end
+
+end

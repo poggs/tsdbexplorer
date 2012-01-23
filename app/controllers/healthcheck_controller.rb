@@ -17,21 +17,13 @@
 #  $Id$
 #
 
-# Set the hostname, username and password for the AMQP server here.  Leave
-# the queue names at their default unless it's necessary to change them.
+class HealthcheckController < ApplicationController
 
-AMQP_SERVER:
-  hostname:    'localhost'
-  username:    'dummy_user'
-  password:    'dummy_password'
-  vhost:       'vhost_name'
+  def index
 
-REDIS_SERVER:
-  hostname:    'localhost'
-  port:        '6379'
+    @status = "200 OK"
+    render :layout => nil
 
-DATA:
-  path:        'import'
+  end
 
-RESTRICTIONS:
-  category:    [nil]
+end

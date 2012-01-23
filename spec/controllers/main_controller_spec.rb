@@ -21,6 +21,10 @@ require 'spec_helper'
 
 describe MainController do
 
+  before do
+    ActionController::Base.perform_caching = true
+  end
+
   render_views
 
   before(:each) do
@@ -35,7 +39,7 @@ describe MainController do
   it "should show an informational page when called with an empty database" do
     get :setup
     response.code.should eql("200")
-    response.body.should =~ /You will need some CIF timetable data/
+    response.body.should =~ /To use this site, you will need the latest timetable and station names data files/
   end
 
   it "should show a message when the site is in to maintenance mode" do
@@ -61,14 +65,6 @@ describe MainController do
     response.code.should_not eql("503")
     response.body.should_not include('Test message')
     response.should_not render_template('common/maintenance_mode')
-  end
-
-  it "should the latest schedule date in the footer" do
-    result = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    result.status.should eql(:ok)
-    get :index
-    response.code.should eql("200")
-    response.body.should =~ /Schedules are available for dates up to Sunday 15th May 2011/
   end
 
   it "should not display the latest schedule date if no CIF data has been imported" do

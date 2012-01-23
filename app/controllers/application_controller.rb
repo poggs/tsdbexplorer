@@ -21,7 +21,6 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
-  before_filter :calculate_stats
   before_filter :in_maintenance_mode?
   before_filter :convert_url_parameters
   helper_method :advanced_mode?
@@ -31,17 +30,11 @@ class ApplicationController < ActionController::Base
 
   def in_maintenance_mode?
 
-    render 'common/maintenance_mode', :status => :service_unavailable, :locals => { :reason => $REDIS.get('OTT:SYSTEM:MAINT') } and return if $REDIS.get('OTT:SYSTEM:MAINT')
-
-  end
-
-
-  # Calculate statistics to be included in the footer of each page
-
-  def calculate_stats
-
-    @stats = Hash.new
-    @stats[:latest_schedule] = BasicSchedule.maximum(:runs_to) unless BasicSchedule.count == 0
+    unless request[:controller] == "healthcheck"
+      if $REDIS.get('OTT:SYSTEM:MAINT')
+        render 'common/maintenance_mode', :status => :service_unavailable, :locals => { :reason => $REDIS.get('OTT:SYSTEM:MAINT') } and return
+      end
+    end
 
   end
 
@@ -108,6 +101,55 @@ class ApplicationController < ActionController::Base
     end
 
     @datetime = @time
+
+  end
+
+
+  # Return all the TIPLOCs for a specified location.  This may be a TIPLOC, in which case, validate and return the TIPLOC.  It may be a CRS code, in which case, return all the associated TIPLOCs from the MSNF
+
+  def tiplocs_for(loc)
+
+    tiplocs = nil
+
+    # Update the location database if it's empty
+
+    if $REDIS.keys('CRS:*').blank?
+      logger.warn "Location cache empty - rebuilding"
+      TSDBExplorer::Realtime::cache_location_database
+    end
+
+    if loc.length == 3
+
+      # If a three-character location has been entered, try to find an exact
+      # match, and if not, redirect to the search page (unless we're in
+      # advanced mode)
+
+      tiplocs = $REDIS.lrange('CRS:' + loc.upcase + ':TIPLOCS', 0, -1)
+      return nil if tiplocs.blank? && !advanced_mode?
+      location_name = $REDIS.hget('CRS:' + loc.upcase, 'description')
+
+    elsif advanced_mode?
+
+      # If we're in advanced mode, try to match on a TIPLOC if the CRS code
+      # match didn't work.  If the TIPLOC isn't found, redirect to the
+      # search page
+
+      location_detail = $REDIS.hgetall('TIPLOC:' + loc.upcase)
+      return if location_detail.blank?
+
+      tiplocs = loc.upcase
+      location_name = location_detail['description']
+
+    else
+
+      # We are not in advanced mode and a location has been passed that is
+      # not a CRS code - so return nothing.
+
+      return nil
+
+    end
+
+    return { :locations => tiplocs, :name => location_name }
 
   end
 

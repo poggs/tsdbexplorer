@@ -450,7 +450,7 @@ module ApplicationHelper
     if t[4] == " " || t[4].nil?
       t[0..3]
     else
-      t[0..3] + "&half;"
+      t[0..3] + "&frac12;"
     end
 
   end

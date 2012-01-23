@@ -422,4 +422,36 @@ module ScheduleHelper
 
   end
 
+
+  # Show a location name, or "Starts here"/"Terminates here" if appropriate
+
+  def show_location_name(loc, type)
+
+    if type == :from && loc.activity_tb == true
+      text = "Starts here"
+      tiploc = loc.tiploc_code
+    elsif type == :to && loc.activity_tf == true
+      text = "Terminates here"
+      tiploc = loc.tiploc_code
+    else
+      if type == :from
+        text = tidy_text(decode_tiploc(loc.basic_schedule.origin))
+        tiploc = loc.basic_schedule.origin.tiploc_code
+      else
+        text = tidy_text(decode_tiploc(loc.basic_schedule.terminate))
+        tiploc = loc.basic_schedule.terminate.tiploc_code
+      end
+    end
+
+    if session['mode'] == 'advanced'
+      location_code = loc.tiploc_code
+    else
+      crs_code = $REDIS.hget('TIPLOC:' + tiploc, 'crs_code')
+      location_code = crs_code unless crs_code.nil?
+    end
+
+    return link_to text, :controller => 'location', :action => 'index', :location => location_code
+
+  end
+
 end

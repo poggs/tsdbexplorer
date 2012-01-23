@@ -152,7 +152,7 @@ describe ApplicationHelper do
   end
 
   it "should append a half-sign to WTT timings with a half-minute appended" do
-    tidy_wtt_time('1800H').should eql('1800&half;')
+    tidy_wtt_time('1800H').should eql('1800&frac12;')
   end
 
   it "should not append a half-sign to WTT timings which are only four characters" do
