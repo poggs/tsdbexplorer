@@ -83,7 +83,13 @@ class LocationController < ApplicationController
 
     if @range[:from].midnight == @range[:to].midnight
 
-      @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd))
+
+      if advanced_mode?
+        @schedule = @schedule.passes_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      else
+        @schedule = @schedule.calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      end
 
       @schedule.each do |l|
         next if l.basic_schedule.nil?
@@ -94,11 +100,23 @@ class LocationController < ApplicationController
 
       @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), '2359')
 
+      if advanced_mode?
+        @schedule_a = @schedule_a.passes_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      else
+        @schedule_a = @schedule_a.calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      end
+
       @schedule_a.each do |l|
         @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
       end
 
       @schedule_b = @schedule.runs_on(@range[:to].to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
+
+      if advanced_mode?
+        @schedule_b = @schedule_b.passes_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      else
+        @schedule_b = @schedule_b.calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      end
 
       @schedule_b.each do |l|
         @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
