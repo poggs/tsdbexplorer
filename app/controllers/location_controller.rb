@@ -98,12 +98,12 @@ class LocationController < ApplicationController
 
     else
 
-      @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), '2359')
+      @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd))
 
       if advanced_mode?
-        @schedule_a = @schedule_a.passes_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+        @schedule_a = @schedule_a.passes_between(@range[:from].to_s(:hhmm), '2359')
       else
-        @schedule_a = @schedule_a.calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+        @schedule_a = @schedule_a.calls_between(@range[:from].to_s(:hhmm), '2359')
       end
 
       @schedule_a.each do |l|
@@ -113,9 +113,9 @@ class LocationController < ApplicationController
       @schedule_b = @schedule.runs_on(@range[:to].to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
 
       if advanced_mode?
-        @schedule_b = @schedule_b.passes_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+        @schedule_b = @schedule_b.passes_between('0000', @range[:to].to_s(:hhmm))
       else
-        @schedule_b = @schedule_b.calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+        @schedule_b = @schedule_b.calls_between('0000', @range[:to].to_s(:hhmm))
       end
 
       @schedule_b.each do |l|
