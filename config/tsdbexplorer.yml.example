@@ -30,8 +30,8 @@ REDIS_SERVER:
   hostname:    'localhost'
   port:        '6379'
 
-TIMETABLE:
+DATA:
   path:        'import'
 
 RESTRICTIONS:
-  category:    []
+  category:    [nil]

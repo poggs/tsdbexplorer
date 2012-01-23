@@ -200,6 +200,9 @@ class LocationController < ApplicationController
     elsif match.is_a? Tiploc
       id = match.tiploc_code
       text = tidy_text(match.tps_description)
+    elsif match.is_a? Hash
+      id = match['crs_code']
+      text = tidy_text(match['description'])
     end
 
     text = text + ' (' + id + ')'
@@ -222,7 +225,14 @@ class LocationController < ApplicationController
 
   def match_msnf_on_station_name(term)
 
+    @matches = Array.new
+
     StationName.where('cate_type != 9 AND station_name LIKE ?', '%' + term + '%')
+    $REDIS.keys('LOCATION:MSNF:*' + term + '*').each do |s|
+      @matches.push $REDIS.hgetall(s)
+    end
+
+    return @matches
 
   end
 

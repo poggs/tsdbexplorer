@@ -13,8 +13,10 @@
   <li>
   <% if m.is_a? Tiploc %>
    <%= link_to "#{tidy_text(m.tps_description)} #{m.crs_code.blank? ? '(' + m.tiploc_code + ')' : '(' + m.crs_code + ')' }", :controller => 'location', :location => m.tiploc_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %>
-  <% else %>
+  <% elsif m.is_a? StationName %>
    <%= link_to "#{tidy_text(m.station_name)} (#{m.crs_code})", :controller => 'location', :location => m.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %>
+  <% else %>
+  <%= link_to "#{tidy_text(m['description'])} (#{m['crs_code']})", :controller => 'location', :location => m['crs_code'], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %>
   <% end %>
   </li>
   <% end %>
