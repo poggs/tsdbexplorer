@@ -28,6 +28,7 @@ class LocationController < ApplicationController
     redirect_to root_url and return if params[:location].nil?
 
     tiplocs = tiplocs_for(params[:location])
+
     redirect_to :action => 'search', :term => params[:location] and return if tiplocs.nil?
 
 
@@ -48,7 +49,7 @@ class LocationController < ApplicationController
 
     # Limit our search only to relevant TIPLOCs
 
-    @schedule = Location.where([ 'locations.tiploc_code IN (?)', tiplocs[:locations].collect(&:tiploc_code) ])
+    @schedule = Location.where([ 'locations.tiploc_code IN (?)', tiplocs[:locations] ])
 
 
     # Only show passenger services if we are not in advanced mode
@@ -62,14 +63,14 @@ class LocationController < ApplicationController
       from_tiplocs = tiplocs_for(params[:from])
       render 'common/error', :status => :bad_request, :locals => { :message => "We couldn't find the location " + params[:from] + " that you specified in your 'from location' filter." } and return if from_tiplocs.nil? || from_tiplocs[:locations].nil?
       @from_location = from_tiplocs[:name]
-      @schedule = @schedule.runs_from(tiplocs_for(params[:from])[:locations].collect(&:tiploc_code))
+      @schedule = @schedule.runs_from(tiplocs_for(params[:from])[:locations])
     end
 
     unless params[:to].blank?
       to_tiplocs = tiplocs_for(params[:to])
       render 'common/error', :status => :bad_request, :locals => { :message => "We couldn't find the location " + params[:to] + " that you specified in your 'to location' filter." } and return if to_tiplocs.nil? || to_tiplocs[:locations].nil?
       @to_location = to_tiplocs[:name]
-      @schedule = @schedule.runs_to(tiplocs_for(params[:to])[:locations].collect(&:tiploc_code))
+      @schedule = @schedule.runs_to(tiplocs_for(params[:to])[:locations])
     end
 
 

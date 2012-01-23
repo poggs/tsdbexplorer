@@ -348,7 +348,7 @@ describe LocationController do
     response.body.should =~ /C51784/
     response.body.should_not =~ /C51786/
     response.body.should =~ /Services at Watford Junction \(WFJ\)/
-    response.body.should =~ /Which are going to How Wood \(HOWWOOD\)/
+    response.body.should =~ /Which are going to How Wood \(Herts\) \(HOWWOOD\)/
   end
 
   it "should only show trains which have called previously a specified CRS code" do
