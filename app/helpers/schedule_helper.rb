@@ -428,10 +428,10 @@ module ScheduleHelper
   def show_location_name(loc, type)
 
     if type == :from && loc.activity_tb == true
-      text = "Starts here"
+      text = "<strong>Starts here</strong>"
       tiploc = loc.tiploc_code
     elsif type == :to && loc.activity_tf == true
-      text = "Terminates here"
+      text = "<strong>Terminates here</strong>"
       tiploc = loc.tiploc_code
     else
       if type == :from
@@ -450,7 +450,7 @@ module ScheduleHelper
       location_code = crs_code unless crs_code.nil?
     end
 
-    return link_to text, :controller => 'location', :action => 'index', :location => location_code
+    return text
 
   end
 

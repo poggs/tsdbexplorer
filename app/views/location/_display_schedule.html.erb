@@ -3,7 +3,7 @@
   <%= tag 'tr', { :style => s.basic_schedule.atoc_code == "ZZ" ? 'background: #eee;' : nil }, 'open' %>
   <% if advanced_mode? %>
    <td><%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), { :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :year => datetime.year, :month => datetime.month, :day => datetime.day } %> <%= s.basic_schedule.train_identity %></span>&nbsp;<%= decode_stp_indicator(s.basic_schedule, :A) %></td>
-   <td><%= raw format_location_time(s, :arrival) %></td>
+   <td><%= format_location_time(s, :arrival) %></td>
    <td><%= tidy_text(decode_tiploc(s.basic_schedule.origin)) %></td>
    <td><%= format_platform_and_line(s) %>
    <td><%= tidy_text(decode_tiploc(s.basic_schedule.terminate)) %></td>
@@ -14,9 +14,9 @@
    <% if @realtime.member? s.basic_schedule_uuid %>&nbsp;<%= image_tag 'tick.png', :alt => 'Real-time information available' %><% end %>
   </td>
   <td><%= s.public_arrival %></td>
-  <td><%= show_location_name(s, :from) %></td>
+  <td><%= raw show_location_name(s, :from) %></td>
   <td><%= s.platform %></td>
-  <td><%= show_location_name(s, :to) %></td>
+  <td><%= raw show_location_name(s, :to) %></td>
   <td><%= s.public_departure %></td>
   <td><%= decode_toc(s.basic_schedule.atoc_code) %></td>
  </tr>
