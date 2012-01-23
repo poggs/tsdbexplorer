@@ -34,7 +34,7 @@ class MainController < ApplicationController
     today = Date.today
     @dates.push({ :yyyymmdd => today.to_s(:yyyymmdd), :human => 'Today' })
 
-    (0..days_forward).to_a.each do |add_day|
+    (1..days_forward).to_a.each do |add_day|
       fwd_date = today + add_day.days
       @dates.push( :yyyymmdd => fwd_date.to_s(:yyyymmdd), :human => 'on ' + fwd_date.to_s )
     end
