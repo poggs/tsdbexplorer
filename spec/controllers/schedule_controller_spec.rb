@@ -229,6 +229,11 @@ describe ScheduleController do
 
   # Activities
 
+  it "should highlight where a stop is to set down passengers only (D)"
+  it "should highlight where a stop is to change locomotives (L)"
+  it "should highlight where a stop is unadvertised (N)"
+  it "should highlight where the train stops as required (R)"
+
   it "should highlight where a stop is for operational purposes (OP)" do
     session[:mode] = 'advanced'
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_op.cif')
@@ -236,6 +241,13 @@ describe ScheduleController do
     get :schedule_by_uid_and_run_date, :uid => 'L95157', :year => '2011', :month => '05', :day => '22'
     response.body.should =~ /North Pole Signal Vc818.+OP/
   end
+
+  it "should highlight where a stop is to allow the locomotive to run round (RR)"
+  it "should highlight where a stop is for staff only (S)"
+  it "should highlight where a stop is for token/staff exchange (TW)"
+  it "should highlight where a stop is to pick up passengers only (U)"
+  it "should highlight where a stop is to detach vehicles (-D)"
+  it "should highlight where a stop is to attach vehicles (-U)"
 
 
   # Security
