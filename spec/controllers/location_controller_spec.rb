@@ -109,15 +109,26 @@ describe LocationController do
     response.body.should =~ /Sunday 12 December 2010/
   end
 
-  it "should display services at a location if the date range spans midnight" do
+  it "should display services at a location where the time range includes the next day" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/train_over_midnight.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/train_over_midnight.msn')
-    get :index, :location => 'LST', :year => '2011', :month => '05', :day => '22', :time => '2330'
+    get :index, :location => 'LST', :year => '2011', :month => '05', :day => '22', :time => '2359'
     response.body.should =~ /Between/
-    response.body.should =~ /2300 on Sunday 22 May 2011/
-    response.body.should =~ /0030 on Monday 23 May 2011/
-    response.body.should =~ /L02600/
+    response.body.should =~ /2329 on Sunday 22 May 2011/
+    response.body.should =~ /0059 on Monday 23 May 2011/
+    response.body.should =~ /L02600\/2011\/5\/22/
   end
+
+  it "should display services at a location where the time range includes the previous day" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/train_over_midnight.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/train_over_midnight.msn')
+    get :index, :location => 'LST', :year => '2011', :month => '05', :day => '23', :time => '0001'
+    response.body.should =~ /Between/
+    response.body.should =~ /2331 on Sunday 22 May 2011/
+    response.body.should =~ /0101 on Monday 23 May 2011/
+    response.body.should =~ /L02600\/2011\/5\/22/
+  end
+
 
   it "should display an error if passed an incorrectly formatted date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
