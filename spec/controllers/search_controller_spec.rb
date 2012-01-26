@@ -21,9 +21,19 @@ require 'spec_helper'
 
 describe SearchController do
 
+  render_views
+
   it "should redirect to the root URL if called directly" do
     get :index
     response.should redirect_to root_url
+  end
+
+  it "should allow searching by location" do
+    get :location
+  end
+
+  it "should allow searching by identity" do
+    get :identity
   end
 
 end

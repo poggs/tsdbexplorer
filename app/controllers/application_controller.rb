@@ -60,47 +60,61 @@ class ApplicationController < ActionController::Base
 
   def convert_url_parameters
 
-    @date = Date.today
+    @today = Time.now
 
-    if params[:date]
+
+    # Date parsing
+
+    if params[:date] && !params[:date].blank?
       begin
         @date = Date.parse(params[:date])
         params[:year] = @date.year.to_s
         params[:month] = @date.month.to_s.rjust(2, '0')
         params[:day] = @date.day.to_s.rjust(2, '0')
         params.delete(:date)
-      rescue
-      end
-    end
-
-    if params[:year] && params[:month] && params[:day]
-      begin
-        @date = Date.parse(params[:year] + "-" + params[:month] + "-" + params[:day])
+        @date_passed = true
       rescue
         render 'common/error', :status => :bad_request, :locals => { :message => "Sorry, we couldn't understand the date you gave." }
       end
+    elsif params[:year] && params[:month] && params[:day]
+      begin
+        @date = Date.parse(params[:year] + "-" + params[:month] + "-" + params[:day])
+        @date_passed = true
+      rescue
+        render 'common/error', :status => :bad_request, :locals => { :message => "Sorry, we couldn't understand the date you gave." }
+      end
+    else
+      @date_passed = false
     end
+
+
+    # Time parsing
 
     if params[:time]
       begin
-        if params[:time].blank?
-          @time = Time.parse(@date.to_s + " " + Time.now.to_s(:hhmm))
-        elsif params[:time].match(/(\d{2})\:(\d{2})/) || params[:time].match(/(\d{2})\.(\d{2})/)
+        if params[:time].match(/(\d{2})\:(\d{2})/) || params[:time].match(/(\d{2})\.(\d{2})/)
           Time.parse($1 + ":" + $2)
           @time = Time.parse(@date.to_s + " " + $1 + ":" + $2)
         else
           Time.parse(params[:time][0..1] + ":" + params[:time][2..3])
           @time = Time.parse(@date.to_s + " " + params[:time][0..1] + ":" + params[:time][2..3])
         end
+        @time_passed = true
       rescue
         render 'common/error', :status => :bad_request, :locals => { :message => "Sorry, we couldn't understand the time you gave." }
       end
     else
-      @time = Time.parse(@date.to_s + " " + Time.now.to_s(:hhmm))
-      params[:time] = nil
+      @time_passed = false
     end
 
-    @datetime = @time
+
+    if @date_passed && @time_passed
+      @datetime = Time.parse(@date.to_s(:yyyymmdd) + " " + @time.to_s(:hhmm_colon))
+    elsif @date_passed && !@time_passed
+      @datetime = Time.parse(@date.to_s(:yyyymmdd) + " " + Time.now.to_s(:hhmm_colon))
+    else
+      @datetime = @today
+    end
 
   end
 
