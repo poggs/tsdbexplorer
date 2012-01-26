@@ -4,9 +4,9 @@
   <% if advanced_mode? %>
    <td><%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), { :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :year => datetime.year, :month => datetime.month, :day => datetime.day } %> <%= s.basic_schedule.train_identity %></span>&nbsp;<%= decode_stp_indicator(s.basic_schedule, :A) %></td>
    <td><%= raw format_location_time(s, :arrival) %></td>
-   <td><%= tidy_text(decode_tiploc(s.basic_schedule.origin)) %></td>
+   <td><%= raw show_location_name(s, :from) %></td>
    <td><%= format_platform_and_line(s) %>
-   <td><%= tidy_text(decode_tiploc(s.basic_schedule.terminate)) %></td>
+   <td><%= raw show_location_name(s, :to) %></td>
    <td><%= raw format_location_time(s, :departure) %></td>
    <td><%= s.basic_schedule.atoc_code %></td>
   <% else %>
