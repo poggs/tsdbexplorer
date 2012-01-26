@@ -174,6 +174,12 @@ describe LocationController do
     response.body.should redirect_to(:controller => 'main', :action => 'index')
   end
 
+  it "should return an error if an empty search string is passed" do
+    get :search, :term => ''
+    response.code.should eql('400')
+    response.body.should =~ /must specify a location/
+  end
+
   it "should return an empty JSON array when no search string is passed and the format is JSON" do
     get 'search', :format => :json
     matches = JSON.parse(response.body)

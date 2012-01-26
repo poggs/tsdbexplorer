@@ -138,6 +138,8 @@ class LocationController < ApplicationController
     if term.nil?
       render :json => Array.new and return if request.format.json?
       redirect_to :root and return if request.format.html?
+    elsif term.blank?
+      render 'common/error', :status => :bad_request, :locals => { :message => 'You must specify a location name.' } and return
     end
 
     term.upcase!
