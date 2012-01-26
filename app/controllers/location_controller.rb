@@ -174,7 +174,7 @@ class LocationController < ApplicationController
 
     # If we've been called as HTML and there's exactly one match, redirect to the location page
 
-    redirect_to :action => 'index', :location => @matches.first.crs_code, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
+    redirect_to :action => 'index', :location => @matches.first['crs_code'], :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
 
 
     if advanced_mode?

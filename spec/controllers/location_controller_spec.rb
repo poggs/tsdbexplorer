@@ -244,6 +244,13 @@ describe LocationController do
     response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
   end
 
+  it "should, in normal mode, match exact station names from the MSNF" do
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    get :search, :term => 'WATFORD JUNCTION'
+    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
+  end
+
   it "should not, in normal mode, match CRS codes from the CIF file" do
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/empty.msn')
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/barking.cif')
