@@ -402,6 +402,7 @@ module ScheduleHelper
   def format_activities(loc)
 
     activity_hash = {
+      'D' => 'Stops to set down passengers only',
       'L' => 'Stops to change locomotive',
       'N' => 'Unadvertised stop',
       'R' => 'Stops when required',
@@ -410,6 +411,7 @@ module ScheduleHelper
       'RR' => 'Stops for locomotive to run round train',
       'S' => 'Stops for railway personnel only',
       'TW' => 'Stops for tablet, staff or token',
+      'U' => 'Stops to pick up passengers only',
       'minusD' => 'Stops to detach vehicles',
       'minusU' => 'Stops to attach vehicles'
     }
