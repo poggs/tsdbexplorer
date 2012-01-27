@@ -21,7 +21,12 @@
       <li><%= link_to 'Home', :controller => 'main', :action => 'index' %></li>
       <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
      </ul>
+
      <ul class="nav secondary-nav">
+      <form class="pull-left" action="<%= url_for :controller => 'location', :action => 'search' %>">
+       <input class="medium" name="term" size="24" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
+      </form>
+
       <li class="dropdown" data-dropdown="dropdown">
        <a href="#" class="dropdown-toggle">Settings</a>
        <ul class="dropdown-menu">
