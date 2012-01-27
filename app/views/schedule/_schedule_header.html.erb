@@ -1,6 +1,6 @@
 <div class="row">
  <div class="span1"><%= mode_icon_for(schedule.status) %></div>
- <div class="span12">
+ <div class="span15">
   <h1><%= time_only(schedule.origin.public_departure) || schedule.origin.departure %> <%= tidy_text(decode_tiploc(schedule.origin)) %> to <%= tidy_text(decode_tiploc(schedule.terminate)) %><br />
   <% unless schedule.atoc_code == "ZZ" %><small>Operated by <%= decode_toc(schedule.atoc_code) %></small><% end %>
   </h1>
@@ -23,10 +23,6 @@
    <li><%= decode_train_class(schedule.train_class) %></li>
    <li>Reservations <%= decode_reservations(schedule.reservations) %></li>
   </ul>
- </div>
- <div class="span8">
-   <h2>Performance</h2>
-   <p>Not yet available</p>
  </div>
 </div>
 <% end %>
