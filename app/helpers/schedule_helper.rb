@@ -430,17 +430,17 @@ module ScheduleHelper
   def show_location_name(loc, type)
 
     if type == :from && loc.activity_tb == true
-      text = "<strong>Starts here</strong>"
+      text = "Starts here"
       tiploc = loc.tiploc_code
     elsif type == :to && loc.activity_tf == true
-      text = "<strong>Terminates here</strong>"
+      text = "Terminates here"
       tiploc = loc.tiploc_code
     else
       if type == :from
-        text = tidy_text(decode_tiploc(loc.basic_schedule.origin))
+        text = "<strong>" + tidy_text(decode_tiploc(loc.basic_schedule.origin)) + "</strong>"
         tiploc = loc.basic_schedule.origin.tiploc_code
       else
-        text = tidy_text(decode_tiploc(loc.basic_schedule.terminate))
+        text = "<strong>" + tidy_text(decode_tiploc(loc.basic_schedule.terminate)) + "</strong>"
         tiploc = loc.basic_schedule.terminate.tiploc_code
       end
     end
