@@ -30,6 +30,10 @@ REDIS_SERVER:
   hostname:    'localhost'
   port:        '6379'
 
+ANALYTICS:
+  tracking_id: nil
+  domain_name: nil
+
 DATA:
   path:        'import'
 
