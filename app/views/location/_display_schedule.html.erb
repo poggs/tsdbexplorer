@@ -3,11 +3,11 @@
   <%= tag 'tr', { :style => s.basic_schedule.atoc_code == "ZZ" ? 'background: #eee;' : nil }, 'open' %>
   <% if advanced_mode? %>
    <td><%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), { :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :year => datetime.year, :month => datetime.month, :day => datetime.day } %> <%= s.basic_schedule.train_identity %></span>&nbsp;<%= decode_stp_indicator(s.basic_schedule, :A) %></td>
-   <td><%= raw format_location_time(s, :arrival) %></td>
+   <td><% if s.pass? %><em>PASS</em><% else %><%= raw format_location_time(s, :arrival) %><% end %></td>
    <td><%= raw show_location_name(s, :from) %></td>
    <td><%= format_platform_and_line(s) %>
    <td><%= raw show_location_name(s, :to) %></td>
-   <td><%= raw format_location_time(s, :departure) %></td>
+   <td><% if s.pass? %><%= raw format_location_time(s, :pass) %><% else %><%= raw format_location_time(s, :departure) %><% end %></td>
    <td><%= s.basic_schedule.atoc_code %></td>
   <% else %>
   <td><%= link_to (image_tag 'information.png', :alt => 'Information', :style => 'info_button'), :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :year => datetime.year, :month => datetime.month, :day => datetime.day %>

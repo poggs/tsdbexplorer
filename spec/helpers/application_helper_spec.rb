@@ -159,6 +159,18 @@ describe ApplicationHelper do
     tidy_wtt_time('1800').should eql('1800')
   end
 
+  it "should handle a half-minute allowance" do
+    tidy_wtt_time('H').should eql('&frac12;')
+  end
+
+  it "should handle a whole-minute allowance" do
+    tidy_wtt_time('5').should eql('5')
+  end
+
+  it "should handle a number-and-half-minute allowance" do
+    tidy_wtt_time('5H').should eql('5&frac12;')
+  end
+
 
   # Time formatting
 
@@ -169,7 +181,7 @@ describe ApplicationHelper do
 
   it "should format a public and WTT departure time" do
     loc = Location.new(:departure => '1000', :public_departure => '1000')
-    format_location_time(loc, :departure).should eql('<span class="gbtt">1000</span> (<span class="wtt">1000</span>)')
+    format_location_time(loc, :departure).should eql('<span class="wtt">1000</span> (<span class="gbtt">1000</span>)')
   end
 
   it "should format a WTT arrival time" do
@@ -179,7 +191,12 @@ describe ApplicationHelper do
 
   it "should format a public and WTT arrival time" do
     loc = Location.new(:arrival => '1000', :public_arrival => '1000')
-    format_location_time(loc, :arrival).should eql('<span class="gbtt">1000</span> (<span class="wtt">1000</span>)')
+    format_location_time(loc, :arrival).should eql('<span class="wtt">1000</span> (<span class="gbtt">1000</span>)')
+  end
+
+  it "should format a passing time time" do
+    loc = Location.new(:pass => '1000')
+    format_location_time(loc, :pass).should eql('<span class="wtt"><em>1000</em></span>')
   end
 
 end
