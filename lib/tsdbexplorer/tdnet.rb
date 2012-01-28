@@ -525,13 +525,20 @@ module TSDBExplorer
                 location[:basic_schedule_uuid] = basic_schedule[:uuid]
 
                 mapping.each do |bs_attr, cif_attr|
-                  location[bs_attr] = doc_child_4.attributes[cif_attr].text
+                  location[bs_attr] = doc_child_4.attributes[cif_attr].text.strip
                 end
 
                 # If the public arrival or public departure times are '00', get rid of them
 
                 location[:public_arrival] = nil if location[:public_arrival] == "00" || location[:public_arrival].blank?
                 location[:public_departure] = nil if location[:public_departure] == "00" || location[:public_departure].blank?
+
+
+                # If any of the allowances are blank, get rid of them
+
+                location[:engineering_allowance] = nil if location[:engineering_allowance] == ""
+                location[:pathing_allowance] = nil if location[:pathing_allowance] == ""
+                location[:performance_allowance] = nil if location[:performance_allowance] == ""
 
 
                 # Split the CIF activities

@@ -412,13 +412,13 @@ module ScheduleHelper
       'S' => 'Stops for railway personnel only',
       'TW' => 'Stops for tablet, staff or token',
       'U' => 'Stops to pick up passengers only',
-      'minusD' => 'Stops to detach vehicles',
-      'minusU' => 'Stops to attach vehicles'
+      '-D' => 'Stops to detach vehicles',
+      '-U' => 'Stops to attach vehicles'
     }
 
     activities = Array.new
 
-    activity_hash.collect { |k,v| activities.push(content_tag 'abbr', k, { :title => v }) if loc.send('activity_' + k.downcase) == true }
+    activity_hash.collect { |k,v| activities.push(content_tag 'abbr', k, { :title => v }) if loc.send('activity_' + k.downcase.gsub('-', 'minus')) == true }
 
     return activities.collect { |a| content_tag('span', a, { :class => 'label important'  }) }.join(" ")
 
