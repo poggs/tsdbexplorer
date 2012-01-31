@@ -20,7 +20,7 @@
   <h2>Service</h2>
   <ul>
    <li><%= decode_train_category(schedule.category) %></li>
-   <li><%= decode_train_class(schedule.train_class) %></li>
+   <% unless schedule.atoc_code == "ZZ" %><li><%= decode_train_class(schedule.train_class) %></li><% end %>
    <li>Reservations <%= decode_reservations(schedule.reservations) %></li>
   </ul>
  </div>
