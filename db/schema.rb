@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111228235307) do
+ActiveRecord::Schema.define(:version => 20120128231259) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -253,9 +253,9 @@ ActiveRecord::Schema.define(:version => 20111228235307) do
     t.string   "platform",              :limit => 3
     t.string   "line",                  :limit => 3
     t.string   "path",                  :limit => 3
-    t.integer  "engineering_allowance"
-    t.integer  "pathing_allowance"
-    t.integer  "performance_allowance"
+    t.string   "engineering_allowance", :limit => 2
+    t.string   "pathing_allowance",     :limit => 2
+    t.string   "performance_allowance", :limit => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "seq"
