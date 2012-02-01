@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html itemscope itemtype="http://schema.org/CreativeWork">
  <head>
   <title>Open Train Times<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
   <%= stylesheet_link_tag 'application' %>
@@ -8,6 +8,7 @@
   <%= csrf_meta_tag %>
   <%= yield(:script) %>
   <%= render :partial => 'common/analytics' rescue nil %>
+  <%= render :partial => 'common/google_plus' if $CONFIG['ANALYTICS'] rescue nil %>
   <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
   <meta name="description" content="Real-time train information using Open Data" />
  </head>
@@ -20,7 +21,12 @@
       <li><%= link_to 'Home', :controller => 'main', :action => 'index' %></li>
       <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
      </ul>
+
      <ul class="nav secondary-nav">
+      <form class="pull-left" action="<%= url_for :controller => 'location', :action => 'search' %>">
+       <input class="medium" name="term" size="24" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
+      </form>
+
       <li class="dropdown" data-dropdown="dropdown">
        <a href="#" class="dropdown-toggle">Settings</a>
        <ul class="dropdown-menu">
@@ -44,12 +50,15 @@
    </div>
 
   </div>
-
   <footer class="footer">
    <div class="container">
     <p class="pull-right"><%= link_to (image_tag 'twitter_followus.png'), 'http://twitter.com/opentraintimes' %></p>
     <p><a href="http://github.com/poggs/tsdbexplorer">Open Train Times</a> is &copy;2011-2012 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a> using data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>, <a href="http://www.atoc.org/">RSP</a> and <a href="http://www.transportdirect.info/">Transport Direct</a>.</p> 
     <p>Please read the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %> to understand the limitations of this site.</p>
+    <% if request.url == root_url %>
+     <p><!-- Fix this ugly hack -->&nbsp;</p>
+     <div class="g-plusone" data-size="small" data-annotation="inline"></div>
+    <% end %>
    </div>
   </footer>
 

@@ -34,9 +34,9 @@
  <% end %>
  </thead>
  <tbody>
-  <% if @schedule_a || @schedule_b %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_a, :datetime => @datetime } %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_b, :datetime => @datetime + 1.day } %>
+  <% if @schedule_a && @schedule_b %>
+   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_a, :datetime => @range[:from] } %>
+   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_b, :datetime => @range[:to] } %>
   <% else %>
    <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule, :datetime => @datetime } %>
   <% end %>

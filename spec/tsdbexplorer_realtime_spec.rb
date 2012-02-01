@@ -26,11 +26,16 @@ describe "lib/tsdbexplorer/realtime.rb" do
   end
 
   it "should put the site in to maintenance mode" do
+    $REDIS.get('OTT:SYSTEM:MAINT').should be_nil
     TSDBExplorer::Realtime::set_maintenance_mode('Test message')
+    $REDIS.get('OTT:SYSTEM:MAINT').should eql('Test message')
   end
 
   it "should take the site out of maintenance mode" do
+    $REDIS.get('OTT:SYSTEM:MAINT').should be_nil
+    TSDBExplorer::Realtime::set_maintenance_mode('Test message')
     TSDBExplorer::Realtime::clear_maintenance_mode
+    $REDIS.get('OTT:SYSTEM:MAINT').should be_nil
   end
 
   it "should cache TIPLOC data keyed on TIPLOC" do
@@ -42,18 +47,18 @@ describe "lib/tsdbexplorer/realtime.rb" do
   it "should cache TIPLOC data keyed on description" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
     expected_data = { 'tiploc' => 'EUSTON', 'stanox' => '72410', 'crs_code' => 'EUS' }
-    $REDIS.hgetall('LOCATION:LONDON EUSTON').should eql(expected_data)
+    $REDIS.hgetall('LOCATION:CIF:LONDON EUSTON').should eql(expected_data)
   end
 
   it "should cache MSNF data keyed on TIPLOC" do
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/london_euston.msn')
-    expected_data = { 'description' => 'LONDON EUSTON', 'crs_code' => 'EUS', 'cate_type' => '3' }
+    expected_data = { 'tiploc' => 'EUSTON', 'description' => 'LONDON EUSTON', 'crs_code' => 'EUS' }
     $REDIS.hgetall('TIPLOC:EUSTON').should eql(expected_data)
   end
 
   it "should cache MSNF data keyed on description" do
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/london_euston.msn')
-    expected_data = { 'tiploc' => 'EUSTON', 'crs_code' => 'EUS', 'cate_type' => '3' }
+    expected_data = { 'description' => 'LONDON EUSTON', 'tiploc' => 'EUSTON', 'crs_code' => 'EUS' }
     $REDIS.hgetall('LOCATION:LONDON EUSTON').should eql(expected_data)
   end
 
@@ -72,7 +77,7 @@ describe "lib/tsdbexplorer/realtime.rb" do
   it "should update locations from the TIPLOC table with additional data from the MSNF table" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/london_euston.msn')
-    expected_data = { 'description' => 'LONDON EUSTON', 'stanox' => '72410', 'crs_code' => 'EUS', 'cate_type' => '3' }
+    expected_data = { 'description' => 'LONDON EUSTON', 'stanox' => '72410', 'crs_code' => 'EUS', 'tiploc' => 'EUSTON' }
     $REDIS.hgetall('TIPLOC:EUSTON').should eql(expected_data)
   end
 

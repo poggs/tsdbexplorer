@@ -109,15 +109,26 @@ describe LocationController do
     response.body.should =~ /Sunday 12 December 2010/
   end
 
-  it "should display services at a location if the date range spans midnight" do
+  it "should display services at a location where the time range includes the next day" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/train_over_midnight.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/train_over_midnight.msn')
-    get :index, :location => 'LST', :year => '2011', :month => '05', :day => '22', :time => '2330'
+    get :index, :location => 'LST', :year => '2011', :month => '05', :day => '22', :time => '2359'
     response.body.should =~ /Between/
-    response.body.should =~ /2300 on Sunday 22 May 2011/
-    response.body.should =~ /0030 on Monday 23 May 2011/
-    response.body.should =~ /L02600/
+    response.body.should =~ /2329 on Sunday 22 May 2011/
+    response.body.should =~ /0059 on Monday 23 May 2011/
+    response.body.should =~ /L02600\/2011\/5\/22/
   end
+
+  it "should display services at a location where the time range includes the previous day" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/train_over_midnight.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/train_over_midnight.msn')
+    get :index, :location => 'LST', :year => '2011', :month => '05', :day => '23', :time => '0001'
+    response.body.should =~ /Between/
+    response.body.should =~ /2331 on Sunday 22 May 2011/
+    response.body.should =~ /0101 on Monday 23 May 2011/
+    response.body.should =~ /L02600\/2011\/5\/22/
+  end
+
 
   it "should display an error if passed an incorrectly formatted date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
@@ -172,6 +183,12 @@ describe LocationController do
   it "should redirect to the main page when no search string is passed" do
     get :search
     response.body.should redirect_to(:controller => 'main', :action => 'index')
+  end
+
+  it "should return an error if an empty search string is passed" do
+    get :search, :term => ''
+    response.code.should eql('400')
+    response.body.should =~ /must specify a location/
   end
 
   it "should return an empty JSON array when no search string is passed and the format is JSON" do
@@ -235,6 +252,13 @@ describe LocationController do
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
     get :search, :term => 'WFJ'
+    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
+  end
+
+  it "should, in normal mode, match exact station names from the MSNF" do
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
+    get :search, :term => 'WATFORD JUNCTION'
     response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
   end
 

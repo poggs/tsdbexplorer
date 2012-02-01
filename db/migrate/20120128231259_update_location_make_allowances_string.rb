@@ -17,25 +17,16 @@
 #  $Id$
 #
 
-# Set the hostname, username and password for the AMQP server here.  Leave
-# the queue names at their default unless it's necessary to change them.
+class UpdateLocationMakeAllowancesString < ActiveRecord::Migration
 
-AMQP_SERVER:
-  hostname:    'localhost'
-  username:    'dummy_user'
-  password:    'dummy_password'
-  vhost:       'vhost_name'
+  def up
+    change_column(:locations, :engineering_allowance, :string, { :limit => 2 })
+    change_column(:locations, :pathing_allowance, :string, { :limit => 2 })
+    change_column(:locations, :performance_allowance, :string, { :limit => 2 })
+  end
 
-REDIS_SERVER:
-  hostname:    'localhost'
-  port:        '6379'
+  def down
+    raise ActiveRecord::IrreversibleMigration
+  end
 
-ANALYTICS:
-  tracking_id: nil
-  domain_name: nil
-
-DATA:
-  path:        'import'
-
-RESTRICTIONS:
-  category:    [nil]
+end

@@ -33,12 +33,13 @@ class ScheduleController < ApplicationController
   def search
 
     redirect_to :root and return if params[:by].nil? || params[:term].blank?
+    render 'common/error', :status => :bad_request, :locals => { :message => "We don't know how to search by #{params[:by]}" } and return unless ['train_id', 'schedule_uid'].include? params[:by]
 
     params[:term].upcase!
 
     @schedule = BasicSchedule
 
-    @schedule = @schedule.runs_on(@date)
+    @schedule = @schedule.runs_on(@date) if @date_passed
 
     if params[:by] == "train_id"
 
@@ -81,10 +82,6 @@ class ScheduleController < ApplicationController
         end
 
       end
-
-    else
-
-      render 'common/error', :status => :bad_request, :locals => { :message => "We don't know how to search by #{params[:by]}" }
 
     end
 

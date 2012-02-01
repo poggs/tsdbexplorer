@@ -65,9 +65,11 @@ describe AdminController do
     end
   end
 
-  it "should display a notice if the timetable path is not set in tsdbexplorer.yml" do
-    $CONFIG['TIMETABLE'] = nil
+  it "should display a notice if the data import path is not set in tsdbexplorer.yml" do
+    original_value = $CONFIG['DATA']
+    $CONFIG.delete('DATA')
     get :timetable
+    $CONFIG['DATA'] = original_value
     response.body.should =~ /No timetable directory has been specified in the configuration file/
   end
 

@@ -40,6 +40,18 @@ end
 $REDIS = Redis.new(:host => $CONFIG['REDIS_SERVER']['hostname'], :port => $CONFIG['REDIS_SERVER']['port'])
 
 
+# Ensure we reset the connection if we spawn under Passenger
+
+if defined?(PhusionPassenger)
+  PhusionPassenger.on_event(:starting_worker_process) do |forked|
+    if forked
+      require 'redis'
+      $REDIS.cache.reset
+    end
+  end
+end
+
+
 # Select the correct database so we don't accidentally clobber production
 # data if we run unit tests on the production server within the test
 # environment!

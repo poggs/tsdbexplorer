@@ -83,7 +83,13 @@ class LocationController < ApplicationController
 
     if @range[:from].midnight == @range[:to].midnight
 
-      @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd))
+
+      if advanced_mode?
+        @schedule = @schedule.passes_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      else
+        @schedule = @schedule.calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
+      end
 
       @schedule.each do |l|
         next if l.basic_schedule.nil?
@@ -92,13 +98,25 @@ class LocationController < ApplicationController
 
     else
 
-      @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd)).calls_between(@range[:from].to_s(:hhmm), '2359')
+      @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd))
+
+      if advanced_mode?
+        @schedule_a = @schedule_a.passes_between(@range[:from].to_s(:hhmm), '2359')
+      else
+        @schedule_a = @schedule_a.calls_between(@range[:from].to_s(:hhmm), '2359')
+      end
 
       @schedule_a.each do |l|
         @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
       end
 
       @schedule_b = @schedule.runs_on(@range[:to].to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
+
+      if advanced_mode?
+        @schedule_b = @schedule_b.passes_between('0000', @range[:to].to_s(:hhmm))
+      else
+        @schedule_b = @schedule_b.calls_between('0000', @range[:to].to_s(:hhmm))
+      end
 
       @schedule_b.each do |l|
         @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
@@ -120,6 +138,8 @@ class LocationController < ApplicationController
     if term.nil?
       render :json => Array.new and return if request.format.json?
       redirect_to :root and return if request.format.html?
+    elsif term.blank?
+      render 'common/error', :status => :bad_request, :locals => { :message => 'You must specify a location name.' } and return
     end
 
     term.upcase!
@@ -154,7 +174,7 @@ class LocationController < ApplicationController
 
     # If we've been called as HTML and there's exactly one match, redirect to the location page
 
-    redirect_to :action => 'index', :location => @matches.first.crs_code, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
+    redirect_to :action => 'index', :location => @matches.first['crs_code'], :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
 
 
     if advanced_mode?
@@ -200,6 +220,9 @@ class LocationController < ApplicationController
     elsif match.is_a? Tiploc
       id = match.tiploc_code
       text = tidy_text(match.tps_description)
+    elsif match.is_a? Hash
+      id = match['crs_code']
+      text = tidy_text(match['description'])
     end
 
     text = text + ' (' + id + ')'
@@ -222,7 +245,14 @@ class LocationController < ApplicationController
 
   def match_msnf_on_station_name(term)
 
+    @matches = Array.new
+
     StationName.where('cate_type != 9 AND station_name LIKE ?', '%' + term + '%')
+    $REDIS.keys('LOCATION:MSNF:*' + term + '*').each do |s|
+      @matches.push $REDIS.hgetall(s)
+    end
+
+    return @matches
 
   end
 

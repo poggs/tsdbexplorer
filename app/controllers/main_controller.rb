@@ -48,7 +48,9 @@ class MainController < ApplicationController
 
     redirect_to :action => 'index' and return if BasicSchedule.count > 0
 
-    @data_files = Dir.glob(::Rails.root.join($CONFIG['TIMETABLE']['path']).to_s + "/*")
+    render 'common/error', :locals => { :message => "Please set the location of the data import directory in the application configuration file" } and return unless ($CONFIG.has_key? 'DATA') && ($CONFIG['DATA'].has_key? 'path')
+
+    @data_files = Dir.glob(::Rails.root.join($CONFIG['DATA']['path']).to_s + "/*")
 
     if @data_files.blank?
       render 'main/setup_part1'

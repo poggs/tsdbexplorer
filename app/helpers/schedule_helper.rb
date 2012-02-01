@@ -402,6 +402,7 @@ module ScheduleHelper
   def format_activities(loc)
 
     activity_hash = {
+      'D' => 'Stops to set down passengers only',
       'L' => 'Stops to change locomotive',
       'N' => 'Unadvertised stop',
       'R' => 'Stops when required',
@@ -410,13 +411,14 @@ module ScheduleHelper
       'RR' => 'Stops for locomotive to run round train',
       'S' => 'Stops for railway personnel only',
       'TW' => 'Stops for tablet, staff or token',
-      'minusD' => 'Stops to detach vehicles',
-      'minusU' => 'Stops to attach vehicles'
+      'U' => 'Stops to pick up passengers only',
+      '-D' => 'Stops to detach vehicles',
+      '-U' => 'Stops to attach vehicles'
     }
 
     activities = Array.new
 
-    activity_hash.collect { |k,v| activities.push(content_tag 'abbr', k, { :title => v }) if loc.send('activity_' + k.downcase) == true }
+    activity_hash.collect { |k,v| activities.push(content_tag 'abbr', k, { :title => v }) if loc.send('activity_' + k.downcase.gsub('-', 'minus')) == true }
 
     return activities.collect { |a| content_tag('span', a, { :class => 'label important'  }) }.join(" ")
 
@@ -435,10 +437,10 @@ module ScheduleHelper
       tiploc = loc.tiploc_code
     else
       if type == :from
-        text = tidy_text(decode_tiploc(loc.basic_schedule.origin))
+        text = "<strong>" + tidy_text(decode_tiploc(loc.basic_schedule.origin)) + "</strong>"
         tiploc = loc.basic_schedule.origin.tiploc_code
       else
-        text = tidy_text(decode_tiploc(loc.basic_schedule.terminate))
+        text = "<strong>" + tidy_text(decode_tiploc(loc.basic_schedule.terminate)) + "</strong>"
         tiploc = loc.basic_schedule.terminate.tiploc_code
       end
     end
@@ -450,7 +452,7 @@ module ScheduleHelper
       location_code = crs_code unless crs_code.nil?
     end
 
-    return link_to text, :controller => 'location', :action => 'index', :location => location_code
+    return text
 
   end
 

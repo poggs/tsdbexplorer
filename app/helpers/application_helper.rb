@@ -202,7 +202,7 @@ module ApplicationHelper
 
     words = tiploc.split(' ') unless tiploc.nil?
 
-    abbreviations = { 'CARR' => 'Carriage',
+    abbreviations = { 'CARR.' => 'Carriage',
                       'C.S.D' => 'Carriage Servicing Depot',
                       'C.S.D.' => 'Carriage Servicing Depot',
                       'C.S.' => 'Carriage Sidings',
@@ -443,14 +443,36 @@ module ApplicationHelper
   end
 
 
-  # Formats a WTT time in to either HHMM, or HHMM with a half HTML entity appended
+  # Formats a WTT or allowance time in to either HHMM, or HHMM with a half HTML entity appended
 
   def tidy_wtt_time(t)
 
-    if t[4] == " " || t[4].nil?
-      t[0..3]
-    else
-      t[0..3] + "&frac12;"
+    if t.blank?
+
+      ""
+
+    elsif t.length == 1 || t.length == 2
+
+      # Allowance
+
+      if t[0] == "H"
+        "&frac12;"
+      elsif t[1] == "H"
+        t[0] + "&frac12;"
+      else
+        t
+      end
+
+    elsif t.length >= 4
+
+      # Time
+
+      if t[4] == " " || t[4].nil?
+        t[0..3]
+      else
+        t[0..3] + "&frac12;"
+      end
+
     end
 
   end
@@ -492,16 +514,17 @@ module ApplicationHelper
 
   def format_location_time(location, type)
 
-    if [:arrival, :departure].include? type
+    if [:arrival, :departure, :pass].include? type
 
       wtt_time = location.send(type.to_s).to_s
+      gbtt_time = location.send('public_' + type.to_s).to_s unless type == :pass
 
-      gbtt_time = location.send('public_' + type.to_s).to_s
-
-      if gbtt_time.blank?
+      if wtt_time && type == :pass
+        return '<span class="wtt"><em>' + tidy_wtt_time(wtt_time) + '</em></span>'
+      elsif gbtt_time.blank?
         return '<span class="wtt">' + tidy_wtt_time(wtt_time) + '</span>'
       else
-        return '<span class="gbtt">' + gbtt_time + '</span> (<span class="wtt">' + tidy_wtt_time(wtt_time) + '</span>)'
+        return '<span class="wtt">' + tidy_wtt_time(wtt_time) + '</span> (<span class="gbtt">' + gbtt_time + '</span>)'
       end
 
     end
