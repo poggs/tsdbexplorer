@@ -2,6 +2,16 @@
  <div class="alert-message info">Real-time information is not yet available for this train.</div>
 <% end %>
 
+<%= content_for :script do %>
+<script type="text/javascript">
+ $(function () {
+   $("a[rel=twipsy]").twipsy({
+     live: true
+   })
+ })
+</script>
+<% end %>
+
 <table id="schedule">
 
 <% if session[:mode] == 'advanced' %>
