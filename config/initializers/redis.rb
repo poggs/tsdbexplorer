@@ -35,21 +35,21 @@ unless $CONFIG['REDIS_SERVER']['hostname'] && $CONFIG['REDIS_SERVER']['port']
 end
 
 
-# Connect to the Redis server
-
-$REDIS = Redis.new(:host => $CONFIG['REDIS_SERVER']['hostname'], :port => $CONFIG['REDIS_SERVER']['port'])
-
-
 # Ensure we reset the connection if we spawn under Passenger
 
 if defined?(PhusionPassenger)
   PhusionPassenger.on_event(:starting_worker_process) do |forked|
     if forked
-      require 'redis'
-      $REDIS.cache.reset
+      $REDIS.client.disconnect
+      $REDIS = Redis.new(:host => $CONFIG['REDIS_SERVER']['hostname'], :port => $CONFIG['REDIS_SERVER']['port'])
     end
   end
 end
+
+
+# Connect to the Redis server
+
+$REDIS = Redis.new(:host => $CONFIG['REDIS_SERVER']['hostname'], :port => $CONFIG['REDIS_SERVER']['port'])
 
 
 # Select the correct database so we don't accidentally clobber production
