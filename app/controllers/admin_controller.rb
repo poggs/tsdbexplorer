@@ -70,7 +70,7 @@ class AdminController < ApplicationController
 
         next if File.directory? t
 
-        if tt_file = File.open(tt_dir + "/" + t)
+        if tt_file = File.open(tt_dir.path + "/" + t)
           header = TSDBExplorer::CIF::parse_record(tt_file.readline)
           info = Hash.new
           info[:filename] = t
