@@ -69,7 +69,11 @@ class MainController < ApplicationController
         end
       end
 
-      render 'main/setup_part2'
+      if @import_files.blank?
+        render 'main/setup_part1'
+      else
+        render 'main/setup_part2'
+      end
 
     end
 
