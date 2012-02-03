@@ -26,13 +26,7 @@
       <form class="pull-left" action="<%= url_for :controller => 'location', :action => 'search' %>">
        <input class="medium" name="term" size="24" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
       </form>
-
-      <li class="dropdown" data-dropdown="dropdown">
-       <a href="#" class="dropdown-toggle">Settings</a>
-       <ul class="dropdown-menu">
-        <%= content_tag 'li', (link_to 'Advanced mode', :controller => 'application', :action => 'toggle_mode'), { :class => (advanced_mode? == false ? nil : 'active') } %>
-       </ul>
-      </li>
+      <%= content_tag 'li', (link_to advanced_mode? ? 'Public' : 'Advanced', :controller => 'application', :action => 'toggle_mode') %>
      </ul>
     </div>
    </div>
