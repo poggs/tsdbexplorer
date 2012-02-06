@@ -201,7 +201,7 @@ class LocationController < ApplicationController
 
     @json_matches = Array.new
 
-    matches.each do |m|
+    matches[0...20].each do |m|
       @json_matches.push(convert_match_to_json(m))
     end
 
