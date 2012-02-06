@@ -92,7 +92,7 @@ class ScheduleController < ApplicationController
 
   def schedule_by_uid
 
-    @schedule = BasicSchedule.where(:train_uid => params[:uid])
+    @schedule = BasicSchedule.all_schedules_by_uid(params[:uid])
 
     render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]}.  The schedule may not be valid for this date." } and return if @schedule.blank?
 
