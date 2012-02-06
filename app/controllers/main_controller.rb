@@ -19,7 +19,7 @@
 
 class MainController < ApplicationController
 
-  caches_page :index, :disclaimer, :about
+  caches_page :disclaimer, :about
 
   # Handle the front page
 
