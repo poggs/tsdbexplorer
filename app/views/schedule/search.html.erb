@@ -3,22 +3,19 @@
 </div>
 
 <div class="row">
- <div class="span16">
+ <div class="span12">
   <p>We found more than one schedule that matched <strong><%= params[:term] %></strong> - please select one of the following:</p>
  </div>
 </div>
 
 <div class="row">
- <div class="span16">
-  <table class="condensed-table">
+ <div class="span12">
+  <table class="table condensed-table">
    <thead>
     <tr>
-     <th>ID / UID</th>
-     <th>Time</th>
-     <th>Origin</th>
-     <th>Destination</th>
-     <th>Time</th>
-     <th>Operator</th>
+     <th class="span2">Schedule</th>
+     <th class="span8">Journey</th>
+     <th class="span2">Operator</th>
     </tr>
    </thead>
    <tbody>
@@ -26,19 +23,19 @@
      <tr>
       <td>
        <% if params[:date] %>
-        <%= link_to s.train_identity + ' / ' + s.train_uid, :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %>
+        <%= link_to (content_tag :i, { :class => 'icon-calendar' }) + s.train_uid + " (" + decode_stp_indicator(s, :A) + ")", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %> (<%= s.train_identity %>)
        <% else %>
-        <%= link_to s.train_identity + ' / ' + s.train_uid, :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %>
+        <%= link_to raw('<i class="icon-list-alt"></i>&nbsp;') + s.train_uid + " (" + decode_stp_indicator(s, :A) + ")", :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %>
+        <br />
+        <i class="icon-cog">&nbsp;</i><%= s.train_identity %>
        <% end %>
-      <td><%= raw format_location_time(s.origin, :departure) %></td>
-      <td><%= tidy_text(decode_tiploc(s.origin)) %></td>
-      <td><%= tidy_text(decode_tiploc(s.terminate)) %></td>
-      <td><%= raw format_location_time(s.terminate, :arrival) %></td>
+      </td>
+      <td>
+       <%= raw format_location_time(s.origin, :departure) %> <%= tidy_text(decode_tiploc(s.origin)) %> to <%= tidy_text(decode_tiploc(s.terminate)) %>
+       <br />
+       <em><%= run_details(s) %></em>
+      </td>
       <td><%= decode_toc(s.atoc_code) %></td>
-     </tr>
-     <tr>
-      <td colspan="2">&nbsp;</td>
-      <td colspan="5" style="font-style: italic;"><%= decode_stp_indicator(s, :A) %> schedule, runs <%= run_details(s) %></td>
      </tr>
     <% end %>
    </tbody>

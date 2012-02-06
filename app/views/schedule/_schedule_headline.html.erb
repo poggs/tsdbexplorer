@@ -1,0 +1,15 @@
+<div class="row">
+ <div class="span12">
+  <div class="schedule-header">
+   <div class="schedule-icon"><%= mode_icon_for(schedule.status) %></div>
+   <div class="schedule-headline">
+    <% if mode == 'schedule' %>
+     <%= schedule.data_source %> Schedule <%= schedule.train_uid %>
+    <% else %>
+     <% if advanced_mode? %><span style="train_identity"><%= @schedule.train_identity %></span><% end %> <%= raw time_only(schedule.origin.public_departure) || tidy_wtt_time(schedule.origin.departure) %> <%= tidy_text(decode_tiploc(schedule.origin)) %> to <%= tidy_text(decode_tiploc(schedule.terminate)) %>
+    <% end %>
+   </div>
+   <% unless schedule.atoc_code == "ZZ" %><div class="schedule-subtitle">Operated by <%= decode_toc(schedule.atoc_code) %></div><% end %>
+  </div>
+ </div>
+</div>

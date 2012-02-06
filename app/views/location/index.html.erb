@@ -1,46 +1,56 @@
-<div class="page-header">
- <h1>Services at <%= tidy_text(@location) %> (<%= params[:location] %>)</h1>
- <ul>
-  <li>Between <%= date_range(@range[:from], @range[:to]) %></li>
-  <% unless params[:from].blank? %><li>Which have come from <%= tidy_text(@from_location) %> (<%= params[:from].upcase %>)</li><% end %>
-  <% unless params[:to].blank? %><li>Which are going to <%= tidy_text(@to_location) %> (<%= params[:to].upcase %>)</li><% end %>
-</ul>
+<div class="row">
+ <div class="span12">
+  <div class="location-header">
+   <div class="location-headline">Services at <%= tidy_text(@location) %> (<%= params[:location] %>)</div>
+   <div class="location-subtitle">
+    <ul>
+     <li>Between <%= date_range(@range[:from], @range[:to]) %></li>
+     <% unless params[:from].blank? %><li>Which have come from <%= tidy_text(@from_location) %> (<%= params[:from].upcase %>)</li><% end %>
+     <% unless params[:to].blank? %><li>Which are going to <%= tidy_text(@to_location) %> (<%= params[:to].upcase %>)</li><% end %>
+    </ul>
+   </div>
+  </div>
+ </div>
 </div>
 
 <%= render :partial => 'time_navigation_buttons' %>
 
-<table>
- <thead>
- <% if advanced_mode? %>
-  <tr>
-   <th>Info</th>
-   <th>Arrival</th>
-   <th>From</th>
-   <th>Plat.</th>
-   <th>To</th>
-   <th>Departure</th>
-   <th>Operator</th>
-  </tr>
- <% else %>
- <tr>
-  <th>Info</th>
-  <th>Arrival</th>
-  <th>From</th>
-  <th>Plat.</th>
-  <th>To</th>
-  <th>Departure</th>
-  <th>Operator</th>
- </tr>
- <% end %>
- </thead>
- <tbody>
-  <% if @schedule_a && @schedule_b %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_a, :datetime => @range[:from] } %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_b, :datetime => @range[:to] } %>
-  <% else %>
-   <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule, :datetime => @datetime } %>
-  <% end %>
- </tbody>
-</table>
+<div class="row">
+ <div class="span12">
+  <table class="table">
+   <thead>
+   <% if advanced_mode? %>
+    <tr>
+     <th>Info</th>
+     <th>Arrival</th>
+     <th>From</th>
+     <th>Plat.</th>
+     <th>To</th>
+     <th>Departure</th>
+     <th>Operator</th>
+    </tr>
+   <% else %>
+    <tr>
+     <th>Info</th>
+     <th>Arrival</th>
+     <th>From</th>
+     <th>Plat.</th>
+     <th>To</th>
+     <th>Departure</th>
+     <th>Operator</th>
+    </tr>
+   <% end %>
+   </thead>
+   <tbody>
+    <% if @schedule_a && @schedule_b %>
+     <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_a, :datetime => @range[:from] } %>
+     <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule_b, :datetime => @range[:to] } %>
+    <% else %>
+     <%= render :partial => 'display_schedule', :locals => { :schedule => @schedule, :datetime => @datetime } %>
+    <% end %>
+   </tbody>
+  </table>
+ </div>
+</div>
 
 <%= render :partial => 'time_navigation_buttons' %>

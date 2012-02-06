@@ -1,45 +1,80 @@
-<h1>Administration: Real-Time</h1>
-
-<%= render :partial => 'common/pills' %>
-
-<div class="row">
- <div class="span8">
-  <h2>TD</h2>
-  <ul>
-   <li><%= @stats[:td_messages] %> TD messages processed</li>
-   <li><%= @stats[:td_areas] %> TD areas tracked</li>
-   <li><%= @stats[:td_message_ca] %> CA messages processed</li>
-   <li><%= @stats[:td_message_cb] %> CB messages processed</li>
-   <li><%= @stats[:td_message_cc] %> CC messages processed</li>
-   <li><%= @stats[:td_message_ct] %> CT messages processed</li>
-  </ul>
- </div>
- <div class="span8">
-  <h2>TRUST</h2>
-  <ul>
-   <li><%= @stats[:trust_messages] %> TRUST messages processed</li>
-   <li><%= @stats[:trust_activations] %> activations</li>
-   <li><%= @stats[:trust_cancellations] %> train cancellations</li>
-   <li><%= @stats[:trust_movements] %> train movements</li>
-   <li><%= @stats[:trust_unidentified_trains] %> unidentified trains</li>
-   <li><%= @stats[:trust_train_reinstatements] %> train reinstatements</li>
-   <li><%= @stats[:trust_change_of_origins] %> change-of-origin</li>
-   <li><%= @stats[:trust_change_of_identities] %> change-of-identity</li>
-   <li><%= @stats[:trust_change_of_locations] %> change-of-location</li>
-  </ul>
- </div>
+<div class="page-header">
+ <h1>Administration</h1>
 </div>
+
 <div class="row">
- <div class="span8">
+ <%= render :partial => 'common/pills' %>
+ <div class="span10">
+
+  <h2>Train Describer</h2>
+
+  <table class="table table-condensed">
+   <thead>
+    <tr>
+     <th>Metric</th>
+     <th class="span2">Count</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr><td>Total TD messages</td><td><%= @stats[:td_messages] %></td></tr>
+    <tr><td>Number of TD areas seen</td><td><%= @stats[:td_areas] %></td>
+    <tr><td>Berth Step (CA) messages</td><td><%= @stats[:td_message_ca] %></td>
+    <tr><td>Berth Cancel (CB) messages</td><td><%= @stats[:td_message_cb] %></td>
+    <tr><td>Berth Interpose (CC) messages</td><td><%= @stats[:td_message_cc] %></td>
+    <tr><td>Berth Heartbeat (CT) messages</td><td><%= @stats[:td_message_ct] %></td>
+   </tbody>
+  </table>
+
+  <h2>TRUST</h2>
+
+  <table class="table table-condensed">
+   <thead>
+    <tr>
+     <th>Metric</th>
+     <th class="span2">Count</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr><td>Total TRUST messages</td><td><%= @stats[:trust_messages] %></td></tr>
+    <tr><td>Activations</td><td><%= @stats[:trust_activations] %></td></tr>
+    <tr><td>Cancellations</td><td><%= @stats[:trust_cancellations] %></td></tr>
+    <tr><td>Movements</td><td><%= @stats[:trust_movements] %></td></tr>
+    <tr><td>Unidentified trains</td><td><%= @stats[:trust_unidentified_trains] %></td></tr>
+    <tr><td>Reinstatements</td><td><%= @stats[:trust_train_reinstatements] %></td></tr>
+    <tr><td>Change of Origin</td><td><%= @stats[:trust_change_of_origins] %></td></tr>
+    <tr><td>Change of Identity</td><td><%= @stats[:trust_change_of_identities] %></td></tr>
+    <tr><td>Change of Location</td><td><%= @stats[:trust_change_of_locations] %></td></tr>
+   </tbody>
+  </table>
+
   <h2>TSR</h2>
-  <ul>
-   <li><%= @stats[:tsr_messages] %> TSR messages processed</li>
-  </ul>
- </div>
- <div class="span8">
+
+  <table class="table table-condensed">
+   <thead>
+    <tr>
+     <th>Metric</th>
+     <th class="span2">Count</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr><td>Total TSR messages</td><td><%= @stats[:tsr_messages] %></td></tr>
+   </tbody>
+  </table>
+
   <h2>VSTP</h2>
-   <li><%= @stats[:vstp_messages] %> VSTP messages processed</li>
-  </ul>
+
+  <table class="table table-condensed">
+   <thead>
+    <tr>
+     <th>Metric</th>
+     <th class="span2">Count</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr><td>Total VSTP messages</td><td><%= @stats[:vstp_messages] %></td></tr>
+   </tbody>
+  </table>
+
  </div>
 </div>
 

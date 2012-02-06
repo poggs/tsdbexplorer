@@ -1,10 +1,11 @@
-<div class="row">
- <div class="span18">
-  <ul class="pills">
-   <% @pills.each do |pill| %>
+<div class="span2">
+ <ul class="nav nav-list">
+  <% @pills.each do |nav_list| %>
+   <li class="nav-header"><%= nav_list[0] %></li>
+   <% nav_list[1].each do |pill| %>
     <% pill_action = pill.downcase.tr('- ', '') %>
-    <%= tag 'li', { :class => pill_action == action_name ? 'active' : nil } %><%= link_to pill, :action => pill_action %></a></li>
+    <%= content_tag 'li', { :class => pill_action == action_name ? 'active' : nil } do %><%= link_to pill, :action => pill_action %></a><% end %>
    <% end %>
-  </ul>
- </div>
+  <% end %>
+ </ul>
 </div>

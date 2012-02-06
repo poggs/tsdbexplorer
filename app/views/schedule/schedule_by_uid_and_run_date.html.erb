@@ -1,8 +1,18 @@
 <% if @schedule.stp_indicator == "C" %>
-<h1>Schedule cancelled</h1>
-<p>This schedule does not run on <%= @date %>.</p>
+<div class="page-header">
+ <h1>Planned cancellation</h1>
+</div>
+
+<div class="row">
+ <div class="span12 alert alert-error">
+  This schedule does not run on <%= @date %>.
+ </div>
+</div>
 <% else %>
- <%= render :partial => 'schedule_header', :locals => { :schedule => @schedule } %>
+ <%= render :partial => 'schedule_headline', :locals => { :schedule => @schedule, :mode => '' } %>
+ <% if advanced_mode? && @schedule.is_a_train? %>
+  <%= render :partial => 'schedule_technical', :locals => { :schedule => @schedule, :mode => '' } %>
+ <% end %>
  <% if @as_run.nil? %>
   <%= render :partial => 'schedule_locations' %>
  <% else %>

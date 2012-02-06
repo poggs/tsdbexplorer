@@ -1,0 +1,23 @@
+/*
+ *  Schedule page
+ */
+
+.schedule-header { padding-bottom: 24px; }
+.schedule-icon { float: left; }
+.schedule-headline { padding-top: 10px; padding-bottom: 10px; font-size: 26px; font-weight: bold; }
+.schedule-subtitle { font-size: 18px; }
+
+
+/*
+ *  Schedule calendar
+ */
+
+td.weekend { background: #d0d0d0; }
+
+td.notmonth { color: #b0b0b0; }
+
+td.schedule_p {}
+td.schedule_o {}
+td.schedule_n {}
+td.schedule_c {}
+

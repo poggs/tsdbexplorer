@@ -1,0 +1,46 @@
+<div class="page-header">
+ <h1>Administration</h1>
+</div>
+
+<div class="row">
+
+ <%= render :partial => 'common/pills' %>
+
+ <div class="span10">
+  <h2>Import</h2>
+
+  <% if ($CONFIG.has_key? 'DATA') && ($CONFIG['DATA'].has_key? 'path') %>
+
+   <p>There are <%= @all_timetables.count %> timetable files in <code><%= ::Rails.root + $CONFIG['DATA']['path'] %></code>.</p>
+
+   <% if @all_timetables.count > 0 %>
+
+    <table class="table">
+     <thead>
+      <tr>
+       <th>Filename</th>
+       <th>Mainframe identity</th>
+       <th>Type</th>
+       <th>Imported</th>
+      </tr>
+     </thead>
+     <tbody>
+      <% @all_timetables.keys.sort.each do |t| %>
+       <tr>
+        <td><%= t %></td>
+        <td><%= @all_timetables[t][:file_mainframe_identity] %></td>
+        <td><%= @all_timetables[t][:extract_type] %></td>
+        <td><%= @all_timetables[t][:imported] && image_tag('tick.png', :alt => 'Real-time information available') %></td>
+       </tr>
+      <% end %>
+     </tbody>
+    </table>
+
+   <% end %>
+
+  <% else %>
+   <p>No import directory has been specified in the configuration file</p>
+  <% end %>
+
+ </div>
+</div>

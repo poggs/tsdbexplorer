@@ -35,4 +35,8 @@ function load_handler() {
 
   }
 
+  // Activate popovers
+
+  $('[rel=popover]').popover({ placement: 'bottom', delay: 500 });
+
 }

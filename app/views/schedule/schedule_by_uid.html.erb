@@ -1,15 +1,13 @@
-<div class="row">
- <div class="span14"><h1>Schedule <%= @schedule.first.train_uid %><br /><small>Operated by <%= decode_toc(@schedule.first.atoc_code) %></small></h1></div>
-</div>
+<%= render :partial => 'schedule/schedule_headline', :locals => { :schedule => @schedule.first, :mode => 'schedule' } %>
 
 <div class="row">
+ <div class="span12 well">
 
- <div class="span9">
-  <h3>Validity</h3>
-  <table class="bordered-table">
+  <h2>Validity</h2>
+  <table class="table bordered-table">
    <thead>
     <tr>
-     <th>Schedule type</th>
+     <th>Type</th>
      <th>Validity</th>
     </tr>
    </thead>
@@ -24,29 +22,27 @@
   </table>
  </div>
 
- <% if advanced_mode? %>
- <div class="span7">
-  <h3>Technical</h3>
-  <%= render :partial => 'technical_detail', :locals => { :schedule => @schedule.first, :runs_on => false } %>
- </div>
- <% end %>
-
 </div>
 
 <div class="row">
- <h3>Validity calendar</h3>
- <div class="span6">
-  <%= calendar_for @date_array, :year => @date.year, :month => @date.month do |calendar| %>
-   <%= calendar.head('Su', 'M', 'T', 'W', 'Th', 'F', 'S') %>
-   <h3><%= @date.month %></h3>
-   <%= calendar.day(:day_method => :date) do |date, schedule| %>
-    <%= date.day %>
-    <% unless schedule.length == 0 %>
-     <div style="text-align: center;"><%= link_to schedule.first.type, :action => 'schedule_by_uid_and_run_date', :year => date.year, :month => date.month, :day => date.day  %></div>
-    <% end %>
-   <% end %>
-  <% end %>
+ <div class="span12">
+  <h3>Validity calendar</h3>
  </div>
 </div>
 
+<div class="row">
+ <% (0...4).each do |m| %>
+  <div class="span3">
+   <%= render :partial => 'calendar', :locals => { :date_array => @date_array, :date => @date.beginning_of_month + m.month } %>
+  </div>
+ <% end %>
+</div>
+
+<div class="row">
+ <% (4...8).each do |m| %>
+  <div class="span3">
+   <%= render :partial => 'calendar', :locals => { :date_array => @date_array, :date => @date.beginning_of_month + m.month } %>
+  </div>
+ <% end %>
+</div>
 

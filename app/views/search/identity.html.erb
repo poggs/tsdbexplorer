@@ -3,60 +3,60 @@
 <%= render :partial => 'common/autocomplete_javascript', :locals => { :element => 'goes_to', :controller => 'location', :action => 'search', :min_length => 3 } %>
 
 <div class="page-header">
- <h1>Search by identity</h1>
+ <h1>Advanced search</h1>
 </div>
-
-<%= render :partial => 'common/pills' %>
 
 <div class="row">
 
- <div class="span8">
-  <h2>About the identity search</h2>
+ <%= render :partial => 'common/pills' %>
+
+ <div class="span6">
+
+  <%= tag 'form', :method => 'GET', :action => (url_for :controller => 'schedule', :action => 'search'), :class => 'well form-horizontal' %>
+   <fieldset>
+    <legend>Search by identity</legend>
+
+    <div class="control-group">
+     <label class="control-label">Search...</label>
+     <div class="controls">
+      <label class="radio">
+       <input type="radio" checked name="by" value="train_id" /> By Train Identity
+      </label>
+      <label class="radio">
+       <input type="radio" name="by" value="schedule_uid" /> By Schedule UID
+      </label>
+     </div>
+    </div>
+
+    <div class="control-group">
+     <label for="term">Identity</label>
+     <div class="controls">
+      <input class="span1" id="term" name="term" type="text" />
+     </div>
+    </div>
+
+    <div class="control-group">
+     <label for="date">Date (optional)</label>
+     <div class="controls">
+      <input class="span2" id="date" name="date" type="text" value="<%= @datetime.to_s(:yyyymmdd) %>" />
+     </div>
+    </div>
+
+    <div class="form-actions">
+     <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+
+   </fieldset>
+  </form>
+
+ </div>
+
+ <div class="span4">
+  <h2>What is this?</h2>
   <p>Search for a schedule by train identity (sometimes called the headcode), or the schedule unique identifier (UID).</p>
   <p>The date field is optional - specify it in the format YYYY-MM-DD and the results will be shown for that day only.  Leave it blank, and the entire timetable database will be searched.</p>
   <p>If you're searching for a train identity without a date, you will probably get dozens of matches.  Consider adding a date to simplify things.</p>
  </div>
 
- <div class="span8">
-  <%= tag 'form', :method => 'GET', :action => (url_for :controller => 'schedule', :action => 'search') %>
-   <fieldset>
-    <legend>By ID</legend>
-    <div class="clearfix">
-     <label id="by">Search by</label>
-     <div class="input">
-      <ul class="inputs-list">
-       <li>
-        <label>
-         <input type="radio" checked name="by" value="train_id" />
-         <span>By Train Identity</span>
-        </label>
-       </li>
-       <li>
-        <label>
-         <input type="radio" name="by" value="schedule_uid" />
-         <span>By Schedule UID</span>
-        </label>
-       </li>
-      </ul>
-     </div>
-    </div>
-    <div class="clearfix">
-     <label for="term">ID/UID</label>
-     <div class="input">
-      <input class="small" id="term" name="term" size="8" type="text" />
-     </div>
-    </div>
-    <div class="clearfix">
-     <label for="date">Runs on (optional)</label>
-     <div class="input">
-      <input class="small" id="date" name="date" size="10" type="text" value="<%= @datetime.to_s(:yyyymmdd) %>" />
-     </div>
-    </div>
-    <div class="actions">
-     <button type="submit" class="btn primary">Search</button>
-    </div>
-   </fieldset>
-  </form>
- </div>
 
 </div>

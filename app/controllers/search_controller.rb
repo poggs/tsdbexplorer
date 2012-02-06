@@ -21,6 +21,7 @@ class SearchController < ApplicationController
 
   caches_page :index, :advanced, :location, :identity
 
+
   # Search
 
   def index
@@ -32,7 +33,7 @@ class SearchController < ApplicationController
 
   def advanced
 
-    @pills = [ 'Location', 'Identity' ]
+    @pills = [ [ "Search options", [ 'Location', 'Identity' ] ] ]
 
   end
 
@@ -41,7 +42,7 @@ class SearchController < ApplicationController
 
   def location
 
-    @pills = [ 'Location', 'Identity' ]
+    @pills = [ [ "Search options", [ 'Location', 'Identity' ] ] ]
 
   end
 
@@ -50,7 +51,7 @@ class SearchController < ApplicationController
 
   def identity
 
-    @pills = [ 'Location', 'Identity' ]
+    @pills = [ [ "Search options", [ 'Location', 'Identity' ] ] ]
 
   end
 

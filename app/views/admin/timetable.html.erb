@@ -1,55 +1,23 @@
-<h1>Administration: Timetable</h1>
-
-<%= render :partial => 'common/pills' %>
-
-<div class="row">
- <div class="span16">
-  <h2>Statistics</h2>
-  <ul>
-   <li><%= @stats[:cifs_imported] %> CIF files have been imported</li>
-   <li><%= @stats[:tiplocs] %> timing point locations are known</li>
-   <li><%= @stats[:basic_schedules] %> schedules are known, covering the period from <%= @stats[:earliest_schedule] %> to <%= @stats[:latest_schedule] %></li>
-   <% if @stats[:cifs_imported] %><li><%= @stats[:last_cif_import] %></li><% end %>
-  </ul>
- </div>
+<div class="page-header">
+ <h1>Administration</h1>
 </div>
 
 <div class="row">
- <div class="span16">
-  <h2>Schedule extracts</h2>
-
-  <% if ($CONFIG.has_key? 'DATA') && ($CONFIG['DATA'].has_key? 'path') %>
-
-  <ul>
-   <li>There are <%= @all_timetables.count %> timetable files in <%= $CONFIG['DATA']['path'] %></li>
-  </ul>
-
-  <table class="zebra-striped condensed-table">
+ <%= render :partial => 'common/pills' %>
+ <div class="span10">
+  <h2>Timetable</h2>
+  <table class="table table-condensed">
    <thead>
     <tr>
-     <th>Filename</th>
-     <th>Mainframe identity</th>
-     <th>Type</th>
-     <th>Imported</th>
+     <th>Metric</th>
+     <th class="span2">Count</th>
     </tr>
    </thead>
    <tbody>
-    <% @all_timetables.keys.sort.each do |t| %>
-     <tr>
-      <td><%= t %></td>
-      <td><%= @all_timetables[t][:file_mainframe_identity] %></td>
-      <td><%= @all_timetables[t][:extract_type] %></td>
-      <td><%= @all_timetables[t][:imported] && image_tag('tick.png', :alt => 'Real-time information available') %></td>
-     </tr>
-    <% end %>
+    <tr><td>CIF files imported</td><td><%= @stats[:cifs_imported] %></td></tr>
+    <tr><td>TIPLOCs known</td><td><%= @stats[:tiplocs] %></td></tr>
+    <tr><td>Schedules</td><td><%= @stats[:basic_schedules] %></td></tr>
    </tbody>
   </table>
-
-  <% else %>
-   <p>
-    <div class="alert-message warning">No timetable directory has been specified in the configuration file</div>
-   </p>
-  <% end %>
-
  </div>
 </div>

@@ -128,20 +128,20 @@ describe ApplicationHelper do
 
   it "should return an icon and text for an 'OK' status" do
     status = Struct.new(:status, :message).new(:ok, "This is OK")
-    status_data_for(status).should include('tick.png')
     status_data_for(status).should include('This is OK')
+    status_data_for(status).should include('icon-ok')
   end
 
   it "should return an icon and text for an 'error' status" do
     status = Struct.new(:status, :message).new(:error, "This is an error")
-    status_data_for(status).should include('cross.png')
     status_data_for(status).should include('This is an error')
+    status_data_for(status).should include('icon-remove')
   end
 
   it "should return a question-mark and text for an 'unknown' status" do
     status = Struct.new(:status, :message).new(:unknown, "This is unknown")
-    status_data_for(status).should include('question.png')
     status_data_for(status).should include('This is unknown')
+    status_data_for(status).should include('icon-question-sign')
   end
 
 

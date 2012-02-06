@@ -418,9 +418,9 @@ module ScheduleHelper
 
     activities = Array.new
 
-    activity_hash.collect { |k,v| activities.push(content_tag 'a', k, { :href => '#', :rel => 'twipsy', :title => v }) if loc.send('activity_' + k.downcase.gsub('-', 'minus')) == true }
+    activity_hash.collect { |k,v| activities.push(content_tag 'a', k, { :href => '#', :rel => 'tooltip', :title => v }) if loc.send('activity_' + k.downcase.gsub('-', 'minus')) == true }
 
-    return activities.collect { |a| "<span class=\"label\">" + a + "</span>" }.join("&nbsp;")
+    return activities.collect { |a| "<span class=\"label activity\">" + a + "</span>" }.join("&nbsp;")
 
   end
 

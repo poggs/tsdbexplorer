@@ -30,7 +30,7 @@ class AdminController < ApplicationController
 
   def overview
 
-    @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
+    @pills = pills
 
     @status = Hash.new
     @status[:timetable_feed] = TSDBExplorer::Realtime::Status.timetable_feed
@@ -44,7 +44,7 @@ class AdminController < ApplicationController
 
   def timetable
 
-    @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
+    @pills = pills
 
     @stats = Hash.new
     @stats[:cifs_imported] = CifFile.count
@@ -59,6 +59,15 @@ class AdminController < ApplicationController
     else
       @stats[:last_cif_import] = "No CIF files have been imported"
     end
+
+  end
+
+
+  # Import
+
+  def import
+
+    @pills = pills
 
     @all_timetables = Hash.new
 
@@ -91,7 +100,7 @@ class AdminController < ApplicationController
 
   def realtime
 
-    @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
+    @pills = pills
 
     @stats = Hash.new
 
@@ -131,10 +140,17 @@ class AdminController < ApplicationController
 
   def memory
 
-    @pills = [ 'Overview', 'Timetable', 'Real-Time', 'Memory' ]
+    @pills = pills
 
     @redis = $REDIS.info
 
+  end
+
+
+  private
+
+  def pills
+    [ [ 'Admin' , [ 'Overview', 'Timetable', 'Import', 'Real-Time', 'Memory' ] ] ]
   end
 
 end

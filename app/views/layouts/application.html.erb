@@ -1,7 +1,15 @@
 <!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/CreativeWork">
+<html itemscope itemtype="http://schema.org/CreativeWork" lang="en">
  <head>
+  <meta charset="utf-8">
   <title>Open Train Times<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
+  <meta name="description" content="Real-time train information using Open Data">
+  <meta name="author" content="Peter Hicks">
+
+  <!--[if lt IE 9]>
+   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
   <%= stylesheet_link_tag 'application' %>
   <%= yield(:head) %>
   <%= javascript_include_tag 'application' %>
@@ -10,29 +18,34 @@
   <%= render :partial => 'common/analytics' rescue nil %>
   <%= render :partial => 'common/google_plus' if $CONFIG['ANALYTICS'] rescue nil %>
   <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
-  <meta name="description" content="Real-time train information using Open Data" />
  </head>
  <body onLoad="load_handler();">
-  <div class="topbar" data-scrollspy="scrollspy">
-   <div class="topbar-inner">
-    <div class="container">
-     <%= link_to "Open Train Times" + (Rails.env != "production" ? " (" + Rails.env.titlecase + ")" : ""), { :controller => 'main', :action => 'index' }, { :class => 'brand' } %>
-     <ul class="nav">
-      <li><%= link_to 'Home', :controller => 'main', :action => 'index' %></li>
-      <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
-     </ul>
 
-     <ul class="nav secondary-nav">
-      <form class="pull-left" action="<%= url_for :controller => 'location', :action => 'search' %>">
-       <input class="medium" name="term" size="24" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
-      </form>
-      <%= content_tag 'li', (link_to advanced_mode? ? 'Public' : 'Advanced', :controller => 'application', :action => 'toggle_mode') %>
-     </ul>
+  <div class="navbar navbar-fixed-top">
+   <div class="navbar-inner">
+    <div class="container">
+
+     <%= link_to "Open Train Times" + (Rails.env != "production" ? " (" + Rails.env.titlecase + ")" : ""), { :controller => 'main', :action => 'index' }, { :class => 'brand' } %>
+
+     <div class="nav">
+      <ul class="nav">
+       <li><%= link_to 'Home', :controller => 'main', :action => 'index' %></li>
+       <li><%= link_to 'Maps', :controller => 'map', :action => 'index' %></li>
+       <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
+       <form class="navbar-search" action="<%= url_for :controller => 'location', :action => 'search' %>">
+        <input class="search-query" name="term" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
+       </form>
+      </ul>
+     </div>
+     <div class="nav pull-right">
+      <p class="navbar-text"><%= link_to advanced_mode? ? 'Advanced' : 'Public', { :controller => 'application', :action => 'toggle_mode' }, { :rel => 'popover', :title => "Change modes?", 'data-content' => "Click to change modes.  <strong>Public</strong> mode shows train times, and is suitable for most people.  <strong>Advanced</strong> mode shows lots of technical data - perfect for those who want the details." } %></p>
+     </div>
+
     </div>
    </div>
   </div>
 
-  <%= yield(:jumbotron) %>
+  <%= yield :jumbotron %>
 
   <div class="container" style="padding-top: 64px;">
 
@@ -44,6 +57,7 @@
    </div>
 
   </div>
+
   <footer class="footer">
    <div class="container">
     <p class="pull-right"><%= link_to (image_tag 'twitter_followus.png'), 'http://twitter.com/opentraintimes' %></p>

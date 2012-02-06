@@ -3,4 +3,25 @@
  *  to change without affecting the original source
  */
 
-footer p { margin-bottom: 1px; }
+.footer {
+  margin-top: 45px;
+  padding: 16px 0 36px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.footer p {
+  margin-bottom: 0;
+  color: #555;
+}
+
+.navbar-text a {
+  color: white;
+}
+
+.jumbotron p.example {
+  padding-bottom: 25px;
+}
+
+span.label a {
+  color: #fff;
+}

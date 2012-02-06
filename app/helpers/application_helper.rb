@@ -498,14 +498,14 @@ module ApplicationHelper
   def status_data_for(status)
 
     if status.status == :ok
-      icon = 'tick.png'
+      icon = 'icon-ok'
     elsif status.status == :error
-      icon = 'cross.png'
+      icon = 'icon-remove'
     else
-      icon = 'question.png'
+      icon = 'icon-question-sign'
     end
 
-    (image_tag icon) + " " + status.message
+    "<i class=#{icon}></i>&nbsp;<em>#{status.message}</em>"
 
   end
 

@@ -1,27 +1,27 @@
-<h1>Administration: Overview</h1>
-
-<%= render :partial => 'common/pills' %>
+<div class="page-header">
+ <h1>Administration</h1>
+</div>
 
 <div class="row">
- <div class="span16">
-  <h2>Service status</p>
-  <table>
+ <%= render :partial => 'common/pills' %>
+ <div class="span10">
+  <h2>Overview</h2>
+  <table class="table">
    <thead>
-    <th>Feed</th>
+    <th class="span2">Feed</th>
     <th>Status</th>
    </thead>
    <tbody>
     <tr>
-     <td>Static timetable data</td><td><%= status_data_for(@status[:timetable_feed]) %></td>
+     <td>Static timetable data</em></td><td><%= raw status_data_for(@status[:timetable_feed]) %></td>
     </tr>
     <tr>
-     <td>Train Describer data</td><td><%= status_data_for(@status[:train_describer_feed]) %></td>
+     <td>Train Describer data</td><td><%= raw status_data_for(@status[:train_describer_feed]) %></td>
     </tr>
     <tr>
-     <td>TRUST movements</td><td><%= status_data_for(@status[:trust_feed]) %></td>
+     <td>TRUST movements</td><td><%= raw status_data_for(@status[:trust_feed]) %></td>
     </tr>
    </tbody>
   </table>
  </div>
 </div>
-
