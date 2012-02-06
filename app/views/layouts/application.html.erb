@@ -30,7 +30,6 @@
      <div class="nav">
       <ul class="nav">
        <li><%= link_to 'Home', :controller => 'main', :action => 'index' %></li>
-       <li><%= link_to 'Maps', :controller => 'map', :action => 'index' %></li>
        <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
        <form class="navbar-search" action="<%= url_for :controller => 'location', :action => 'search' %>">
         <input class="search-query" name="term" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
