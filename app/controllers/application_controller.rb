@@ -163,6 +163,11 @@ class ApplicationController < ActionController::Base
 
     end
 
+    # If we have an array of TIPLOCs, remove duplicates.
+    # TODO: Always return an Array of TIPLOCs
+
+    tiplocs.uniq! if tiplocs.class == Array
+
     return { :locations => tiplocs, :name => location_name }
 
   end
