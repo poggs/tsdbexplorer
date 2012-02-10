@@ -37,7 +37,10 @@
       </ul>
      </div>
      <div class="nav pull-right">
-      <p class="navbar-text"><%= link_to advanced_mode? ? 'Advanced' : 'Public', { :controller => 'application', :action => 'toggle_mode' }, { :rel => 'popover', :title => "Change modes?", 'data-content' => "Click to change modes.  <strong>Public</strong> mode shows train times, and is suitable for most people.  <strong>Advanced</strong> mode shows lots of technical data - perfect for those who want the details." } %></p>
+      <p class="navbar-text">
+       <%= link_to advanced_mode? ? 'Advanced mode' : 'Normal mode', { :controller => 'application', :action => 'toggle_mode' } %>
+       <i class="icon-question-sign icon-white" rel="popover" title="Change modes?" data-content="Click to change modes.  <strong>Normal</strong> mode shows train times, and is suitable for most people.  <strong>Advanced</strong> mode shows lots of technical data - perfect for those who want the details."></i>
+      </p>
      </div>
 
     </div>
