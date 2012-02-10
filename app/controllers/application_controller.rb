@@ -49,10 +49,15 @@ class ApplicationController < ActionController::Base
   # Toggle between normal and advanced mode
    
   def toggle_mode
-      
+
     session[:mode] = (session[:mode] == 'advanced' ? 'normal' : 'advanced')
-    redirect_to :back
-              
+
+    begin
+      redirect_to :back
+    rescue
+      redirect_to :root
+    end
+
   end
 
 

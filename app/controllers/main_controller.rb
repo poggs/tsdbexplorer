@@ -32,11 +32,14 @@ class MainController < ApplicationController
 
     @dates = Array.new
     today = Date.today
-    @dates.push({ :yyyymmdd => today.to_s(:yyyymmdd), :human => 'Today' })
 
-    (1..days_forward).to_a.each do |add_day|
+    ((-days_forward)..days_forward).to_a.each do |add_day|
       fwd_date = today + add_day.days
-      @dates.push( :yyyymmdd => fwd_date.to_s(:yyyymmdd), :human => 'on ' + fwd_date.to_s )
+      if fwd_date == today
+        @dates.push({ :yyyymmdd => today.to_s(:yyyymmdd), :human => 'Today', :selected => 'selected' })
+      else
+        @dates.push( :yyyymmdd => fwd_date.to_s(:yyyymmdd), :human => 'on ' + fwd_date.to_s )
+      end
     end
 
   end

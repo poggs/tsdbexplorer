@@ -12,7 +12,7 @@
      Show me trains at <input class="span3" id="term" name="term" type="text">
      <select name="date" class="span3">
       <% @dates.each do |d| %>
-       <option value="<%= d[:yyyymmdd] %>"><%= d[:human] %></option>
+       <%= content_tag :option, { :value => d[:yyyymmdd], :selected => d[:selected] } do %><%= d[:human] %><%= @date %><% end %>
       <% end %>
      </select>
      at
