@@ -23,7 +23,7 @@
      <tr>
       <td>
        <% if params[:date] %>
-        <%= link_to (content_tag :i, { :class => 'icon-calendar' }) + s.train_uid + " (" + decode_stp_indicator(s, :A) + ")", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %> (<%= s.train_identity %>)
+        <%= link_to raw('<i class="icon-calendar"></i>&nbsp;') + s.train_uid + " (" + decode_stp_indicator(s, :A) + ")", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %> (<%= s.train_identity %>)
        <% else %>
         <%= link_to raw('<i class="icon-list-alt"></i>&nbsp;') + s.train_uid + " (" + decode_stp_indicator(s, :A) + ")", :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %>
         <br />
