@@ -23,6 +23,10 @@ describe LocationController do
 
   render_views
 
+  before(:each) do
+    $REDIS.flushdb
+  end
+
   it "should redirect to the main page if passed no parameters" do
     get :index
     response.should redirect_to root_url
@@ -299,20 +303,19 @@ describe LocationController do
     response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WATFDJ'
   end
 
-#  it "should return an exact match for a CRS code from CIF even if a location with a longer matched name exists" do
-#    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
-#    get :search, :term => 'ACC'
-#    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'ACC'
-#  end
+  it "should return an exact match for a CRS code from CIF even if a location with a longer matched name exists" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
+    get :search, :term => 'ACC'
+    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'ACC'
+  end
 
-
-#  it "should return an exact match for a CRS code from the MSNF even if a location with a longer matched name exists" do
-#    pending
-#    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
-#    get :search, :term => 'ACC'
-#    response.body.should =~ /Acton Central/
-#    response.body.should_not =~ /Accrington/
-#  end
+# it "should return an exact match for a CRS code from the MSNF even if a location with a longer matched name exists" do
+#   TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
+#   get :search, :term => 'ACC'
+#   response.body.should =~ /Acton Central/
+#   response.body.should_not =~ /Accrington/
+# end
 
 #  it "should match on both an exact CRS code and a matched name from the MSNF if the format is JSON" do
 #    pending

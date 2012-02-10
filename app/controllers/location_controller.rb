@@ -153,12 +153,20 @@ class LocationController < ApplicationController
 
     # Try an exact match on the CRS code if the term is three characters long
 
-    @matches = match_msnf_on_crs(term) if term.length == 3
+    if term.length == 3
+      if advanced_mode?
+        @matches = @matches + match_cif_on_crs(term) if term.length == 3
+      else
+        @matches = @matches + match_msnf_on_crs(term) if term.length == 3
+      end
 
+      # If we've been called as HTML and there's exactly one match, redirect to the location page
 
-    # If we've been called as HTML and there's exactly one match, redirect to the location page
+      if @matches.length == 1 && request.format.html?
+        redirect_to :action => 'index', :location => @matches.first.crs_code, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return
+      end
 
-    redirect_to :action => 'index', :location => @matches.first.crs_code, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
+    end
 
 
     if advanced_mode?
@@ -257,6 +265,15 @@ class LocationController < ApplicationController
     end
 
     return @matches
+
+  end
+
+
+  # Try to match a CRS code against the CIF
+
+  def match_cif_on_crs(term)
+
+    Tiploc.where('crs_code = ?', term)
 
   end
 
