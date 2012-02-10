@@ -44,6 +44,12 @@ describe "lib/tsdbexplorer/realtime.rb" do
     $REDIS.hgetall('TIPLOC:EUSTON').should eql(expected_data)
   end
 
+  it "should handle TIPLOCs where the TPS description is not set" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/blank_tps_description.cif')
+    expected_data = { 'description' => '', 'stanox' => '36411', 'crs_code' => '' }
+    $REDIS.hgetall('TIPLOC:DITTDRS').should eql(expected_data)
+  end
+
   it "should cache TIPLOC data keyed on description" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_ti.cif')
     expected_data = { 'tiploc' => 'EUSTON', 'stanox' => '72410', 'crs_code' => 'EUS' }

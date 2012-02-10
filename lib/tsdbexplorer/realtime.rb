@@ -40,6 +40,8 @@ module TSDBExplorer
     def Realtime.cache_location_database
 
       Tiploc.all.each do |l|
+        l.tps_description = '' if l.tps_description.blank?
+        l.crs_code = '' if l.crs_code.blank?
         $REDIS.hset('TIPLOC:' + l.tiploc_code, 'description', l.tps_description)
         $REDIS.hset('TIPLOC:' + l.tiploc_code, 'stanox', l.stanox)
         $REDIS.hset('TIPLOC:' + l.tiploc_code, 'crs_code', l.crs_code)
