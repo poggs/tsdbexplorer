@@ -1,0 +1,72 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIWATFDJ 16140200UWATFORD JUNCTION          710402991WFJWATFORD JUNCTION        
+TIWATFJDC56140207FWATFORD JUNCTION DC       72000   0                           
+TIWATFDHS48145500CWATFORD HIGH STREET       72002   0WFHWATFORD HIGH ST         
+TIBUSHYDC56139501TBUSHEY DC                 72001   0                           
+TICRPNDPK16144200DCARPENDERS PARK           72004   0CPKCARPENDERS PARK         
+TIHTCHEND08139800LHATCH END                 72005   0HTEHATCH END               
+TIHEDSTNL32143400GHEADSTONE LANE            72006   0HDLHEADSTONE LANE          
+TIHROWDC 28139701HHARROW & WEALDSTONE D.C.  72017   0                           
+TIKTON   00139900QKENTON                    72008   0KNTKENTON                  
+TISKENTON01145300PSOUTH KENTON              72009   0SOKSOUTH KENTON            
+TINWEMBLY01142200MNORTH WEMBLEY             72010   0NWBNORTH WEMBLEY           
+TIWMBYDC 24142309DWEMBLEY CENTRAL DC        72020   0                           
+TISTNBGPK16145400TSTONEBRIDGE PARK          72031   0SBPSTONEBRIDGE PARK        
+TIHARLSDN00152100YHARLESDEN                 72033   0HDNHARLESDEN               
+TIWLSDNJL48145800RWILLESDEN JN LOW LEVEL    72277   0WJL                        
+TIKENSLG 16144700FKENSAL GREEN              72272   0KNLKENSAL GREEN            
+TIQPRKJ  00141902ZQUEEN'S PARK JUNCTION     72309   0                           
+TIQPRK   01141900RQUEEN'S PARK (LONDON)     72311   0QPWQUEENS PK LONDON        
+TIKLBRNHR48141500TKILBURN HIGH ROAD         72313   0KBNKILBURN HIGH RD         
+TISHMPSTD01145100FSOUTH HAMPSTEAD           72314   0SOHSOUTH HAMPSTEAD         
+TICMDNJN 08136701JCAMDEN JN                 72315   0                           
+TICMDNSTH08144005UCAMDEN SOUTH JN           72316   0                           
+TIEUSTON 00144400NLONDON EUSTON             724102893EUSLONDON EUSTON           
+BSNL941441105221112040000001 POO2D46    122216000 EMU313 075D     S            P
+BX         LOY                                                                  
+LOEUSTON  2247 22479  C      TB                                                 
+LICMDNSTH           2250 00000000                                               
+LICMDNJN            2250H00000000   DC                                          
+LISHMPSTD 2252H2253      22532253         T                                     
+LIKLBRNHR 2254 2254H     22542254         T                                     
+LIQPRK    2256 2256H     22562256         T                                     
+LIQPRKJ             2257 00000000                                               
+LIKENSLG  2258 2258H     22582258         T                                     
+LIWLSDNJL 2300H2301      230123013        T                                     
+LIHARLSDN 2302H2303      23032303         T                                     
+LISTNBGPK 2305 2305H     23052305         T                                     
+LIWMBYDC  2307H2308      23082308         T                                     
+LINWEMBLY 2309H2310      23102310         T                                     
+LISKENTON 2311H2312      23122312         T                                     
+LIKTON    2313H2314      23142314         T                                     
+LIHROWDC  2316 2316H     23162316         T                                     
+LIHEDSTNL 2319 2319H     23192319         T                                     
+LIHTCHEND 2321 2321H     23212321         T                                     
+LICRPNDPK 2324 2324H     23242324         T                                     
+LIBUSHYDC 2327 2327H     23272327         T                                     
+LIWATFDHS 2329H2330      23302330         T           1                         
+LTWATFJDC 2334 23342     TF                                                     
+BSNL941421110311112091111100 POO2D46    122216000 EMU313 075D     S            P
+BX         LOY                                                                  
+LOEUSTON  2327 23279  C      TB                                                 
+LICMDNSTH           2330 00000000                                               
+LICMDNJN            2330H00000000   DC                                          
+LISHMPSTD 2332H2333      23332333         T                                     
+LIKLBRNHR 2334 2334H     23342334         T                                     
+LIQPRK    2336 2336H     23362336         T                                     
+LIQPRKJ             2337 00000000                                               
+LIKENSLG  2338 2338H     23382338         T                                     
+LIWLSDNJL 2340H2341      234123413        T                                     
+LIHARLSDN 2342H2343      23432343         T                                     
+LISTNBGPK 2345 2345H     23452345         T                                     
+LIWMBYDC  2347H2348      23482348         T                                     
+LINWEMBLY 2349H2350      23502350         T                                     
+LISKENTON 2351H2352      23522352         T                                     
+LIKTON    2353H2354      23542354         T                                     
+LIHROWDC  2356 2356H     23562356         T                                     
+LIHEDSTNL 2359 2359H     23592359         T                                     
+LIHTCHEND 0001 0001H     00010001         T                                     
+LICRPNDPK 0004 0004H     00040004         T                                     
+LIBUSHYDC 0007 0007H     00070007         T                                     
+LIWATFDHS 0009H0010      00100010         T           1                         
+LTWATFJDC 0014 00172     TF                                                     

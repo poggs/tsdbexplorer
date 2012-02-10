@@ -83,6 +83,8 @@ class LocationController < ApplicationController
 
     if @range[:from].midnight == @range[:to].midnight
 
+      # The date window does not span midnight
+
       @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd))
 
       if advanced_mode?
@@ -98,6 +100,8 @@ class LocationController < ApplicationController
 
     else
 
+      # The date window spans midnight
+
       @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd))
 
       if advanced_mode?
@@ -110,7 +114,7 @@ class LocationController < ApplicationController
         @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
       end
 
-      @schedule_b = @schedule.runs_on(@range[:to].to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
+      @schedule_b = @schedule.runs_on((@range[:to] - 1.day).to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
 
       if advanced_mode?
         @schedule_b = @schedule_b.passes_between('0000', @range[:to].to_s(:hhmm))

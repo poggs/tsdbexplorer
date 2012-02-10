@@ -129,6 +129,13 @@ describe LocationController do
     response.body.should =~ /L02600\/2011\/5\/22/
   end
 
+  it "should only display trains which started the previous day when the time range includes the previous day" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/wfj_sunday_evening.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/wfj_sunday_evening.msn')
+    get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '05', :time => '0001'
+    response.body.should =~ /L94144/
+    response.body.should_not =~ /L94142/
+  end
 
   it "should display an error if passed an incorrectly formatted date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
