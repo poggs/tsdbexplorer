@@ -19,7 +19,7 @@
 
 class SearchController < ApplicationController
 
-  caches_page :index, :advanced, :location, :identity
+  caches_page :advanced
 
 
   # Search
