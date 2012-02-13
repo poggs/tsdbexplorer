@@ -1,7 +1,7 @@
 <div class="row">
  <div class="span12">
   <div>
-   <div style="text-align: left; float: left;"><%= content_tag "a", { :class => "btn btn-primary", :href => url_for({ :from => params[:from], :to => params[:to], :year => (@datetime + 1.hour).year, :month => (@datetime + 1.hour).month, :day => (@datetime + 1.hour).day, :time => (@datetime - 1.hour).to_s(:hhmm) }) } do %><i class="icon-chevron-left icon-white"></i> Earlier<% end %></div>
+   <div style="text-align: left; float: left;"><%= content_tag "a", { :class => "btn btn-primary", :href => url_for({ :from => params[:from], :to => params[:to], :year => (@datetime - 1.hour).year, :month => (@datetime - 1.hour).month, :day => (@datetime - 1.hour).day, :time => (@datetime - 1.hour).to_s(:hhmm) }) } do %><i class="icon-chevron-left icon-white"></i> Earlier<% end %></div>
    <div style="text-align: right;"><%= content_tag "a", { :class => "btn btn-primary", :href => url_for({ :from => params[:from], :to => params[:to], :year => (@datetime + 1.hour).year, :month => (@datetime + 1.hour).month, :day => (@datetime + 1.hour).day, :time => (@datetime + 1.hour).to_s(:hhmm) }) } do %>Later <i class="icon-chevron-right icon-white"></i><% end %></div>
   </div>
  </div>
