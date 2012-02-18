@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120128231259) do
+ActiveRecord::Schema.define(:version => 20120215074637) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -293,6 +293,8 @@ ActiveRecord::Schema.define(:version => 20120128231259) do
     t.boolean  "activity_u"
     t.boolean  "activity_w"
     t.boolean  "activity_x"
+    t.boolean  "next_day_arrival"
+    t.boolean  "next_day_departure"
   end
 
   add_index "locations", ["arrival"], :name => "index_locations_on_arrival"
