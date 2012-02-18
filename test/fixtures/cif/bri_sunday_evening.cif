@@ -1,0 +1,39 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIMSHFILD00367711JMARSHFIELD                77086   0                           
+TIEBBWJ  08367756DEBBW JN                   76481   0                           
+TINWPTRTG00367400NNEWPORT (SOUTH WALES)     764012939NWPNEWPORT GWENT           
+TIMAINDWJ48367439WMAINDEE WEST JN           76398   0                           
+TILWERWJN00366602YLLANWERN WEST JN          76099   0                           
+TISEVTNLJ36367900PSEVERN TUNNEL JN          76090   0STJSEVERN TUNNEL JN        
+TISEVTNLW32367978USEVERN TUNNEL WEST        76089   0                           
+TISEVTNLE36367959QSEVERN TUNNEL EAST        76091   0                           
+TIPILNING00321400ZPILNING                   81118   0PILPILNING                 
+TIPATCHWY00321300XPATCHWAY                  81116   0PWYPATCHWAY                
+TIFILTNEW00323500PFILTON ABBEY WOOD         81305   0FITFILTON ABBEYWOOD        
+TISTPLNAR00325001FNARROWAYS HILL JN         81401   0                           
+TISTPLTNR32325000ESTAPLETON ROAD            81403   0SRDSTAPLETON ROAD          
+TILAWRNCH32322500WLAWRENCE HILL             81422   0LWHLAWRENCE HILL           
+TIDRDAYSJ34322058GDR DAY'S JN               81431   0                           
+TIBRSTLEJ48322460UBRISTOL EAST JN           81690   0                           
+TIBRSTLTM48323100YBRISTOL TEMPLE MEADS      817002821BRIBRISTOL TEMPLE M        
+BSNC216281112121205101111000 POO2C97    125460001 DMUS   075      S            P
+BX         GWY                                                                  
+LOCRDFCEN 2327 23271  RL     TB                                                 
+LIMSHFILD           2337 00000000                                               
+LIEBBWJ             2341 00000000   ML                                          
+LINWPTRTG 2344 2346      234423454        T                                     
+LIMAINDWJ           2347 00000000                                               
+LILWERWJN           2349 00000000                     7                         
+LISEVTNLJ 0003 0004      000300034        T                                     
+LISEVTNLW           0006 00000000                                               
+LISEVTNLE           0010 00000000                                               
+LIPILNING           0011 000000001                    1                         
+LIPATCHWY 0016 0017      001600161        T                                     
+LIFILTNEW 0020 0021      001900201        T           1                         
+LISTPLNAR           0024H00000000                                               
+LISTPLTNR 0025H0026      002500252        T                                     
+LILAWRNCH 0027H0028      002700272        T                                     
+LIDRDAYSJ           0029 00000000   ML                                          
+LIBRSTLEJ           0031 00000000   DF                                          
+LTBRSTLTM 0032 00339     TF                                                     
+ZZ

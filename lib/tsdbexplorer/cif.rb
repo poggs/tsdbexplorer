@@ -132,7 +132,7 @@ module TSDBExplorer
 
       pending = { 'Tiploc' => { :cols => [ :tiploc_code, :nalco, :nalco_four, :tps_description, :stanox, :crs_code, :description ], :rows => [] },
                   'BasicSchedule' => { :cols => [ :uuid, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source ], :rows => [] },
-                  'Location' => { :cols => [ :basic_schedule_uuid, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_ae, :activity_bl, :activity_minusd, :activity_hh, :activity_kc, :activity_ke, :activity_kf, :activity_ks, :activity_op, :activity_or, :activity_pr, :activity_rm, :activity_rr, :activity_minust, :activity_tb, :activity_tf, :activity_ts, :activity_tw, :activity_minusu, :activity_a, :activity_c, :activity_d, :activity_e, :activity_g, :activity_h, :activity_k, :activity_l, :activity_n, :activity_r, :activity_s, :activity_t, :activity_u, :activity_w, :activity_x ], :rows => [] } }
+                  'Location' => { :cols => [ :basic_schedule_uuid, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_ae, :activity_bl, :activity_minusd, :activity_hh, :activity_kc, :activity_ke, :activity_kf, :activity_ks, :activity_op, :activity_or, :activity_pr, :activity_rm, :activity_rr, :activity_minust, :activity_tb, :activity_tf, :activity_ts, :activity_tw, :activity_minusu, :activity_a, :activity_c, :activity_d, :activity_e, :activity_g, :activity_h, :activity_k, :activity_l, :activity_n, :activity_r, :activity_s, :activity_t, :activity_u, :activity_w, :activity_x, :next_day_arrival, :next_day_departure ], :rows => [] } }
       start_time = Time.now
 
 
@@ -249,6 +249,12 @@ module TSDBExplorer
               location_record = TSDBExplorer::CIF::LocationRecord.new
 
               seq = 10
+              @next_day_arrival = false
+              @next_day_departure = false
+
+              @last_arrival = nil
+              @last_pass = nil
+              @last_departure = nil
 
               while(1)
 
@@ -258,6 +264,31 @@ module TSDBExplorer
                 location_record.seq = seq
                 Struct.new(:status, :message).new("Record was parsed as a '#{location_record.class}', expecting a TSDBExplorer::CIF::LocationRecord") unless location_record.is_a? TSDBExplorer::CIF::LocationRecord
                 location_record.basic_schedule_uuid = uuid
+
+                # Set the next_day_arrival or next_day_departure flags if we've crossed midnight
+
+                if (!@last_arrival.nil? && !location_record.arrival.nil?) && @last_arrival > location_record.arrival && !@next_day_arrival
+                  @next_day_arrival = true
+                end
+
+                if (!@last_departure.nil? && !location_record.departure.nil?) && @last_departure > location_record.departure && !@next_day_departure
+                  @next_day_departure = true
+                end
+
+                location_record.next_day_arrival = @next_day_arrival
+                location_record.next_day_departure = @next_day_departure
+
+
+                # Store the last arrival and departure time so we can later work out if we've crossed midnight
+
+                if location_record.pass.nil?
+                  @last_arrival = location_record.arrival unless location_record.location_type == 'LO'
+                  @last_departure = location_record.departure unless location_record.location_type == 'LT'
+                else
+                  @last_arrival = location_record.pass
+                  @last_departure = location_record.pass
+                end
+
                 loc_records << location_record
 
                 break if location_record.location_type == "LT"
