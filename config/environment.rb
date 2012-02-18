@@ -20,6 +20,7 @@
 require File.expand_path('../application', __FILE__)
 require 'tsdbexplorer'
 require 'yaml'
+require 'csv'
 
 required_files = [ 'config/tsdbexplorer.yml', 'config/database.yml' ]
 

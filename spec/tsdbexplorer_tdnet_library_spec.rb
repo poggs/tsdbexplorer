@@ -175,9 +175,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     ds.train_identity_unique.should eql('529C02M531')
     ds.locations.count.should eql(24)
     ds.locations.first.tiploc_code.should eql('HIGHBYA')
-    ds.locations.first.departure.should eql(DateTime.parse('2011-12-31 05:35:00'))
+    ds.locations.first.departure.should eql(Time.parse('2011-12-31 05:35:00'))
     ds.locations.last.tiploc_code.should eql('WCROYDN')
-    ds.locations.last.arrival.should eql(DateTime.parse('2011-12-31 06:28:00'))
+    ds.locations.last.arrival.should eql(Time.parse('2011-12-31 06:28:00'))
   end
 
   it "should report details of a successfully activated a CIF WTT train" do
@@ -258,7 +258,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     schedule = DailySchedule.runs_on_by_uid_and_date('C43391', '2010-12-12').first
     schedule.last_location.should eql(schedule.locations.first)
     originating_point = schedule.locations.find_by_tiploc_code('EUSTON')
-    originating_point.actual_departure.should eql(DateTime.parse('2010-12-12 18:34:00'))
+    originating_point.actual_departure.should eql(Time.parse('2010-12-12 18:34:00'))
     originating_point.platform.should eql('10')
     originating_point.line.should eql('C')
   end
@@ -526,7 +526,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     depart_liverpool_street_rec.terminated?.should_not be_true
     depart_liverpool_street_rec.locations[0].actual_arrival.should be_nil
     depart_liverpool_street_rec.locations[0].actual_pass.should be_nil
-    depart_liverpool_street_rec.locations[0].actual_departure.should eql(DateTime.parse('2011-08-25 00:03:00'))
+    depart_liverpool_street_rec.locations[0].actual_departure.should eql(Time.zone.parse('2011-08-25 00:03:00'))
     depart_liverpool_street_rec.locations[0].actual_platform.should eql('3')
     depart_liverpool_street_rec.locations[0].actual_line.should eql('S')
     depart_liverpool_street_rec.locations[0].actual_path.should be_nil
@@ -538,7 +538,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     arrive_bethnal_green_rec.terminated?.should_not be_true
     arrive_bethnal_green_rec.departed_origin?.should be_true
     arrive_bethnal_green_rec.locations[1].actual_arrival.should be_nil
-    arrive_bethnal_green_rec.locations[1].actual_pass.should eql(DateTime.parse('2011-08-25 00:06:00'))
+    arrive_bethnal_green_rec.locations[1].actual_pass.should eql(Time.zone.parse('2011-08-25 00:06:00'))
     arrive_bethnal_green_rec.locations[1].actual_departure.should be_nil
     arrive_bethnal_green_rec.locations[1].actual_platform.should be_nil
     arrive_bethnal_green_rec.locations[1].actual_line.should be_nil
@@ -551,7 +551,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     depart_bethnal_green_rec.departed_origin?.should be_true
     depart_bethnal_green_rec.terminated?.should_not be_true
     depart_bethnal_green_rec.locations[1].actual_arrival.should be_nil
-    depart_bethnal_green_rec.locations[1].actual_pass.should eql(DateTime.parse('2011-08-25 00:06:00'))
+    depart_bethnal_green_rec.locations[1].actual_pass.should eql(Time.zone.parse('2011-08-25 00:06:00'))
     depart_bethnal_green_rec.locations[1].actual_departure.should be_nil
     depart_bethnal_green_rec.locations[1].actual_platform.should be_nil
     depart_bethnal_green_rec.locations[1].actual_line.should eql('S')
@@ -563,7 +563,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     arrive_hackney_downs_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     arrive_hackney_downs_rec.departed_origin?.should be_true
     arrive_hackney_downs_rec.terminated?.should_not be_true
-    arrive_hackney_downs_rec.locations[2].actual_arrival.should eql(DateTime.parse('2011-08-25 00:10:00'))
+    arrive_hackney_downs_rec.locations[2].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:10:00'))
     arrive_hackney_downs_rec.locations[2].actual_pass.should be_nil
     arrive_hackney_downs_rec.locations[2].actual_departure.should be_nil
     arrive_hackney_downs_rec.locations[2].actual_platform.should eql('4')
@@ -576,9 +576,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     depart_hackney_downs_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     depart_hackney_downs_rec.departed_origin?.should be_true
     depart_hackney_downs_rec.terminated?.should_not be_true
-    depart_hackney_downs_rec.locations[2].actual_arrival.should eql(DateTime.parse('2011-08-25 00:10:00'))
+    depart_hackney_downs_rec.locations[2].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:10:00'))
     depart_hackney_downs_rec.locations[2].actual_pass.should be_nil
-    depart_hackney_downs_rec.locations[2].actual_departure.should eql(DateTime.parse('2011-08-25 00:10:00'))
+    depart_hackney_downs_rec.locations[2].actual_departure.should eql(Time.zone.parse('2011-08-25 00:10:00'))
     depart_hackney_downs_rec.locations[2].actual_platform.should eql('4')
     depart_hackney_downs_rec.locations[2].actual_line.should be_nil
     depart_hackney_downs_rec.locations[2].actual_path.should be_nil
@@ -589,7 +589,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     arrive_clapton_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     arrive_clapton_rec.departed_origin?.should be_true
     arrive_clapton_rec.terminated?.should_not be_true
-    arrive_clapton_rec.locations[3].actual_arrival.should eql(DateTime.parse('2011-08-25 00:13:00'))
+    arrive_clapton_rec.locations[3].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:13:00'))
     arrive_clapton_rec.locations[3].actual_pass.should be_nil
     arrive_clapton_rec.locations[3].actual_departure.should be_nil
     arrive_clapton_rec.locations[3].actual_platform.should be_nil
@@ -602,9 +602,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     depart_clapton_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     depart_clapton_rec.departed_origin?.should be_true
     depart_clapton_rec.terminated?.should_not be_true
-    depart_clapton_rec.locations[3].actual_arrival.should eql(DateTime.parse('2011-08-25 00:13:00'))
+    depart_clapton_rec.locations[3].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:13:00'))
     depart_clapton_rec.locations[3].actual_pass.should be_nil
-    depart_clapton_rec.locations[3].actual_departure.should eql(DateTime.parse('2011-08-25 00:14:00'))
+    depart_clapton_rec.locations[3].actual_departure.should eql(Time.zone.parse('2011-08-25 00:14:00'))
     depart_clapton_rec.locations[3].actual_platform.should be_nil
     depart_clapton_rec.locations[3].actual_line.should be_nil
     depart_clapton_rec.locations[3].actual_path.should be_nil
@@ -617,7 +617,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     arrive_st_james_street_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     arrive_st_james_street_rec.departed_origin?.should be_true
     arrive_st_james_street_rec.terminated?.should_not be_true
-    arrive_st_james_street_rec.locations[5].actual_arrival.should eql(DateTime.parse('2011-08-25 00:17:00'))
+    arrive_st_james_street_rec.locations[5].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:17:00'))
     arrive_st_james_street_rec.locations[5].actual_pass.should be_nil
     arrive_st_james_street_rec.locations[5].actual_departure.should be_nil
     arrive_st_james_street_rec.locations[5].actual_platform.should be_nil
@@ -630,7 +630,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     arrive_walthamstow_central_cp.status.should eql(:ok)
     arrive_walthamstow_central_cp.message.should include('Processed movement type A for train 522T52M125 at WALTHAMSTOW CENTRAL')
     arrive_walthamstow_central_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
-    arrive_walthamstow_central_rec.locations[6].actual_arrival.should eql(DateTime.parse('2011-08-25 00:19:00'))
+    arrive_walthamstow_central_rec.locations[6].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:19:00'))
     arrive_walthamstow_central_rec.departed_origin?.should be_true
     arrive_walthamstow_central_rec.terminated?.should_not be_true
     arrive_walthamstow_central_rec.locations[6].actual_pass.should be_nil
@@ -645,9 +645,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     depart_walthamstow_central_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     depart_walthamstow_central_rec.departed_origin?.should be_true
     depart_walthamstow_central_rec.terminated?.should_not be_true
-    depart_walthamstow_central_rec.locations[6].actual_arrival.should eql(DateTime.parse('2011-08-25 00:19:00'))
+    depart_walthamstow_central_rec.locations[6].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:19:00'))
     depart_walthamstow_central_rec.locations[6].actual_pass.should be_nil
-    depart_walthamstow_central_rec.locations[6].actual_departure.should eql(DateTime.parse('2011-08-25 00:20:00'))
+    depart_walthamstow_central_rec.locations[6].actual_departure.should eql(Time.zone.parse('2011-08-25 00:20:00'))
     depart_walthamstow_central_rec.locations[6].actual_platform.should be_nil
     depart_walthamstow_central_rec.locations[6].actual_line.should be_nil
     depart_walthamstow_central_rec.locations[6].actual_path.should be_nil
@@ -658,7 +658,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     arrive_wood_street_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     arrive_wood_street_rec.departed_origin?.should be_true
     arrive_wood_street_rec.terminated?.should_not be_true
-    arrive_wood_street_rec.locations[7].actual_arrival.should eql(DateTime.parse('2011-08-25 00:22:00'))
+    arrive_wood_street_rec.locations[7].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:22:00'))
     arrive_wood_street_rec.locations[7].actual_pass.should be_nil
     arrive_wood_street_rec.locations[7].actual_departure.should be_nil
     arrive_wood_street_rec.locations[7].actual_platform.should be_nil
@@ -671,9 +671,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     depart_wood_street_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     depart_wood_street_rec.departed_origin?.should be_true
     depart_wood_street_rec.terminated?.should_not be_true
-    depart_wood_street_rec.locations[7].actual_arrival.should eql(DateTime.parse('2011-08-25 00:22:00'))
+    depart_wood_street_rec.locations[7].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:22:00'))
     depart_wood_street_rec.locations[7].actual_pass.should be_nil
-    depart_wood_street_rec.locations[7].actual_departure.should eql(DateTime.parse('2011-08-25 00:22:00'))
+    depart_wood_street_rec.locations[7].actual_departure.should eql(Time.zone.parse('2011-08-25 00:22:00'))
     depart_wood_street_rec.locations[7].actual_platform.should be_nil
     depart_wood_street_rec.locations[7].actual_line.should be_nil
     depart_wood_street_rec.locations[7].actual_path.should be_nil
@@ -682,7 +682,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     arrive_highams_park_cp.status.should eql(:ok)
     arrive_highams_park_cp.message.should include('Processed movement type A for train 522T52M125 at HIGHAMS PARK')
     arrive_highams_park_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
-    arrive_highams_park_rec.locations[8].actual_arrival.should eql(DateTime.parse('2011-08-25 00:25:00'))
+    arrive_highams_park_rec.locations[8].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:25:00'))
     arrive_highams_park_rec.departed_origin?.should be_true
     arrive_highams_park_rec.terminated?.should_not be_true
     arrive_highams_park_rec.locations[8].actual_pass.should be_nil
@@ -697,9 +697,9 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     depart_highams_park_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     depart_highams_park_rec.departed_origin?.should be_true
     depart_highams_park_rec.terminated?.should_not be_true
-    depart_highams_park_rec.locations[8].actual_arrival.should eql(DateTime.parse('2011-08-25 00:25:00'))
+    depart_highams_park_rec.locations[8].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:25:00'))
     depart_highams_park_rec.locations[8].actual_pass.should be_nil
-    depart_highams_park_rec.locations[8].actual_departure.should eql(DateTime.parse('2011-08-25 00:26:00'))
+    depart_highams_park_rec.locations[8].actual_departure.should eql(Time.zone.parse('2011-08-25 00:26:00'))
     depart_highams_park_rec.locations[8].actual_platform.should be_nil
     depart_highams_park_rec.locations[8].actual_line.should be_nil
     depart_highams_park_rec.locations[8].actual_path.should be_nil
@@ -710,7 +710,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
     arrive_chingford_rec = DailySchedule.runs_on_by_uid_and_date('L06809', '2011-08-25').first
     arrive_chingford_rec.departed_origin?.should be_true
     arrive_chingford_rec.terminated?.should be_true
-    arrive_chingford_rec.locations[9].actual_arrival.should eql(DateTime.parse('2011-08-25 00:33:00'))
+    arrive_chingford_rec.locations[9].actual_arrival.should eql(Time.zone.parse('2011-08-25 00:33:00'))
     arrive_chingford_rec.locations[9].actual_pass.should be_nil
     arrive_chingford_rec.locations[9].actual_departure.should be_nil
     arrive_chingford_rec.locations[9].actual_platform.should be_nil
