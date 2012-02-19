@@ -34,6 +34,7 @@ gem 'ruby-progressbar', '>= 0.0.10'
 gem 'redis', '>= 2.2.2'
 gem 'activerecord-import', '>= 0.2.9'
 gem 'fastercsv'
+gem 'watu_table_builder', :require => 'table_builder'
 
 
 # Environment-specific gems
