@@ -37,7 +37,7 @@
       </ul>
      </div>
      <div class="nav pull-right" rel="popover" title="Change modes?" data-content="Click to change modes.<br /><strong>Normal</strong> mode shows train times, and is suitable for most people.  <strong>Advanced</strong> mode shows lots of technical data - perfect for those who want the details.">
-      <p class="navbar-text"><%= link_to raw((advanced_mode? ? 'Advanced' : 'Normal') + '&nbsp;<i class="icon-question-sign icon-white"></i>'), { :controller => 'application', :action => 'toggle_mode' },  %></p>
+      <p class="navbar-text"><%= link_to raw((advanced_mode? ? 'Advanced' : 'Normal') + '&nbsp;<i class="icon-question-sign icon-white"></i>'), { :controller => 'application', :action => 'toggle_mode' } %></p>
      </div>
 
     </div>
