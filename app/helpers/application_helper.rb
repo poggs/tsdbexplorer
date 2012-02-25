@@ -273,12 +273,12 @@ module ApplicationHelper
 
         # Some locations are in brackets - these require special treatment
 
-        brackets = part.match(/\((\w+)/)
+        brackets = part.match(/\((.+)/)
 
         if brackets.nil?
           new_words.push part.capitalize
         else
-          new_words.push "(" + brackets[1].capitalize + ")"
+          new_words.push "(" + brackets[1].capitalize
         end
 
       end

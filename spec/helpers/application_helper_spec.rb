@@ -85,6 +85,7 @@ describe ApplicationHelper do
     tidy_text("").should eql("")
     tidy_text("FOOINGHAM").should eql("Fooingham")
     tidy_text("BARVILLE (BAZCESTER)").should eql('Barville (Bazcester)')
+    tidy_text("CANAL JUNCTION (NEW CROSS)").should eql("Canal Junction (New Cross)")
   end
 
   it "should convert a known TOC code to text" do
