@@ -42,16 +42,23 @@ module TSDBExplorer
  
       # Read in the rest of the MSNF
 
+      msnf_entries = Array.new
+
       while(!msnf_data.eof)
       
         record = TSDBExplorer::RSP::parse_record(msnf_data.gets)
         break if record.nil?
 
         if record.is_a? TSDBExplorer::RSP::StationDetailRecord
-          StationName.create!(record.to_hash)          
+          msnf_entries << StationName.new(record.to_hash)
         end
 
       end
+
+
+      # Do the import
+
+      StationName.import(msnf_entries)
 
 
       # Update the Redis caches
