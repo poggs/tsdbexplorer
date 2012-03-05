@@ -24,18 +24,15 @@
   <div class="navbar navbar-fixed-top">
    <div class="navbar-inner">
     <div class="container">
-
-     <%= link_to "Open Train Times" + (Rails.env != "production" ? " (" + Rails.env.titlecase + ")" : ""), { :controller => 'main', :action => 'index' }, { :class => 'brand' } %>
-
-     <div class="nav">
-      <ul class="nav">
-       <li><%= link_to 'Home', :controller => 'main', :action => 'index' %></li>
-       <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
-       <form class="navbar-search" action="<%= url_for :controller => 'location', :action => 'search' %>">
-        <input class="search-query" name="term" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
-       </form>
-      </ul>
-     </div>
+     <a href="/" class="brand"><%= "Open Train Times" + (Rails.env != "production" ? " (" + Rails.env.titlecase + ")" : "") %></a>
+     <ul class="nav">
+      <li><%= link_to 'Search', :controller => 'search', :action => 'advanced' %></li>
+      <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
+      <li class="divider-vertical"></li>
+      <form class="navbar-search pull-left" action="<%= url_for :controller => 'location', :action => 'search' %>">
+       <input class="search-query" name="term" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
+      </form>
+     </ul>
      <div class="nav pull-right" rel="popover" title="Change modes?" data-content="Click to change modes.<br /><strong>Normal</strong> mode shows train times, and is suitable for most people.  <strong>Advanced</strong> mode shows lots of technical data - perfect for those who want the details.">
       <p class="navbar-text"><%= link_to raw((advanced_mode? ? 'Advanced' : 'Normal') + '&nbsp;<i class="icon-question-sign icon-white"></i>'), { :controller => 'application', :action => 'toggle_mode' } %></p>
      </div>

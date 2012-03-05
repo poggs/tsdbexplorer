@@ -49,7 +49,7 @@ class LocationController < ApplicationController
 
     # Limit our search only to relevant TIPLOCs
 
-    @schedule = Location.where([ 'locations.tiploc_code IN (?)', tiplocs[:locations] ])
+    @schedule = Location.includes(:basic_schedule).where([ 'locations.tiploc_code IN (?)', tiplocs[:locations] ])
 
 
     # Only show passenger services if we are not in advanced mode

@@ -3,6 +3,10 @@
  *  to change without affecting the original source
  */
 
+h2,h3,h4 {
+  color: #36444e;
+}
+
 .footer {
   margin-top: 45px;
   padding: 16px 0 36px;
