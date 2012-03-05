@@ -267,11 +267,37 @@ module TSDBExplorer
 
                 # Set the next_day_arrival or next_day_departure flags if we've crossed midnight
 
-                if (!@last_arrival.nil? && !location_record.arrival.nil?) && @last_arrival > location_record.arrival && !@next_day_arrival
+                # The last departure was before midnight, and this arrival is after midnight.
+                # Since the departure must be after the arrival, set both the next-day flags
+
+                if (!@last_departure.nil? && !location_record.arrival.nil?) && @last_departure > location_record.arrival
                   @next_day_arrival = true
+                  @next_day_departure = true
                 end
 
-                if (!@last_departure.nil? && !location_record.departure.nil?) && @last_departure > location_record.departure && !@next_day_departure
+
+                # The last departure was before midnight, and this passing time is after midnight.
+                # The next arrival and departure must also be after midnight, so set both flags.
+
+                if (!@last_departure.nil? && !location_record.pass.nil?) && @last_departure > location_record.pass
+                  @next_day_arrival = true
+                  @next_day_departure = true
+                end
+
+
+                # The last pass was before midnight and this arrival is after midnight.
+                # Again, the next departure will be after midnight, so set both flags.
+
+                if(!@last_pass.nil? && !location_record.arrival.nil?) && @last_pass > location_record.arrival
+                  @next_day_arrival = true
+                  @next_day_departure = true
+                end
+
+
+                # The departure time is after midnight and the arrival time is before.
+                # Just set the next-day departure flag.
+
+                if (!location_record.arrival.nil? && !location_record.departure.nil?) && location_record.arrival > location_record.departure
                   @next_day_departure = true
                 end
 

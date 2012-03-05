@@ -439,7 +439,7 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
 
-  it "should set the next_day flag on locations where the schedule originated the previous day" do
+  it "should set the next_day flag on locations where the schedule originated the previous day (example 1)" do
 
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bri_sunday_evening.cif')
 
@@ -447,6 +447,27 @@ describe "lib/tsdbexplorer/cif.rb" do
 
     next_day_false = ['CRDFCEN', 'MSHFILD', 'EBBWJ', 'NWPTRTG', 'MAINDWJ', 'LWERWJN']
     next_day_true = ['SEVTNLJ', 'SEVTNLW', 'SEVTNLE', 'PILNING', 'PATCHWY', 'FILTNEW', 'STPLNAR', 'STPLTNR', 'LAWRNCH', 'DRDAYSJ', 'BRSTLEJ', 'BRSTLTM']
+
+    next_day_false.each do |loc|
+      schedule.locations.where(:tiploc_code => loc).first.next_day_arrival.should be_false
+      schedule.locations.where(:tiploc_code => loc).first.next_day_departure.should be_false
+    end
+
+    next_day_true.each do |loc|
+      schedule.locations.where(:tiploc_code => loc).first.next_day_arrival.should be_true
+      schedule.locations.where(:tiploc_code => loc).first.next_day_departure.should be_true
+    end
+
+  end
+
+  it "should set the next_day flag on locations where the schedule originated the previous day (example 2)" do
+
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/train_over_midnight.cif')
+
+    schedule = BasicSchedule.where(:train_uid => 'L73705').first
+
+    next_day_false = ['EUSTON']
+    next_day_true = ['CMDNSTH', 'CMDNJN', 'SHMPSTD', 'KLBRNHR', 'QPRK', 'QPRKJ', 'KENSLG', 'WLSDNJL', 'HARLSDN', 'STNBGPK', 'WMBYDC', 'NWEMBLY', 'SKENTON', 'KTON', 'HROWDC', 'HEDSTNL', 'HTCHEND', 'CRPNDPK', 'BUSHYDC', 'WATFDHS', 'WATFJDC']
 
     next_day_false.each do |loc|
       schedule.locations.where(:tiploc_code => loc).first.next_day_arrival.should be_false
