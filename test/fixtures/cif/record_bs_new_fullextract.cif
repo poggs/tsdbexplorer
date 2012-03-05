@@ -18,7 +18,7 @@ TIWLSDWLJ56145731VWILLESDEN WEST LONDN JN   72268   0XWI
 TIWLVR   00136400QWOLVERTON                 70215   0WOLWOLVERTON               
 TIWMBY   00142300RWEMBLEY CENTRAL           72021   0WMBWEMBLEY CENTRAL         
 BSNC433911012121105150000001 POO2N53    122209000 EMU321 100      B S          P
-BX         LMY                                                                  
+BX         LMYLM000000                                                          
 LOEUSTON  1834 183410 C      TB                                                 
 LICMDNSTH           1837 00000000                                               
 LICMDNJN            1837H00000000   SL                                          

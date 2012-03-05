@@ -76,8 +76,8 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should correctly parse a CIF 'BX' record" do
-    expected_data = {:uic_code=>"48488", :atoc_code=>"ZZ", :ats_code=>"Y", :rsid=>nil, :data_source=>nil, :traction_class=>nil}
-    parsed_record = TSDBExplorer::CIF::parse_record('BX    48488ZZY                                                                  ')
+    expected_data = {:uic_code=>"48488", :atoc_code=>"ZZ", :ats_code=>"Y", :rsid=>"ZZ000000", :data_source=>nil, :traction_class=>nil}
+    parsed_record = TSDBExplorer::CIF::parse_record('BX    48488ZZYZZ000000                                                          ')
     parsed_record.should be_a TSDBExplorer::CIF::BasicScheduleExtendedRecord
     expected_data.collect.each { |k,v| parsed_record.send(k).should eql(v) }
   end
@@ -104,8 +104,8 @@ describe "lib/tsdbexplorer/cif.rb" do
   end
 
   it "should correctly parse a CIF 'CR' record" do
-    expected_data = {:timing_load=>"350", :speed=>"100", :course_indicator=>"1", :catering_code=>nil, :headcode=>"2130", :rsid=>nil, :operating_characteristics=>nil, :tiploc_code=>"NMPTN", :service_branding=>nil, :service_code=>"22209000", :train_identity=>"1U30", :train_class=>"B", :traction_class=>nil, :portion_id=>nil, :sleepers=>nil, :tiploc_instance=>nil, :uic_code=>nil, :power_type=>"EMU", :reservations=>"S", :category=>"XX"}
-    parsed_record = TSDBExplorer::CIF::parse_record('CRNMPTN   XX1U302130122209000 EMU350 100      B S                               ')
+    expected_data = {:timing_load=>"350", :speed=>"100", :course_indicator=>"1", :catering_code=>nil, :headcode=>"2130", :rsid=>"LM000000", :operating_characteristics=>nil, :tiploc_code=>"NMPTN", :service_branding=>nil, :service_code=>"22209000", :train_identity=>"1U30", :train_class=>"B", :traction_class=>nil, :portion_id=>nil, :sleepers=>nil, :tiploc_instance=>nil, :uic_code=>nil, :power_type=>"EMU", :reservations=>"S", :category=>"XX"}
+    parsed_record = TSDBExplorer::CIF::parse_record('CRNMPTN   XX1U302130122209000 EMU350 100      B S                  LM000000     ')
     expected_data.collect.each { |k,v| parsed_record.send(k).should eql(v) }
   end
 

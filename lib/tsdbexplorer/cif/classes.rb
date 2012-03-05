@@ -154,7 +154,7 @@ module TSDBExplorer
         self.uic_code = record[6..10]
         self.atoc_code = record[11..12]
         self.ats_code = record[13..13]
-        self.rsid = record[15..22].strip
+        self.rsid = record[14..22].strip
         self.data_source = record[23..23].strip
 
         self.traction_class = self.traction_class.strip.empty? ? nil : self.traction_class.strip
@@ -290,7 +290,7 @@ module TSDBExplorer
         self.service_branding = record[53..56].strip
         self.traction_class = record[57..60].strip
         self.uic_code = record[61..65].strip
-        self.rsid = record[66..73].strip
+        self.rsid = record[66..74].strip
 
         self.tiploc_instance = nil if self.tiploc_instance == ""
         self.portion_id = nil if self.portion_id == ""
