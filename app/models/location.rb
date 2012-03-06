@@ -42,7 +42,7 @@ class Location < ActiveRecord::Base
 
   # Limit the search to passenger categories
 
-  scope :only_passenger, lambda { where("category IN ('OL', 'OU', 'OO', 'OW', 'XC', 'XD', 'XI', 'XR', 'XU', 'XX', 'XD', 'XZ', 'BR', 'BS')") }
+  scope :only_passenger, lambda { join_basic_schedule.where("category IN ('OL', 'OU', 'OO', 'OW', 'XC', 'XD', 'XI', 'XR', 'XU', 'XX', 'XD', 'XZ', 'BR', 'BS')") }
   # TODO: Create an :only_freight scope
 
 
@@ -83,6 +83,96 @@ class Location < ActiveRecord::Base
   scope :runs_from, lambda { |loc|
     joins('LEFT JOIN locations loc_from ON locations.basic_schedule_uuid = loc_from.basic_schedule_uuid').where('loc_from.tiploc_code IN (?) AND locations.seq > loc_from.seq', loc)
   }
+
+
+  # Return an ActiveRecord::Relation object containing all the schedules which arrive, pass or depart a location within a specific time window
+
+  def self.runs_between(from, to)
+
+    queries = Hash.new
+
+
+    # We're going to be forming a Location query
+
+    schedule_base = Location
+
+    if from.midnight == to.midnight
+
+      # The time window doesn't span midnight, so retrieve the following schedules:
+      #
+      #   - Runs today and calls within the time window
+      #   - Ran yesterday and calls within the time window with the next-day flag set
+
+      run_date = from.midnight
+
+      # Return all schedules which run today and call on this day within the window
+
+      q1 = schedule_base.runs_on(from.to_s(:yyyymmdd)).calls_between(from.to_s(:hhmm), to.to_s(:hhmm)).where('locations.next_day_departure = false AND locations.next_day_arrival = false')
+
+      unless q1.blank?
+        queries[run_date] = Array.new unless queries.has_key? run_date
+        queries[run_date].push q1
+      end
+
+
+      # Return all schedules which ran yesterday and call on the next day within the window (i.e. over midnight)
+
+      q2 = schedule_base.runs_on((from - 1.day).to_s(:yyyymmdd)).calls_between(from.to_s(:hhmm), to.to_s(:hhmm)).where('locations.next_day_departure = true AND locations.next_day_arrival = true')
+
+      unless q2.blank?
+        queries[(run_date - 1.day)] = Array.new unless queries.has_key? (run_date - 1.day)
+        queries[(run_date - 1.day)].push q2
+      end
+
+    else
+
+      # The time window spans midnight, so retrieve the following schedules:
+      #
+      #  - Runs on the day before midnight and calls up until midnight
+      #  - Runs on the day before midnight and calls after midnight
+      #  - Runs on the day after midnight and calls between midnight and the end of the time window
+
+      # Return all schedules which run on the day before midnight and call up until midnight
+
+      q1 = schedule_base.runs_on(from.to_s(:yyyymmdd)).calls_between(from.to_s(:hhmm), '2359H').where('locations.next_day_departure = false AND locations.next_day_arrival = false')
+
+      unless q1.blank?
+        queries[from] = Array.new unless queries.has_key? from
+        queries[from].push q1
+      end
+
+
+      # Return all schedules which run on the day before midnight and call after midnight
+
+      q2 = schedule_base.runs_on(from.to_s(:yyyymmdd)).calls_between('0000', to.to_s(:hhmm)).where('locations.next_day_departure = true AND locations.next_day_arrival = true')
+
+      unless q2.blank?
+        queries[from] = Array.new unless queries.has_key? from
+        queries[from].push q2
+      end
+
+
+      # Return all schedules which run on the day after midnight and call between midnight and the end of the time window
+
+      q3 = schedule_base.runs_on(to.to_s(:yyyymmdd)).calls_between('0000', to.to_s(:hhmm)).where('locations.next_day_departure = false AND locations.next_day_arrival = false')
+
+      unless q3.blank?
+        queries[to] = Array.new unless queries.has_key? to
+        queries[to].push q3
+      end
+
+    end
+
+    results = Hash.new
+
+    queries.keys.each do |q|
+      results[q.midnight] = Array.new unless results.has_key? q.midnight
+      results[q.midnight] = results[q.midnight] + queries[q].first
+    end
+
+    return results
+
+  end
 
 
 

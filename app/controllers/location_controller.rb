@@ -31,30 +31,17 @@ class LocationController < ApplicationController
 
     redirect_to :action => 'search', :term => params[:location] and return if tiplocs.nil?
 
+    @all_schedules = Array.new
 
-    # Determine the name of this location
+
+    # Determine the name of this location for the view
 
     @location = tiplocs[:name]
 
 
-    # Work out the start and end of the time range we're interested in
+    # Limit the search to a particular location
 
-    early_range = 30.minutes
-    late_range = 1.hour
-
-    @range = Hash.new
-    @range[:from] = @datetime - early_range
-    @range[:to] = @datetime + late_range
-
-
-    # Limit our search only to relevant TIPLOCs
-
-    @schedule = Location.includes(:basic_schedule).where([ 'locations.tiploc_code IN (?)', tiplocs[:locations] ])
-
-
-    # Only show passenger services if we are not in advanced mode
-
-    @schedule = @schedule.only_passenger if session[:mode] != 'advanced'
+    @schedule = Location.where(:tiploc_code => tiplocs[:locations])
 
 
     # Optionally limit the search to trains travelling to or from a particular location
@@ -74,59 +61,19 @@ class LocationController < ApplicationController
     end
 
 
-    # Prepare an empty array of schedules which have been activated
+    # Work out the start and end of the time range we're interested in
 
-    @realtime = Array.new
+    early_range = 30.minutes
+    late_range = 1.hour
+
+    @range = Hash.new
+    @range[:from] = @datetime - early_range
+    @range[:to] = @datetime + late_range
 
 
-    # Handle windows which span midnight
+    # Finally, run the query for schedules valid in the time window
 
-    if @range[:from].midnight == @range[:to].midnight
-
-      # The date window does not span midnight
-
-      @schedule = @schedule.runs_on(@datetime.to_s(:yyyymmdd))
-
-      if advanced_mode?
-        @schedule = @schedule.passes_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
-      else
-        @schedule = @schedule.calls_between(@range[:from].to_s(:hhmm), @range[:to].to_s(:hhmm))
-      end
-
-      @schedule.each do |l|
-        next if l.basic_schedule.nil?
-        @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
-      end
-
-    else
-
-      # The date window spans midnight
-
-      @schedule_a = @schedule.runs_on(@range[:from].to_s(:yyyymmdd))
-
-      if advanced_mode?
-        @schedule_a = @schedule_a.passes_between(@range[:from].to_s(:hhmm), '2359')
-      else
-        @schedule_a = @schedule_a.calls_between(@range[:from].to_s(:hhmm), '2359')
-      end
-
-      @schedule_a.each do |l|
-        @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
-      end
-
-      @schedule_b = @schedule.runs_on((@range[:to] - 1.day).to_s(:yyyymmdd)).calls_between('0000', @range[:to].to_s(:hhmm))
-
-      if advanced_mode?
-        @schedule_b = @schedule_b.passes_between('0000', @range[:to].to_s(:hhmm))
-      else
-        @schedule_b = @schedule_b.calls_between('0000', @range[:to].to_s(:hhmm))
-      end
-
-      @schedule_b.each do |l|
-        @realtime.push l.basic_schedule_uuid if $REDIS.get("ACT:" + l.basic_schedule.train_uid + ":" + @range[:from].to_s(:yyyymmdd).gsub('-', ''))
-      end
-
-    end
+    @schedule = @schedule.runs_between(@range[:from], @range[:to])
 
   end
 
