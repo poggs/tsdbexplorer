@@ -75,7 +75,7 @@ module ApplicationHelper
       "HT" => "Hull Trains",
       "HX" => "Heathrow Express",
       "IL" => "Island Line",
-      "LE" => "National Express East Anglia",
+      "LE" => "Greater Anglia",
       "LM" => "London Midland",
       "LO" => "London Overground",
       "LT" => "London Underground",
