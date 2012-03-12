@@ -35,6 +35,8 @@ gem 'redis', '>= 2.2.2'
 gem 'activerecord-import', '>= 0.2.9'
 gem 'fastercsv'
 gem 'watu_table_builder', :require => 'table_builder'
+gem 'devise'
+gem 'prawn'
 
 
 # Environment-specific gems
@@ -42,9 +44,6 @@ gem 'watu_table_builder', :require => 'table_builder'
 group :test do
   gem 'cucumber-rails'
   gem 'database_cleaner'
-end
-
-group :development, :test do
   gem "rspec-rails", ">= 2.7.0"
   gem "guard-rspec", ">= 0.5.7"
   gem "rb-inotify", :require => false if RUBY_PLATFORM =~ /linux/i
