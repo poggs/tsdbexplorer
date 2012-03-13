@@ -46,8 +46,8 @@
        </a>
        <ul class="dropdown-menu">
          <li class="nav-header">Site mode</li>
-         <%= content_tag :li, (link_to "Normal", { :controller => 'application', :action => 'toggle_mode' }), :class => advanced_mode? ? 'light-active' : nil %>
-         <%= content_tag :li, (link_to "Detailed", { :controller => 'application', :action => 'toggle_mode' }), :class => advanced_mode? ? nil : 'light-active' %>
+         <%= content_tag :li, (link_to "Normal", { :controller => 'application', :action => 'toggle_mode' }), :class => advanced_mode? ? nil : 'light-active' %>
+         <%= content_tag :li, (link_to "Detailed", { :controller => 'application', :action => 'toggle_mode' }), :class => advanced_mode? ? 'light-active' : nil %>
         <% if user_signed_in? %>
          <li class="divider"></li>
          <li class="nav-header">Account settings</li>
