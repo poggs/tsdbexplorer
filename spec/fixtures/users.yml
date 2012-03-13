@@ -1,0 +1,13 @@
+admin_user:
+    id: 1
+    email: adminuser@example.com
+    encrypted_password: $2a$10$28AQlnjEgnXF48pkj5kBnutVYFOnLI0PiFmStsXPYBqwmvPD3G8YK
+    full_name: Admin User
+    is_admin: true
+
+user:
+    id: 2
+    email: user@example.com
+    encrypted_password: $2a$10$28AQlnjEgnXF48pkj5kBnutVYFOnLI0PiFmStsXPYBqwmvPD3G8YK
+    full_name: Normal User
+    is_admin: false
