@@ -509,6 +509,20 @@ module ApplicationHelper
 
   end
 
+  def boolean_to_image(status)
+
+    if status == true
+      icon = 'icon-ok'
+    elsif status == false
+      icon = 'icon-remove'
+    else
+      icon = 'icon-question-sign'
+    end
+
+    "<i class=#{icon}></i>"
+
+  end
+
 
   # Time formatting
 

@@ -25,6 +25,14 @@ describe ApplicationHelper do
     $REDIS.flushall
   end
 
+  it "should return a tick icon if passed a boolean 'true'" do
+    boolean_to_image(true).should include('icon-ok')
+  end
+
+  it "should return a tick icon if passed a boolean 'true'" do
+    boolean_to_image(false).should include('icon-remove')
+  end
+
   it "should convert a Time object representing a whole minute to HHMM format using the 24 hour clock" do    
     time_only(Time.parse('2011-01-01 09:00:00')).should eql('0900')
     time_only(Time.parse('2011-01-01 19:00:00')).should eql('1900')
