@@ -398,6 +398,14 @@ module TSDBExplorer
       cif_file_record.save
 
 
+      # If we're using PostgreSQL and we aren't in the test environment
+      # (which runs tests in a transaction), VACUUM ANALYZE the tables
+
+      if ActiveRecord::Base.connection.adapter_name == "PostgreSQL" && ::Rails.env != "test"
+        ActiveRecord::Base.connection.execute('VACUUM ANALYZE')
+      end
+
+
       # Update the Redis caches
 
       TSDBExplorer::Realtime::cache_location_database
