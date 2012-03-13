@@ -29,3 +29,19 @@ h2,h3,h4 {
 span.label a {
   color: #fff;
 }
+
+table.stats-table td, table.stats-table th {
+  text-align: center;
+}
+
+table.stats-table td {
+  font-size: 36px;
+}
+
+#error_explanation h2 {
+  font-size: 14px;
+}
+
+li.light-active {
+  background: rgba(4, 156, 219, 0.5);
+}

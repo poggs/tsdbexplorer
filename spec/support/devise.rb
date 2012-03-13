@@ -17,27 +17,7 @@
 #  $Id$
 #
 
-# Set the hostname, username and password for the AMQP server here.  Leave
-# the queue names at their default unless it's necessary to change them.
-
-AMQP_SERVER:
-  hostname:    'localhost'
-  username:    'dummy_user'
-  password:    'dummy_password'
-  vhost:       'vhost_name'
-
-REDIS_SERVER:
-  hostname:    'localhost'
-  port:        '6379'
-
-ANALYTICS:
-  tracking_id: nil
-  domain_name: nil
-
-DATA:
-  path:        'import'
-
-RESTRICTIONS:
-  category:    [nil]
-
-BRANDING:      'TSDB Explorer'
+RSpec.configure do |config|
+  config.include Devise::TestHelpers, :type => :controller
+end
+  

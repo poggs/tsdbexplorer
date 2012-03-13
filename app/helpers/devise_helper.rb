@@ -17,27 +17,26 @@
 #  $Id$
 #
 
-# Set the hostname, username and password for the AMQP server here.  Leave
-# the queue names at their default unless it's necessary to change them.
+module DeviseHelper
 
-AMQP_SERVER:
-  hostname:    'localhost'
-  username:    'dummy_user'
-  password:    'dummy_password'
-  vhost:       'vhost_name'
+  def devise_error_messages!
 
-REDIS_SERVER:
-  hostname:    'localhost'
-  port:        '6379'
+    return "" if resource.errors.empty?
 
-ANALYTICS:
-  tracking_id: nil
-  domain_name: nil
+    messages = resource.errors.full_messages.map { |msg| content_tag(:li, msg) }.join
+    sentence = I18n.t("errors.messages.not_saved",
+                      :count => resource.errors.count,
+                      :resource => resource.class.model_name.human.downcase)
 
-DATA:
-  path:        'import'
+    html = <<-HTML
+    <div class="alert alert-error">
+      <h4 class="alert-heading">#{sentence}</h4>
+      <ul>#{messages}</ul>
+    </div>
+    HTML
 
-RESTRICTIONS:
-  category:    [nil]
+    html.html_safe
 
-BRANDING:      'TSDB Explorer'
+  end
+
+end

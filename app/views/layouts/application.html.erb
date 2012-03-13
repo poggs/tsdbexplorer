@@ -2,7 +2,7 @@
 <html itemscope itemtype="http://schema.org/CreativeWork" lang="en">
  <head>
   <meta charset="utf-8">
-  <title>Open Train Times<% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
+  <title><%= $CONFIG['BRANDING'] %><% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
   <meta name="description" content="Real-time train information using Open Data">
   <meta name="author" content="Peter Hicks">
 
@@ -24,7 +24,7 @@
   <div class="navbar navbar-fixed-top">
    <div class="navbar-inner">
     <div class="container">
-     <a href="/" class="brand"><%= "Open Train Times" + (Rails.env != "production" ? " (" + Rails.env.titlecase + ")" : "") %></a>
+     <a href="/" class="brand"><%= $CONFIG['BRANDING'] + (Rails.env != "production" ? " (" + Rails.env.titlecase + ")" : "") %></a>
      <ul class="nav">
       <li><%= link_to 'Search', :controller => 'search', :action => 'advanced' %></li>
       <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
@@ -33,9 +33,37 @@
        <input class="search-query" name="term" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
       </form>
      </ul>
-     <div class="nav pull-right" rel="popover" title="Change modes?" data-content="Click to change modes.<br /><strong>Normal</strong> mode shows train times, and is suitable for most people.  <strong>Advanced</strong> mode shows lots of technical data - perfect for those who want the details.">
-      <p class="navbar-text"><%= link_to raw((advanced_mode? ? 'Advanced' : 'Normal') + '&nbsp;<i class="icon-question-sign icon-white"></i>'), { :controller => 'application', :action => 'toggle_mode' } %></p>
-     </div>
+
+     <ul class="nav pull-right">
+      <li class="dropdown">
+       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <% if user_signed_in? %>
+         <i class="icon-user icon-white"></i>&nbsp;<%= current_user.full_name %>
+        <% else %>
+         Options
+        <% end %>
+        <b class="caret"></b>
+       </a>
+       <ul class="dropdown-menu">
+         <li class="nav-header">Site mode</li>
+         <%= content_tag :li, (link_to "Normal", { :controller => 'application', :action => 'toggle_mode' }), :class => advanced_mode? ? 'light-active' : nil %>
+         <%= content_tag :li, (link_to "Detailed", { :controller => 'application', :action => 'toggle_mode' }), :class => advanced_mode? ? nil : 'light-active' %>
+        <% if user_signed_in? %>
+         <li class="divider"></li>
+         <li class="nav-header">Account settings</li>
+         <li><%= link_to "Update your details", edit_user_registration_path %></li>
+         <li><%= link_to "Change password", edit_user_registration_path %></li>
+         <li class="divider"></li>
+         <li><%= link_to "Sign out", destroy_user_session_path %></li>
+        <% elsif $CONFIG['AUTH'] == false %>
+         <li class="divider"></li>
+         <li class="nav-header">Account</li>
+         <li><%= link_to "Log in", new_user_session_path %></li>
+         <li><%= link_to "Sign up", new_user_registration_path %></li>
+        <% end %>
+       </ul>
+      </li>
+     </ul>
 
     </div>
    </div>
@@ -46,9 +74,7 @@
   <div class="container" style="padding-top: 64px;">
 
    <div class="content">
-    <%= content_tag(:div, flash[:error], :id => "flash_error", :class => "alert alert-error") if flash[:error] %>
-    <%= content_tag(:div, flash[:notice], :id => "flash_notice", :class => "alert alert-info") if flash[:notice] %>
-    <%= content_tag(:div, flash[:alert], :id => "flash_alert", :class => "alert") if flash[:alert] %>
+    <%= render :partial => 'common/flash', :locals => { :flash => flash } %>
     <%= yield %>
    </div>
 
@@ -57,7 +83,7 @@
   <footer class="footer">
    <div class="container">
     <p class="pull-right"><%= link_to (image_tag 'twitter_followus.png'), 'http://twitter.com/opentraintimes' %></p>
-    <p><a href="http://github.com/poggs/tsdbexplorer" target="_blank">Open Train Times</a> is &copy;2011-2012 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a> using data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>, <a href="http://www.atoc.org/">RSP</a> and <a href="http://www.transportdirect.info/">Transport Direct</a>.</p> 
+    <p><a href="http://github.com/poggs/tsdbexplorer" target="_blank"><%= $CONFIG['BRANDING'] %></a> is &copy;2011-2012 <a href="mailto:peter.hicks@poggs.co.uk">Peter Hicks</a> using data provided by <a href="http://www.networkrail.co.uk/">Network Rail</a>, <a href="http://www.atoc.org/">RSP</a> and <a href="http://www.transportdirect.info/">Transport Direct</a>.</p> 
     <p>Please read the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %> to understand the limitations of this site.</p>
     <% if request.url == root_url %>
      <p><!-- Fix this ugly hack -->&nbsp;</p>

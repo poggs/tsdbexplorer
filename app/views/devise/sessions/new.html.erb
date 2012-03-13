@@ -1,0 +1,52 @@
+<div class="page-header">
+ <h1>Log in to <%= $CONFIG['BRANDING'] %></h1>
+</div>
+
+<div class="row">
+ <div class="span8">
+
+  <%= form_for resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => 'well form-horizontal' } do |f| %>
+
+  <fieldset>
+
+   <div class="control-group">
+    <label class="control-label" for="email"><%= f.label :email %></label>
+    <div class="controls"><%= f.email_field :email, :class => 'span3' %></div>
+   </div>
+
+   <div class="control-group">
+    <label class="control-label" for="password"><%= f.label :password %></label>
+    <div class="controls"><%= f.password_field :password, :class => 'span3' %></div>
+   </div>
+
+   <% if devise_mapping.rememberable? -%>
+   <div class="control-group">
+    <label class="control-label" for="remember_me"><%= f.label :remember_me %></label>
+    <div class="controls"><%= f.check_box :remember_me %></div>
+   </div>
+   <% end -%>
+
+   <div class="form-actions">
+    <%= f.submit "Sign in", :class => 'btn btn-primary' %>
+   </div>
+
+  </fieldset>
+
+  <% end %>
+
+ </div>
+
+ <div class="span4">
+  <h2>Need help logging in?</h2>
+  <h3>I've forgotten my password!</h3>
+  <p>Don't worry - you can <%= link_to "reset your password", new_password_path(resource_name) %>.  We'll send you instructions to your email address.</p>
+  <h3>I'm not sure I have an account</h3>
+  <p>Why not <%= link_to "create your account", new_registration_path(resource_name) %>?  It's free, and it'll let us save your preferences and keep you updated.</p>
+  <p>Don't worry - we promise never to share or sell your information.</p>
+  <h3>I still can't log in</h3>
+  <p><a href="mailto:peter.hicks@poggs.co.uk">Get in touch</a> and we'll help you out.</p>
+ </div>
+
+
+</div>
+

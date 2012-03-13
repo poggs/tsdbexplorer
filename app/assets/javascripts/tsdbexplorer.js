@@ -35,8 +35,9 @@ function load_handler() {
 
   }
 
-  // Activate popovers
+  // Activate popovers and dropdowns
 
   $('[rel=popover]').popover({ placement: 'bottom', delay: 500 });
+  $('.dropdown-toggle').dropdown();
 
 }

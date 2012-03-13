@@ -1,0 +1,60 @@
+<div class="page-header">
+ <h1>Edit your account</h1>
+</div>
+
+<div class="row">
+ <div class="span8">
+
+  <%= form_for resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :class => 'well form-horizontal' } do |f| %>
+
+   <fieldset>
+
+    <%= devise_error_messages! %>
+
+    <div class="control-group">
+     <label class="control-label" for="full_name"><%= f.label :full_name %></label>
+     <div class="controls"><%= f.text_field :full_name, :class => 'span3' %></div>
+    </div>
+
+    <div class="control-group">
+     <label class="control-label" for="email"><%= f.label :email %></label>
+     <div class="controls"><%= f.email_field :email, :class => 'span3' %></div>
+    </div>
+
+    <div class="control-group">
+     <label class="control-label" for="password"><%= f.label :password %></label>
+     <div class="controls"><%= f.password_field :password, :autocomplete => 'off', :class => 'span3' %><p class="help-block">Leave it blank if you don't want to change your password</p></div>
+    </div>
+
+    <div class="control-group">
+     <label class="control-label" for="password_confirmation"><%= f.label :password_confirmation %></label>
+     <div class="controls"><%= f.password_field :password_confirmation, :class => 'span3' %></div>
+    </div>
+
+    <div class="control-group">
+     <label class="control-label" for="current_password"><%= f.label :current_password %></label>
+     <div class="controls"><%= f.password_field :current_password, :class => 'span3' %><p class="help-block">We need it so we can update your details</p></div>
+    </div>
+
+    <div class="form-actions">
+     <p>
+      <%= f.submit "Update details", :class => 'btn btn-primary' %>
+      <%= link_to "Go back", :back, :class => 'btn' %>
+     </p>
+    </div>
+
+   </fieldset>
+
+  <% end %>
+
+ </div>
+
+ <div class="span4">
+  <h2>Why do we need this?</h2>
+  <p>It's so we can keep you updated with news and new feature announcements.</p>
+  <p>Some new features we're planning will only be available if you've signed up, such as automatic emails and real-time train tracking.</p>
+  <p><strong>We promise never to share or sell your personal information.</strong></p>
+ </div>
+
+</div>
+

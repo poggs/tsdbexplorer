@@ -17,27 +17,11 @@
 #  $Id$
 #
 
-# Set the hostname, username and password for the AMQP server here.  Leave
-# the queue names at their default unless it's necessary to change them.
+class User < ActiveRecord::Base
 
-AMQP_SERVER:
-  hostname:    'localhost'
-  username:    'dummy_user'
-  password:    'dummy_password'
-  vhost:       'vhost_name'
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 
-REDIS_SERVER:
-  hostname:    'localhost'
-  port:        '6379'
+  attr_accessible :username, :password, :password_confirmation, :email, :full_name, :enabled, :is_admin, :remember_me
+  attr_protected :is_admin
 
-ANALYTICS:
-  tracking_id: nil
-  domain_name: nil
-
-DATA:
-  path:        'import'
-
-RESTRICTIONS:
-  category:    [nil]
-
-BRANDING:      'TSDB Explorer'
+end

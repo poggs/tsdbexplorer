@@ -19,6 +19,11 @@
 
 class AdminController < ApplicationController
 
+  # This controller is only accessible to logged-in users who have admin rights
+
+  before_filter :require_admin!
+
+
   # Redirect to the overview page
 
   def index
@@ -147,10 +152,21 @@ class AdminController < ApplicationController
   end
 
 
+  # User management
+
+  def manageusers
+
+    @pills = pills
+
+    @users = User.all
+
+  end
+
+
   private
 
   def pills
-    [ [ 'Admin' , [ 'Overview', 'Timetable', 'Import', 'Real-Time', 'Memory' ] ] ]
+    [ [ 'System' , [ 'Overview', 'Timetable', 'Import', 'Real-Time', 'Memory' ] ], [ 'Authentication', [ 'Manage users' ] ] ]
   end
 
 end

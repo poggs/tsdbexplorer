@@ -1,0 +1,28 @@
+<div class="page-header">
+ <h1>Administration</h1>
+</div>
+
+<div class="row">
+ <%= render :partial => 'common/pills' %>
+ <div class="span10">
+  <h2>User management</h2>
+  <table class="table condensed-table">
+   <thead>
+    <tr>
+     <th class="span3">Username</th>
+     <th>Full name</th>
+     <th class="span1">Admin?</th>
+    </tr>
+   </thead>
+   <tbody>
+    <% @users.each do |u| %>
+    <tr>
+     <td><%= u.email %><br />Last login <%= distance_of_time_in_words_to_now(u.current_sign_in_at) %> ago</td>
+     <td><%= u.full_name %></td>
+     <td><%= raw boolean_to_image(u.is_admin?) %></td>
+    </tr>
+    <% end %>
+   </tbody>
+  </table>
+ </div>
+</div>

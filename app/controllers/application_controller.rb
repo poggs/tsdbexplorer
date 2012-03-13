@@ -177,4 +177,12 @@ class ApplicationController < ActionController::Base
 
   end
 
+
+  # Require that the user is an administrator, otherwise redirect to the
+  # root page
+
+  def require_admin!
+    redirect_to :root unless !current_user.nil? && current_user.is_admin?
+  end
+
 end
