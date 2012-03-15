@@ -31,11 +31,6 @@ describe MainController do
     $REDIS.flushall
   end
 
-  it "should redirect to a setup page when called with an empty database" do
-    get :index
-    response.should redirect_to :action => :setup
-  end
-
   it "should show an informational page when called with an empty database" do
     get :setup
     response.code.should eql("200")

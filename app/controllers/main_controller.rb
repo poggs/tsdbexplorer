@@ -26,7 +26,6 @@ class MainController < ApplicationController
   def index
 
     @time = Time.now
-    redirect_to :action => 'setup' if BasicSchedule.count == 0
 
     days_forward = 10
 
