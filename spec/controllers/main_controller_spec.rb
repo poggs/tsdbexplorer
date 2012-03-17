@@ -26,8 +26,11 @@ describe MainController do
   end
 
   render_views
+  fixtures :users
 
   before(:each) do
+    @user = users(:user)
+    @admin_user = users(:admin_user)
     $REDIS.flushall
   end
 
@@ -77,5 +80,22 @@ describe MainController do
   end
 
   it "should show a time selector on the main page"
+
+  it "should show a link to the admin page when an administrator is logged in" do
+    sign_in @admin_user
+    get :index
+    response.body.should =~ /<li class=\"nav-header\">Administration<\/li>/
+  end
+
+  it "should not show a link to the admin page when a non-administrator is logged in" do
+    sign_in @user
+    get :index
+    response.body.should_not =~ /<li class=\"nav-header\">Administration<\/li>/
+  end
+
+  it "should not show a link to the admin page when no user is logged in" do
+    get :index
+    response.body.should_not =~ /<li class=\"nav-header\">Administration<\/li>/
+  end
 
 end
