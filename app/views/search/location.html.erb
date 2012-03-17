@@ -24,28 +24,28 @@
     </div>
 
     <div class="control-group">
-     <label for="from">which came from<br />(optional)</label>
+     <label class="control-label" for="from">which came from<br />(optional)</label>
      <div class="controls">
       <input class="span3" id="from" name="from" type="text" />
      </div>
     </div>
 
     <div class="control-group">
-     <label for="to">...and later call at<br />(optional)</label>
+     <label class="control-label" for="to">...and later call at<br />(optional)</label>
      <div class="controls">
       <input class="span3" id="to" name="to" type="text" />
      </div>
     </div>
 
     <div class="control-group">
-     <label for="date">on</label>
+     <label class="control-label" for="date">on</label>
      <div class="controls">
       <input class="span3" id="date" name="date" size="10" type="text" value="<%= @datetime.to_s(:yyyymmdd) %>" />
      </div>
     </div>
 
     <div class="control-group">
-     <label for="time">at</label>
+     <label class="control-label" for="time">at</label>
      <div class="controls">
       <input class="span1" id="time" name="time" size="10" type="text" value="<%= @datetime.to_s(:hhmm_colon) %>" />
      </div>
