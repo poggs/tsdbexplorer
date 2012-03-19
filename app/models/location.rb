@@ -109,20 +109,16 @@ class Location < ActiveRecord::Base
 
       q1 = schedule_base.runs_on(from.to_s(:yyyymmdd)).calls_between(from.to_s(:hhmm), to.to_s(:hhmm)).where('locations.next_day_departure = false AND locations.next_day_arrival = false')
 
-      unless q1.blank?
-        queries[run_date] = Array.new unless queries.has_key? run_date
-        queries[run_date].push q1
-      end
+      queries[run_date] = Array.new unless queries.has_key? run_date
+      queries[run_date].push q1
 
 
       # Return all schedules which ran yesterday and call on the next day within the window (i.e. over midnight)
 
       q2 = schedule_base.runs_on((from - 1.day).to_s(:yyyymmdd)).calls_between(from.to_s(:hhmm), to.to_s(:hhmm)).where('locations.next_day_departure = true AND locations.next_day_arrival = true')
 
-      unless q2.blank?
-        queries[(run_date - 1.day)] = Array.new unless queries.has_key? (run_date - 1.day)
-        queries[(run_date - 1.day)].push q2
-      end
+      queries[(run_date - 1.day)] = Array.new unless queries.has_key? (run_date - 1.day)
+      queries[(run_date - 1.day)].push q2
 
     else
 
@@ -136,30 +132,24 @@ class Location < ActiveRecord::Base
 
       q1 = schedule_base.runs_on(from.to_s(:yyyymmdd)).calls_between(from.to_s(:hhmm), '2359H').where('locations.next_day_departure = false AND locations.next_day_arrival = false')
 
-      unless q1.blank?
-        queries[from] = Array.new unless queries.has_key? from
-        queries[from].push q1
-      end
+      queries[from] = Array.new unless queries.has_key? from
+      queries[from].push q1
 
 
       # Return all schedules which run on the day before midnight and call after midnight
 
       q2 = schedule_base.runs_on(from.to_s(:yyyymmdd)).calls_between('0000', to.to_s(:hhmm)).where('locations.next_day_departure = true AND locations.next_day_arrival = true')
 
-      unless q2.blank?
-        queries[from] = Array.new unless queries.has_key? from
-        queries[from].push q2
-      end
+      queries[from] = Array.new unless queries.has_key? from
+      queries[from].push q2
 
 
       # Return all schedules which run on the day after midnight and call between midnight and the end of the time window
 
       q3 = schedule_base.runs_on(to.to_s(:yyyymmdd)).calls_between('0000', to.to_s(:hhmm)).where('locations.next_day_departure = false AND locations.next_day_arrival = false')
 
-      unless q3.blank?
-        queries[to] = Array.new unless queries.has_key? to
-        queries[to].push q3
-      end
+      queries[to] = Array.new unless queries.has_key? to
+      queries[to].push q3
 
     end
 
