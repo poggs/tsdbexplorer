@@ -73,7 +73,7 @@ class LocationController < ApplicationController
 
     # Finally, run the query for schedules valid in the time window
 
-    @schedule = @schedule.runs_between(@range[:from], @range[:to])
+    @schedule = @schedule.runs_between(@range[:from], @range[:to], advanced_mode?)
 
   end
 
