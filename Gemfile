@@ -44,10 +44,13 @@ gem 'prawn'
 group :test do
   gem 'cucumber-rails'
   gem 'database_cleaner'
-  gem "rspec-rails", ">= 2.7.0"
   gem "guard-rspec", ">= 0.5.7"
   gem "rb-inotify", :require => false if RUBY_PLATFORM =~ /linux/i
   gem "libnotify", :require => false if RUBY_PLATFORM =~ /linux/i
   gem "rb-fsevent", :require => false if RUBY_PLATFORM =~ /darwin/i
   gem "growl", :require => false if RUBY_PLATFORM =~ /darwin/i
+end
+
+group :test, :development do
+  gem "rspec-rails", ">= 2.9.0"
 end
