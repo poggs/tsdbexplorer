@@ -74,8 +74,8 @@ module TSDBExplorer
 
     class LocationRecord
 
-      attr_reader :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_ae, :activity_bl, :activity_minusd, :activity_hh, :activity_kc, :activity_ke, :activity_kf, :activity_ks, :activity_op, :activity_or, :activity_pr, :activity_rm, :activity_rr, :activity_minust, :activity_tb, :activity_tf, :activity_ts, :activity_tw, :activity_minusu, :activity_a, :activity_c, :activity_d, :activity_e, :activity_g, :activity_h, :activity_k, :activity_l, :activity_n, :activity_r, :activity_s, :activity_t, :activity_u, :activity_w, :activity_x, :next_day_arrival, :next_day_departure
-      attr_accessor :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_ae, :activity_bl, :activity_minusd, :activity_hh, :activity_kc, :activity_ke, :activity_kf, :activity_ks, :activity_op, :activity_or, :activity_pr, :activity_rm, :activity_rr, :activity_minust, :activity_tb, :activity_tf, :activity_ts, :activity_tw, :activity_minusu, :activity_a, :activity_c, :activity_d, :activity_e, :activity_g, :activity_h, :activity_k, :activity_l, :activity_n, :activity_r, :activity_s, :activity_t, :activity_u, :activity_w, :activity_x, :next_day_arrival, :next_day_departure
+      attr_reader :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_ae, :activity_bl, :activity_minusd, :activity_hh, :activity_kc, :activity_ke, :activity_kf, :activity_ks, :activity_op, :activity_or, :activity_pr, :activity_rm, :activity_rr, :activity_minust, :activity_tb, :activity_tf, :activity_ts, :activity_tw, :activity_minusu, :activity_a, :activity_c, :activity_d, :activity_e, :activity_g, :activity_h, :activity_k, :activity_l, :activity_n, :activity_r, :activity_s, :activity_t, :activity_u, :activity_w, :activity_x, :next_day_arrival, :next_day_departure, :arrival_secs, :departure_secs, :pass_secs, :public_arrival_secs, :public_departure_secs
+      attr_accessor :basic_schedule_uuid, :record_identity, :location_type, :seq, :tiploc_code, :tiploc_instance, :arrival, :public_arrival, :pass, :departure, :public_departure, :platform, :line, :path, :engineering_allowance, :pathing_allowance, :performance_allowance, :activity_ae, :activity_bl, :activity_minusd, :activity_hh, :activity_kc, :activity_ke, :activity_kf, :activity_ks, :activity_op, :activity_or, :activity_pr, :activity_rm, :activity_rr, :activity_minust, :activity_tb, :activity_tf, :activity_ts, :activity_tw, :activity_minusu, :activity_a, :activity_c, :activity_d, :activity_e, :activity_g, :activity_h, :activity_k, :activity_l, :activity_n, :activity_r, :activity_s, :activity_t, :activity_u, :activity_w, :activity_x, :next_day_arrival, :next_day_departure, :arrival_secs, :departure_secs, :pass_secs, :public_arrival_secs, :public_departure_secs
 
       def initialize(record=nil)
 
@@ -136,6 +136,12 @@ module TSDBExplorer
           self.pathing_allowance = nil if self.pathing_allowance == ""
           self.engineering_allowance = nil if self.engineering_allowance == ""
           self.performance_allowance = nil if self.performance_allowance == ""
+
+          self.arrival_secs = TSDBExplorer::time_to_seconds(self.arrival) unless self.arrival.nil?
+          self.departure_secs = TSDBExplorer::time_to_seconds(self.departure) unless self.departure.nil?
+          self.pass_secs = TSDBExplorer::time_to_seconds(self.pass) unless self.pass.nil?
+          self.public_arrival_secs = TSDBExplorer::time_to_seconds(self.public_arrival) unless self.public_arrival.nil?
+          self.public_departure_secs = TSDBExplorer::time_to_seconds(self.public_departure) unless self.public_departure.nil?
 
         end
 

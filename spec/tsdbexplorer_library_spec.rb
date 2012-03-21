@@ -196,4 +196,16 @@ describe "lib/tsdbexplorer.rb" do
     TSDBExplorer::schedule_type_to_text('C').should eql('CAN')
   end
 
+
+  # HHMM(H) to seconds conversion
+
+  it "should convert a time in the format HHMM(H) in to the number of seconds since midnight" do
+    TSDBExplorer::time_to_seconds('0000').should eql(0)
+    TSDBExplorer::time_to_seconds('0000H').should eql(30)
+    TSDBExplorer::time_to_seconds('0001').should eql(60)
+    TSDBExplorer::time_to_seconds('0100').should eql(3600)
+    TSDBExplorer::time_to_seconds('2359').should eql(86340)
+    TSDBExplorer::time_to_seconds('2359H').should eql(86370)
+  end
+
 end

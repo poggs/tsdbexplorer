@@ -63,14 +63,14 @@ class Location < ActiveRecord::Base
   # Return trains arriving or departing between the specified times
 
   scope :calls_between, lambda { |from_time,to_time|
-    where('(locations.arrival BETWEEN ? AND ?) OR (locations.departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time)
+    where('(locations.arrival_secs BETWEEN ? AND ?) OR (locations.departure_secs BETWEEN ? AND ?)', TSDBExplorer::time_to_seconds(from_time), TSDBExplorer::time_to_seconds(to_time), TSDBExplorer::time_to_seconds(from_time), TSDBExplorer::time_to_seconds(to_time))
   }
 
 
   # Return trains arriving, departing or passing between the specified times
 
   scope :passes_between, lambda { |from_time,to_time|
-    where('(locations.arrival BETWEEN ? AND ?) OR (locations.pass BETWEEN ? AND ?) OR (locations.departure BETWEEN ? AND ?)', from_time, to_time, from_time, to_time, from_time, to_time)
+    where('(locations.arrival_secs BETWEEN ? AND ?) OR (locations.pass_secs BETWEEN ? AND ?) OR (locations.departure_secs BETWEEN ? AND ?)', TSDBExplorer::time_to_seconds(from_time), TSDBExplorer::time_to_seconds(to_time), TSDBExplorer::time_to_seconds(from_time), TSDBExplorer::time_to_seconds(to_time), TSDBExplorer::time_to_seconds(from_time), TSDBExplorer::time_to_seconds(to_time))
   }
 
 

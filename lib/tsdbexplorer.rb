@@ -228,4 +228,17 @@ module TSDBExplorer
 
   end
 
+
+  # Converts a time in the format HHMM(H) in to the number of seconds since midnight
+
+  def TSDBExplorer.time_to_seconds(t)
+
+    hours = t[0..1].to_i
+    minutes = t[2..3].to_i
+    seconds = t[4]
+
+    return (hours * 3600) + (minutes * 60) + (seconds == "H" ? 30 : 0)
+
+  end
+
 end

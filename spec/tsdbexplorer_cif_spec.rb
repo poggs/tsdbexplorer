@@ -411,24 +411,39 @@ describe "lib/tsdbexplorer/cif.rb" do
 
     # Originating locations must have only a departure time
     locations.first.arrival.should be_nil
+    locations.first.arrival_secs.should be_nil
     locations.first.public_arrival.should be_nil
+    locations.first.public_arrival_secs.should be_nil
     locations.first.pass.should be_nil
+    locations.first.pass_secs.should be_nil
     locations.first.departure.should eql('1834 ')
+    locations.first.departure_secs.should eql(66840)
     locations.first.public_departure.should eql('1834')
+    locations.first.public_departure_secs.should eql(66840)
 
     # Passing points must have only a passing time
     locations[2].arrival.should be_nil
+    locations[2].arrival_secs.should be_nil
     locations[2].public_arrival.should be_nil
+    locations[2].public_arrival_secs.should be_nil
     locations[2].pass.should eql('1837H')
+    locations[2].pass_secs.should eql(67050)
     locations[2].departure.should be_nil
-    locations[2].public_departure.should be_nil    
+    locations[2].departure_secs.should be_nil
+    locations[2].public_departure.should be_nil
+    locations[2].public_departure_secs.should be_nil
 
     # Calling points must have only an arrival, public arrival, departure and public departure time only
     locations[6].arrival.should eql('1850 ')
+    locations[6].arrival_secs.should eql(67800)
     locations[6].public_arrival.should eql('1850')
+    locations[6].public_arrival_secs.should eql(67800)
     locations[6].pass.should be_nil
+    locations[6].pass_secs.should be_nil
     locations[6].departure.should eql('1851 ')
+    locations[6].departure_secs.should eql(67860)
     locations[6].public_departure.should eql('1851')
+    locations[6].public_departure_secs.should eql(67860)
 
     # Terminating locations must have only an arrival and public arrival time
     locations.last.arrival.should eql('1946 ')
