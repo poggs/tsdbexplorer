@@ -1,0 +1,347 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIABINGTN00969700FABINGTON                  07972   0                           
+TIACBG   02228700BACTON BRIDGE              37001   0ACBACTON BRIDGE            
+TIACGJN  06238401UACTON GRANGE JN           35555   0                           
+TIACHNGRY00970415PAUCHENGRAY                04120   0                           
+TIAMNGTNJ00132350UAMINGTON JUNCTION         69003   0XIM                        
+TIATLBRJN32107711JATTLEBOROUGH JN           69023   0                           
+TIAVIEMRE00861000QAVIEMORE                  01144   0AVMAVIEMORE                
+TIBALSHWL32271003UBALSHAW LANE              30165   0                           
+TIBEATCK 48960100EBEATTOCK                  07977   0                           
+TIBEATCKS32960200JBEATTOCK SUMMIT           07975   0                           
+TIBLARATH08875000JBLAIR ATHOLL              03101   0BLABLAIR ATHOLL            
+TIBLFD   00871560BBLACKFORD                 03155   0                           
+TIBLTCHLY00136000ZBLETCHLEY                 703062815BLYBLETCHLEY               
+TIBLTRNAB48522700UBELTRING                  89329   0BEGBELTRING                
+TIBONENDJ00140224WBOURNE END JN (HERTS)     71009   0XOE                        
+TIBRINKLW00108701NBRINKLOW                  69025   0                           
+TICARLILE00211800PCARLISLE                  091612827CARCARLISLE                
+TICARRBDG00862100FCARRBRIDGE                01138   0CAGCARRBRIDGE              
+TICMDNJN 08136701JCAMDEN JN                 72315   0                           
+TICMDNSTH08144005UCAMDEN SOUTH JN           72316   0                           
+TICOLWICH00108401UCOLWICH                   43328   0XCO                        
+TICREWBHJ56123908RCREWE BASFORD HALL JN     42155   0                           
+TICREWE  00124300JCREWE                     421402835CRECREWE                   
+TICREWECY48124330YCREWE COAL YARD           42128   0                           
+TICRMRSEJ00987665WCARMUIRS EAST JN          05019   0                           
+TICRNFNJN24264009XCARNFORTH NORTH JN        11526   0XOA                        
+TICRSTRSE32970486XCARSTAIRS EAST JN         07961   0                           
+TICRSTRSS32970487PCARSTAIRS SOUTH JN        07966   0                           
+TICULDNMR16862400TCULLODEN                  01131   0                           
+TIDALAMBR16238501DDALLAM JUNCTION           35509   0                           
+TIDALWCE 00862801YDALWHINNIE ISU (CE)       01155   0                           
+TIDALWHIN00862800RDALWHINNIE                01154   0DLWDALWHINNIE              
+TIDLNCRDH00875060EDALNACARDOCH              03100   0                           
+TIDLNSPDL00862861NDALNASPIDAL               01157   0                           
+TIDUBLINH32048500KDUBLIN HEUSTON            00000   0DHT                        
+TIDUNANE 00871300ZDUNBLANE                  03161   0DBLDUNBLANE                
+TIDUNKELD00876300WDUNKELD & BIRNAM          03106   0DKDDUNKELD                 
+TIDUNKUS 00876301JDUNKELD & BIRNAM UP SDG   03107   0                           
+TIEDIN81300932843MEDINBURGH SIGNAL E813     00000   0                           
+TIEDIN81500932845XEDINBURGH SIGNAL E815     04307   0                           
+TIEDINBUR00932800TEDINBURGH                 043032851EDBEDINBURGH               
+TIEDINBUS56933700VEDINBURGH BUS STATION     00000   0EBS                        
+TIEDINPRK00939500WEDINBURGH PARK            04039   0EDPEDINBURGH PARK          
+TIEDINSTE56932876BEDINBURGH S.& T.E.        00000   0                           
+TIEUST10200144443FEUSTON SIG WM102          72405   0                           
+TIEUST10400144442EEUSTON SIG WM104          72407   0                           
+TIEUST28400144439WEUSTON SIG WM284          72409   0                           
+TIEUST28600144430VEUSTON SIG WM286          72397   0                           
+TIEUST30800144419CEUSTON SIG WM308          72396   0                           
+TIEUST31000144418BEUSTON SIG WM310          72395   0                           
+TIEUST47300144412YEUSTON SIG WM473          72394   0                           
+TIEUST48800144410QEUSTON SIG WM488          72393   0                           
+TIEUST50100144409VEUSTON SIG WM501          72392   0                           
+TIEUST51000144407TEUSTON SIG WM510          72391   0                           
+TIEUST51200144404REUSTON SIG WM512          72390   0                           
+TIEUSTBAL00144457MEUSTON BALLAST            72411   0                           
+TIEUSTBOR56144401XEUSTON BACKING OUT ROADS  72404   0                           
+TIEUSTDCN56144402PEUSTON DOWN CARR SHED NECK72403   0                           
+TIEUSTNHS48144406ZEUSTON H.S.               72408   0                           
+TIEUSTON 00144400NLONDON EUSTON             724102893EUSLONDON EUSTON           
+TIEUSTRES56144463LEUSTON R.E.S.             72402   0XEN                        
+TIEUSTUCS56144405YEUSTON UP CARRIAGE SHED   72406   0XEU                        
+TIEUXTONJ32271001ZEUXTON JN                 30164   0XOU                        
+TIGLNEGLS00871500GGLENEAGLES                03153   0GLEGLENEAGLES              
+TIGRETNAJ32961060BGRETNA JN                 09095   0XGS                        
+TIGRNGMTJ32987262WGRANGEMOUTH JN            05042   0XGM                        
+TIGSTANG 01268505RGARSTANG & CATTERAL       11727   0                           
+TIHANSLPJ32136403ZHANSLOPE JN               70201   0XHN                        
+TIHARTFDJ32223002CHARTFORD JN               37003   0                           
+TIHAYMRKT00941900GHAYMARKET                 04235   0HYMHAYMARKET               
+TIHAYMRWJ48941980HHAYMARKET WEST JN         04221   0                           
+TIHILTONJ32880536CHILTON JN                 03149   0                           
+TIHMTNJ  11108769QHILLMORTON JN             70070   0                           
+TIHROW   04139700GHARROW & WEALDSTONE       72007   0HRWHARROW & WEALDST        
+TIIVRNESS00864900NINVERNESS                 01100   0INVINVERNESS               
+TIKGUSSIE00865500AKINGUSSIE                 01147   0KINKINGUSSIE               
+TIKNCRAIG00865400YKINCRAIG                  01145   0                           
+TIKRKP86300961063EKIRKPATRICK SIGNAL MC863  07989   0                           
+TILANCSTR00268500MLANCASTER                 117202880LANLANCASTER               
+TILARBERJ32987667KLARBERT JN                05015   0                           
+TILCHTNJ 00129107YLICHFIELD NORTH JN (LL)   65309   0XOI                        
+TILCKRBIE00961400DLOCKERBIE                 07981   0LOCLOCKERBIE               
+TILEDBRNJ32137301ZLEDBURN JN                70320   0XOD                        
+TILNGBKBY04106700ULONG BUCKBY               70091   0LBKLONG BUCKBY             
+TILNLTHGW00943800PLINLITHGOW                05119   0LINLINLITHGOW              
+TIMADE49000461905XMADELEY JN SIG 490        64830   0                           
+TIMADEJN 08461902LMADELEY JN (SALOP)        64828   0XMD                        
+TIMADELEY00126808KMADELEY (STAFFS)          42302   0                           
+TIMADELYC32126809LMADELEY CHORD LINE(STAFFS)42301   0                           
+TIMDCLDRJ32923061YMIDCALDER JN              04111   0                           
+TIMILBRNJ32865162AMILLBURN JN               01109   0                           
+TIMKNSCEN09137800TMILTON KEYNES CENTRAL     702613397MKCMILTON KEYNES C         
+TIMORCMSJ48268502XMORECAMBE SOUTH JN        11718   0                           
+TIMOYY   00866400CMOY                       01133   0                           
+TINMPTN  00106900WNORTHAMPTON               70100   0NMPNORTHAMPTON             
+TINNTN   00107700FNUNEATON                  69021   0NUNNUNEATON                
+TINTNB   04135600ZNORTON BRIDGE             42312   0NTBNORTON BRIDGE           
+TINWBG   00942661RNEWBRIDGE JN              04032   0                           
+TINWTM   00866800VNEWTONMORE                01151   0NWRNEWTONMORE              
+TIOXENHLM00209000TOXENHOLME LAKE DISTRICT   11012   0OXNOXENHOLME               
+TIPERTH  00880500KPERTH                     03140   0PTHPERTH                   
+TIPNTH   00210200BPENRITH NORTH LAKES       093123441PNRPENRITH                 
+TIPOLMNTJ00993661KPOLMONT JN                05110   0                           
+TIPRNC84600932880UEDINBURGH SIGNAL E846     00000   0                           
+TIPRNCSTG40932863YPRINCES ST GARDENS        04291   0                           
+TIPRST   00275300PPRESTON                   301202956PREPRESTON LANCS           
+TIPTLCHRY00880100NPITLOCHRY                 03102   0PITPITLOCHRY               
+TIRUGBTVJ56108704QRUGBY TRENT VALLEY JN     70029   0                           
+TIRUGBY  00108700MRUGBY                     700303484RUGRUGBY                   
+TIRUGLYNJ48108402VRUGELEY NORTH JN          43333   0                           
+TISLATFDJ32923687XSLATEFORD JN              04106   0                           
+TISLOCHD 00862160ASLOCHD                    01136   0                           
+TISPRBJN 12226703NSPRINGS BRANCH JN         35152   0                           
+TISTAFFRD00126800CSTAFFORD                  433143534STASTAFFORD                
+TISTAFRD400126805HSTAFFORD NO4              43319   0                           
+TISTIRLNG00988800CSTIRLING                  03401   0STGSTIRLING                
+TISTNY   00880200YSTANLEY                   03110   0                           
+TITEBAY  00211500ATEBAY                     09330   0XIT                        
+TITOMATIN00867800GTOMATIN                   01134   0                           
+TITORPHIN00970420NTORPHIN                   04119   0                           
+TITRING  00139300JTRING                     70411   0TRITRING                   
+TIWATFDJ 16140200UWATFORD JUNCTION          710402991WFJWATFORD JUNCTION        
+TIWEAVERJ32228701CWEAVER JN                 35591   0XYJ                        
+TIWIGANNW48236300BWIGAN NORTH WESTERN       351362992WGNWIGAN NORTH WEST        
+TIWIGASJN24240604MWIGAN SOUTH JN            35137   0                           
+TIWINWCKJ32238404BWINWICK JN                35505   0                           
+TIWLSDWLJ56145731VWILLESDEN WEST LONDN JN   72268   0XWI                        
+TIWMBY   00142300RWEMBLEY CENTRAL           72021   0WMBWEMBLEY CENTRAL         
+TIWNCBROJ32941564WWINCHBURGH JN             05125   0                           
+TIWNSFD  00226900TWINSFORD                  37011   0WSFWINSFORD                
+TIWRGTNBQ48238400TWARRINGTON BANK QUAY      355312989WBQWARRINGTON BK QY        
+BSNG608131112251212020000001 PXZ1S2527031235530031E  595 090      SBA C        P
+BX         SRY                                                                  
+LOEUSTON  2057 205515 E      TBK                                                
+LICMDNSTH           2100 00000000                                               
+LICMDNJN            2100H00000000   SL                                          
+LIWLSDWLJ           2106H00000000   SL SL                                       
+LIWMBY              2108H000000005                                              
+LIHROW              2111 000000005  SL SL                                       
+LIWATFDJ  2116 2118      000021178     SL U                                     
+LIBONENDJ           2125H00000000   SL                                          
+LITRING             2130 000000003  SL SL             2                         
+LILEDBRNJ           2136H00000000   SL SL                                       
+LIBLTCHLY           2142H000000003  SL SL             4 1                       
+LIMKNSCEN           2149H000000003  SL SL                                       
+LIHANSLPJ           2154 00000000      SL             2                         
+LINMPTN             2206 000000002                                              
+LILNGBKBY           2215 00000000                                               
+LIHMTNJ             2224 00000000   DNL               2                         
+LIRUGBY             2228 000000002  FL DNL                                      
+LIRUGBTVJ           2229H00000000                                               
+LIBRINKLW           2234 00000000   FL                                          
+LIATLBRJN           2240 00000000                                               
+LINNTN              2241 000000003     FL                                       
+LIAMNGTNJ           2250 00000000   FL                                          
+LILCHTNJ            2256 00000000                                               
+LIRUGLYNJ           2300H00000000                     1                         
+LICOLWICH           2305 00000000   FL FL                                       
+LISTAFRD4           2311 00000000   SL                                          
+LISTAFFRD           2311H000000005  SL SL                                       
+LINTNB              2316 00000000   SL SL                                       
+LIMADELEY           2325H00000000   SL SL             1                         
+LICREWBHJ           2331H00000000                                               
+CRCREWE   XZ1S2527031235530031E  595 080      SBA C                             
+LICREWE   2336 2339      000023396        K U                                   
+LICREWECY           2341H00000000                                               
+LIWNSFD             2348 00000000   FL                                          
+LIHARTFDJ           2352H00000000                                               
+LIACBG              2354 00000000                     1                         
+LIWEAVERJ           2357H00000000                                               
+LIACGJN             0001 00000000                                               
+LIWRGTNBQ 0003H0004H     000000003        C N                                   
+LIDALAMBR           0006H00000000                                               
+LIWINWCKJ           0008 00000000                                               
+LISPRBJN            0015 00000000                                               
+LIWIGASJN           0015H00000000                                               
+LIWIGANNW           0016 000000005                                              
+LIBALSHWL           0023 00000000                     1                         
+LIEUXTONJ           0025H00000000                                               
+LIPRST    0030H0032H     000000304        U K                                   
+LIGSTANG            0041 00000000                                               
+LILANCSTR           0050H00000000DFL                                            
+LIMORCMSJ           0052 00000000                                               
+LICRNFNJN           0055 00000000                                               
+LIOXENHLM           0105 000000002                    1                         
+LITEBAY             0118 00000000                                               
+LIPNTH              0135H000000002                    2                         
+LICARLILE 0153 0155      000000004        N K         22 H                      
+LIGRETNAJ           0226 00000000                                               
+LIKRKP863           0229 00000000                                               
+LILCKRBIE           0239 00000000                                               
+LIBEATCK            0249H00000000                                               
+LIBEATCKS           0257H00000000                                               
+LIABINGTN           0303H00000000                     8                         
+LICRSTRSS           0325 00000000                                               
+LICRSTRSE           0328H00000000                                               
+LIACHNGRY           0333H00000000                                               
+LITORPHIN           0339 00000000                                               
+LIMDCLDRJ           0342 00000000                     2   1                     
+LISLATFDJ           0352 00000000                                               
+LIHAYMRKT           0354 000000003  US                                          
+LIPRNCSTG           0355H00000000   W                                           
+CREDINBUR XZ1S2527031235530031D  385 125      SBA C                             
+LIEDINBUR 0357H0415H     0000000011 W  W  L -DRR                                
+LIPRNCSTG2          0416H00000000   DS                                          
+LIHAYMRKT2          0418 000000004                                              
+LIHAYMRWJ           0419H00000000      DS                                       
+LINWBG              0426 00000000                                               
+LIWNCBROJ           0429H00000000                                               
+LILNLTHGW           0433H000000002                                              
+LIPOLMNTJ           0438 00000000                     1                         
+LIGRNGMTJ           0442 00000000                     1                         
+LICRMRSEJ           0445H00000000                                               
+LILARBERJ           0446H00000000                                               
+LISTIRLNG 0453H0455H     045500002        D                                     
+LIDUNANE  0503H0505H     05040000         D                                     
+LIBLFD              0516H00000000                                               
+LIGLNEGLS 0518H0521H     05190000         D           3                         
+LIHILTONJ           0535 00000000                                               
+LIPERTH   0538H0541H     053900007        D                                     
+LISTNY              0551 00000000                                               
+LIDUNKELD 0600 0602      06000000         D                                     
+LIPTLCHRY 0614H0617H     06160000         D                                     
+LIBLARATH 0628 0629H     06280000         D                                     
+LIDLNCRDH           0641H00000000                                               
+LIDLNSPDL           0649H00000000                     1                         
+LIDALWHIN 0659 0700H     07000000         D                                     
+LINWTM    0710H0713H     07120000         D                                     
+LIKGUSSIE 0717H0719H     07180719         T                                     
+LIKNCRAIG 0726 0732H     00000000         A X                                   
+LIAVIEMRE 0739 0742      07410741         T                                     
+LICARRBDG 0752 0755      075407541        T                                     
+LISLOCHD            0803 00000000                                               
+LITOMATIN 0807H0817H     00000000         A X                                   
+LIMOYY              0822 00000000                                               
+LICULDNMR           0828H00000000                     2  H                      
+LIMILBRNJ           0836 00000000                                               
+LTIVRNESS 0838 08382     TF                                                     
+BSNG605071201021203221111000 PXZ1M1627051235530031D  385 125R     SBA C        P
+BX         SRY                                                                  
+LOIVRNESS 2047 20472         TB                                                 
+LIMILBRNJ           2049 00000000                                               
+LICULDNMR           2057H00000000         X                                     
+LIMOYY              2109 00000000                                               
+LITOMATIN           2113 00000000                                               
+LISLOCHD            2117H00000000         X                                     
+LICARRBDG           2122H000000001                                              
+LIAVIEMRE 2128H2130H     00002129         U                                     
+LIKNCRAIG           2137H00000000                                               
+LIKGUSSIE 2142H2144H     00002142UDV      U X                                   
+LINWTM    2149 2152      00002150         U           2                         
+LIDALWHIN 2206H2208H     00002206         X U                                   
+LIDLNSPDL           2216H00000000                                               
+LIDLNCRDH           2222 00000000                                               
+LIBLARATH 2232 2234      00002232         U                                     
+LIPTLCHRY 2243H2246H     00002245         U                                     
+LIDUNKELD 2259 2301      00002300         U                                     
+LISTNY              2310H00000000                     1                         
+LIPERTH   2319 2322      000023214        U                                     
+LIHILTONJ           2326H00000000                                               
+LIGLNEGLS 2338 2341      00002339         U                                     
+LIBLFD              2345 00000000                                               
+LIDUNANE  2354H2357H     00002355         U                                     
+LISTIRLNG 0005 0008      000000063        U                                     
+LILARBERJ           0016 00000000                                               
+LICRMRSEJ           0017 00000000                     2                         
+LIFALKRKG 0022 0025      000000231        U                                     
+LIGRNGMTJ           0027H00000000                        H                      
+LIPOLMNTJ           0031 00000000                                               
+LILNLTHGW           0034H000000001                                              
+LIWNCBROJ           0038H00000000                                               
+LINWBG              0041H00000000                     2  H                      
+LIHAYMRWJ           0048H00000000   US                  2H                      
+LIHAYMRKT           0052 000000003                                              
+LIPRNCSTG           0053H00000000   W                     4                     
+CREDINBUR XZ1M1627051235530031E  595 080R     SBA C                             
+LIEDINBUR 0059H0124      0000000011 W  W  RR-UL                                 
+LIPRNCSTG2          0125 00000000   DS                                          
+LIHAYMRKT2          0126H000000004                       H                      
+LISLATFDJ           0129 00000000                                               
+LIMDCLDRJ           0136 00000000                                               
+LITORPHIN           0141 00000000                                               
+LIACHNGRY           0146 00000000                     2                         
+LICRSTRSE           0151 00000000                                               
+LICRSTRSS           0153 00000000                                               
+LIABINGTN           0205H00000000                                               
+LIBEATCKS           0211H00000000                                               
+LIBEATCK            0219 00000000                                               
+LILCKRBIE           0229H00000000                     2                         
+LIKRKP862           0241H00000000                                               
+LIGRETNAJ           0244H00000000                                               
+LICARLILE 0252H0254H     000000004        C                                     
+LIPNTH              0311 000000001                      16                      
+LITEBAY             0344H00000000                        H                      
+LIOXENHLM           0357 000000001                    1                         
+LICRNFNJN           0408 00000000                                               
+LIMORCMSJ           0411 00000000                                               
+LILANCSTR           0412H00000000UFL                  2                         
+LIPRST    0432 0442      043200003  FL    D                                     
+LIPRSTRJN           0444 00000000   SL                4                         
+LIFRNGTNC           0450 00000000                                               
+LIEUXTONJ           0454 00000000                                               
+LIBALSHWL           0456 00000000   FL                                          
+LIWIGANNW           0504 000000004                                              
+LIWIGASJN           0504H00000000                                               
+LISPRBJN            0505 00000000                                               
+LIWINWCKJ           0510H00000000                                               
+LIDALAMBR           0512 00000000                                               
+LIWRGTNBQ 0514 0515      000000002        C N                                   
+LIACGJN             0518H00000000                     2                         
+LIWEAVERJ           0523H00000000                                               
+LIACBG              0525 00000000                                               
+LIHARTFDJ           0526H00000000                                               
+LIWNSFD             0531 00000000                                               
+LICREWECY           0536H00000000                                               
+LICREWE   0539 0541      053800006        D                                     
+LICREWBHJ           0545H00000000                                               
+LIMADELEY           0549H00000000   FL FL             1                         
+LINTNB              0558 00000000   FL FL                                       
+LISTAFFRD           0601H00000000UFLFL FL                                       
+LICOLWICH           0606H00000000   FL FL                                       
+LIRUGLYNJ           0608H00000000                                               
+LILCHTNJ            0613H00000000                                               
+LIAMNGTNJ           0618H00000000                                               
+LINNTN              0626H000000004     FL             1 1                       
+LIRUGBNBJ           0639H00000000   SL                  1                       
+LIRUGBTVJ           0641H00000000   UNL                 1                       
+LIRUGBY             0643H000000005  FL UNL                                      
+LIHMTNJ             0644H00000000                                               
+LIWEEDON            0653 00000000   FL FL                                       
+LIHANSLPJ           0702 00000000   FL FL                                       
+LIMKNSCEN           0706H000000004  FL FL                                       
+LIBLTCHLY           0708H000000002  FL FL                                       
+LILEDBRNJ           0714H00000000   FL FL             1                         
+LITRING             0720 000000002  FL FL                                       
+LIBONENDJ           0724 00000000   FL FL                                       
+LIWATFDJ            0729H000000007     FL                                       
+LIHROW              0733H000000004  FL                                          
+LIWMBY              0735H000000004                    1   1                     
+LIWLSDWLJ           0739H00000000   FL FL                                       
+LICMDNJN            0742H00000000   D                                           
+LICMDNSTH           0743 00000000                                               
+LTEUSTON  0747 074715    TF                                                     
+ZZ
+
+ZZ

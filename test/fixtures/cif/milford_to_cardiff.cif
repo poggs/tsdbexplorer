@@ -1,0 +1,68 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIBRGEND 00380900LBRIDGEND                  797913086BGNBRIDGEND                
+TICLARBRD16406900BCLARBESTON ROAD           80199   0CLRCLARBESTON ROAD         
+TICLYNDRW00407000JCLUNDERWEN                80305   0CUWCLUNDERWEN              
+TICMTHN  00406800ZCARMARTHEN                80419   0CMNCARMARTHEN              
+TICMTHNBG16406883ACARMARTHEN BRIDGE         80409   0                           
+TICMTHNJ 16406865ZCARMARTHEN JN             80411   0XCI                        
+TICOCKETW32422275JCOCKETT WEST              79323   0                           
+TICRDFCEN08389900FCARDIFF CENTRAL           773012826CDFCARDIFF CENTRAL         
+TIDUFRYNW32413362EDUFFRYN WEST              79326   0                           
+TIFYSD   00407400GFERRYSIDE                 80407   0FYSFERRYSIDE               
+TIHAVRFDW00407900WHAVERFORDWEST             80122   0HVFHAVERFORDWEST           
+TIHRBRNSJ32409561UHERBRANDSTON JN           80110   0                           
+TIJHNSTND32408100UJOHNSTON                  80111   0JOHJOHNSTON DYFED          
+TIKIDWELY00413200CKIDWELLY                  79019   0KWLKIDWELLY                
+TILLDELOJ32413364GLLANDEILO JN              79050   0                           
+TILLNLLI 00413300HLLANELLI                  79040   0LLELLANELLI                
+TIMLFDHVN08409500CMILFORD HAVEN             80102   0MFHMILFORD HAVEN           
+TIMRGMMJN24418056CMARGAM MOORS JN.          79783   0                           
+TINEATH  00421600ZNEATH                     794113404NTHNEATH                   
+TIPMBRYBP48414000VPEMBREY & BURRY PORT      79031   0PBYPEMBRY & BY PORT        
+TIPONYCLN00385000BPONTYCLUN                 78608   0PYCPONTYCLUN               
+TIPTALBOT01418100JPORT TALBOT PARKWAY       797013455PTAPORT TALBOT PWY         
+TISTORDGL00380956JSTORMY DOWN GOODS LOOP    79786   0                           
+TISTORMY 00380959MSTORMY                    79787   0                           
+TISTORUGL00380957KSTORMY UP GOODS LOOP      79788   0                           
+TISWANABP00422122JSWANSEA DOCKS ABP SHIPMENT79224   0                           
+TISWANKDA00422123KSWANSEA KINGS DOCK ADVENZA79225   0                           
+TISWANMCS00422213MSWANSEA MALIPHANT CSD     79305   0XMA                        
+TISWANNON00422119NSWANSEA DKS ABP NON SHIPMT79223   0                           
+TISWANSBS48429700LSWANSEA BURROWS S.S.      79230   0                           
+TISWANSEA00422200GSWANSEA                   793042978SWASWANSEA                 
+TISWANSED32422100BSWANSEA DOCKS             79222   0SWF                        
+TISWANSLE48422252ASWANSEA LOOP EAST         79303   0                           
+TISWANSLW48422250USWANSEA LOOP WEST         79306   0                           
+TIWHLAND 00411100GWHITLAND                  80303   0WTLWHITLAND                
+BSNC360011112121212071111100 PXX1B411069125432000 DMUE   100      S S          P
+BX         AWY                                                                  
+LOMLFDHVN 1910 1908          TB                                                 
+LIHRBRNSJ           1913H00000000                                               
+LIJHNSTND 1917H1918      19161916         R                                     
+LIHAVRFDW 1924H1925H     192319231        T                                     
+LICLARBRD 1932H1933      19311931         R                                     
+LICLYNDRW 1939H1940      19381938         R                                     
+LIWHLAND  1945H1946H     194419441        T           2                         
+LICMTHNBG           2000H00000000                                               
+LICMTHN   2002 2005      200020051        T RM                                  
+LICMTHNJ            2007 00000000                                               
+LIFYSD              2014 00000000                                               
+LIKIDWELY           2017H00000000                                               
+LIPMBRYBP 2022 2023      20222023         T                                     
+LILLNLLI  2028 2030      20282029UPL      T                                     
+LILLDELOJ           2032H00000000                                               
+LIDUFRYNW           2033 00000000                                               
+LICOCKETW           2037H00000000                     2                         
+LISWANSLW           2042H00000000                                               
+LISWANSLE           2044H00000000                                               
+CRSWANSEA XX1B411069125438000 DMUE   100      S S                               
+LISWANSEA 2046H2057      204720571        T RM                                  
+LISWANSLE2          2059 00000000                                               
+LINEATH   2107 2108      21072108         T                                     
+LIPTALBOT 2114 2115      21142115         T                                     
+LIMRGMMJN           2119 00000000                                               
+LISTORMY            2122H00000000                        H                      
+LIBRGEND  2126H2127H     212721272        T                                     
+LIPONYCLN           2136 00000000                     2                         
+LTCRDFCEN 2148 21504A    TF                                                     
+ZZ

@@ -229,10 +229,33 @@ describe ScheduleController do
 
   # Activities
 
-  it "should highlight where a stop is to set down passengers only (D)"
-  it "should highlight where a stop is to change locomotives (L)"
-  it "should highlight where a stop is unadvertised (N)"
-  it "should highlight where the train stops as required (R)"
+  it "should highlight where a stop is to set down passengers only (D)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
+    response.body.should =~ /Perth.+D/
+  end
+
+  it "should highlight where a stop is to change locomotives (L)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
+    response.body.should =~ /Edinburgh.+L/
+  end
+
+  it "should highlight where a stop is unadvertised (N)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
+    response.body.should =~ /Carlisle.+N/
+  end
+
+  it "should highlight where the train stops as required (R)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/milford_to_cardiff.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'C36001', :year => '2011', :month => '12', :day => '12'
+    response.body.should =~ /Clarbeston Road.+R/
+  end
 
   it "should highlight where a stop is for operational purposes (OP)" do
     session[:mode] = 'advanced'
@@ -242,12 +265,42 @@ describe ScheduleController do
     response.body.should =~ /North Pole Signal Vc818.+OP/
   end
 
-  it "should highlight where a stop is to allow the locomotive to run round (RR)"
+  it "should highlight where a stop is to allow the locomotive to run round (RR)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
+    response.body.should =~ /Edinburgh.+L/
+  end
+
   it "should highlight where a stop is for staff only (S)"
-  it "should highlight where a stop is for token/staff exchange (TW)"
-  it "should highlight where a stop is to pick up passengers only (U)"
-  it "should highlight where a stop is to detach vehicles (-D)"
-  it "should highlight where a stop is to attach vehicles (-U)"
+
+  it "should highlight where a stop is for token/staff exchange (TW)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/fishguard_to_cheltenham.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'C36098', :year => '2011', :month => '12', :day => '12'
+    response.body.should =~ /Clarbeston Road.+TW/
+  end
+
+  it "should highlight where a stop is to pick up passengers only (U)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
+    response.body.should =~ /Watford Junction.+U/
+  end
+
+  it "should highlight where a stop is to detach vehicles (-D)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
+    response.body.should =~ /Edinburgh.+\-D/
+  end
+
+  it "should highlight where a stop is to attach vehicles (-U)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'G60507', :year => '2012', :month => '01', :day => '02'
+    response.body.should =~ /Edinburgh.+\-U/
+  end
 
 
   # Security

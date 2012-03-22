@@ -1,0 +1,81 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIAWRE   00475670WAWRE                      76076   0                           
+TIBNWDJN 08476024TBARNWOOD JN.              68082   0                           
+TIBRGEND 00380900LBRIDGEND                  797913086BGNBRIDGEND                
+TIBRITUFJ40416759DBRITON FERRY U.F.L. JN.   79601   0                           
+TICDCOT  00368000ACALDICOT                  76078   0CDTCALDICOT                
+TICHEPSTW00377400BCHEPSTOW                  76079   0CPWCHEPSTOW                
+TICHLTNHM00473100RCHELTENHAM SPA            680763128CNMCHELTENHAM SPA          
+TICLARBRD16406900BCLARBESTON ROAD           80199   0CLRCLARBESTON ROAD         
+TICMTHN  00406800ZCARMARTHEN                80419   0CMNCARMARTHEN              
+TICMTHNBG16406883ACARMARTHEN BRIDGE         80409   0                           
+TICMTHNJ 16406865ZCARMARTHEN JN             80411   0XCI                        
+TICRDFCEN08389900FCARDIFF CENTRAL           773012826CDFCARDIFF CENTRAL         
+TIDYNEVRJ32421685CDYNEVOR JN                79256   0                           
+TIEBBWJ  08367756DEBBW JN                   76481   0                           
+TIFELNFRN08420900EFELIN FRAN                79106   0                           
+TIFGDHBR 04407600QFISHGUARD HARBOUR         80011   0FGHFISHGUARD HBR           
+TIFYSD   00407400GFERRYSIDE                 80407   0FYSFERRYSIDE               
+TIGLOSTER00476000KGLOUCESTER                68089   0GCRGLOUCESTER              
+TIHRTNRDJ40476022YHORTON ROAD JN            68103   0                           
+TIKIDWELY00413200CKIDWELLY                  79019   0KWLKIDWELLY                
+TILLDELOJ32413364GLLANDEILO JN              79050   0                           
+TILLNLLI 00413300HLLANELLI                  79040   0LLELLANELLI                
+TILWERWJN00366602YLLANWERN WEST JN          76099   0                           
+TILYDN18200482603DLYDNEY SIGNAL N182        76072   0                           
+TILYDNDUL00482602CLYDNEY DOWN & UP LOOPS    76070   0                           
+TILYDNEY 00482600ALYDNEY                    76072   0LYDLYDNEY                  
+TILYDNJCT08482601BLYDNEY JUNCTION           76068   0                           
+TIMAINDWJ48367439WMAINDEE WEST JN           76398   0                           
+TIMORLASJ32413859KMORLAIS JN                79055   0                           
+TIMRGMMJN24418056CMARGAM MOORS JN.          79783   0                           
+TIMSHFILD00367711JMARSHFIELD                77086   0                           
+TINWPTRTG00367400NNEWPORT (SOUTH WALES)     764012939NWPNEWPORT GWENT           
+TIPMBRYBP48414000VPEMBREY & BURRY PORT      79031   0PBYPEMBRY & BY PORT        
+TIPONYCLN00385000BPONTYCLUN                 78608   0PYCPONTYCLUN               
+TIPTALBOT01418100JPORT TALBOT PARKWAY       797013455PTAPORT TALBOT PWY         
+TISEVTNLJ36367900PSEVERN TUNNEL JN          76090   0STJSEVERN TUNNEL JN        
+TISTORDGL00380956JSTORMY DOWN GOODS LOOP    79786   0                           
+TISTORMY 00380959MSTORMY                    79787   0                           
+TISTORUGL00380957KSTORMY UP GOODS LOOP      79788   0                           
+TIWHLAND 00411100GWHITLAND                  80303   0WTLWHITLAND                
+BSNC360981112121205111111100 PXX1G971050125432000 DMUS   075      S R T        P
+BX         AWY                                                                  
+LOFGDHBR  1330 1330          TB                                                 
+LICLARBRD 1349 1350      00000000         TWN                                   
+LIWHLAND  1401H1402H     140214021        T           2                         
+LICMTHNBG           1417 00000000                                               
+LICMTHN   1418H1425      141914251        T                                     
+LICMTHNJ            1427 00000000                                               
+LIFYSD              1434 00000000                                               
+LIKIDWELY           1437H00000000                                               
+LIPMBRYBP           1442 00000000                                               
+CRLLNLLI  XX1G971050125438000 DMUS   075      S R T                             
+LILLNLLI  1446H1448H     14471447UPL      T                                     
+LILLDELOJ           1451 00000000                                               
+LIMORLASJ           1456 00000000                                               
+LIFELNFRN           1507H00000000                                               
+LIDYNEVRJ           1512H00000000                       2H                      
+LIBRITUFJ           1519 00000000                       1                       
+LIPTALBOT           1524 00000000                                               
+LIMRGMMJN           1527H00000000                                               
+LISTORMY            1531H00000000                                               
+LIBRGEND            1534H000000002                                              
+LIPONYCLN           1542H00000000                     2 8H                      
+CRCRDFCEN XX1G971050125429000 DMUS   075      S R T                             
+LICRDFCEN 1603 1605      160416052  ML    T                                     
+LIMSHFILD           1612 00000000                                               
+LIEBBWJ             1615H00000000                                               
+LINWPTRTG 1618 1621      161816213        T                                     
+LIMAINDWJ           1622 00000000                                               
+LILWERWJN           1624 00000000                                               
+LISEVTNLJ 1631 1632      163116322        T                                     
+LICDCOT   1633H1634H     16341634         T                                     
+LICHEPSTW 1642H1643H     16431643         T                                     
+LILYDNEY  1651H1652H     16521652         T                                     
+LIAWRE              1658H00000000                     2                         
+LIGLOSTER 1713H1723H     171417234        T                                     
+LIHRTNRDJ           1724H00000000                                               
+LIBNWDJN            1725H00000000                     1                         
+LTCHLTNHM 1732 17342     TF                                                     
+ZZ
