@@ -21,7 +21,7 @@ class BasicSchedule < ActiveRecord::Base
 
   has_many :locations, :primary_key => :uuid, :foreign_key => :basic_schedule_uuid, :dependent => :delete_all
 
-  default_scope :conditions => ([ "category NOT IN (?) AND atoc_code NOT IN (?)", $CONFIG['RESTRICTIONS']['category'], $CONFIG['RESTRICTIONS']['toc_code']])
+  default_scope :conditions => ([ "stp_indicator = 'C' OR data_source = 'VSTP' OR (category NOT IN (?) AND atoc_code NOT IN (?))", $CONFIG['RESTRICTIONS']['category'], $CONFIG['RESTRICTIONS']['toc']])
 
   scope :runs_on_by_uid_and_date, lambda { |uid,date| where(:train_uid => uid).where('? BETWEEN runs_from AND runs_to', date).runs_on_wday(date.wday).order("runs_to - runs_from").limit(1) }
   scope :runs_on_by_train_identity_and_date, lambda { |identity,date| where('train_identity_unique = ? AND ? BETWEEN runs_from AND runs_to', uid, date).order("runs_to - runs_from").limit(1) }
