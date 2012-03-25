@@ -85,10 +85,10 @@ module TSDBExplorer
 
           if last_data_from > limit
             status = :error
-            message = "Last extract imported was #{CifFile.last.file_mainframe_identity} on #{last_extract.extract_timestamp.to_s(:human)}"
+            message = "Last extract imported was #{CifFile.last.file_mainframe_identity} on #{last_extract.extract_timestamp.localtime.to_s(:human)}"
           else
             status = :ok
-            message = "Last extract imported was #{CifFile.last.file_mainframe_identity} on #{last_extract.extract_timestamp.to_s(:human)}"
+            message = "Last extract imported was #{CifFile.last.file_mainframe_identity} on #{last_extract.extract_timestamp.localtime.to_s(:human)}"
           end
 
         end
