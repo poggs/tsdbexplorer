@@ -164,6 +164,7 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   it "should process a train activation message" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/highbury_to_west_croydon.cif')
     result = TSDBExplorer::TDnet::process_trust_message('000120111231043501TRUST               TSIA                                529C02M531201112310435015205320111231053500L759262017121100000020210712000000CO9C02M000005205320111231053500AN3022215003   ')
+    result.message.should =~ /TRUST TSIA successfully activated CIF WTT schedule L75926 for TOC LO, departing HIGHBYA at 2011-12-31 05:35:00 as 9C02 \(529C02M531\)/
     result.status.should eql(:ok)
   end
 
