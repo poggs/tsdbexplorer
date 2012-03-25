@@ -456,4 +456,19 @@ module ScheduleHelper
 
   end
 
+
+  # Format allowances in to text
+
+  def format_allowances(l)
+
+    a = Array.new
+
+    a.push("[#{tidy_wtt_time(l.engineering_allowance)}]") unless l.engineering_allowance.nil?
+    a.push("(#{tidy_wtt_time(l.pathing_allowance)})") unless l.pathing_allowance.nil?
+    a.push("<#{tidy_wtt_time(l.performance_allowance)}>") unless l.performance_allowance.nil?
+
+    a.join(" ") unless a.blank?
+
+  end
+
 end

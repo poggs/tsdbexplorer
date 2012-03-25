@@ -379,4 +379,42 @@ describe ScheduleHelper do
     text.should =~ /Terminates here/
   end
 
+
+  # Allowances
+
+  it "should return an engineering allowance in square brackets" do
+    l = Location.new(:engineering_allowance => '1')
+    format_allowances(l).should eql("[1]")
+  end
+
+  it "should return a pathing allowance in brackets" do
+    l = Location.new(:pathing_allowance => '1')
+    format_allowances(l).should eql("(1)")
+  end
+
+  it "should return a performance allowance in angle brackets" do
+    l = Location.new(:performance_allowance => '1')
+    format_allowances(l).should eql("<1>")
+  end
+
+  it "should return nothing if there is no allowance" do
+    l = Location.new
+    format_allowances(l).should eql(nil)
+  end
+
+  it "should return an engineering and pathing allowance in order" do
+    l = Location.new(:engineering_allowance => '1', :pathing_allowance => '2')
+    format_allowances(l).should eql("[1] (2)")
+  end
+
+  it "should return an engineering and performance allowance in order" do
+    l = Location.new(:engineering_allowance => '1', :performance_allowance => '2')
+    format_allowances(l).should eql("[1] <2>")
+  end
+
+  it "should return a pathing and performance allowance in order" do
+    l = Location.new(:pathing_allowance => '1', :performance_allowance => '2')
+    format_allowances(l).should eql("(1) <2>")
+  end
+
 end

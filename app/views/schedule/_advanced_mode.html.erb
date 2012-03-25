@@ -7,9 +7,7 @@
   <th>Arrival</th>
   <th>Pass</th>
   <th>Departure</th>
-  <th>Eng</th>
-  <th>Path</th>
-  <th>Perf</th>
+  <th>Allowances</th>
  </tr>
 </thead>
 <tbody>
@@ -22,9 +20,7 @@
    <td><%= raw format_location_time(l, :arrival) %></td>
    <td><%= raw format_location_time(l, :pass) %></td>
    <td><%= raw format_location_time(l, :departure) %></td>
-   <td><%= raw tidy_wtt_time(l.engineering_allowance) %></td>
-   <td><%= raw tidy_wtt_time(l.pathing_allowance) %></td>
-   <td><%= raw tidy_wtt_time(l.performance_allowance) %></td>
+   <td><%= raw format_allowances(l) %></td>
   <% end %>
  <% end %>
 </tbody>
