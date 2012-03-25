@@ -13,7 +13,7 @@
   </td>
   <td><%= s.public_arrival %></td>
   <td><%= raw show_location_name(s, :from) %></td>
-  <td><%= s.platform %></td>
+  <td><%= s.basic_schedule.train_identity == "0B00" ? "BUS" : s.platform %></td>
   <td><%= raw show_location_name(s, :to) %></td>
   <td><%= s.public_departure %></td>
   <td><%= decode_toc(s.basic_schedule.atoc_code) %></td>
