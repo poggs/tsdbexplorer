@@ -44,6 +44,11 @@ class LocationController < ApplicationController
     @schedule = Location.where(:tiploc_code => tiplocs[:locations])
 
 
+    # Only display passenger schedules in normal mode
+
+    @schedule = @schedule.only_passenger unless advanced_mode?
+
+
     # Optionally limit the search to trains travelling to or from a particular location
 
     unless params[:from].blank?
