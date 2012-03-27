@@ -17,7 +17,7 @@
       <% end %>
      </select>
      at
-     <input class="span1" id="time" name="time" size="span1" type="text"/>
+     <input class="span1" id="time" name="time" size="span1" type="text" value="<%= Time.now.to_s(:hhmm) %>"/>
      <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Search</button>
     </p>
 
