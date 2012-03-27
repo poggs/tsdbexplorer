@@ -194,10 +194,10 @@ module TSDBExplorer
 
     class BasicScheduleRecord
 
-      FIELDS = [ :uuid, :transaction_type, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :course_indicator, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :connection_indicator, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source ]
+      FIELDS = [ :uuid, :transaction_type, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :course_indicator, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :oper_q, :oper_y, :train_class, :sleepers, :reservations, :connection_indicator, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source ]
 
-      attr_reader :uuid, :transaction_type, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :course_indicator, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :connection_indicator, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source
-      attr_accessor :uuid, :transaction_type, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :course_indicator, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :train_class, :sleepers, :reservations, :connection_indicator, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source
+      attr_reader :uuid, :transaction_type, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :course_indicator, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :oper_q, :oper_y, :train_class, :sleepers, :reservations, :connection_indicator, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source
+      attr_accessor :uuid, :transaction_type, :train_uid, :train_identity_unique, :runs_from, :runs_to, :runs_mo, :runs_tu, :runs_we, :runs_th, :runs_fr, :runs_sa, :runs_su, :bh_running, :status, :category, :train_identity, :headcode, :course_indicator, :service_code, :portion_id, :power_type, :timing_load, :speed, :operating_characteristics, :oper_q, :oper_y, :train_class, :sleepers, :reservations, :connection_indicator, :catering_code, :service_branding, :stp_indicator, :uic_code, :atoc_code, :ats_code, :rsid, :data_source
 
       def initialize(record=nil)
 
@@ -238,6 +238,8 @@ module TSDBExplorer
           self.power_type = nil if self.power_type == ""
           self.timing_load = nil if self.timing_load == ""
           self.operating_characteristics = nil if self.operating_characteristics == ""
+          self.oper_q = true if self.operating_characteristics =~ /Q/
+          self.oper_y = true if self.operating_characteristics =~ /Y/
           self.sleepers = nil if self.sleepers == ""
           self.reservations = nil if self.reservations == ""
           self.catering_code = nil if self.catering_code == ""

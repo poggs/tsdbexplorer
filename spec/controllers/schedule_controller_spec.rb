@@ -302,6 +302,20 @@ describe ScheduleController do
     response.body.should =~ /Edinburgh.+\-U/
   end
 
+  it "should highlight a train which runs as required (Q)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'C05395', :year => '2011', :month => '12', :day => '11'
+    response.body.should =~ /Runs as required/
+  end
+
+  it "should highlight a train which runs as required (Y)" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'G67076', :year => '2012', :month => '01', :day => '09'
+    response.body.should =~ /Runs as required/
+  end
+
 
   # Security
 

@@ -208,4 +208,22 @@ describe ApplicationHelper do
     format_location_time(loc, :pass).should eql('<span class="wtt"><em>1000</em></span>')
   end
 
+
+  # Runs-as-Required handling
+
+  it "should return nil if the schedule does not have the Q or Y flags set" do
+    schedule = BasicSchedule.new
+    runs_as_required_flags_for(schedule).should be_nil
+  end
+
+  it "should return suitable HTML if the schedule has the Q flag set" do
+    schedule = BasicSchedule.new(:oper_q => true)
+    runs_as_required_flags_for(schedule).should =~ /\(Q\)/
+  end
+
+  it "should return suitable HTML if the schedule has the Y flag set" do
+    schedule = BasicSchedule.new(:oper_y => true)
+    runs_as_required_flags_for(schedule).should =~ /\(Y\)/
+  end
+
 end

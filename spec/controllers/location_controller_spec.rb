@@ -484,4 +484,21 @@ describe LocationController do
     response.body.should =~ /Which are going to Watford Junction \(WATFDJ\)/
   end
 
+
+  # Train highlighting
+
+  it "should highlight trains which run as required" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
+    get :index, :location => 'PADTON', :year => '2011', :month => '12', :day => '11', :time => '0600'
+    response.body.should =~ /\(Q\)/
+  end
+
+  it "should highlight trains which run as required to terminals/yards" do
+    session[:mode] = 'advanced'
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
+    get :index, :location => 'EDINBUR', :year => '2012', :month => '01', :day => '09', :time => '0900'
+    response.body.should =~ /\(Y\)/
+  end
+
 end

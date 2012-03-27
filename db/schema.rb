@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120320185636) do
+ActiveRecord::Schema.define(:version => 20120323163313) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -74,6 +74,8 @@ ActiveRecord::Schema.define(:version => 20120320185636) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "data_source",               :limit => 16
+    t.boolean  "oper_q"
+    t.boolean  "oper_y"
   end
 
   add_index "basic_schedules", ["runs_fr"], :name => "index_basic_schedules_on_runs_fr"

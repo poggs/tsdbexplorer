@@ -1,0 +1,26 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIOLDOEMU00309654NOLD OAK COMMON EMU DEPOT  73228   0                           
+TIOLDOEMR00309606AOLD OAK COMMON EMU RECEPTN73229   0                           
+TIOLDOKCE52309658ROLD OAK COMMON EAST       73226   0                           
+TIPADTON 00308700PLONDON PADDINGTON         730002910PADLONDON PADDINGTN        
+TIEDINBUR00932800TEDINBURGH                 043032851EDBEDINBURGH               
+TIABHLJN 08937800JABBEYHILL JN              04309   0                           
+TICRGNTYJ00932449UCRAIGENTINNY JN           04517   0                           
+TIPORTOBL00932400APORTOBELLO JN (LOTHIAN)   04641   0                           
+TINIDRISJ48935761JNIDDRIE SOUTH JN          04655   0                           
+TIMLRHY  08932200NMILLERHILL S.S.           04720   0   MILLERHILL AM F         
+BSNC053951112111212020000001 PEE5T07    125503000 EMU360 100DQ                 P
+BX         HCY                                                                  
+LOOLDOEMU 0550 0000          TB                                                 
+LIOLDOEMR 0553 0555      00000000         OP                                    
+LIOLDOKCE           0559 00000000   ECL                                         
+LTPADTON  0605 00005     TF                                                     
+BSNG670761201091212071111100 PEE5K01    123587003 D  245 100Y                  P
+BX         SRY                                                                  
+LOEDINBUR 0858 00001  NL     TB                                                 
+LIABHLJN            0859H00000000                                               
+LICRGNTYJ           0900H00000000                                               
+LIPORTOBL           0903 00000000                                               
+LINIDRISJ           0907 00000000                                               
+LTMLRHY   0914 0000      TF                                                     
+ZZ

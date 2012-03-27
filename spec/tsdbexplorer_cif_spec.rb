@@ -322,6 +322,20 @@ describe "lib/tsdbexplorer/cif.rb" do
     schedule.timing_load.should eql('410')
   end
 
+  it "should identify schedules which run as required (Q)" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('C05395', Date.parse('2011-12-11')).first
+    schedule.oper_q.should be_true
+    schedule.oper_y.should_not be_true
+  end
+
+  it "should identify schedules which run as required to terminals/yards (Y)" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
+    schedule = BasicSchedule.runs_on_by_uid_and_date('G67076', Date.parse('2012-01-09')).first
+    schedule.oper_q.should_not be_true
+    schedule.oper_y.should be_true
+  end
+
 
   # Sequence processing
 

@@ -5,6 +5,7 @@
    <li><%= decode_stp_indicator(schedule, :F) %> <%= schedule.data_source %> schedule</li>
    <% unless schedule.atoc_code == "ZZ" %><li><%= decode_train_class(schedule.train_class) %></li><% end %>
    <li>Timed for <%= schedule.power_type + (schedule.timing_load || "") %> at <%= schedule.speed.to_i %>mph</li>
+   <% if schedule.oper_q == true || schedule.oper_y == true %><li>Runs as required</li><% end %>
   </dl>
   <%= link_to raw('<i class="icon-list icon-white"></i>') + ' Display schedule', { :controller => 'schedule', :action => 'schedule_by_uid', :uid => params[:uid] }, { :class => 'btn btn-info' } %>
  </div>

@@ -545,4 +545,19 @@ module ApplicationHelper
 
   end
 
+
+  # Runs-as-required flag handling
+
+  def runs_as_required_flags_for(sch)
+
+    if sch.oper_q == true
+      "(Q)"
+    elsif sch.oper_y == true
+      "(Y)"
+    else
+      nil
+    end
+
+  end
+
 end
