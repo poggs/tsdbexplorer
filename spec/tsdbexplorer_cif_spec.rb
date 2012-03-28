@@ -577,4 +577,16 @@ describe "lib/tsdbexplorer/cif.rb" do
     result.status.should eql(:ok)
   end
 
+
+  # Bugs
+
+  it "should process a CIF update with a new cancellation followed by the deletion of an existing cancellation" do
+    result_1 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_issue_95_part1.cif')
+    result_1.status.should eql(:ok)
+    result_1.message.should =~ /Schedules: 1 inserted, 0 amended, 0 deleted/
+    result_2 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_issue_95_part2.cif')
+    result_2.status.should eql(:ok)
+    result_2.message.should =~ /Schedules: 1 inserted, 0 amended, 1 deleted/
+  end
+
 end
