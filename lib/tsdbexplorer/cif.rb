@@ -230,7 +230,11 @@ module TSDBExplorer
 
             bs_record = Hash.new
 
-            if record.stp_indicator != "C"
+            if record.stp_indicator == "C"
+
+              stats[:schedule][:insert] = stats[:schedule][:insert] + 1
+
+            else
 
               # Generate a UUID  for this BasicSchedule record
 
@@ -369,7 +373,7 @@ module TSDBExplorer
 
           # Push any the schedules on to the pending INSERT queue
 
-          if bs_record
+          if bs_record && record.transaction_type != "D"
 
             data = []
             pending['BasicSchedule'][:cols].each do |column|
@@ -378,10 +382,13 @@ module TSDBExplorer
 
             pending['BasicSchedule'][:rows] << data
 
-            if pending['BasicSchedule'][:rows].count > 1000
-              pending = process_pending(pending)
-            end
+          end
 
+
+          # Only process new records if we have more than a set number
+
+          if pending['BasicSchedule'][:rows].count > 1000
+            pending = process_pending(pending)
           end
 
         end
