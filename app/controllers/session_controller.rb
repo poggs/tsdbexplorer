@@ -22,13 +22,13 @@ class SessionController < ApplicationController
   def set
     session[params[:key]] = params[:value] unless params[:key].nil?
     redirect_to :back if request.referer == true
-    render :text => "Set '#{params[:key]}' to '#{params[:value]}'.  Session is #{session.inspect}"
+    render :text => nil
   end
 
   def clear
     session.delete(params[:key]) unless params[:key].nil?
     redirect_to :back if request.referer == true
-    render :text => "Cleared '#{params[:key]}'.  Session is #{session.inspect}"
+    render :text => nil
   end
 
   def toggle
@@ -38,7 +38,7 @@ class SessionController < ApplicationController
       session[params[:key]] = true
     end
     redirect_to :back if request.referer == true
-    render :text => "Toggled '#{params[:key]}'.  Session is #{session.inspect}"
+    render :text => nil
   end
 
 end
