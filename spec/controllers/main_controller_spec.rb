@@ -98,4 +98,29 @@ describe MainController do
     response.body.should_not =~ /<li class=\"nav-header\">Administration<\/li>/
   end
 
+
+  # Preferences
+
+  it "should not show a settings menu in normal mode" do
+    get :index
+    response.body.should_not =~ /Settings/
+  end
+
+  it "should show a settings menu in advanced mode" do
+    session['advanced'] = true
+    get :index
+    response.body.should =~ /Settings/
+  end
+
+  it "should not show an option to highlight VAR/STP schedules in normal mode" do
+    get :index
+    response.body.should_not =~ /Highlight schedules/
+  end
+  
+  it "should show an option to highlight VAR/STP schedules in advanced mode" do
+    session['advanced'] = true
+    get :index
+    response.body.should =~ /Highlight schedules/
+  end
+
 end

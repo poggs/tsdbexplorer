@@ -63,6 +63,40 @@ describe SessionController do
       session['foo'].should be_true
     end
 
+    it "should toggle a value to true even if it does not exist" do
+      get :toggle_on, :key => 'foo'
+      session['foo'].should be_true
+    end
+
+    it "should toggle a value to false even if it does not exist" do
+      get :toggle_off, :key => 'foo'
+      session['foo'].should be_false
+    end
+
+    it "should toggle a value to true even if it is already true" do
+      session['foo'] = true
+      get :toggle_on, :key => 'foo'
+      session['foo'].should be_true
+    end
+
+    it "should toggle a value to false even if it is already false" do
+      session['foo'] = false
+      get :toggle_off, :key => 'foo'
+      session['foo'].should be_false
+    end
+
+    it "should toggle a value to true regardless of whether it's false" do
+      session['foo'] = false
+      get :toggle_on, :key => 'foo'
+      session['foo'].should be_true
+    end
+
+    it "should toggle a value to false regardless of whether it's true" do
+      session['foo'] = true
+      get :toggle_off, :key => 'foo'
+      session['foo'].should be_false
+    end
+
   end
 
 end

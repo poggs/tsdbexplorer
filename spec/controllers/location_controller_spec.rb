@@ -57,7 +57,7 @@ describe LocationController do
   end
 
   it "should display services at a location when given a TIPLOC code in advanced mode" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'BLTCHLY', :year => '2010', :month => '12', :day => '12', :time => '1800'
     response.code.should eql('200')
@@ -65,7 +65,7 @@ describe LocationController do
   end
 
   it "should display services at a location when given a TIPLOC code in lower-case" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'bltchly', :year => '2010', :month => '12', :day => '12', :time => '1800'
     response.code.should eql('200')
@@ -80,7 +80,7 @@ describe LocationController do
   end
 
   it "should display an error if passed an invalid TIPLOC in advanced mode" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'ZZZZZZZ', :year => '2010', :month => '12', :day => '12', :time => '1800'
     response.body.should redirect_to :controller => 'location', :action => 'search', :term => 'ZZZZZZZ'
@@ -104,7 +104,7 @@ describe LocationController do
   end
 
   it "should display services at a location given a TIPLOC code and date in advanced mode" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
     get :index, :location => 'BLTCHLY', :year => '2010', :month => '12', :day => '12'
@@ -174,7 +174,7 @@ describe LocationController do
   end
 
   it "should display services at a location given a TIPLOC code, date and time" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
     get :index, :location => 'BLTCHLY', :year => '2010', :month => '12', :day => '12', :time => '1300'
@@ -237,7 +237,7 @@ describe LocationController do
   end
 
   it "should, in advanced mode, report if no matches for a search string were found" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
     get :search, :term => 'FOOBARBAZ'
@@ -257,7 +257,7 @@ describe LocationController do
   end
 
   it "should, in normal mode, report if more than one match was found for a search string" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
     get :search, :term => 'WATF'
@@ -297,7 +297,7 @@ describe LocationController do
   end
 
   it "should, in advanced mode, match CRS codes from the MSNF" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
     get :search, :term => 'WFJ'
@@ -305,7 +305,7 @@ describe LocationController do
   end
 
   it "should, in advanced mode, match TIPLOCS codes from the CIF" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
     get :search, :term => 'WATFDJ'
@@ -313,7 +313,7 @@ describe LocationController do
   end
 
   it "should return an exact match for a CRS code from CIF even if a location with a longer matched name exists" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
     get :search, :term => 'ACC'
     response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'ACC'
@@ -346,7 +346,7 @@ describe LocationController do
   end
 
   it "should include associated TIPLOCs from the MSNF when given a CRS code in advanced mode" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     get :index, :location => 'WFJ', :year => '2011', :month => '05', :day => '23', :time => '0900'
@@ -355,7 +355,7 @@ describe LocationController do
   end
 
   it "should not include associated TIPLOCs from the MSNF when given a TIPLOC code in advanced mode" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
     get :index, :location => 'WATFJDC', :year => '2011', :month => '05', :day => '23', :time => '0900'
@@ -384,7 +384,7 @@ describe LocationController do
   end
 
   it "should show trains which later call at at a specified TIPLOC when in advanced mode" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
     get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HOWWOOD'
@@ -412,7 +412,7 @@ describe LocationController do
   end
 
   it "should only show trains which have called previously at a specified TIPLOC when in advanced mode" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WATFDJ'
@@ -437,7 +437,7 @@ describe LocationController do
   end
 
   it "should, in advanced mode, support both from and to CRS locations in the same query" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WFJ'
@@ -449,7 +449,7 @@ describe LocationController do
   end
 
   it "should, in advanced mode, support a from CRS code and a to TIPLOC in the same query" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WATFDJ'
@@ -461,7 +461,7 @@ describe LocationController do
   end
 
   it "should, in advanced mode, support a from TIPLOC and a to CRS code in the same query" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'STALBNA', :to => 'WFJ'
@@ -473,7 +473,7 @@ describe LocationController do
   end
 
   it "should, in advanced mode, support a from TIPLOC and a to TIPLOC in the same query" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
     get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'STALBNA', :to => 'WATFDJ'
@@ -488,14 +488,14 @@ describe LocationController do
   # Train highlighting
 
   it "should highlight trains which run as required" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
     get :index, :location => 'PADTON', :year => '2011', :month => '12', :day => '11', :time => '0600'
     response.body.should =~ /\(Q\)/
   end
 
   it "should highlight trains which run as required to terminals/yards" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
     get :index, :location => 'EDINBUR', :year => '2012', :month => '01', :day => '09', :time => '0900'
     response.body.should =~ /\(Y\)/

@@ -42,22 +42,7 @@ class ApplicationController < ActionController::Base
   # Return true if advanced mode has been selected
   
   def advanced_mode?
-    return session[:mode] == 'advanced'
-  end
-
-
-  # Toggle between normal and advanced mode
-   
-  def toggle_mode
-
-    session[:mode] = (session[:mode] == 'advanced' ? 'normal' : 'advanced')
-
-    begin
-      redirect_to :back
-    rescue
-      redirect_to :root
-    end
-
+    return (session.has_key? 'advanced') && session['advanced'] == true
   end
 
 

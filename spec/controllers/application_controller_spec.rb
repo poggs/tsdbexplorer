@@ -109,4 +109,11 @@ describe ApplicationController do
 
   end
 
+  describe "advanced mode handling" do
+
+    it "should return true if in advanced mode"
+    it "should return false if not in advanced mode"
+
+  end
+
 end

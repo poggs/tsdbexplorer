@@ -54,6 +54,12 @@ Tsdbexplorer::Application.routes.draw do
   match '/about', :controller => 'main', :action => 'about'
   match '/disclaimer', :controller => 'main', :action => 'disclaimer'
 
+  match '/session/set/:key/:value', :controller => 'session', :action => 'set'
+  match '/session/clear/:key', :controller => 'session', :action => 'clear'
+  match '/session/toggle/:key', :controller => 'session', :action => 'toggle'
+  match '/session/toggle_on/:key', :controller => 'session', :action => 'toggle_on'
+  match '/session/toggle_off/:key', :controller => 'session', :action => 'toggle_off'
+
   match ':controller(/:action(/:id(.:format)))'
 
 end

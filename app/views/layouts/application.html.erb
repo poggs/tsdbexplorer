@@ -33,7 +33,6 @@
        <input class="search-query" name="term" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
       </form>
      </ul>
-
      <ul class="nav pull-right">
       <li class="dropdown">
        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -46,8 +45,8 @@
        </a>
        <ul class="dropdown-menu">
          <li class="nav-header">Site mode</li>
-         <%= content_tag :li, (link_to "Normal", { :controller => 'application', :action => 'toggle_mode' }), :class => advanced_mode? ? nil : 'light-active' %>
-         <%= content_tag :li, (link_to "Detailed", { :controller => 'application', :action => 'toggle_mode' }), :class => advanced_mode? ? 'light-active' : nil %>
+         <%= content_tag :li, (link_to "Normal", { :controller => 'session', :action => 'toggle_off', :key => 'advanced' }), :class => advanced_mode? ? true : 'light-active' %>
+         <%= content_tag :li, (link_to "Detailed", { :controller => 'session', :action => 'toggle_on', :key => 'advanced' }), :class => advanced_mode? ? 'light-active' : true %>
         <% if user_signed_in? %>
          <% if current_user.is_admin? %>
           <li class="divider"></li>
@@ -65,6 +64,11 @@
          <li class="nav-header">Account</li>
          <li><%= link_to "Log in", new_user_session_path %></li>
          <li><%= link_to "Sign up", new_user_registration_path %></li>
+        <% end %>
+        <% if advanced_mode? %>
+         <li class="divider"></li>
+         <li class="nav-header">Settings</li>
+         <li><%= link_to "Highlight schedules" %></li>
         <% end %>
        </ul>
       </li>

@@ -19,16 +19,31 @@
 
 class SessionController < ApplicationController
 
+  def show
+    render :text => session.inspect
+  end
+
+  def reset
+    reset_session
+    render :text => 'Reset'
+  end
+
   def set
     session[params[:key]] = params[:value] unless params[:key].nil?
-    redirect_to :back if request.referer == true
-    render :text => nil
+    if request.referer.blank?
+      render :text => nil
+    else
+      redirect_to :back
+    end
   end
 
   def clear
     session.delete(params[:key]) unless params[:key].nil?
-    redirect_to :back if request.referer == true
-    render :text => nil
+    if request.referer.blank?
+      render :text => nil
+    else
+      redirect_to :back
+    end
   end
 
   def toggle
@@ -37,8 +52,30 @@ class SessionController < ApplicationController
     else
       session[params[:key]] = true
     end
-    redirect_to :back if request.referer == true
-    render :text => nil
+    logger.debug "Key #{params[:key]} is now #{session[params[:key]]}"
+    if request.referer.blank?
+      render :text => advanced_mode?
+    else
+      redirect_to :back
+    end
+  end
+
+  def toggle_on
+    session[params[:key]] = true
+    if request.referer.blank?
+      render :text => advanced_mode?
+    else
+      redirect_to :back
+    end
+  end
+
+  def toggle_off
+    session[params[:key]] = false
+    if request.referer.blank?
+      render :text => advanced_mode?
+    else
+      redirect_to :back
+    end
   end
 
 end

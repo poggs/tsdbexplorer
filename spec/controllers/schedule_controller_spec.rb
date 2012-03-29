@@ -230,35 +230,35 @@ describe ScheduleController do
   # Activities
 
   it "should highlight where a stop is to set down passengers only (D)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
     get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
     response.body.should =~ /Perth.+D/
   end
 
   it "should highlight where a stop is to change locomotives (L)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
     get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
     response.body.should =~ /Edinburgh.+L/
   end
 
   it "should highlight where a stop is unadvertised (N)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
     get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
     response.body.should =~ /Carlisle.+N/
   end
 
   it "should highlight where the train stops as required (R)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/milford_to_cardiff.cif')
     get :schedule_by_uid_and_run_date, :uid => 'C36001', :year => '2011', :month => '12', :day => '12'
     response.body.should =~ /Clarbeston Road.+R/
   end
 
   it "should highlight where a stop is for operational purposes (OP)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_op.cif')
     TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/activity_op.msn')
     get :schedule_by_uid_and_run_date, :uid => 'L95157', :year => '2011', :month => '05', :day => '22'
@@ -266,7 +266,7 @@ describe ScheduleController do
   end
 
   it "should highlight where a stop is to allow the locomotive to run round (RR)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
     get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
     response.body.should =~ /Edinburgh.+L/
@@ -275,42 +275,42 @@ describe ScheduleController do
   it "should highlight where a stop is for staff only (S)"
 
   it "should highlight where a stop is for token/staff exchange (TW)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/fishguard_to_cheltenham.cif')
     get :schedule_by_uid_and_run_date, :uid => 'C36098', :year => '2011', :month => '12', :day => '12'
     response.body.should =~ /Clarbeston Road.+TW/
   end
 
   it "should highlight where a stop is to pick up passengers only (U)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
     get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
     response.body.should =~ /Watford Junction.+U/
   end
 
   it "should highlight where a stop is to detach vehicles (-D)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
     get :schedule_by_uid_and_run_date, :uid => 'G60813', :year => '2011', :month => '12', :day => '25'
     response.body.should =~ /Edinburgh.+\-D/
   end
 
   it "should highlight where a stop is to attach vehicles (-U)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/sr_sleeper.cif')
     get :schedule_by_uid_and_run_date, :uid => 'G60507', :year => '2012', :month => '01', :day => '02'
     response.body.should =~ /Edinburgh.+\-U/
   end
 
   it "should highlight a train which runs as required (Q)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
     get :schedule_by_uid_and_run_date, :uid => 'C05395', :year => '2011', :month => '12', :day => '11'
     response.body.should =~ /Runs as required/
   end
 
   it "should highlight a train which runs as required (Y)" do
-    session[:mode] = 'advanced'
+    session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
     get :schedule_by_uid_and_run_date, :uid => 'G67076', :year => '2012', :month => '01', :day => '09'
     response.body.should =~ /Runs as required/
