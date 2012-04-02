@@ -23,44 +23,68 @@ describe ScheduleController do
 
   render_views
 
-  # it "should display a planned schedule originating from CIF in advanced mode" do
-  #   TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-  #   session[:mode] = "advanced"
-  #   get :schedule_by_uid, :uid => 'C43391', :year => '2010', :month => '12', :day => '12'
-  #   response.code.should eql("200")
-  #   response.body.should =~ /originated from CIF/
-  # end
-  # 
-  # it "should display a planned schedule originating from VSTP in advanced mode" do
+  it "should display a planned schedule originating from CIF in advanced mode" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    session['advanced'] = true
+    get :schedule_by_uid_and_run_date, :uid => 'C43391', :year => '2010', :month => '12', :day => '12'
+    response.code.should eql("200")
+    response.body.should =~ /CIF schedule/
+  end
+
+  # it "should not display a VSTP ECS schedule in normal mode" do
   #   vstp_data = File.open('test/fixtures/tdnet/vstp_create_1.xml').read
   #   vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
   #   vstp_message.status.should eql(:ok)
-  #   session[:mode] = "advanced"
-  #   get :schedule_by_uid, :uid => '20203', :year => '2011', :month => '11', :day => '14'
+  #   get :schedule_by_uid_and_run_date, :uid => '20203', :year => '2011', :month => '11', :day => '14'
   #   response.code.should eql("200")
-  #   response.body.should =~ /originated from VSTP/
+  #   response.body.should =~ /20203/
+  #   response.body.should =~ /Monday 14th November 2011/
   # end
-  # 
-  # it "should return an error if passed an invalid schedule" do
-  #   get :schedule_by_uid, :uid => 'Z99999'
-  #   response.code.should eql("404")
-  #   response.body.should =~ /schedule Z99999/
-  # end
-  # 
-  # it "should return an error if passed a valid schedule and invalid run date" do
-  #   TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-  #   get :schedule_by_uid_and_run_date, :uid => 'C43391', :year => '2010', :month => '12', :day => '13'
-  #   response.code.should eql("404")
-  #   response.body.should =~ /schedule C43391/
-  #   response.body.should =~ /running on 2010-12-13/
-  # end
-  # 
-  # it "should return an error if passed an invalid schedule and invalid run date" do
-  #   get :schedule_by_uid_and_run_date, :uid => 'Z99999', :year => '2011', :month => '01', :day => '01'
-  #   response.code.should eql("404")
-  #   response.body.should =~ /schedule Z99999/
-  # end
-  # 
+
+  it "should display a VSTP ECS schedule in advanced mode" do
+    vstp_data = File.open('test/fixtures/tdnet/vstp_create_1.xml').read
+    vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
+    vstp_message.status.should eql(:ok)
+    session['advanced'] = true
+    get :schedule_by_uid_and_run_date, :uid => '20203', :year => '2011', :month => '11', :day => '14'
+    response.code.should eql("200")
+    response.body.should =~ /VSTP schedule/
+  end
+
+  it "should not display an operator for VSTP mode" do
+    vstp_data = File.open('test/fixtures/tdnet/vstp_create_1.xml').read
+    vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
+    vstp_message.status.should eql(:ok)
+    session['advanced'] = true
+    get :schedule_by_uid, :uid => '20203', :year => '2011', :month => '11', :day => '14'
+    response.code.should eql("200")
+    response.body.should_not =~ /Operated by/
+    response.body.should =~ /No operator information available/
+  end
+
+
+
+  it "should return an error if passed an invalid schedule" do
+    get :schedule_by_uid, :uid => 'Z99999'
+    response.code.should eql("404")
+    response.body.should =~ /schedule Z99999/
+  end
+
+  it "should return an error if passed a valid schedule and invalid run date" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'C43391', :year => '2010', :month => '12', :day => '13'
+    response.code.should eql("404")
+    response.body.should =~ /schedule C43391/
+    response.body.should =~ /running on Monday 13th December 2010/
+  end
+
+  it "should return an error if passed an invalid schedule and invalid run date" do
+    get :schedule_by_uid_and_run_date, :uid => 'Z99999', :year => '2011', :month => '01', :day => '01'
+    response.code.should eql("404")
+    response.body.should =~ /schedule Z99999/
+    response.body.should =~ /running on Saturday 1st January 2011/
+  end
+
   # it "should highlight a train that has not yet been activated by TRUST" do
   #   TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/euston_to_glasgow.cif')
   #   get :schedule_by_uid_and_run_date, :uid => 'P64836', :year => '2011', :month => '11', :day => '02'
