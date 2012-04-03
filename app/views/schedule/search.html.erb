@@ -19,21 +19,20 @@
     </tr>
    </thead>
    <tbody>
-    <% @schedule.sort { |a,b| a.atoc_code <=> b.atoc_code }.each do |s| %>
+    <% @schedule.each do |s| %>
      <tr>
       <td>
+       <%= s.train_identity %><br />
        <% if params[:date] %>
-        <%= link_to raw('<i class="icon-calendar"></i>&nbsp;') + s.train_uid + " (" + decode_stp_indicator(s, :A) + ")", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %> (<%= s.train_identity %>)
+        <%= link_to s.train_uid + " (" + decode_stp_indicator(s, :A) + ")", :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.train_uid, :year => params[:year], :month => params[:month], :day => params[:day] %> (<%= s.train_identity %>)
        <% else %>
-        <%= link_to raw('<i class="icon-list-alt"></i>&nbsp;') + s.train_uid + " (" + decode_stp_indicator(s, :A) + ")", :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %>
-        <br />
-        <i class="icon-cog">&nbsp;</i><%= s.train_identity %>
+        <%= link_to s.train_uid + " (" + decode_stp_indicator(s, :A) + ")", :controller => 'schedule', :action => 'schedule_by_uid', :uid => s.train_uid %>
        <% end %>
       </td>
       <td>
-       <%= raw format_location_time(s.origin, :departure) %> <%= tidy_text(decode_tiploc(s.origin)) %> to <%= tidy_text(decode_tiploc(s.terminate)) %>
+       <strong><%= raw format_location_time(s.origin, :departure) %> <%= tidy_text(decode_tiploc(s.origin)) %> to <%= tidy_text(decode_tiploc(s.terminate)) %></strong>
        <br />
-       <em><%= run_details(s) %></em>
+       Runs <%= run_details(s) %>
       </td>
       <td><%= decode_toc(s.atoc_code) %></td>
      </tr>
