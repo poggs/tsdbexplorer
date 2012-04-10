@@ -110,6 +110,8 @@ class ScheduleController < ApplicationController
 
     render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the schedule #{params[:uid]} running on #{@date}.  The schedule may not be valid for this date." } if @schedule.nil?
 
+    render 'cancellation' if @schedule && @schedule.stp_indicator == "C"
+
     @as_run = DailySchedule.runs_on_by_uid_and_date(params[:uid], @date).first
 
   end

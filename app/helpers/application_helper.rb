@@ -103,6 +103,18 @@ module ApplicationHelper
 
   end
 
+  def display_operator(toc)
+
+    toc_name = decode_toc(toc)
+
+    if toc_name.nil?
+      "No operator information available"
+    else
+      "Operated by #{toc_name}"
+    end
+
+  end
+
   def decode_train_class(train_class)
 
     train_class_hash = {
@@ -559,5 +571,17 @@ module ApplicationHelper
     end
 
   end
+
+
+  # Icons
+
+  def tick_icon
+    tag 'i', :class => 'icon-ok'
+  end
+
+  def cross_icon
+    tag 'i', :class => 'icon-remove'
+  end
+
 
 end

@@ -7,6 +7,10 @@ h2,h3,h4 {
   color: #36444e;
 }
 
+body {
+  padding-top: 40px;
+}
+
 .footer {
   margin-top: 45px;
   padding: 16px 0 36px;
@@ -44,4 +48,18 @@ table.stats-table td {
 
 li.light-active {
   background: rgba(4, 156, 219, 0.5);
+}
+
+
+/* Enhancements for .page-header */
+
+.page-header .icon { float: left; }
+.page-header .headline { padding-top: 10px; padding-bottom: 10px; font-size: 26px; font-weight: bold; }
+.page-header .subtitle { font-size: 18px; }
+
+
+/* Enhancements for tables */
+
+.table-td-centre tr td:first-child {
+  text-align: center;
 }

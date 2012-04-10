@@ -5,6 +5,7 @@
   <title><%= $CONFIG['BRANDING'] %><% if Rails.env != 'production' %> (<%= Rails.env.titlecase %>)<% end %></title>
   <meta name="description" content="Real-time train information using Open Data">
   <meta name="author" content="Peter Hicks">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!--[if lt IE 9]>
    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -24,26 +25,37 @@
   <div class="navbar navbar-fixed-top">
    <div class="navbar-inner">
     <div class="container">
+
+     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+      <img src="/assets/190_circle_plus.png">
+     </a>
+
      <a href="/" class="brand"><%= $CONFIG['BRANDING'] + (Rails.env != "production" ? " (" + Rails.env.titlecase + ")" : "") %></a>
-     <ul class="nav">
-      <li><%= link_to 'Search', :controller => 'search', :action => 'advanced' %></li>
-      <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
-      <li class="divider-vertical"></li>
-      <form class="navbar-search pull-left" action="<%= url_for :controller => 'location', :action => 'search' %>">
-       <input class="search-query" name="term" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
-      </form>
-     </ul>
-     <ul class="nav pull-right">
-      <li class="dropdown">
-       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <% if user_signed_in? %>
-         <i class="icon-user icon-white"></i>&nbsp;<%= current_user.full_name %>
-        <% else %>
-         Options
-        <% end %>
-        <b class="caret"></b>
-       </a>
-       <ul class="dropdown-menu">
+
+     <div class="nav-collapse">
+      <ul class="nav">
+       <li class=""><%= link_to 'Search', :controller => 'search', :action => 'advanced' %></li>
+       <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
+       <li class="divider-vertical"></li>
+      </ul>
+     </div>
+
+     <form class="navbar-search pull-left" action="<%= url_for :controller => 'location', :action => 'search' %>">
+      <input class="search-query" name="term" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
+     </form>
+
+     <div class="nav-collapse">
+      <ul class="nav pull-right">
+       <li class="nav dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+         <% if user_signed_in? %>
+          <i class="icon-user icon-white"></i>&nbsp;<%= current_user.full_name %>
+         <% else %>
+          Options
+         <% end %>
+         <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
          <li class="nav-header">Site mode</li>
          <%= content_tag :li, (link_to "Normal", { :controller => 'session', :action => 'toggle_off', :key => 'advanced' }), :class => advanced_mode? ? true : 'light-active' %>
          <%= content_tag :li, (link_to "Detailed", { :controller => 'session', :action => 'toggle_on', :key => 'advanced' }), :class => advanced_mode? ? 'light-active' : true %>
@@ -71,8 +83,9 @@
          <li><%= link_to "Highlight schedules" %></li>
         <% end %>
        </ul>
-      </li>
-     </ul>
+       </li>
+      </ul>
+     </div>
 
     </div>
    </div>
@@ -80,7 +93,7 @@
 
   <%= yield :jumbotron %>
 
-  <div class="container" style="padding-top: 64px;">
+  <div class="container">
 
    <div class="content">
     <%= render :partial => 'common/flash', :locals => { :flash => flash } %>

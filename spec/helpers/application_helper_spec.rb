@@ -105,6 +105,14 @@ describe ApplicationHelper do
     decode_toc('11').should be_nil
   end
 
+  it "should output 'Operated by' and a known TOC name" do
+    display_operator('LM').should eql('Operated by London Midland')
+  end
+
+  it "should output 'No operator information available' for an unknown TOC" do
+    display_operator('11').should eql('No operator information available')
+  end
+
   it "should decode a Delay Attribution code in to text" do
     da_to_text('IA').should eql('a signal failure')
     da_to_text('V8').should eql('a bird strike')

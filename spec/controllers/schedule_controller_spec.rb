@@ -28,7 +28,7 @@ describe ScheduleController do
     session['advanced'] = true
     get :schedule_by_uid_and_run_date, :uid => 'C43391', :year => '2010', :month => '12', :day => '12'
     response.code.should eql("200")
-    response.body.should =~ /CIF schedule/
+    response.body.should =~ /CIF/
   end
 
   # it "should not display a VSTP ECS schedule in normal mode" do
@@ -48,7 +48,7 @@ describe ScheduleController do
     session['advanced'] = true
     get :schedule_by_uid_and_run_date, :uid => '20203', :year => '2011', :month => '11', :day => '14'
     response.code.should eql("200")
-    response.body.should =~ /VSTP schedule/
+    response.body.should =~ /VSTP/
   end
 
   it "should not display an operator for VSTP mode" do

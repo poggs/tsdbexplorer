@@ -1,21 +1,37 @@
-<% if @schedule.stp_indicator == "C" %>
-<div class="page-header">
- <h1>Planned cancellation</h1>
-</div>
-
-<div class="row">
- <div class="span12 alert alert-error">
-  This schedule does not run on <%= @date %>.
- </div>
-</div>
-<% else %>
- <%= render :partial => 'schedule_headline', :locals => { :schedule => @schedule, :mode => '' } %>
- <% if advanced_mode? && @schedule.is_a_train? %>
-  <%= render :partial => 'schedule_technical', :locals => { :schedule => @schedule, :mode => '' } %>
- <% end %>
- <% if @as_run.nil? %>
-  <%= render :partial => 'schedule_locations' %>
- <% else %>
-  <%= render :partial => 'schedule_locations_realtime' %>
- <% end %>
+<% content_for :script do%>
+ <script type="text/javascript">
+ $(function () {
+   $('#scheduletabs').tab('show');
+ })
+ </script>
 <% end %>
+
+<%= render :partial => 'schedule_headline', :locals => { :schedule => @schedule, :mode => '' } %>
+
+<ul id="tab" class="nav nav-tabs">
+ <li class="active"><a href="#calling-points" data-toggle="tab">Calling points</a></li>
+ <% if advanced_mode? && @schedule.is_a_train? %>
+ <li><a href="#facilities" data-toggle="tab">Facilities</a></li>
+ <li><a href="#technical" data-toggle="tab">Technical</a></li>
+ <li><a href="#real-time" data-toggle="tab">Real-time</a></li>
+ <% end %>
+</ul>
+
+<div id="scheduletabs" class="tab-content">
+ <div class="tab-pane fade in active" id="calling-points">
+  <%= render :partial => 'schedule_locations' %>
+ </div>
+ <% if advanced_mode? && @schedule.is_a_train? %>
+ <div class="tab-pane fade in" id="facilities">
+  <%= render :partial => 'schedule_facilities', :locals => { :schedule => @schedule } %>
+ </div>
+ <div class="tab-pane fade in" id="technical">
+  <%= render :partial => 'schedule_technical', :locals => { :schedule => @schedule, :mode => '' } %>
+ </div>
+ <div class="tab-pane fade in" id="real-time">
+  <div class="alert alert-info">
+   We're currently working hard on integrating real-time data in to the site.  Please check back soon.
+  </div>
+ </div>
+ <% end %>
+</div>

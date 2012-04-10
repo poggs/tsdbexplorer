@@ -1,0 +1,34 @@
+<div class="row">
+ <div class="span6">
+  <h2>Accommodation</h2>
+  <table class="table table-bordered table-condensed table-td-centre">
+   <tbody>
+    <tr><td class="span1"><%= tick_icon if ['B'].include? schedule.train_class %></td><td>1st Class seats</td></tr>
+    <tr><td class="span1"><%= tick_icon if ['B', 'S'].include? schedule.train_class %></td><td>Standard Class seats</td></tr>
+    <tr><td class="span1"><%= tick_icon if ['B', 'F'].include? schedule.sleepers %></td><td>1st Class berths</td></tr>
+    <tr><td class="span1"><%= tick_icon if ['B', 'S'].include? schedule.sleepers %></td><td>Standard Class berths</td></tr>
+   </tbody>
+  </table>
+
+  <h2>Reservations</h2>
+  <ul>
+   <li><%= decode_reservations(schedule.reservations).capitalize %></li>
+  </ul>
+
+ </div>
+ <div class="span6">
+  <h2>Catering</h2>
+  <table class="table table-bordered table-condensed table-td-centre">
+   <tbody>
+    <tr><td class="span1"><%= tick_icon if !schedule.catering_code.nil? && schedule.catering_code.match(/C/) %></td><td>Buffet service</td></tr>
+    <tr><td class="span1"><%= tick_icon if !schedule.catering_code.nil? && schedule.catering_code.match(/F/) %></td><td>Restaurant for 1st Class passengers</td></tr>
+    <tr><td class="span1"><%= tick_icon if !schedule.catering_code.nil? && schedule.catering_code.match(/H/) %></td><td>Hot food service</td></tr>
+    <tr><td class="span1"><%= tick_icon if !schedule.catering_code.nil? && schedule.catering_code.match(/M/) %></td><td>Inclusive meal for 1st Class passengers</td></tr>
+    <tr><td class="span1"><%= tick_icon if !schedule.catering_code.nil? && schedule.catering_code.match(/P/) %></td><td>Wheelchair-only reservations</td></tr>
+    <tr><td class="span1"><%= tick_icon if !schedule.catering_code.nil? && schedule.catering_code.match(/R/) %></td><td>Restaurant</td></tr>
+    <tr><td class="span1"><%= tick_icon if !schedule.catering_code.nil? && schedule.catering_code.match(/T/) %></td><td>Trolley service</td></tr>
+   </tbody>
+  </table>
+ </div>
+</div>
+

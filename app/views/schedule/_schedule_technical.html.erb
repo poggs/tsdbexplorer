@@ -1,12 +1,57 @@
 <div class="row">
- <div class="span6 well">
-  <h3>Details</h3>
-  <dl>
-   <li><%= decode_stp_indicator(schedule, :F) %> <%= schedule.data_source %> schedule</li>
-   <% unless schedule.atoc_code == "ZZ" %><li><%= decode_train_class(schedule.train_class) %></li><% end %>
-   <li>Timed for <%= schedule.power_type + (schedule.timing_load || "") %> at <%= schedule.speed.to_i %>mph</li>
-   <% if schedule.oper_q == true || schedule.oper_y == true %><li>Runs as required</li><% end %>
-  </dl>
-  <%= link_to raw('<i class="icon-list icon-white"></i>') + ' Display schedule', { :controller => 'schedule', :action => 'schedule_by_uid', :uid => params[:uid] }, { :class => 'btn btn-info' } %>
+ <div class="span6">
+  <h2>Summary</h2>
+  <table class="table table-bordered table-condensed">
+   <tbody>
+    <tr>
+     <th class="span3">Train ID</th><td><%= @schedule.train_identity %></td>
+    </tr>
+    <tr>
+     <th class="span3">RSID</th><td>Unknown</td>
+    </tr>
+    <tr>
+     <th class="span3">Service code</th><td><%= @schedule.service_code %></td>
+    </tr>
+    <tr>
+     <th class="span3">Power type</th><td><%= @schedule.power_type %></td>
+    </tr>
+    <tr>
+     <th class="span3">Speed</th><td><%= @schedule.speed.to_i %>mph</td>
+    </tr>
+    <tr>
+     <th class="span3">Other</th>
+     <td>
+      <% if schedule.oper_q == true || schedule.oper_y == true %><li>Runs as required</li><% end %>
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <div class="span6">
+  <h2>Schedule</h2>
+  <table class="table table-bordered table-condensed">
+   <tbody>
+    <tr>
+     <th class="span3">UID</th><td><%= @schedule.train_uid %></td>
+    </tr>
+    <tr>
+     <th class="span3">Type</th><td><%= decode_stp_indicator(@schedule, :F) %> (<%= decode_stp_indicator(@schedule, :A) %>)</td>
+    </tr>
+    <tr>
+     <th class="span3">Source</th><td><%= schedule.data_source %></td>
+    </tr>
+    <tr>
+     <th class="span3">Runs</th>
+     <td>
+      <%= run_details(schedule) %>
+     </td>
+    </tr>
+    <tr>
+     <td colspan="2">
+      <%= link_to raw('<i class="icon-calendar"></i>') + ' Show all schedules', { :controller => 'schedule', :action => 'schedule_by_uid', :uid => params[:uid] } %>
+     </td>
+    </tr>
+   </tbody>
+  </table>
  </div>
 </div>

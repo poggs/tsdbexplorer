@@ -30,7 +30,7 @@
 <% if advanced_mode? %>
      <td><%= s.power_type %><%= s.speed %></td>
 <% end %>
-     <td><%= decode_toc(s.atoc_code) %></td>
+     <td><%= display_operator(s.atoc_code) %></td>
     </tr>
    <% end %>
   </table>
