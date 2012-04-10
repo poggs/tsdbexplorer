@@ -7,8 +7,10 @@ h2,h3,h4 {
   color: #36444e;
 }
 
-body {
-  padding-top: 40px;
+@media (min-width: 979px) {
+  body {
+    padding-top: 40px;
+  }
 }
 
 .footer {
