@@ -35,9 +35,16 @@
 
      <div class="nav-collapse">
       <ul class="nav">
-       <li class=""><%= link_to 'Search', :controller => 'search', :action => 'advanced' %></li>
+       <li><%= link_to 'Search', :controller => 'search', :action => 'advanced' %></li>
        <li><%= link_to 'About', :controller => 'main', :action => 'about' %></li>
        <li class="divider-vertical"></li>
+      </ul>
+     </div>
+
+     <div class="nav-collapse hidden-desktop">
+      <ul class="nav">
+       <%= content_tag :li, (link_to "Switch to Normal mode", { :controller => 'session', :action => 'toggle_off', :key => 'advanced' }) if advanced_mode? == true %>
+       <%= content_tag :li, (link_to "Switch to Detailed mode", { :controller => 'session', :action => 'toggle_on', :key => 'advanced' }) if advanced_mode? == false %>
       </ul>
      </div>
 
@@ -45,7 +52,7 @@
       <input class="search-query" name="term" type="text" value="<%= params[:location] %>" placeholder="Show me trains at...">
      </form>
 
-     <div class="nav-collapse">
+     <div class="nav-collapse hidden-phone hidden-tablet">
       <ul class="nav pull-right">
        <li class="nav dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
