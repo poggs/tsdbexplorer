@@ -18,6 +18,7 @@
   <%= yield(:script) %>
   <%= render :partial => 'common/analytics' rescue nil %>
   <%= render :partial => 'common/google_plus' if $CONFIG['ANALYTICS'] rescue nil %>
+  <%= render :partial => 'common/facebook_like' rescue nil %>
   <link rel="shortcut icon" href="<%= url_for '/assets/favicon.png' %>" />
  </head>
  <body onLoad="load_handler();">
@@ -109,6 +110,7 @@
     <p>Please read the <%= link_to 'disclaimer', :controller => 'main', :action => 'disclaimer' %> to understand the limitations of this site.</p>
     <% if request.url == root_url %>
      <p><!-- Fix this ugly hack -->&nbsp;</p>
+     <div class="fb-like" data-href="http://www.opentraintimes.com/" data-send="true" data-layout="button_count" data-show-faces="true" data-action="recommend" data-font="arial"></div>
      <div class="g-plusone" data-size="small" data-annotation="inline"></div>
     <% end %>
    </div>
