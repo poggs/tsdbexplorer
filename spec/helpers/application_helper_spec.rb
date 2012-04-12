@@ -63,17 +63,6 @@ describe ApplicationHelper do
     decode_train_status('$').should eql('$: Unknown')
   end
 
-  it "should convert a reservation status in to text" do
-    decode_reservations(' ').should eql('not available')
-    decode_reservations(nil).should eql('not available')
-    decode_reservations('A').should eql('compulsory')
-    decode_reservations('S').should eql('possible')
-  end
-
-  it "should gracefully handle an unknown reservation status" do
-    decode_reservations('$').should eql('unknown')
-  end
-
   it "should return the description for a Location object referencing a known TIPLOC" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     location = Location.where(:tiploc_code => 'EUSTON').first

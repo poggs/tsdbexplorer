@@ -162,28 +162,6 @@ module ApplicationHelper
   end
 
 
-  def decode_reservations(reservations)
-
-    reservation_hash = {
-      "A" => "compulsory",
-      "E" => "essential for bicycles",
-      "R" => "recommended",
-      "S" => "possible"
-    }
-
-    if reservations == " " || reservations.nil?
-      decoded_reservations = "not available"
-    elsif reservation_hash.has_key? reservations
-      decoded_reservations = "#{reservation_hash[reservations]}"
-    else
-      decoded_reservations = "unknown"
-    end
-
-    return decoded_reservations
-
-  end
-
-
   # Decode a TIPLOC in to text, using the in-memory database where possible
 
   def decode_tiploc(obj)

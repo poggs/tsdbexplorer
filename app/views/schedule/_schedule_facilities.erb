@@ -11,9 +11,14 @@
   </table>
 
   <h2>Reservations</h2>
-  <ul>
-   <li><%= decode_reservations(schedule.reservations).capitalize %></li>
-  </ul>
+  <table class="table table-bordered table-condensed table-td-centre">
+   <tbody>
+    <tr><td class="span1"><%= tick_icon if ['A'].include? schedule.reservations %></td><td>Compulsory</td></tr>
+    <tr><td class="span1"><%= tick_icon if ['E'].include? schedule.reservations %></td><td>Compulsory for bicycles</td></tr>
+    <tr><td class="span1"><%= tick_icon if ['R'].include? schedule.reservations %></td><td>Recommended</td></tr>
+    <tr><td class="span1"><%= tick_icon if ['S'].include? schedule.reservations %></td><td>Available</td></tr>
+   </tbody>
+  </table>
 
  </div>
  <div class="span6">
