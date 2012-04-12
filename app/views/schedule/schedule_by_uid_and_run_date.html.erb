@@ -10,8 +10,10 @@
 
 <ul id="tab" class="nav nav-tabs">
  <li class="active"><a href="#calling-points" data-toggle="tab">Calling points</a></li>
- <% if advanced_mode? && @schedule.is_a_train? %>
+ <% if @schedule.is_a_train? %>
  <li><a href="#facilities" data-toggle="tab">Facilities</a></li>
+ <% end %>
+ <% if advanced_mode? && @schedule.is_a_train? %>
  <li><a href="#technical" data-toggle="tab">Technical</a></li>
  <li><a href="#real-time" data-toggle="tab">Real-time</a></li>
  <% end %>
@@ -21,10 +23,12 @@
  <div class="tab-pane fade in active" id="calling-points">
   <%= render :partial => 'schedule_locations' %>
  </div>
- <% if advanced_mode? && @schedule.is_a_train? %>
+ <% if @schedule.is_a_train? %>
  <div class="tab-pane fade in" id="facilities">
   <%= render :partial => 'schedule_facilities', :locals => { :schedule => @schedule } %>
  </div>
+ <% end %>
+ <% if advanced_mode? && @schedule.is_a_train? %>
  <div class="tab-pane fade in" id="technical">
   <%= render :partial => 'schedule_technical', :locals => { :schedule => @schedule, :mode => '' } %>
  </div>
