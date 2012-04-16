@@ -562,4 +562,78 @@ module ApplicationHelper
   end
 
 
+  # Translate power types and timing loads in to text
+
+  def translate_tload(power_type, timing_load)
+
+    if power_type == "D"
+
+      if timing_load.nil? || timing_load.blank?
+        "Diesel-hauled"
+      else
+        "Diesel-hauled (#{timing_load} tonne load)"
+      end
+
+    elsif power_type == "E"
+
+      if timing_load.nil? || timing_load.blank?
+        "Electric-hauled"
+      else
+        "Electric-hauled (#{timing_load} tonne load)"
+      end
+
+    elsif power_type == "ED"
+
+      if timing_load.nil? || timing_load.blank?
+        "Electro-Diesel hauled"
+      else
+        "Electro-Diesel hauled (#{timing_load} tonne load)"
+      end
+
+    elsif power_type == "HST"
+
+      "High Speed Train"
+
+    elsif power_type == "EMU"
+
+      if timing_load.nil? || timing_load.blank?
+        "Electric Multiple Unit"
+      else
+        "Class #{timing_load} EMU"
+      end
+
+    elsif power_type == "DMU"
+
+      if timing_load.nil? || timing_load.blank?
+        "Diesel Multiple Unit"
+      elsif timing_load == "A"
+        "Class 14x DMU"
+      elsif timing_load == "E"
+        "Class 158 DMU"
+      elsif timing_load == "N"
+        "Class 165/0 DMU"
+      elsif timing_load == "S"
+        "Class 150/153/155/156 DMU"
+      elsif timing_load == "T"
+        "Class 165/1 or 166 DMU"
+      elsif timing_load == "V"
+        "Class 220/221 DMU"
+      elsif timing_load == "X"
+        "Class 159 DMU"
+      else
+        "Unknown Class #{timing_load} DMU"
+      end
+
+    elsif power_type == "EML"
+
+      "Electric Multiple Unit plus Locomotive"
+
+    elsif power_type == "DEM"
+
+      "Diesel Electric Multiple Unit"
+
+    end
+
+  end
+
 end

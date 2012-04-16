@@ -223,4 +223,65 @@ describe ApplicationHelper do
     runs_as_required_flags_for(schedule).should =~ /\(Y\)/
   end
 
+
+  # Power type and timing load
+
+  it "should translate DMU power types and timing loads in to text" do
+    translate_tload('DMU', 'A').should eql('Class 14x DMU')
+    translate_tload('DMU', 'E').should eql('Class 158 DMU')
+    translate_tload('DMU', 'N').should eql('Class 165/0 DMU')
+    translate_tload('DMU', 'S').should eql('Class 150/153/155/156 DMU')
+    translate_tload('DMU', 'T').should eql('Class 165/1 or 166 DMU')
+    translate_tload('DMU', 'V').should eql('Class 220/221 DMU')
+    translate_tload('DMU', 'X').should eql('Class 159 DMU')
+  end
+
+  it "should translate an unknown DMU timing load in to text" do
+    translate_tload('DMU', 'Q').should eql('Unknown Class Q DMU')
+  end
+
+  it "should translate a DMU power type with no timing load in to text" do
+    translate_tload('DMU', nil).should eql('Diesel Multiple Unit')
+    translate_tload('DMU', '').should eql('Diesel Multiple Unit')
+  end
+
+  it "should translate other non-hauled timing loads in to text" do
+    translate_tload('DEM', nil).should eql('Diesel Electric Multiple Unit')
+    translate_tload('DEM', '').should eql('Diesel Electric Multiple Unit')
+    translate_tload('EML', nil).should eql('Electric Multiple Unit plus Locomotive')
+    translate_tload('EML', '').should eql('Electric Multiple Unit plus Locomotive')
+    translate_tload('HST', nil).should eql('High Speed Train')
+    translate_tload('HST', '').should eql('High Speed Train')
+  end
+
+  it "should translate EMU power types and timing loads in to text" do
+    # NOTE: A Class 300 EMU does not exist
+    translate_tload('EMU', '300').should eql('Class 300 EMU')
+    translate_tload('EMU', '313').should eql('Class 313 EMU')
+    translate_tload('EMU', '315').should eql('Class 315 EMU')
+    translate_tload('EMU', '317').should eql('Class 317 EMU')
+  end
+
+  it "should translate an EMU power type with no timing load in to text" do
+    translate_tload('EMU', nil).should eql('Electric Multiple Unit')
+    translate_tload('EMU', '').should eql('Electric Multiple Unit')
+  end
+
+  it "should translate hauled trains power type and timing load in to text" do
+    translate_tload('D', '140').should eql('Diesel-hauled (140 tonne load)')
+    translate_tload('D', '1400').should eql('Diesel-hauled (1400 tonne load)')
+    translate_tload('E', '800').should eql('Electric-hauled (800 tonne load)')
+    translate_tload('E', '1800').should eql('Electric-hauled (1800 tonne load)')
+    translate_tload('ED', '455').should eql('Electro-Diesel hauled (455 tonne load)')
+  end
+
+  it "should translate hauled trains power types in to text when no timing load is specified" do
+    translate_tload('D', nil).should eql('Diesel-hauled')
+    translate_tload('D', '').should eql('Diesel-hauled')
+    translate_tload('E', nil).should eql('Electric-hauled')
+    translate_tload('E', '').should eql('Electric-hauled')
+    translate_tload('ED', nil).should eql('Electro-Diesel hauled')
+    translate_tload('ED', '').should eql('Electro-Diesel hauled')
+  end
+
 end
