@@ -805,7 +805,19 @@ describe "lib/tsdbexplorer/tdnet.rb" do
   end
 
 
-  it "should process a VSTP DELETE message"
+  it "should process a VSTP DELETE message" do
+
+    vstp_create_data = File.open('test/fixtures/tdnet/vstp_delete_part1.xml')
+    vstp_create_message = TSDBExplorer::TDnet::process_vstp_message(vstp_create_data)
+    vstp_create_message.status.should eql(:ok)
+    vstp_create_message.message.should include('Created VSTP schedule for train 66986 running from 20120416 to 20120416')
+
+    vstp_delete_data = File.open('test/fixtures/tdnet/vstp_delete_part2.xml')
+    vstp_delete_message = TSDBExplorer::TDnet::process_vstp_message(vstp_delete_data)
+    vstp_delete_message.status.should eql(:ok)
+    vstp_delete_message.message.should include('Deleted VSTP schedule 66986 running from 20120416 to 20120416')
+
+  end
 
   it "should process the activation of a VSTP train" do
 

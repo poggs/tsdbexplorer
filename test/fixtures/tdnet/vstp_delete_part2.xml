@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VSTPCIFMsgV1 xmlns="http://xml.networkrail.co.uk/ns/2008/Train" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:eai="http://xml.networkrail.co.uk/ns/2008/EAI" xsi:schemaLocation="http://xml.networkrail.co.uk/ns/2008/Train itm_vstp_cif_messaging_v1.xsd" classification="industry" timestamp="2012-04-16T09:33:40-00:00" owner="Network Rail" originMsgId="2012-04-16T09:33:40-00:00@vstp.networkrail.co.uk">
+	<eai:Sender organisation="Network Rail" application="TOPS" component="VSTP"/>
+	<schedule schedule_id="" transaction_type="Delete" schedule_start_date="20120416" schedule_end_date="20120416" schedule_days_runs="1000000" CIF_bank_holiday_running=" " CIF_train_uid=" 66986" train_status=" " CIF_stp_indicator="N"/>
+</VSTPCIFMsgV1>

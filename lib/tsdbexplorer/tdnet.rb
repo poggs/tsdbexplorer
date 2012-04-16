@@ -455,6 +455,8 @@ module TSDBExplorer
 
     def TDnet.process_vstp_message(msg)
 
+      # TODO: Tidy up VSTP Delete processing
+
       doc = Nokogiri::XML(msg) do |config|
         config.options = Nokogiri::XML::ParseOptions::NOBLANKS
       end
@@ -610,13 +612,36 @@ module TSDBExplorer
 
       end
 
-      BasicSchedule.create!(vstp[:basic_schedule])
 
-      vstp[:location].each do |location|
-        Location.create!(location)
+      # Insert records if this is a VSTP Create message, otherwise find and delete the appropriate schedule
+
+      if vstp[:transaction_type] == "Create"
+
+        BasicSchedule.create!(vstp[:basic_schedule])
+
+        vstp[:location].each do |location|
+          Location.create!(location)
+        end
+
+        status = :ok
+        message = "Created VSTP schedule for train #{vstp[:basic_schedule][:train_uid]} running from #{vstp[:basic_schedule][:runs_from]} to #{vstp[:basic_schedule][:runs_to]} as #{vstp[:basic_schedule][:train_identity]}"
+
+      else
+
+        schedule = BasicSchedule.where(:train_uid => vstp[:basic_schedule][:train_uid]).where(:runs_from => Date.parse(vstp[:basic_schedule][:runs_from])).where(:stp_indicator => vstp[:basic_schedule][:stp_indicator])
+
+        if schedule.count == 1
+          schedule.first.delete
+          status = :ok
+          message = "Deleted VSTP schedule #{vstp[:basic_schedule][:train_uid]} running from #{vstp[:basic_schedule][:runs_from]} to #{vstp[:basic_schedule][:runs_to]}"
+        else
+          status = :error
+          message = "Failed to process VSTP deletion - found #{schedule.count} match(es) for train #{vstp[:basic_schedule][:train_uid]} running from #{vstp[:basic_schedule][:runs_from]} to #{vstp[:basic_schedule][:runs_to]}"
+        end
+
       end
 
-      return Struct.new(:status, :message).new(:ok, 'Created VSTP schedule for train ' + vstp[:basic_schedule][:train_uid] + ' running from ' + vstp[:basic_schedule][:runs_from] + ' to ' + vstp[:basic_schedule][:runs_to]  + ' as ' + vstp[:basic_schedule][:train_identity])
+      return Struct.new(:status, :message).new(status, message)
 
     end
 
