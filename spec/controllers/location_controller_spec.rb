@@ -198,6 +198,19 @@ describe LocationController do
   end
 
 
+  # VSTP trains
+
+  it "should display VSTP-originated trains in a location line-up" do
+    vstp_data = File.open('test/fixtures/tdnet/vstp_four_oaks_to_redditch.xml').read
+    vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
+    vstp_message.status.should eql(:ok)
+    vstp_message.message.should include('Created VSTP schedule for train 20263 running from 20111114 to 20111114 as 2T19')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/vstp_fok_to_rdc.msn')
+    get :index, :location => 'FOK', :year => '2011', :month => '11', :day => '14', :time => '0900'
+    response.code.should eql('200')
+  end
+
+
   # Location search
 
   it "should redirect to the main page when no search string is passed" do

@@ -530,10 +530,11 @@ module TSDBExplorer
                   location[bs_attr] = doc_child_4.attributes[cif_attr].text.strip
                 end
 
+
                 # If the public arrival or public departure times are '00', get rid of them
 
-                location[:public_arrival] = nil if location[:public_arrival] == "00" || location[:public_arrival].blank?
-                location[:public_departure] = nil if location[:public_departure] == "00" || location[:public_departure].blank?
+                location[:public_arrival] = nil if location[:public_arrival] == "00" || location[:public_arrival].strip.blank?
+                location[:public_departure] = nil if location[:public_departure] == "00" || location[:public_departure].strip.blank?
 
 
                 # If any of the allowances are blank, get rid of them
@@ -541,6 +542,19 @@ module TSDBExplorer
                 location[:engineering_allowance] = nil if location[:engineering_allowance] == ""
                 location[:pathing_allowance] = nil if location[:pathing_allowance] == ""
                 location[:performance_allowance] = nil if location[:performance_allowance] == ""
+
+
+                # Calculate the number of seconds since midnight for arrival, pass and departure times
+
+                [ :arrival, :pass, :departure ].each { |k| location[k].strip! }
+                [ :arrival, :pass, :departure ].each { |k| location[k] = nil if location[k].blank? }
+
+                location[:arrival_secs] = TSDBExplorer::time_to_seconds(location[:arrival]) unless location[:arrival].nil?
+                location[:pass_secs] = TSDBExplorer::time_to_seconds(location[:pass]) unless location[:pass].nil?
+                location[:departure_secs] = TSDBExplorer::time_to_seconds(location[:departure]) unless location[:departure].nil?
+
+                location[:public_arrival_secs] = TSDBExplorer::time_to_seconds(location[:public_arrival]) unless location[:public_arrival].nil?
+                location[:public_departure_secs] = TSDBExplorer::time_to_seconds(location[:public_departure]) unless location[:public_departure].nil?
 
 
                 # Split the CIF activities
