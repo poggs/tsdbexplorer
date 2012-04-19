@@ -25,7 +25,11 @@ class SessionController < ApplicationController
 
   def reset
     reset_session
-    render :text => 'Reset'
+    if request.referer.blank?
+      render :text => nil
+    else
+      redirect_to :back
+    end
   end
 
   def set
@@ -52,9 +56,8 @@ class SessionController < ApplicationController
     else
       session[params[:key]] = true
     end
-    logger.debug "Key #{params[:key]} is now #{session[params[:key]]}"
     if request.referer.blank?
-      render :text => advanced_mode?
+      render :text => nil
     else
       redirect_to :back
     end
