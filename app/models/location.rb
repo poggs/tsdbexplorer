@@ -107,7 +107,7 @@ class Location < ActiveRecord::Base
 
       # Return all schedules which run today and call on this day within the window
 
-      q1 = schedule_base.runs_on(from.to_s(:yyyymmdd)).where('locations.next_day_departure = false AND locations.next_day_arrival = false').includes(:basic_schedule)
+      q1 = schedule_base.runs_on(from.to_s(:yyyymmdd)).where('locations.next_day_departure = false OR locations.next_day_arrival = false').includes(:basic_schedule)
 
       if show_passing == true
         q1 = q1.passes_between(from.to_s(:hhmm), to.to_s(:hhmm))
@@ -121,7 +121,7 @@ class Location < ActiveRecord::Base
 
       # Return all schedules which ran yesterday and call on the next day within the window (i.e. over midnight)
 
-      q2 = schedule_base.runs_on((from - 1.day).to_s(:yyyymmdd)).where('locations.next_day_departure = true AND locations.next_day_arrival = true').includes(:basic_schedule)
+      q2 = schedule_base.runs_on((from - 1.day).to_s(:yyyymmdd)).where('locations.next_day_departure = true OR locations.next_day_arrival = true').includes(:basic_schedule)
 
       if show_passing == true
         q2 = q2.passes_between(from.to_s(:hhmm), to.to_s(:hhmm))
@@ -142,7 +142,7 @@ class Location < ActiveRecord::Base
 
       # Return all schedules which run on the day before midnight and call up until midnight
 
-      q1 = schedule_base.runs_on(from.to_s(:yyyymmdd)).where('locations.next_day_departure = false AND locations.next_day_arrival = false').includes(:basic_schedule)
+      q1 = schedule_base.runs_on(from.to_s(:yyyymmdd)).where('locations.next_day_departure = false OR locations.next_day_arrival = false').includes(:basic_schedule)
 
       if show_passing == true
         q1 = q1.passes_between(from.to_s(:hhmm), "2359H")
@@ -157,7 +157,7 @@ class Location < ActiveRecord::Base
 
       # Return all schedules which run on the day before midnight and call after midnight
 
-      q2 = schedule_base.runs_on((from - 1.day).to_s(:yyyymmdd)).where('locations.next_day_departure = true AND locations.next_day_arrival = true').includes(:basic_schedule)
+      q2 = schedule_base.runs_on((from - 1.day).to_s(:yyyymmdd)).where('locations.next_day_departure = true OR locations.next_day_arrival = true').includes(:basic_schedule)
 
       if show_passing == true
         q2 = q2.passes_between('0000', to.to_s(:hhmm))

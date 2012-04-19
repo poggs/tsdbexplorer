@@ -1,0 +1,134 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIPENZNCE00352600APENZANCE                  857343442PNZPENZANCE                
+TILNGROCK04352674CLONG ROCK                 85730   0                           
+TISTERTH 02353700MST ERTH                   85721   0SERST ERTH                 
+TICBORNE 00350400VCAMBORNE                  85622   0CBNCAMBORNE                
+TIREDRUTH00353000AREDRUTH                   856013472REDREDRUTH                 
+TITRURO  00354000HTRURO                     855012984TRUTRURO                   
+TIPROBUS 00354069LPROBUS                    85440   0                           
+TIBGLWJN 08350300RBURNGULLOW JN             85401   0                           
+TISTAUSTL02353400TST AUSTELL                853033490SAUST AUSTELL              
+TIPARR   00352400NPAR                       85111   0PARPAR                     
+TILSTWTHL00351700ULOSTWITHIEL               85101   0LOSLOSTWITHIEL             
+TIBODMNPW16350100HBODMIN PARKWAY            850113071BODBODMIN PARKWAY          
+TILRGN   00350164GLARGIN                    84431   0                           
+TISTPNCVE50350159WST PINNOCK VIADUCT EAST   84435   0                           
+TILISKARD00357300TLISKEARD                  84411   0LSKLISKEARD                
+TISTGRMNS02358600ZST GERMANS                84397   0SGMST GERMANS              
+TISASH   00358700BSALTASH                   84301   0STSSALTASH                 
+TISTBDXJN16359059TST BUDEAUX JN.            84293   0                           
+TIPLYMTH 00358000MPLYMOUTH                  841392951PLYPLYMOUTH                
+TILIPSONJ32357759YLIPSON JUNCTION           84135   0                           
+TIHEMERDN00359866XHEMERDON                  84075   0                           
+TIIVYBDGE00355500QIVYBRIDGE                 84067   0IVYIVYBRIDGE               
+TIAISHXO 00355550WAISH EMERGENCY CROSSOVER  84060   0                           
+TITOTNES 00355800WTOTNES                    83702   0TOTTOTNES                  
+TIDAINTNT32355859JDAINTON TUNNEL            83699   0                           
+TINABTWJ 00342607ZNEWTON ABBOT WEST JUNCTION83625   0                           
+TINABT   01342600MNEWTON ABBOT              836243416NTANEWTON ABBOT            
+TITEINMTH00343000MTEIGNMOUTH                83607   0TGMTEIGNMOUTH              
+TIDAWLISH00340800WDAWLISH                   83605   0DWLDAWLISH                 
+TIDAWLSHW32340900NDAWLISH WARREN            83603   0DWWDAWLISH WARREN          
+TIEXETRSD48341000UEXETER ST DAVIDS          834212854EXDEXETER ST DAVIDS        
+TICWLYBDG08341663DCOWLEY BRIDGE JN          83398   0                           
+TITIVILP 08347200ETIVERTON LOOP             83109   0                           
+TITIVIPW 08347400XTIVERTON PARKWAY          83038   0TVPTIVERTON PARKWAY        
+TITIVITNL00347430AWHITEBALL                 83028   0                           
+TINTNFTZN04346500MNORTON FITZWARREN         83011   0                           
+TITAUNTON00347100VTAUNTON                   830092980TAUTAUNTON                 
+TICOGLOAD00347198LCOGLOAD JN                83010   0                           
+TIBRDGWTR00344900YBRIDGWATER                81924   0BWTBRIDGWATER              
+TIUPHILLJ32339160TUPHILL JUNCTION           81913   0                           
+TIWORLEJ 16339159DWORLE JN                  81907   0                           
+TIPARSNST16324600EPARSON STREET             81819   0PSNPARSON STREET           
+TIBRSTLWJ48320755BBRISTOL WEST JN.          81812   0                           
+TIBRSTLTM48323100YBRISTOL TEMPLE MEADS      817002821BRIBRISTOL TEMPLE M        
+TIBRSTLEJ48322460UBRISTOL EAST JN           81690   0                           
+TIDRDAYSJ34322058GDR DAY'S JN               81431   0                           
+TISTPLNAR00325001FNARROWAYS HILL JN         81401   0                           
+TIFILTNEW00323500PFILTON ABBEY WOOD         81305   0FITFILTON ABBEYWOOD        
+TIBRSTPWY08323000NBRISTOL PARKWAY           81109   0BPWBRISTOL PARKWAY         
+TIWSTLGHJ32338013ZWESTERLEIGH JN            81107   0                           
+TIHLVNGTN00321000VHULLAVINGTON              81001   0                           
+TIWTNBSTJ36333711RWOOTTON BASSETT JN        75242   0
+TISDON   00333300QSWINDON                   75012   0SWISWINDON WILTS           
+TIUFNGTN 00333600WUFFINGTON (OXFORDSHIRE)   74331   0                           
+TICHALLOW00303054KCHALLOW                   74329   0                           
+TIWANTRD 08302500JWANTAGE ROAD              74327   0                           
+TIFOXHALJ32303056MFOXHALL JN                74315   0XJF                        
+TIDIDCOTP32303000XDIDCOT PARKWAY            74313   0DIDDIDCOT PARKWAY          
+TIDIDCTEJ48303057NDIDCOT EAST JN            74320   0                           
+TIREDGWJN24316059BREADING WEST JN           74260   0                           
+TIRDNGSTN00314900WREADING                   742372957RDGREADING                 
+TITWYFORD00315500YTWYFORD                   74023   0TWYTWYFORD                 
+TIMDNHEAD00314700UMAIDENHEAD                74005   0MAIMAIDENHEAD              
+TISLOUGH 00317200RSLOUGH                    738222966SLOSLOUGH                  
+TIHTRWAJN24318620EHEATHROW AIRPORT JN       73775   0                           
+TISTHALL 00318700DSOUTHALL                  73663   0STLSOUTHALL                
+TIACTONW 16300058QACTON WEST                73251   0                           
+TILDBRKJ 48309400HLADBROKE GROVE            73111   0                           
+TIPADTON 00308700PLONDON PADDINGTON         730002910PADLONDON PADDINGTN        
+BSNC210371204171204180110000 PXZ1A401218125396002 D  350 075      SSR C        O
+BX         GWY                                                                  
+LOPENZNCE 2145 21454         TB                                                 
+LILNGROCK           2149 00000000         X                                     
+LISTERTH  2153 2155      215321552        T                                     
+LICBORNE  2205 2207      22052207         T                                     
+LIREDRUTH 2212H2214H     22132214         T                                     
+LITRURO   2225 2227      222522273        T                                     
+LIPROBUS            2233H00000000                                               
+LIBGLWJN            2240H00000000                                               
+LISTAUSTL 2243 2245      22432245         T           1                         
+LIPARR    2252 2254      22522254         T                                     
+LILSTWTHL           2300 000000001                                              
+LIBODMNPW 2304 2306      23042306         T                                     
+LILRGN              2312 00000000                                               
+LISTPNCVE           2313H00000000                                               
+LILISKARD 2319 2321      231923212        T                                     
+LISTGRMNS           2330H000000002                    1                         
+LISASH              2337 000000002                                              
+LISTBDXJN           2341 00000000                     1                         
+LIPLYMTH  2347 0003H     234500037        T                                     
+LILIPSONJ           0006H00000000                     10                        
+LIHEMERDN           0022 00000000                     5                         
+LIIVYBDGE           0032 000000002                    5                         
+LIAISHXO            0041H00000000                     1                         
+LITOTNES  0050H0052H     005100522        T                                     
+LIDAINTNT           0059H00000000                                               
+LINABTWJ            0103 00000000                                               
+LINABT    0104 0106      010401063        T                                     
+LITEINMTH           0112 000000002                                              
+LIDAWLISH           0115 000000002                                              
+LIDAWLSHW           0116H00000000                     1                         
+LIEXETRSD 0127H0133H     012801331        T                                     
+LICWLYBDG           0136H00000000                                               
+LITIVILP            0147H00000000                                               
+LITIVIPW            0149 000000002                                              
+LITIVITNL           0152 00000000                     1                         
+LINTNFTZN           0200H00000000                                               
+LITAUNTON 0202H0204H     020202025        T                                     
+LICOGLOAD           0209H00000000                                               
+LIATHLNEY           0212H00000000                                               
+LISOMEGF            0219H00000000                                               
+LICCARY             0228 000000001                                              
+LIESTSOMJ           0235H00000000                                               
+LIBLBGJN            0239 00000000                                               
+LICLNKRDJ           0240H00000000                     1                         
+LIFRWDJN            0244 00000000                                               
+LIWSTBRYW 0247 0307      000000003        OP                                    
+LIHWRDJN            0309H00000000                                               
+LILAVNGTN           0315 00000000                                               
+LIWBORO             0323 00000000                                               
+LIBEDYN             0333H00000000                     1                         
+LINEWBURY           0346 00000000                     2                         
+LISCOTEJN           0401 00000000                                               
+LIRDNGSTN 0405 0423      040000008  ML    D                                     
+LITWYFORD           0430 000000002                                              
+LIMDNHEAD           0437H000000002  ML                1                         
+LISLOUGH            0445 000000003  ML                   H                      
+LIHTRWAJN           0453 00000000                     1    H                    
+LISTHALL            0456 00000000                     1 13 H                    
+LIACTONW            0514 00000000                     1                         
+LILDBRKJ            0518 00000000   ML                                          
+LTPADTON  0521 05251     TF
+ZZ

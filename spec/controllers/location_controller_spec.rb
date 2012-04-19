@@ -150,6 +150,13 @@ describe LocationController do
     response.body.should =~ /C21628/
   end
 
+  it "should show trains which arrive before midnight and depart after midnight when the time window spans midnight" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_issue_98.cif')
+    session['advanced'] = true
+    get :index, :location => 'PLYMTH', :year => '2012', :month => '04', :day => '17', :time => '2359'
+    response.body.should =~ /C21037/
+  end
+
   it "should display an error if passed an incorrectly formatted date" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     get :index, :location => 'BLY', :year => 'FOO', :month => 'BAR', :day => 'BAZ'
