@@ -1,0 +1,12 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TIHNLYOT 24314600QHENLEY-ON-THAMES          74029   0HOTHENLEY ON THAMES        
+TISHPLAKE00315000QSHIPLAKE                  74027   0SHISHIPLAKE                
+TIWARGRAV00315800KWARGRAVE                  74028   0WGVWARGRAVE                
+TITWYFORD00315500YTWYFORD                   74023   0TWYTWYFORD                 
+BSNC218791204231204261111000 POO2H6568  125511007 DMUT   090D     B            O
+BX         GWY                                                                  
+LOHNLYOT  2352 2352          TB                                                 
+LISHPLAKE 2356 2356H     23562356         T                                     
+LIWARGRAV 2359 2359H     23592359         T                                     
+LTTWYFORD 0004 00045     TF                                                     
+ZZ

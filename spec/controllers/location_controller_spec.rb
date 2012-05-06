@@ -150,6 +150,14 @@ describe LocationController do
     response.body.should =~ /C21628/
   end
 
+  it "should display a train which started before midnight and terminates after midnight" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_issue_97.cif')
+    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/bug_issue_97.msn')
+    get :index, :location => 'TWY', :year => '2012', :month => '04', :day => '26', :time => '2359'
+    response.body.should =~ /C21879/
+  end
+
+
   it "should show trains which arrive before midnight and depart after midnight when the time window spans midnight" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_issue_98.cif')
     session['advanced'] = true

@@ -188,7 +188,9 @@ class Location < ActiveRecord::Base
 
     queries.keys.each do |q|
       results[q.midnight] = Array.new unless results.has_key? q.midnight
-      results[q.midnight] = results[q.midnight] + queries[q].first
+      queries[q].each do |e|
+        results[q.midnight] = results[q.midnight] + e
+      end
     end
 
     return results
