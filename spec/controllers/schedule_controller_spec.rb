@@ -281,6 +281,13 @@ describe ScheduleController do
     response.body.should =~ /Clarbeston Road.+R/
   end
 
+  it "should highlight where the train stops as required (R) in simple mode" do
+    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/milford_to_cardiff.cif')
+    get :schedule_by_uid_and_run_date, :uid => 'C36001', :year => '2011', :month => '12', :day => '12'
+    response.body.should =~ /Clarbeston Road.+R/
+  end
+
+
   it "should highlight where a stop is for operational purposes (OP)" do
     session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_op.cif')

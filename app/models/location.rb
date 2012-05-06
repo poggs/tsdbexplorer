@@ -202,7 +202,7 @@ class Location < ActiveRecord::Base
   # set-down points
 
   def is_public?
-    [:activity_tb, :activity_tf, :activity_t, :activity_d, :activity_u].each do |a|
+    [:activity_tb, :activity_tf, :activity_t, :activity_d, :activity_u, :activity_r].each do |a|
       return true if self.send(a) == true
     end
     return false

@@ -10,7 +10,7 @@
  <% @schedule.locations.each do |l| %>
   <% if l.is_public? %>
   <tr>
-   <td style="text-align: left;"><%= tidy_text(decode_tiploc(l)) %></td>
+   <td style="text-align: left;"><%= tidy_text(decode_tiploc(l)) %>&nbsp;<%= raw format_activities(l) %></td>
    <td><%=raw l.platform || "&nbsp;" %></td>
    <td><%= l.public_arrival %></td>
    <td><%= l.public_departure %></td>
