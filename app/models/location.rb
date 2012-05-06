@@ -171,7 +171,7 @@ class Location < ActiveRecord::Base
 
       # Return all schedules which run on the day after midnight and call between midnight and the end of the time window
 
-      q3 = schedule_base.runs_on(to.to_s(:yyyymmdd)).calls_between('0000', to.to_s(:hhmm)).where('locations.next_day_departure = false AND locations.next_day_arrival = false').includes(:basic_schedule)
+      q3 = schedule_base.runs_on(to.to_s(:yyyymmdd)).where('locations.next_day_departure = false AND locations.next_day_arrival = false').includes(:basic_schedule)
 
       if show_passing == true
         q3 = q3.passes_between('0000', to.to_s(:hhmm))
