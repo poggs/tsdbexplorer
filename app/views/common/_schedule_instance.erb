@@ -1,6 +1,6 @@
 <div id="service_detail">
   <div id="mode"><%= mode_icon_for(@schedule.status) %></div>
-  <div id="headline"><%= time_only(@schedule.origin.public_departure) || @schedule.origin.departure %> <%= tidy_text(decode_tiploc(@schedule.origin)) %> to <%= tidy_text(decode_tiploc(@schedule.terminate)) %></div>
+  <div id="headline"><%= time_only(@schedule.origin.public_departure) || @schedule.origin.departure %> <%= decode_tiploc(@schedule.origin) %> to <%= decode_tiploc(@schedule.terminate) %></div>
   <% unless @schedule.atoc_code == 'ZZ' %>
    <div id="operator"><%= display_toc(@schedule.atoc_code) %></div>
   <% end %>
@@ -14,7 +14,7 @@
     <% if @schedule.departed_origin? %>
      <p>Showing actual running data from <%= @schedule.runs_on %></p>
     <% else %>
-     <p>Real-time information will be available once the train has left <%= tidy_text(decode_tiploc(@schedule.origin)) %>.</p>
+     <p>Real-time information will be available once the train has left <%= decode_tiploc(@schedule.origin) %>.</p>
     <% end %>
 
     <% if @schedule.cancelled? %>

@@ -3,7 +3,7 @@
  <% if advanced_mode? %>
 
   <tr>
-   <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>
+   <td><%= decode_tiploc(schedule_point) %></td>
    <td style="text-align: center;"><%= schedule_point.platform %></td>
    <td style="text-align: center;"><%= schedule_point.arrival %></td>
    <td style="text-align: center;"><%= schedule_point.public_arrival %></td>
@@ -16,7 +16,7 @@
 
  <% elsif schedule_point.is_public? %>
   <tr>
-   <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>
+   <td><%= decode_tiploc(schedule_point) %></td>
    <td style="text-align: center;"><%= schedule_point.platform %></td>
    <td style="text-align: center;"><%= schedule_point.public_arrival %></td>
    <td style="text-align: center;"><%= schedule_point.public_departure %></td>
@@ -29,7 +29,7 @@
  <% if advanced_mode? %>
 
   <tr>
-   <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>
+   <td><%= decode_tiploc(schedule_point) %></td>
    <td style="text-align: center;"><%= schedule_point.platform %></td>
    <td style="text-align: center;"><%= schedule_point.actual_platform %></td>
    <td style="text-align: center;"><%= time_only(schedule_point.arrival) %></td>
@@ -69,7 +69,7 @@
   <% if schedule_point.is_public? %>
 
    <tr>
-    <td><%= tidy_text(decode_tiploc(schedule_point)) %></td>
+    <td><%= decode_tiploc(schedule_point) %></td>
     <td style="text-align: center;"><%= schedule_point.platform %></td>
     <td style="text-align: center;">
      <% unless schedule_point.activity_tb == true || schedule_point.activity_u == true %>

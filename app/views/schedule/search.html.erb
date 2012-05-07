@@ -30,7 +30,7 @@
        <% end %>
       </td>
       <td>
-       <strong><%= raw format_location_time(s.origin, :departure) %> <%= tidy_text(decode_tiploc(s.origin)) %> to <%= tidy_text(decode_tiploc(s.terminate)) %></strong>
+       <strong><%= raw format_location_time(s.origin, :departure) %> <%= decode_tiploc(s.origin) %> to <%= decode_tiploc(s.terminate) %></strong>
        <br />
        Runs <%= run_details(s) %>
       </td>

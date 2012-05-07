@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120323163313) do
+ActiveRecord::Schema.define(:version => 20120507094627) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -307,8 +307,21 @@ ActiveRecord::Schema.define(:version => 20120323163313) do
   add_index "locations", ["arrival"], :name => "index_locations_on_arrival"
   add_index "locations", ["basic_schedule_uuid"], :name => "index_locations_on_basic_schedule_uuid"
   add_index "locations", ["departure"], :name => "index_locations_on_departure"
+  add_index "locations", ["location_type"], :name => "index_locations_on_location_type"
   add_index "locations", ["pass"], :name => "index_locations_on_pass"
   add_index "locations", ["tiploc_code"], :name => "index_locations_on_tiploc_code"
+
+  create_table "points", :force => true do |t|
+    t.text     "full_name"
+    t.text     "short_name"
+    t.integer  "stanox"
+    t.string   "stanme",     :limit => 9
+    t.string   "tiploc",     :limit => 7
+    t.float    "latitude"
+    t.float    "longitude"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
 
   create_table "queued_messages", :force => true do |t|
     t.string   "queue_name"

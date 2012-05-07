@@ -26,7 +26,7 @@
 <% if advanced_mode? %>
      <td><%= s.train_identity %></td>
 <% end %>
-     <td><%= s.origin.departure %> <%= tidy_text(decode_tiploc(s.origin)) %> to <%= tidy_text(decode_tiploc(s.terminate)) %></td>
+     <td><%= s.origin.departure %> <%= decode_tiploc(s.origin) %> to <%= decode_tiploc(s.terminate) %></td>
 <% if advanced_mode? %>
      <td><%= s.power_type %><%= s.speed %></td>
 <% end %>

@@ -13,7 +13,7 @@
 <tbody>
  <% @schedule.locations.each do |l| %>
   <%= content_tag('tr', '', { :style => l.pass.nil? ? nil : 'background: #eee;' }) do %>
-   <td><%= tidy_text(decode_tiploc(l)) %><% if advanced_mode? %>&nbsp;<%= raw format_activities(l) %><% end %></td>
+   <td><%= decode_tiploc(l) %><% if advanced_mode? %>&nbsp;<%= raw format_activities(l) %><% end %></td>
    <td><%= l.path %></td>
    <td><%= l.platform %></td>
    <td><%= l.line %></td>

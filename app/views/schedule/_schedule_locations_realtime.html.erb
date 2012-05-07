@@ -2,7 +2,7 @@
  <% if @as_run.departed_origin? %>
   Real-time information is available for this train, and is shown below
  <% else %>
-  Real-time information will be shown for this train after it has departed <%= tidy_text(decode_tiploc(@as_run.origin)) %>
+  Real-time information will be shown for this train after it has departed <%= decode_tiploc(@as_run.origin) %>
 <% end %>
 </div>
 
@@ -27,7 +27,7 @@
  <tbody>
   <% @as_run.locations.each do |l| %>
    <tr>
-    <td><%= tidy_text(decode_tiploc(l)) %></td>
+    <td><%= decode_tiploc(l) %></td>
     <td><%= l.platform %></td>
     <td><%= l.line %></td>
     <td><%= l.path %></td>
@@ -55,7 +55,7 @@
   <% @as_run.locations.each do |l| %>
    <% if l.is_public? %>
     <tr>
-     <td><%= tidy_text(decode_tiploc(l)) %></td>
+     <td><%= decode_tiploc(l) %></td>
      <td style="text-align: center;"><%=raw l.platform || "&nbsp;" %></td>
      <td><%= format_time(l, 'arrival', :public) %></td>
      <td><%= format_time(l, 'departure', :public) %></td>

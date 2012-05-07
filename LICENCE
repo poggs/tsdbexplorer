@@ -1,0 +1,19 @@
+This code includes additional data licenced as follows:
+
+
+Location data
+-------------
+
+Filename:
+  data/static/locations.csv
+
+Author:
+  Tom Cairns of www.railmiles.org
+
+Licence:
+  CC BY-SA 3.0
+
+Comments:
+  Tom has added latitude and longitude data for all known STANOXes.  This
+  data is under continual development, and will be kept up-to-date for use
+  with TSDBExplorer.

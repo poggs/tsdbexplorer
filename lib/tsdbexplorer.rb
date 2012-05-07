@@ -22,6 +22,7 @@ require 'tsdbexplorer/cif.rb'
 require 'tsdbexplorer/geography.rb'
 require 'tsdbexplorer/realtime.rb'
 require 'tsdbexplorer/rsp.rb'
+require 'tsdbexplorer/import.rb'
 
 module TSDBExplorer
 

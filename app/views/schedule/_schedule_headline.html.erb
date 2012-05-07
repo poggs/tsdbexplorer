@@ -4,7 +4,7 @@
   <% if mode == 'schedule' %>
    <%= schedule.data_source %> Schedule <%= schedule.train_uid %>
   <% else %>
-   <% if advanced_mode? %><span style="train_identity"><%= @schedule.train_identity %></span><% end %> <%= raw time_only(schedule.origin.public_departure) || tidy_wtt_time(schedule.origin.departure) %> <%= tidy_text(decode_tiploc(schedule.origin)) %> to <%= tidy_text(decode_tiploc(schedule.terminate)) %>
+   <% if advanced_mode? %><span style="train_identity"><%= @schedule.train_identity %></span><% end %> <%= raw time_only(schedule.origin.public_departure) || tidy_wtt_time(schedule.origin.departure) %> <%= decode_tiploc(schedule.origin) %> to <%= decode_tiploc(schedule.terminate) %>
   <% end %>
  </div>
  <div class="subtitle"><%= display_operator(schedule.atoc_code) %></div>

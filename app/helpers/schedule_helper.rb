@@ -437,10 +437,10 @@ module ScheduleHelper
       tiploc = loc.tiploc_code
     else
       if type == :from
-        text = "<strong>" + tidy_text(decode_tiploc(loc.basic_schedule.origin)) + "</strong>"
+        text = "<strong>" + decode_tiploc(loc.basic_schedule.origin) + "</strong>"
         tiploc = loc.basic_schedule.origin.tiploc_code
       else
-        text = "<strong>" + tidy_text(decode_tiploc(loc.basic_schedule.terminate)) + "</strong>"
+        text = "<strong>" + decode_tiploc(loc.basic_schedule.terminate) + "</strong>"
         tiploc = loc.basic_schedule.terminate.tiploc_code
       end
     end

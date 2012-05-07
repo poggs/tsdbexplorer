@@ -66,7 +66,7 @@ describe ApplicationHelper do
   it "should return the description for a Location object referencing a known TIPLOC" do
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
     location = Location.where(:tiploc_code => 'EUSTON').first
-    decode_tiploc(location).should eql('LONDON EUSTON')
+    decode_tiploc(location).should eql('London Euston')
   end
 
   it "should return the Tiploc code for a Location object referring to an unknown TIPLOC" do
