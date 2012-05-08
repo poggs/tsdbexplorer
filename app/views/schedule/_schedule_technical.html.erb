@@ -13,7 +13,7 @@
      <th class="span3">Service code</th><td><%= @schedule.service_code %></td>
     </tr>
     <tr>
-     <th class="span3">Power type</th><td><%= translate_tload(@schedule.power_type, @schedule.timing_load) %></td>
+     <th class="span3">Timings based on</th><td><%= translate_tload(@schedule.power_type, @schedule.timing_load) %></td>
     </tr>
     <tr>
      <th class="span3">Speed</th><td><%= @schedule.speed.to_i %>mph</td>
