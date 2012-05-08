@@ -1,0 +1,49 @@
+<div class="page-header">
+ <h1>Locations</h1>
+</div>
+
+<div class="row-fluid">
+
+ <%= render :partial => 'common/pills' %>
+
+ <div class="span10">
+  <h2>Search for a location</h2>
+
+  <p>Enter a TIPLOC, STANOX or a location description to find matching locations.  Up to 50 matches will be returned.</p>
+
+  <form class="well form-inline">
+   <label>Search for</label>
+   <input type="text" class="span3" name="search" value="<%= params[:search] %>" placeholder="Enter a TIPLOC, STANOX or description" />
+   <input type="submit" class="btn btn-primary" value="Search" />
+  </form>
+
+  <% if @matches %>
+   <% if @matches.count == 0 %>
+    <div class="alert alert-error">Sorry, no locations matched <strong><%= params[:search] %></strong></div>
+   <% else %>
+    <table class="table table-condensed">
+     <thead>
+      <tr>
+       <th class="span6">Location name</th>
+       <th class="span2">TIPLOC</th>
+       <th class="span2">STANME</th>
+       <th class="span2">STANOX</th>
+      </tr>
+     </thead>
+     <tbody>
+      <% @matches.each do |m| %>
+      <tr>
+       <td><%= m.full_name %></td>
+       <td><%= m.tiploc %></td>
+       <td><%= m.stanme %></td>
+       <td><%= m.stanox %></td>
+      </tr>
+      <% end %>
+     </tbody>
+    </table>
+   <% end %>
+  <% end %>
+
+ </div>
+
+</div>

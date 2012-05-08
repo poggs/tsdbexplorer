@@ -163,10 +163,38 @@ class AdminController < ApplicationController
   end
 
 
+  # Location database
+
+  def locations
+
+    @pills = pills
+
+    if params[:search]
+
+      # Try to convert the search string to an integer - if it's zero, it isn't an integer
+
+      if params[:search].to_i == 0
+
+        search_string = "%#{params[:search]}%"
+        @matches = Point.where("full_name LIKE ? OR short_name LIKE ? OR stanme LIKE ? OR tiploc LIKE ?", search_string, search_string, search_string, search_string)
+
+      else
+
+        @matches = Point.where(:stanox => params[:search])
+
+      end
+
+      @matches = @matches.limit(50)
+
+    end
+
+  end
+
+
   private
 
   def pills
-    [ [ 'System' , [ 'Overview', 'Timetable', 'Import', 'Real-Time', 'Memory' ] ], [ 'Authentication', [ 'Manage users' ] ] ]
+    [ [ 'System' , [ 'Overview', 'Timetable', 'Import', 'Real-Time', 'Memory' ] ], [ 'Data', [ 'Locations' ] ], [ 'Authentication', [ 'Manage users' ] ] ]
   end
 
 end
