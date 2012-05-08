@@ -76,7 +76,7 @@ class AdminController < ApplicationController
 
     @all_timetables = Hash.new
 
-    if ($CONFIG.has_key? 'DATA') && ($CONFIG['DATA'].has_key? 'path')
+    if ($CONFIG.has_key? 'DATA') && ($CONFIG['DATA'].has_key? 'path') && Dir.exist?(::Rails.root.join($CONFIG['DATA']['path']))
 
       tt_dir = Dir.open(::Rails.root.join($CONFIG['DATA']['path']))
 
