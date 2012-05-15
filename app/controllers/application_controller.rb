@@ -115,22 +115,15 @@ class ApplicationController < ActionController::Base
 
     tiplocs = nil
 
-    # Update the location database if it's empty
-
-    if $REDIS.keys('CRS:*').blank?
-      logger.warn "Location cache empty - rebuilding"
-      TSDBExplorer::Realtime::cache_location_database
-    end
-
     if loc.length == 3
 
       # If a three-character location has been entered, try to find an exact
       # match, and if not, redirect to the search page (unless we're in
       # advanced mode)
 
-      tiplocs = $REDIS.lrange('CRS:' + loc.upcase + ':TIPLOCS', 0, -1)
+      tiplocs = $REDIS.smembers("CRS:#{loc.upcase}")
       return nil if tiplocs.blank? && !advanced_mode?
-      location_name = $REDIS.hget('CRS:' + loc.upcase, 'description')
+      location_name = $REDIS.hget("TIPLOC:#{loc.upcase}", "short_description")
 
     elsif advanced_mode?
 
@@ -152,11 +145,6 @@ class ApplicationController < ActionController::Base
       return nil
 
     end
-
-    # If we have an array of TIPLOCs, remove duplicates.
-    # TODO: Always return an Array of TIPLOCs
-
-    tiplocs.uniq! if tiplocs.class == Array
 
     return { :locations => tiplocs, :name => location_name }
 

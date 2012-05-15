@@ -62,9 +62,7 @@ class MainController < ApplicationController
       @components = Array.new
 
       @data_files.each do |f|
-        if f.match(/\.MSN/)
-          @import_files.push({ :filename => f, :description => 'Master Station Names File (MSNF)', :provider => 'ATOC', :data_type => :rsp_msnf })
-        elsif f.match(/\.MCA/)
+        if f.match(/\.MCA/)
           @import_files.push({ :filename => f, :description => 'CIF-formatted timetable data', :provider => 'ATOC', :data_type => :rsp_cif })
         elsif f.match(/\.CIF/)
           @import_files.push({ :filename => f, :description => 'CIF-formatted timetable data', :provider => 'Network Rail', :data_type => :nr_cif })

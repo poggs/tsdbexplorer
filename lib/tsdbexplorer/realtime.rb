@@ -35,40 +35,6 @@ module TSDBExplorer
     end
 
 
-    # Cache the location database in memory
-
-    def Realtime.cache_location_database
-
-      Tiploc.all.each do |l|
-        l.tps_description = '' if l.tps_description.blank?
-        l.crs_code = '' if l.crs_code.blank?
-        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'description', l.tps_description)
-        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'stanox', l.stanox)
-        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'crs_code', l.crs_code)
-        $REDIS.hset('LOCATION:' + l.tps_description, 'tiploc', l.tiploc_code)
-        $REDIS.hset('LOCATION:' + l.tps_description, 'crs_code', l.crs_code)
-        $REDIS.hset('LOCATION:CIF:' + l.tps_description, 'tiploc', l.tiploc_code)
-        $REDIS.hset('LOCATION:CIF:' + l.tps_description, 'stanox', l.stanox)
-        $REDIS.hset('LOCATION:CIF:' + l.tps_description, 'crs_code', l.crs_code)
-      end
-
-      StationName.all.each do |l|
-        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'description', l.station_name) if l.cate_type != 9
-        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'tiploc', l.tiploc_code)
-        $REDIS.hset('TIPLOC:' + l.tiploc_code, 'crs_code', l.crs_code)
-        $REDIS.hset('LOCATION:' + l.station_name, 'description', l.station_name)
-        $REDIS.hset('LOCATION:' + l.station_name, 'tiploc', l.tiploc_code)
-        $REDIS.hset('LOCATION:' + l.station_name, 'crs_code', l.crs_code)
-        $REDIS.hset('LOCATION:MSNF:' + l.station_name, 'description', l.station_name)
-        $REDIS.hset('LOCATION:MSNF:' + l.station_name, 'tiploc', l.tiploc_code)
-        $REDIS.hset('LOCATION:MSNF:' + l.station_name, 'crs_code', l.crs_code)
-        $REDIS.rpush('CRS:' + l.crs_code + ':TIPLOCS', l.tiploc_code)
-        $REDIS.hset('CRS:' + l.crs_code, 'description', l.station_name) if l.cate_type != 9
-      end
-
-    end
-
-
     module Status
 
       def Status.timetable_feed

@@ -23,510 +23,337 @@ describe LocationController do
 
   render_views
 
-  before(:each) do
-    $REDIS.flushdb
+  context "search in simple mode when called as JSON" do
+
+    before do
+      TSDBExplorer::Import.locations("test/fixtures/static/wfj-test-location.csv")
+      TSDBExplorer::Import.crs_to_tiploc("test/fixtures/static/wfj-test-crs.csv")
+    end
+
+    it "should return an empty array when passed no search string" do
+      get :search, :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return an empty array when passed an empty query string" do
+      get :search, :term => '', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return an empty array when passed an 1-character query string" do
+      get :search, :term => 'W', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return an empty array when passed a 2-character query string" do
+      get 'search', :term => 'WF', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return a single CRS code when passed 3 characters matching a CRS code" do
+      get 'search', :term => 'WFJ', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WFJ', 'label' => 'Watford Junction [WFJ]', 'value' => 'WFJ' } ]
+      matches.should eql(data)
+    end
+
+    it "should return an empty array when passed 3 characters not matching a CRS code" do
+      get 'search', :term => 'EUS', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return a single match when passed more than three characters matching a location name" do
+      get 'search', :term => 'Watford Junc', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WFJ', 'label' => 'Watford Junction [WFJ]', 'value' => 'WFJ' } ]
+      matches.should =~ data
+    end
+
+    it "should return multiple matches when passed more than three characters matching multiple location names" do
+      get 'search', :term => 'Watford', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WFJ', 'label' => 'Watford Junction [WFJ]', 'value' => 'WFJ' }, { 'id' => 'WFN', 'label' => 'Watford North [WFN]', 'value' => 'WFN' }, { 'id' => 'WFH', 'label' => 'Watford High Street [WFH]', 'value' => 'WFH' } ]
+      matches.should =~ data
+    end
+
+    it "should return an empty array when passed more than 3 characters not matching a CRS code or location name" do
+      get 'search', :term => 'Euston', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should not match TIPLOCs" do
+      get 'search', :term => 'WATFDJ', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
   end
 
-  it "should redirect to the main page if passed no parameters" do
-    get :index
-    response.should redirect_to root_url
+  describe "search in advanced mode when called as JSON" do
+
+    before do
+      session['advanced'] = true
+      TSDBExplorer::Import.locations("test/fixtures/static/wfj-test-location.csv")
+      TSDBExplorer::Import.crs_to_tiploc("test/fixtures/static/wfj-test-crs.csv")
+    end
+
+    it "should return an empty array when passed no search string" do
+      get :search, :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return an empty array when passed an empty query string" do
+      get :search, :term => '', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return an empty array when passed an 1-character query string" do
+      get :search, :term => 'W', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return an empty array when passed a 2-character query string" do
+      get 'search', :term => 'WF', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return a single CRS code when passed 3 upper-case characters matching a CRS code" do
+      get 'search', :term => 'WFJ', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WFJ', 'label' => 'Watford Junction [WFJ]', 'value' => 'WFJ' } ]
+      matches.should eql(data)
+    end
+
+    it "should return a single CRS code when passed 3 lower-case characters matching a CRS code" do
+      get 'search', :term => 'wfj', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WFJ', 'label' => 'Watford Junction [WFJ]', 'value' => 'WFJ' } ]
+      matches.should eql(data)
+    end
+
+    it "should return a single CRS code when passed 3 mixed-case characters matching a CRS code" do
+      get 'search', :term => 'wFj', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WFJ', 'label' => 'Watford Junction [WFJ]', 'value' => 'WFJ' } ]
+      matches.should eql(data)
+    end
+
+    it "should return a single TIPLOC when passed characters matching a TIPLOC" do
+      get 'search', :term => 'WATFDJ', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WATFDJ', 'label' => 'Watford Junction [WATFDJ]', 'value' => 'WATFDJ' } ]
+      matches.should eql(data)
+    end
+
+    it "should return a single TIPLOC when passed mixed-case characters matching a TIPLOC" do
+      get 'search', :term => 'wAtFdJ', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WATFDJ', 'label' => 'Watford Junction [WATFDJ]', 'value' => 'WATFDJ' } ]
+      matches.should eql(data)
+    end
+
+    it "should return an empty array when passed 3 characters not matching a CRS code" do
+      get 'search', :term => 'EUS', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
+    it "should return all matches when passed more than three characters matching a location name and TIPLOC location name" do
+      get 'search', :term => 'Watford Junc', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WATFDJ', 'label' => 'Watford Junction [WATFDJ]', 'value' => 'WATFDJ' }, { 'id' => 'WFJ', 'label' => 'Watford Junction [WFJ]', 'value' => 'WFJ' } ]
+      matches.should =~ data
+    end
+
+    it "should return all matches when passed more than three mixed-case characters matching a location name and TIPLOC location name" do
+pending
+      get 'search', :term => 'wAtFoRd JuNc', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WATFDJ', 'label' => 'Watford Junction [WATFDJ]', 'value' => 'WATFDJ' }, { 'id' => 'WFJ', 'label' => 'Watford Junction [WFJ]', 'value' => 'WFJ' } ]
+      matches.should =~ data
+    end
+
+    it "should return multiple matches when passed more than three characters matching multiple location names" do
+      get 'search', :term => 'Watford', :format => :json
+      matches = JSON.parse(response.body)
+      data = [ { 'id' => 'WFJ', 'label' => 'Watford Junction [WFJ]', 'value' => 'WFJ'  }, { 'id' => 'WATFDJ', 'label' => 'Watford Junction [WATFDJ]', 'value' => 'WATFDJ' }, { 'id' => 'WFN', 'label' => 'Watford North [WFN]', 'value' => 'WFN' }, { 'id' => 'WATFDN', 'label' => 'Watford North [WATFDN]', 'value' => 'WATFDN' }, { 'id' => 'WFH', 'label' => 'Watford High Street [WFH]', 'value' => 'WFH' }, { 'id' => 'WATFDHS', 'label' => 'Watford High Street [WATFDHS]', 'value' => 'WATFDHS' } ]
+      matches.should =~ data
+    end
+
+    it "should return an empty array when passed more than 3 characters not matching a CRS code or location name" do
+      get 'search', :term => 'Euston', :format => :json
+      matches = JSON.parse(response.body)
+      matches.should eql(Array.new)
+    end
+
   end
 
-  it "should display services at a location now if given no date/time on the URL" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
-    get :index, :location => 'BLY'
-    response.code.should eql('200')
-    response.body.should =~ /Bletchley/
-  end
+  context "display services at a location in simple mode" do
 
-  it "should display services at a location when given a CRS code" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
-    get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '12', :time => '1800'
-    response.code.should eql('200')
-    response.body.should =~ /Bletchley/
-  end
+    before do
+      TSDBExplorer::Import.locations("test/fixtures/static/bly-test-location.csv")
+      TSDBExplorer::Import.crs_to_tiploc("test/fixtures/static/bly-test-crs.csv")
+    end
 
-  it "should display services at a location when given a CRS code in lower-case" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
-    get :index, :location => 'bly', :year => '2010', :month => '12', :day => '12', :time => '1800'
-    response.code.should eql('200')
-    response.body.should =~ /Bletchley/
-  end
+    # it "should redirect to the search page if passed an invalid CRS code" do
+    #   TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+    #   get :index, :location => 'ZZZ', :year => '2010', :month => '12', :day => '12', :time => '1800'
+    #   response.body.should redirect_to :controller => 'location', :action => 'search', :term => 'ZZZ'
+    # end
 
-  it "should display services at a location when given a TIPLOC code in advanced mode" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :index, :location => 'BLTCHLY', :year => '2010', :month => '12', :day => '12', :time => '1800'
-    response.code.should eql('200')
-    response.body.should =~ /Bletchley/
-  end
+    it "should display services at a location when given a CRS code, year, month, day and time" do
+      TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+      get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '12', :time => '1800'
+      response.code.should eql('200')
+      response.body.should =~ /Bletchley/
+    end
 
-  it "should display services at a location when given a TIPLOC code in lower-case" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :index, :location => 'bltchly', :year => '2010', :month => '12', :day => '12', :time => '1800'
-    response.code.should eql('200')
-    response.body.should =~ /Bletchley/
-  end
+    it "should display services at a location when given a CRS code in lower-case, year, month, day and time" do
+      TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+      get :index, :location => 'bly', :year => '2010', :month => '12', :day => '12', :time => '1800'
+      response.code.should eql('200')
+      response.body.should =~ /Bletchley/
+    end
 
-  it "should redirect to the search page if passed an invalid CRS code" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
-    get :index, :location => 'ZZZ', :year => '2010', :month => '12', :day => '12', :time => '1800'
-    response.body.should redirect_to :controller => 'location', :action => 'search', :term => 'ZZZ'
-  end
+    it "should display services at a location when given a CRS code, year, month and day" do
+      TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+      get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '12'
+      response.code.should eql('200')
+      response.body.should =~ /Bletchley/
+      response.body.should =~ /Sunday 12 December 2010/
+    end
 
-  it "should display an error if passed an invalid TIPLOC in advanced mode" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :index, :location => 'ZZZZZZZ', :year => '2010', :month => '12', :day => '12', :time => '1800'
-    response.body.should redirect_to :controller => 'location', :action => 'search', :term => 'ZZZZZZZ'
-  end
+    it "should display services at a location when given a lower-case CRS code, year, month and day" do
+      TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+      get :index, :location => 'bly', :year => '2010', :month => '12', :day => '12'
+      response.code.should eql('200')
+      response.body.should =~ /Bletchley/
+      response.body.should =~ /Sunday 12 December 2010/
+    end
 
-  it "should display services at a location given a CRS code and date" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
-    get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '12'
-    response.code.should eql('200')
-    response.body.should =~ /Bletchley/
-    response.body.should =~ /Sunday 12 December 2010/
-  end
+    it "should display services at a location now when given a CRS code" do
+      TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+      get :index, :location => 'BLY'
+      response.code.should eql('200')
+      response.body.should =~ /Bletchley/
+    end
 
-  it "should reject attempts display services at a location given a TIPLOC in normal mode" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
-    get :index, :location => 'BLTCHLY', :year => '2010', :month => '12', :day => '12'
-    response.code.should_not eql('200')
-    response.should redirect_to :action => 'search', :term => 'BLTCHLY'
-  end
+    it "should display services at a location now when given a lower-case CRS code" do
+      TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
+      get :index, :location => 'bly'
+      response.code.should eql('200')
+      response.body.should =~ /Bletchley/
+    end
 
-  it "should display services at a location given a TIPLOC code and date in advanced mode" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
-    get :index, :location => 'BLTCHLY', :year => '2010', :month => '12', :day => '12'
-    response.code.should eql('200')
-    response.body.should =~ /Bletchley/
-    response.body.should =~ /Sunday 12 December 2010/
-  end
-
-  it "should display services at a location where the time range includes the next day" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/train_over_midnight.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/train_over_midnight.msn')
-    get :index, :location => 'LST', :year => '2011', :month => '05', :day => '22', :time => '2359'
-    response.body.should =~ /Between/
-    response.body.should =~ /2329 on Sunday 22 May 2011/
-    response.body.should =~ /0059 on Monday 23 May 2011/
-    response.body.should =~ /L02600\/2011\/5\/22/
-  end
-
-  it "should display services at a location where the time range includes the previous day" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/train_over_midnight.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/train_over_midnight.msn')
-    get :index, :location => 'LST', :year => '2011', :month => '05', :day => '23', :time => '0001'
-    response.body.should =~ /Between/
-    response.body.should =~ /2331 on Sunday 22 May 2011/
-    response.body.should =~ /0101 on Monday 23 May 2011/
-    response.body.should =~ /L02600\/2011\/5\/22/
-  end
-
-  it "should only display trains which started the previous day when the time range includes the previous day" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/wfj_sunday_evening.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/wfj_sunday_evening.msn')
-    get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '05', :time => '0001'
-    response.body.should =~ /L94144\/2011\/12\/4/
-    response.body.should_not =~ /L94142/
-  end
-
-  it "should only display trains which started the previous day when the time range includes the previous day (part 2)" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bri_sunday_evening.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/bri_sunday_evening.msn')
-    get :index, :location => 'BRI', :year => '2012', :month => '02', :day => '13', :time => '0033'
-    response.body.should_not =~ /C21628/
-    get :index, :location => 'BRI', :year => '2012', :month => '02', :day => '14', :time => '0033'
-    response.body.should =~ /C21628/
-  end
-
-  it "should display a train which started before midnight and terminates after midnight" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_issue_97.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/bug_issue_97.msn')
-    get :index, :location => 'TWY', :year => '2012', :month => '04', :day => '26', :time => '2359'
-    response.body.should =~ /C21879/
-  end
-
-
-  it "should show trains which arrive before midnight and depart after midnight when the time window spans midnight" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_issue_98.cif')
-    session['advanced'] = true
-    get :index, :location => 'PLYMTH', :year => '2012', :month => '04', :day => '17', :time => '2359'
-    response.body.should =~ /C21037/
-  end
-
-  it "should display an error if passed an incorrectly formatted date" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :index, :location => 'BLY', :year => 'FOO', :month => 'BAR', :day => 'BAZ'
-    response.code.should eql('400')
-    response.body.should =~ /couldn't understand the date/
-  end
-
-  it "should display an error if passed an invalid date" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '32'
-    response.code.should eql('400')
-    response.body.should =~ /couldn't understand the date/
-  end
-
-  it "should display services at a location given a CRS code, date and time" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
-    get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '12', :time => '1300'
-    response.code.should eql('200')
-    response.body.should =~ /Bletchley/
-    response.body.should =~ /Sunday 12 December 2010/
-  end
-
-  it "should display services at a location given a TIPLOC code, date and time" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/record_bs_new_fullextract.msn')
-    get :index, :location => 'BLTCHLY', :year => '2010', :month => '12', :day => '12', :time => '1300'
-    response.code.should eql('200')
-    response.body.should =~ /Bletchley/
-    response.body.should =~ /Sunday 12 December 2010/
-  end
-
-  it "should display an error if passed an incorrectly formatted time" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '12', :time => 'FOOBAR'
-    response.code.should eql('400')
-    response.body.should =~ /couldn't understand the time/
-  end
-
-  it "should display an error if passed an invalid time" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/record_bs_new_fullextract.cif')
-    get :index, :location => 'BLY', :year => '2010', :month => '12', :day => '12', :time => '2405'
-    response.code.should eql('400')
-    response.body.should =~ /couldn't understand the time/
-  end
-
-
-  # VSTP trains
-
-  it "should display VSTP-originated trains in a location line-up" do
-    vstp_data = File.open('test/fixtures/tdnet/vstp_four_oaks_to_redditch.xml').read
-    vstp_message = TSDBExplorer::TDnet::process_vstp_message(vstp_data)
-    vstp_message.status.should eql(:ok)
-    vstp_message.message.should include('Created VSTP schedule for train 20263 running from 20111114 to 20111114 as 2T19')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/vstp_fok_to_rdc.msn')
-    get :index, :location => 'FOK', :year => '2011', :month => '11', :day => '14', :time => '0900'
-    response.code.should eql('200')
-  end
-
-
-  # Location search
-
-  it "should redirect to the main page when no search string is passed" do
-    get :search
-    response.body.should redirect_to(:controller => 'main', :action => 'index')
-  end
-
-  it "should return an error if an empty search string is passed" do
-    get :search, :term => ''
-    response.code.should eql('400')
-    response.body.should =~ /must specify a location/
-  end
-
-  it "should return an empty JSON array when no search string is passed and the format is JSON" do
-    get 'search', :format => :json
-    matches = JSON.parse(response.body)
-    matches.should eql(Array.new)
-  end
-
-  it "should return a JSON array containing the exact match CRS code when passed a CRS code and the format is JSON" do
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get 'search', :format => :json, :term => 'WFJ'
-    matches = JSON.parse(response.body)
-    matches.length.should eql(1)
-    matches[0]['id'].should eql('WFJ')
-    matches[0]['label'].should eql('Watford Junction (WFJ)')
-    matches[0]['value'].should eql('WFJ')
-  end
-
-  it "should, in normal mode, report if no matches for a search string were found" do
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get :search, :term => 'FOOBARBAZ'
-    response.body.should =~ /We couldn't find any location that matched/
-    response.body.should =~ /FOOBARBAZ/
-  end
-
-  it "should, in advanced mode, report if no matches for a search string were found" do
-    session['advanced'] = true
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get :search, :term => 'FOOBARBAZ'
-    response.body.should =~ /We couldn't find any location that matched/
-    response.body.should =~ /FOOBARBAZ/
-  end
-
-  it "should, in normal mode, report if more than one match was found for a search string" do
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get :search, :term => 'WATF'
-    response.body.should =~ /We couldn't find an exact match for/
-    response.body.should =~ /WATF/
-    response.body.should =~ /Watford High Street/
-    response.body.should =~ /Watford Junction/
-    response.body.should =~ /Watford North/
-  end
-
-  it "should, in normal mode, report if more than one match was found for a search string" do
-    session['advanced'] = true
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get :search, :term => 'WATF'
-    response.body.should =~ /We couldn't find an exact match for/
-    response.body.should =~ /WATF/
-    response.body.should =~ /Watford High Street/
-    response.body.should =~ /Watford Junction/
-    response.body.should =~ /Watford North/
-  end
-
-  it "should, in normal mode, match CRS codes from the MSNF" do
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get :search, :term => 'WFJ'
-    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
-  end
-
-  it "should, in normal mode, match exact station names from the MSNF" do
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get :search, :term => 'WATFORD JUNCTION'
-    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
-  end
-
-  it "should not, in normal mode, match CRS codes from the CIF file" do
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/empty.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/barking.cif')
-    get :search, :term => 'ZBK'
-    response.body.should_not =~ /BARKING/
-  end
-
-  it "should not, in normal mode, match TIPLOCs from the CIF file" do
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get :search, :term => 'WATFDJ'
-    response.body.should_not =~ /Watford Junction/
-  end
-
-  it "should, in advanced mode, match CRS codes from the MSNF" do
-    session['advanced'] = true
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get :search, :term => 'WFJ'
-    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WFJ'
-  end
-
-  it "should, in advanced mode, match TIPLOCS codes from the CIF" do
-    session['advanced'] = true
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    get :search, :term => 'WATFDJ'
-    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'WATFDJ'
-  end
-
-  it "should return an exact match for a CRS code from CIF even if a location with a longer matched name exists" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
-    get :search, :term => 'ACC'
-    response.body.should redirect_to :controller => 'location', :action => 'index', :location => 'ACC'
-  end
-
-# it "should return an exact match for a CRS code from the MSNF even if a location with a longer matched name exists" do
-#   TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
-#   get :search, :term => 'ACC'
-#   response.body.should =~ /Acton Central/
-#   response.body.should_not =~ /Accrington/
-# end
-
-#  it "should match on both an exact CRS code and a matched name from the MSNF if the format is JSON" do
-#    pending
-#    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/accrington_and_acton_central.cif')
-#    get 'search.json', :term => 'ACC'
-#    response.body.should =~ /Acton Central/
-#    response.body.should =~ /Accrington/
-#  end
-
-
-  # Station groupings
-
-  it "should include associated TIPLOCs from the MSNF when given a CRS code in normal mode" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    get :index, :location => 'WFJ', :year => '2011', :month => '05', :day => '23', :time => '0900'
-    response.body.should =~ /St. Albans Abbey/
-    response.body.should =~ /London Euston/
-  end
-
-  it "should include associated TIPLOCs from the MSNF when given a CRS code in advanced mode" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    get :index, :location => 'WFJ', :year => '2011', :month => '05', :day => '23', :time => '0900'
-    response.body.should =~ /St. Albans Abbey/
-    response.body.should =~ /London Euston/
-  end
-
-  it "should not include associated TIPLOCs from the MSNF when given a TIPLOC code in advanced mode" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/watford_junction_and_dc.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/watford_junction.msn')
-    get :index, :location => 'WATFJDC', :year => '2011', :month => '05', :day => '23', :time => '0900'
-    response.body.should_not =~ /St. Albans Abbey/
-    response.body.should =~ /London Euston/
   end
 
 
-  # Show only trains to and from
+  context "display a message if the location passed is not a TIPLOC or CRS code" do
 
-  it "should only show trains which later call at at a specified CRS code" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HWW'
-    response.body.should =~ /C51784/
-    response.body.should_not =~ /C51786/
-    response.body.should =~ /Services at Watford Junction \(WFJ\)/
-    response.body.should =~ /Which are going to How Wood \(Herts\) \(HWW\)/
+    it "should show an error if the location passed in simple mode is not a valid CRS code" do
+      get :index, :location => 'ZZZ'
+      response.code.should eql('404')
+      response.body.should =~ /We couldn't find the location/
+      response.body.should =~ /ZZZ/
+    end
+
+    it "should show an error if the location passed in advanced mode is not a valid CRS code" do
+      session[:mode] = 'advanced'
+      get :index, :location => 'ZZZ'
+      response.code.should eql('404')
+      response.body.should =~ /We couldn't find the location/
+      response.body.should =~ /ZZZ/
+    end
+
+    it "should show an error if the location passed in advanced mode is not a valid TIPLOC" do
+      get :index, :location => 'ZZZQQ'
+      response.code.should eql('404')
+      response.body.should =~ /We couldn't find the location/
+      response.body.should =~ /ZZZQQ/
+    end
+
   end
 
-  it "should not show trains which later call at at a specified TIPLOC in normal mode" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HOWWOOD'
-    response.body.should =~ /We couldn't find the location HOWWOOD/
-  end
+  context "redirect to a location page or fuzzy-search for a location name" do
 
-  it "should show trains which later call at at a specified TIPLOC when in advanced mode" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'WFJ', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'HOWWOOD'
-    response.body.should =~ /C51784/
-    response.body.should_not =~ /C51786/
-    response.body.should =~ /Services at Watford Junction \(WFJ\)/
-    response.body.should =~ /Which are going to How Wood \(Herts\) \(HOWWOOD\)/
-  end
+    before do
+      session['advanced'] = true
+      TSDBExplorer::Import.locations("test/fixtures/static/wfj-test-location.csv")
+      TSDBExplorer::Import.crs_to_tiploc("test/fixtures/static/wfj-test-crs.csv")
+    end
 
-  it "should only show trains which have called previously a specified CRS code" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WFJ'
-    response.body.should =~ /C51786/
-    response.body.should_not =~ /C51784/
-    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
-    response.body.should =~ /Which are going to Watford Junction \(WFJ\)/
-  end
+    it "should, in normal mode, report if more than one match was found for a mixed-case search string" do
+      get :search, :term => 'Watf'
+      response.body.should =~ /We couldn't find an exact match for/
+      response.body.should =~ /WATF/
+      response.body.should =~ /Watford High Street/
+      response.body.should =~ /Watford Junction/
+      response.body.should =~ /Watford North/
+    end
 
-  it "should not show trains which have called previously at a specified TIPLOC in normal mode" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WATFDJ'
-    response.body.should =~ /We couldn't find the location WATFDJ/
-  end
+    it "should, in normal mode, report if more than one match was found for a mixed-case search string" do
+      get :search, :term => 'Watf'
+      response.body.should =~ /We couldn't find an exact match for/
+      response.body.should =~ /WATF/
+      response.body.should =~ /Watford High Street/
+      response.body.should =~ /Watford Junction/
+      response.body.should =~ /Watford North/
+    end
 
-  it "should only show trains which have called previously at a specified TIPLOC when in advanced mode" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :to => 'WATFDJ'
-    response.body.should =~ /C51786/
-    response.body.should_not =~ /C51784/
-    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
-    response.body.should =~ /Which are going to Watford Junction \(WATFDJ\)/
-  end
+    it "should, in normal mode, report if more than one match was found for an upper-case search string" do
+      session['advanced'] = true
+      get :search, :term => 'WATF'
+      response.body.should =~ /We couldn't find an exact match for/
+      response.body.should =~ /WATF/
+      response.body.should =~ /Watford High Street/
+      response.body.should =~ /Watford Junction/
+      response.body.should =~ /Watford North/
+    end
 
+    it "should, in normal mode, report if more than one match was found for an upper-case search string" do
+      session['advanced'] = true
+      get :search, :term => 'WATF'
+      response.body.should =~ /We couldn't find an exact match for/
+      response.body.should =~ /WATF/
+      response.body.should =~ /Watford High Street/
+      response.body.should =~ /Watford Junction/
+      response.body.should =~ /Watford North/
+    end
 
-  # Concurrent From and To queries
-
-  it "should, in normal mode, support both from and to CRS locations in the same query" do
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WFJ'
-    response.body.should =~ /C51786/
-    response.body.should_not =~ /C51784/
-    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
-    response.body.should =~ /Which have come from St. Albans Abbey \(SAA\)/
-    response.body.should =~ /Which are going to Watford Junction \(WFJ\)/
-  end
-
-  it "should, in advanced mode, support both from and to CRS locations in the same query" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WFJ'
-    response.body.should =~ /C51786/
-    response.body.should_not =~ /C51784/
-    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
-    response.body.should =~ /Which have come from St. Albans Abbey \(SAA\)/
-    response.body.should =~ /Which are going to Watford Junction \(WFJ\)/
-  end
-
-  it "should, in advanced mode, support a from CRS code and a to TIPLOC in the same query" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'SAA', :to => 'WATFDJ'
-    response.body.should =~ /C51786/
-    response.body.should_not =~ /C51784/
-    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
-    response.body.should =~ /Which have come from St. Albans Abbey \(SAA\)/
-    response.body.should =~ /Which are going to Watford Junction \(WATFDJ\)/
-  end
-
-  it "should, in advanced mode, support a from TIPLOC and a to CRS code in the same query" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'STALBNA', :to => 'WFJ'
-    response.body.should =~ /C51786/
-    response.body.should_not =~ /C51784/
-    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
-    response.body.should =~ /Which have come from St. Albans Abbey \(STALBNA\)/
-    response.body.should =~ /Which are going to Watford Junction \(WFJ\)/
-  end
-
-  it "should, in advanced mode, support a from TIPLOC and a to TIPLOC in the same query" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/abbey_line_sunday.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/abbey_line_sunday.msn')
-    get :index, :location => 'HWW', :year => '2011', :month => '12', :day => '18', :time => '0830', :from => 'STALBNA', :to => 'WATFDJ'
-    response.body.should =~ /C51786/
-    response.body.should_not =~ /C51784/
-    response.body.should =~ /Services at How Wood \(Herts\) \(HWW\)/
-    response.body.should =~ /Which have come from St. Albans Abbey \(STALBNA\)/
-    response.body.should =~ /Which are going to Watford Junction \(WATFDJ\)/
   end
 
 
-  # Train highlighting
+  context "highlight specific types of train in advanced mode" do
 
-  it "should highlight trains which run as required" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
-    get :index, :location => 'PADTON', :year => '2011', :month => '12', :day => '11', :time => '0600'
-    response.body.should =~ /\(Q\)/
-  end
+    before do
+      TSDBExplorer::Import.locations("test/fixtures/static/highlight-train-test-location.csv")
+      TSDBExplorer::Import.crs_to_tiploc("test/fixtures/static/highlight-train-test-crs.csv")
+    end
 
-  it "should highlight trains which run as required to terminals/yards" do
-    session['advanced'] = true
-    TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
-    get :index, :location => 'EDINBUR', :year => '2012', :month => '01', :day => '09', :time => '0900'
-    response.body.should =~ /\(Y\)/
+    it "should highlight trains which run as required when in advanced mode" do
+      session['advanced'] = true
+      TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
+      get :index, :location => 'PADTON', :year => '2011', :month => '12', :day => '11', :time => '0600'
+      response.body.should =~ /\(Q\)/
+    end
+
+    it "should highlight trains which run as required to terminals/yards when in advanced mode" do
+      session['advanced'] = true
+      TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/runs_as_required.cif')
+      get :index, :location => 'EDINBUR', :year => '2012', :month => '01', :day => '09', :time => '0900'
+      response.body.should =~ /\(Y\)/
+    end
+
   end
 
 end

@@ -21,8 +21,8 @@ require 'tsdbexplorer/tdnet.rb'
 require 'tsdbexplorer/cif.rb'
 require 'tsdbexplorer/geography.rb'
 require 'tsdbexplorer/realtime.rb'
-require 'tsdbexplorer/rsp.rb'
 require 'tsdbexplorer/import.rb'
+require 'tsdbexplorer/cache.rb'
 
 module TSDBExplorer
 
@@ -239,6 +239,15 @@ module TSDBExplorer
     seconds = t[4]
 
     return (hours * 3600) + (minutes * 60) + (seconds == "H" ? 30 : 0)
+
+  end
+
+
+  # Removes all non-alpha characters from a string and returns it in upper-case
+
+  def TSDBExplorer.strip_and_upcase(s)
+
+    s.nil? ? nil : s.upcase.tr('^[A-Z]', '')
 
   end
 

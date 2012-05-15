@@ -291,7 +291,6 @@ describe ScheduleController do
   it "should highlight where a stop is for operational purposes (OP)" do
     session['advanced'] = true
     TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/activity_op.cif')
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/activity_op.msn')
     get :schedule_by_uid_and_run_date, :uid => 'L95157', :year => '2011', :month => '05', :day => '22'
     response.body.should =~ /North Pole Signal Vc818.+OP/
   end

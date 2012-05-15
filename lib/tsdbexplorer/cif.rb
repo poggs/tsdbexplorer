@@ -413,11 +413,6 @@ module TSDBExplorer
       end
 
 
-      # Update the Redis caches
-
-      TSDBExplorer::Realtime::cache_location_database
-
-
       # Calculate stats
 
       stats_text = "Schedules: #{stats[:schedule][:insert]} inserted, #{stats[:schedule][:amend]} amended, #{stats[:schedule][:delete]} deleted.  TIPLOCs: #{stats[:tiploc][:insert]} inserted, #{stats[:tiploc][:amend]} amended, #{stats[:tiploc][:delete]} deleted.  Associations: #{stats[:association][:insert]} inserted, #{stats[:association][:amend]} amended, #{stats[:association][:delete]} deleted"

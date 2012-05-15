@@ -6,21 +6,13 @@
 
  <p>We couldn't find any location that matched <strong><%= params[:term] %></strong>.</p>
 
-<% else @matches.blank? %>
+<% else %>
 
- <p>We couldn't find an exact match for <strong><%= params[:term] %></strong> - did you mean one of these?</p>
+ <p>We couldn't find an exact match for the location <strong><%= params[:term] %></strong>.  Were you looking for one of these locations?</p>
 
  <ul>
   <% @matches.each do |m| %>
-  <li>
-  <% if m.is_a? Tiploc %>
-   <%= link_to "#{tidy_text(m.tps_description)} #{m.crs_code.blank? ? '(' + m.tiploc_code + ')' : '(' + m.crs_code + ')' }", :controller => 'location', :location => m.tiploc_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %>
-  <% elsif m.is_a? StationName %>
-   <%= link_to "#{tidy_text(m.station_name)} (#{m.crs_code})", :controller => 'location', :location => m.crs_code, :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %>
-  <% else %>
-  <%= link_to "#{tidy_text(m['description'])} (#{m['crs_code']})", :controller => 'location', :location => m['crs_code'], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] %>
-  <% end %>
-  </li>
+  <li><%= link_to m['label'], :controller => 'location', :location => m['value'] %></li>
   <% end %>
  </ul>
 

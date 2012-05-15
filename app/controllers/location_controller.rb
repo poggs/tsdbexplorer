@@ -25,23 +25,41 @@ class LocationController < ApplicationController
   
   def index
 
-    redirect_to root_url and return if params[:location].nil?
+    loc = params[:location]
 
-    tiplocs = tiplocs_for(params[:location])
+    redirect_to root_url and return if loc.nil?
 
-    redirect_to :action => 'search', :term => params[:location] and return if tiplocs.nil?
+    # Find a list of TIPLOCs for this location
+
+    tiplocs = Array.new
+
+    if loc.length == 3  # It must be a CRS code
+      loc.upcase!
+      tiplocs = $REDIS.smembers("CRS:TO-TIPLOC:#{loc}")
+      @location_name = $REDIS.get("CRS:TO-NAME:#{loc}")
+    else
+      loc.upcase!
+      tiploc_detail = $REDIS.hgetall("TIPLOC:#{loc}")
+      unless tiploc_detail.empty?
+        tiplocs = [loc]
+        @location_name = tiploc_detail['full_name']
+      end
+    end
+
+
+    # The TIPLOC or CRS code may not be valid - if so, redirect to a search page
+
+    render 'common/error', :status => :not_found, :locals => { :message => "We couldn't find the location #{loc}" } and return if tiplocs.empty?
+
+
+    # Determine the location name for the view
 
     @all_schedules = Array.new
 
 
-    # Determine the name of this location for the view
-
-    @location = tiplocs[:name]
-
-
     # Limit the search to a particular location
 
-    @schedule = Location.where(:tiploc_code => tiplocs[:locations])
+    @schedule = Location.where(:tiploc_code => tiplocs)
 
 
     # Only display passenger schedules in normal mode
@@ -88,70 +106,99 @@ class LocationController < ApplicationController
   def search
 
     term = params[:term]
+    normalised_term = TSDBExplorer.strip_and_upcase(term)
 
-    # Redirect to the main page if we're called without any search parameters
+    matches = Array.new
 
-    if term.nil?
-      render :json => Array.new and return if request.format.json?
-      redirect_to :root and return if request.format.html?
-    elsif term.blank?
-      render 'common/error', :status => :bad_request, :locals => { :message => 'You must specify a location name.' } and return
+    if advanced_mode?
+
+      if term.nil? || term.blank? || term.length < 3
+
+        render :json => Array.new and return if request.format.json?
+        redirect_to :root and return if request.format.html?
+
+      elsif term.length == 3
+
+        matches = matches + crs_match(term)
+
+        # If called as HTML and there's only one match on the CRS code, redirect to the location page
+
+        redirect_to :controller => 'location', :action => 'index', :location => term and return if request.format.html? && matches.count == 1
+
+      else
+
+        # First, exact-match on TIPLOC code
+
+        matches = matches + tiploc_match(term)
+
+
+        # If called as HTML and there's only one match on the TIPLOC, redirect to the location page
+
+        redirect_to :controller => 'location', :action => 'index', :location => term and return if request.format.html? && matches.count == 1
+
+
+        # Partial-match on the CRS and TIPLOC names
+
+        matches = matches + crs_partial_on_name(term)
+        matches = matches + tiploc_partial_on_name(term)
+
+
+        # Finally, fuzzy-match on location name
+
+        matches = matches + tiploc_fuzzy_match(term)
+
+      end
+
+    else
+
+      if term.nil? || term.blank? || term.length < 3
+
+        render :json => Array.new and return if request.format.json?
+        redirect_to :root and return if request.format.html?
+
+      elsif term.length == 3
+
+        matches = matches + crs_match(term)
+
+        # If called as HTML and there's only one match on the CRS code, redirect to the location page
+
+        redirect_to :controller => 'location', :action => 'index', :location => term and return if request.format.html? && matches.count == 1
+
+      else
+
+        # First, exact-match on CRS code.  Redirect if called as HTML and there's exactly one match
+
+        matches = matches + crs_match(term)
+        redirect_to :controller => 'location', :action => 'index', :location => term and return if request.format.html? && matches.count == 1
+
+
+        # Next, partial-match on CRS code station names.  Redirect with exact logic if there's exactly one match
+
+        matches = matches + crs_partial_on_name(term)
+
+        redirect_to :controller => 'location', :action => 'index', :location => matches.first['id'] and return if request.format.html? && matches.count == 1
+
+
+        # Finally, fuzzy-match on CRS code station name
+
+        matches = matches + crs_fuzzy_match(term)
+
+      end
+
     end
 
-    term.upcase!
 
+    match_ids = Array.new
     @matches = Array.new
 
-
-    # Try an exact match on the CRS code if the term is three characters long
-
-    if term.length == 3
-      if advanced_mode?
-        @matches = @matches + match_cif_on_crs(term) if term.length == 3
-      else
-        @matches = @matches + match_msnf_on_crs(term) if term.length == 3
-      end
-
-      # If we've been called as HTML and there's exactly one match, redirect to the location page
-
-      if @matches.length == 1 && request.format.html?
-        redirect_to :action => 'index', :location => @matches.first.crs_code, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return
-      end
-
-    end
-
-
-    if advanced_mode?
-
-      # Try an exact match on the TIPLOC code
-
-      @matches = @matches + match_cif_on_tiploc(term) if term.length > 3
-      redirect_to :action => 'index', :location => @matches.first.tiploc_code, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
-
-    end
-
-
-    # Check for a match on station name.
-
-    @matches = @matches + match_msnf_on_station_name(term)
-
-
-    # If we've been called as HTML and there's exactly one match, redirect to the location page
-
-    redirect_to :action => 'index', :location => @matches.first['crs_code'], :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
-
-
-    if advanced_mode?
-
-      # Check for a match on TPS description in the CIF data
-
-      @matches = @matches + match_cif_on_description(term)
-      redirect_to :action => 'index', :location => @matches.first.tiploc_code, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if @matches.length == 1 && request.format.html?
-
+    matches.each do |m|
+      next if match_ids.include? m['id']
+      match_ids.push m['id']
+      @matches.push m
     end
 
     respond_to do |format|
-      format.json { render :json => matches_to_json(@matches) }
+      format.json { render :json => @matches.to_json }
       format.html
     end
 
@@ -159,91 +206,97 @@ class LocationController < ApplicationController
 
   private
 
-  # Convert matches to JSON format
+  def crs_partial_on_name(term)
 
-  def matches_to_json(matches)
+    matches = Array.new
+    normalised_term = TSDBExplorer.strip_and_upcase(term)
 
-    @json_matches = Array.new
+    crs_text_match = $REDIS.keys("NAME:TO-CRS:*#{normalised_term}*")
 
-    matches[0...20].each do |m|
-      @json_matches.push(convert_match_to_json(m))
+    crs_text_match.each do |loc|
+      crs_code = $REDIS.get(loc)
+      crs_text = $REDIS.get("CRS:TO-NAME:#{crs_code}")
+      matches.push({ 'id' => crs_code, 'label' => "#{crs_text} [#{crs_code}]", 'value' => crs_code })
     end
 
-    return @json_matches
+    return matches
 
   end
 
 
-  # Convert a single match to JSON
+  def tiploc_partial_on_name(term)
 
-  def convert_match_to_json(match)
+    matches = Array.new
+    normalised_term = TSDBExplorer.strip_and_upcase(term)
 
-    if match.is_a? StationName
-      id = match.crs_code
-      text = tidy_text(match.station_name)
-    elsif match.is_a? Tiploc
-      id = match.tiploc_code
-      text = tidy_text(match.tps_description)
-    elsif match.is_a? Hash
-      id = match['crs_code']
-      text = tidy_text(match['description'])
+    tiploc_text_match = $REDIS.keys("NAME:TO-TIPLOC:*#{normalised_term}*")
+
+    tiploc_text_match.each do |loc|
+      tiploc = $REDIS.get(loc)
+      tiploc_text = $REDIS.hget("TIPLOC:#{tiploc}", "full_name")
+      matches.push({ 'id' => tiploc, 'label' => "#{tiploc_text} [#{tiploc}]", 'value' => tiploc })
     end
 
-    text = text + ' (' + id + ')'
-
-    { :id => id, :label => text, :value => id }
+    return matches
 
   end
 
 
-  # Try to match a CRS code against the MSNF
+  def tiploc_match(term)
 
-  def match_msnf_on_crs(term)
+    matches = Array.new
+    normalised_term = TSDBExplorer.strip_and_upcase(term)
 
-    StationName.where('cate_type != 9 AND crs_code = ?', term)
+    tiploc_exact_match = $REDIS.hget("TIPLOC:#{normalised_term}", "full_name")
+
+    matches.push({ 'id' => term.upcase, 'label' => tiploc_exact_match + " [#{term.upcase}]", 'value' => term.upcase }) unless tiploc_exact_match.nil?
+
+    return matches
 
   end
 
+  def crs_match(term)
 
-  # Try to match a station name against the MSNF
+    matches = Array.new
 
-  def match_msnf_on_station_name(term)
+    term.upcase!
+    crs_exact_match = $REDIS.get("CRS:TO-NAME:#{term}")
 
-    @matches = Array.new
+    matches.push({ 'id' => term, 'label' => "#{crs_exact_match} [#{term}]", 'value' => term }) unless crs_exact_match.nil?
 
-    StationName.where('cate_type != 9 AND station_name LIKE ?', '%' + term + '%')
-    $REDIS.keys('LOCATION:MSNF:*' + term + '*').each do |s|
-      @matches.push $REDIS.hgetall(s)
+    return matches
+
+  end
+
+  def tiploc_fuzzy_match(term)
+
+    matches = Array.new
+    tiploc_text_match = Array.new
+
+    term.split(' ').each do |e|
+      m = $REDIS.smembers("FUZZY-NAME:TO-TIPLOC:#{Text::Metaphone.metaphone(e)}")
+      tiploc_text_match = tiploc_text_match.blank? ? m : tiploc_text_match & m
     end
 
-    return @matches
+    tiploc_text_match.collect { |loc| matches.push({ 'id' => loc, 'label' => "#{$REDIS.hget('TIPLOC:' + loc, 'full_name')} [#{loc}]", 'value' => loc }) } unless tiploc_text_match.nil?
+
+    return matches
 
   end
 
+  def crs_fuzzy_match(term)
 
-  # Try to match a CRS code against the CIF
+    matches = Array.new
+    crs_text_match = Array.new
 
-  def match_cif_on_crs(term)
+    term.split(' ').each do |e|
+      m = $REDIS.smembers("FUZZY-NAME:TO-CRS:#{Text::Metaphone.metaphone(e)}")
+      crs_text_match = crs_text_match.blank? ? m : crs_text_match & m
+    end
 
-    Tiploc.where('crs_code = ?', term)
+    crs_text_match.collect { |loc| matches.push({ 'id' => loc, 'label' => "#{$REDIS.get('CRS:TO-NAME:' + loc)} [#{loc}]", 'value' => loc }) } unless crs_text_match.nil?
 
-  end
-
-
-  # Try to match a TIPLOC code against the CIF data
-
-  def match_cif_on_tiploc(term)
-
-    Tiploc.where('tiploc_code = ?', term)
-
-  end
-
-
-  # Try to match a location description against the CIF data
-
-  def match_cif_on_description(term)
-
-    Tiploc.where('tps_description LIKE ?', '%' + term + '%')
+    return matches
 
   end
 

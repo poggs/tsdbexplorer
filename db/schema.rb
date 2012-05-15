@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120507094627) do
+ActiveRecord::Schema.define(:version => 20120507153751) do
 
   create_table "associations", :force => true do |t|
     t.string   "main_train_uid"
@@ -327,20 +327,6 @@ ActiveRecord::Schema.define(:version => 20120507094627) do
     t.string   "queue_name"
     t.string   "message"
     t.integer  "state",      :limit => 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "station_names", :force => true do |t|
-    t.string   "station_name",     :limit => 30
-    t.integer  "cate_type"
-    t.string   "tiploc_code",      :limit => 7
-    t.string   "subsid_crs_code",  :limit => 3
-    t.string   "crs_code",         :limit => 3
-    t.float    "loc_longitude"
-    t.float    "loc_latitude"
-    t.integer  "estimated_coords"
-    t.integer  "change_time"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

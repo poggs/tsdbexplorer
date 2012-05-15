@@ -37,6 +37,7 @@ gem 'fastercsv'
 gem 'watu_table_builder', :require => 'table_builder'
 gem 'devise'
 gem 'prawn'
+gem 'text'
 
 
 # Environment-specific gems

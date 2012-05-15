@@ -17,13 +17,14 @@
 #  $Id$
 #
 
-require 'spec_helper'
+class DeleteStationNames < ActiveRecord::Migration
 
-describe "lib/tsdbexplorer/rsp.rb" do
+  def up
+    drop_table :station_names
+  end
 
-  it "should import the Master Station Names File" do
-    TSDBExplorer::RSP::import_msnf('test/fixtures/msnf/example.msn')
-    StationName.count.should eql(9)
+  def down
+    raise ActiveRecord::IrreversibleMigration
   end
 
 end

@@ -1,5 +1,5 @@
 <div class="page-header">
- <h1>Services at <%= tidy_text(@location) %> (<%= params[:location] %>)</h1>
+ <h1>Services at <%= @location_name %> (<%= params[:location] %>)</h1>
  <p>
   <ul>
    <li>Between <%= date_range(@range[:from], @range[:to]) %></li>

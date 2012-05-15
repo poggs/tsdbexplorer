@@ -163,9 +163,9 @@ class AdminController < ApplicationController
   end
 
 
-  # Location database
+  # Search static data
 
-  def locations
+  def search
 
     @pills = pills
 
@@ -194,7 +194,7 @@ class AdminController < ApplicationController
   private
 
   def pills
-    [ [ 'System' , [ 'Overview', 'Timetable', 'Import', 'Real-Time', 'Memory' ] ], [ 'Data', [ 'Locations' ] ], [ 'Authentication', [ 'Manage users' ] ] ]
+    [ [ 'System' , [ 'Overview', 'Timetable', 'Import', 'Real-Time', 'Memory' ] ], [ 'Data', [ 'Search' ] ], [ 'Authentication', [ 'Manage users' ] ] ]
   end
 
 end

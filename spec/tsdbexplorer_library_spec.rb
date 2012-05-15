@@ -208,4 +208,18 @@ describe "lib/tsdbexplorer.rb" do
     TSDBExplorer::time_to_seconds('2359H').should eql(86370)
   end
 
+
+  # Strip-and-upcase
+
+  it "should strip non-alpha characters from a string and return it in upper-case" do
+    TSDBExplorer::strip_and_upcase('foo').should eql('FOO')
+    TSDBExplorer::strip_and_upcase('foo bar').should eql('FOOBAR')
+    TSDBExplorer::strip_and_upcase('FOO BAR').should eql('FOOBAR')
+    TSDBExplorer::strip_and_upcase('FOO!BAR').should eql('FOOBAR')
+  end
+
+  it "should return nil if asked o strip and upcase a nil string" do
+    TSDBExplorer::strip_and_upcase(nil).should eql(nil)
+  end
+
 end
