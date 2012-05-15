@@ -25,7 +25,7 @@ module TSDBExplorer
 
     def Import.locations(filename='data/static/locations.csv')
 
-      return Struct.new(:status, :message).new(:status => :error, :message => "Location data not found at #{filename}") and return unless File.readable?(filename)
+      return Struct.new(:status, :message).new(:status => :error, :message => "Location data not found at #{filename}") unless File.readable?(filename)
 
       # Wrap everything in a Redis transaction
 
@@ -95,7 +95,7 @@ module TSDBExplorer
 
     def Import.crs_to_tiploc(filename='data/static/crs-to-tiploc.csv')
 
-      return Struct.new(:status, :message).new(:status => :error, :message => "CRS to TIPLOC data not found at #{filename}") and return unless File.readable?(filename)
+      return Struct.new(:status, :message).new(:status => :error, :message => "CRS to TIPLOC data not found at #{filename}") unless File.readable?(filename)
 
       # Wrap everything in a Redis transaction
 
