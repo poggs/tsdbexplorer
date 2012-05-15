@@ -103,6 +103,24 @@ module TSDBExplorer
 
       end
 
+      def Status.vstp_feed
+
+        return Struct.new(:status, :message).new(:unknown, "Status unknown")
+
+      end
+
+      def Status.rtppm_feed
+
+        return Struct.new(:status, :message).new(:unknown, "Status unknown")
+
+      end
+
+      def Status.tsr_feed
+
+        return Struct.new(:status, :message).new(:unknown, "Status unknown")
+
+      end
+
     end
 
   end

@@ -7,7 +7,8 @@
  <%= render :partial => 'common/pills' %>
 
  <div class="span10">
-  <h2>Import</h2>
+
+  <h2>Timetable</h2>
 
   <% if ($CONFIG.has_key? 'DATA') && ($CONFIG['DATA'].has_key? 'path') %>
 
@@ -41,6 +42,13 @@
   <% else %>
    <p>No import directory has been specified in the configuration file</p>
   <% end %>
+
+  <h2>Location data</h2>
+
+  <p>
+   <%= link_to "Import locations", { :action => 'import_locations' }, :class => 'btn' %>
+   <%= link_to "Import CRS-TIPLOC mappings", { :action => 'import_crs_to_tiploc' }, :class => 'btn' %>
+  </p>
 
  </div>
 </div>

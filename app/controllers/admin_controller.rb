@@ -41,6 +41,9 @@ class AdminController < ApplicationController
     @status[:timetable_feed] = TSDBExplorer::Realtime::Status.timetable_feed
     @status[:train_describer_feed] = TSDBExplorer::Realtime::Status.train_describer_feed
     @status[:trust_feed] = TSDBExplorer::Realtime::Status.trust_feed
+    @status[:vstp_feed] = TSDBExplorer::Realtime::Status.vstp_feed
+    @status[:rtppm_feed] = TSDBExplorer::Realtime::Status.rtppm_feed
+    @status[:tsr_feed] = TSDBExplorer::Realtime::Status.tsr_feed
 
   end
 
@@ -187,6 +190,27 @@ class AdminController < ApplicationController
       @matches = @matches.limit(50)
 
     end
+
+  end
+
+
+  # Import location data
+
+  def import_locations
+
+    results = TSDBExplorer::Import.locations
+
+    redirect_to :back
+
+  end
+
+  def import_crs_to_tiploc
+
+    results = TSDBExplorer::Import.crs_to_tiploc
+
+    flash[:alert] = "Imported successfully"
+
+    redirect_to :back
 
   end
 
