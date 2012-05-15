@@ -69,7 +69,7 @@ describe AdminController do
     get :overview
     response.body.should =~ /Static timetable data/
     response.body.should =~ /icon-ok/
-    response.body.should =~ /Last extract imported was TPS.FDFTEST.PD110101 on #{Time.now.to_s(:human)}/
+    response.body.should =~ /Last extract imported was DFTESTA on #{Time.now.to_s(:human)}/
   end
 
   it "should indicate if static timetable data is stale" do
@@ -78,7 +78,7 @@ describe AdminController do
     get :overview
     response.body.should =~ /Static timetable data/
     response.body.should =~ /icon-remove/
-    response.body.should =~ /Last extract imported was TPS.FDFTEST.PD110101 on #{(Time.now - 7.days).to_s(:human)}/
+    response.body.should =~ /Last extract imported was DFTESTA on #{(Time.now - 7.days).to_s(:human)}/
   end
 
   it "should display a timetable page" do
