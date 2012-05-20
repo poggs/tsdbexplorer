@@ -123,7 +123,7 @@ class LocationController < ApplicationController
 
         # If called as HTML and there's only one match on the CRS code, redirect to the location page
 
-        redirect_to :controller => 'location', :action => 'index', :location => term and return if request.format.html? && matches.count == 1
+        redirect_to :controller => 'location', :action => 'index', :location => term, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if request.format.html? && matches.count == 1
 
       else
 
@@ -134,7 +134,7 @@ class LocationController < ApplicationController
 
         # If called as HTML and there's only one match on the TIPLOC, redirect to the location page
 
-        redirect_to :controller => 'location', :action => 'index', :location => term and return if request.format.html? && matches.count == 1
+        redirect_to :controller => 'location', :action => 'index', :location => term, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if request.format.html? && matches.count == 1
 
 
         # Partial-match on the CRS and TIPLOC names
@@ -162,21 +162,21 @@ class LocationController < ApplicationController
 
         # If called as HTML and there's only one match on the CRS code, redirect to the location page
 
-        redirect_to :controller => 'location', :action => 'index', :location => term and return if request.format.html? && matches.count == 1
+        redirect_to :controller => 'location', :action => 'index', :location => term, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if request.format.html? && matches.count == 1
 
       else
 
         # First, exact-match on CRS code.  Redirect if called as HTML and there's exactly one match
 
         matches = matches + crs_match(term)
-        redirect_to :controller => 'location', :action => 'index', :location => term and return if request.format.html? && matches.count == 1
+        redirect_to :controller => 'location', :action => 'index', :location => term, :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if request.format.html? && matches.count == 1
 
 
         # Next, partial-match on CRS code station names.  Redirect with exact logic if there's exactly one match
 
         matches = matches + crs_partial_on_name(term)
 
-        redirect_to :controller => 'location', :action => 'index', :location => matches.first['id'] and return if request.format.html? && matches.count == 1
+        redirect_to :controller => 'location', :action => 'index', :location => matches.first['id'], :from => params[:from], :to => params[:to], :year => params[:year], :month => params[:month], :day => params[:day], :time => params[:time] and return if request.format.html? && matches.count == 1
 
 
         # Finally, fuzzy-match on CRS code station name
