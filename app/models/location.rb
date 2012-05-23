@@ -152,7 +152,7 @@ class Location < ActiveRecord::Base
 
 
       queries[from] = Array.new unless queries.has_key? from
-      queries[from].push q1
+      queries[from].push q1.sort { |a,b| TSDBExplorer::train_sort(a,b) }
 
 
       # Return all schedules which run on the day before midnight and call after midnight
@@ -166,7 +166,7 @@ class Location < ActiveRecord::Base
       end
 
       queries[from] = Array.new unless queries.has_key? from
-      queries[from].push q2
+      queries[from].push q2.sort { |a,b| TSDBExplorer::train_sort(a,b) }
 
 
       # Return all schedules which run on the day after midnight and call between midnight and the end of the time window
@@ -180,7 +180,7 @@ class Location < ActiveRecord::Base
       end
 
       queries[to] = Array.new unless queries.has_key? to
-      queries[to].push q3
+      queries[to].push q3.sort { |a,b| TSDBExplorer::train_sort(a,b) }
 
     end
 
@@ -189,7 +189,11 @@ class Location < ActiveRecord::Base
     queries.keys.each do |q|
       results[q.midnight] = Array.new unless results.has_key? q.midnight
       queries[q].each do |e|
-        results[q.midnight] = results[q.midnight] + e
+        if from.midnight == to.midnight
+          results[q.midnight] = results[q.midnight] + e.sort { |a,b| TSDBExplorer::train_sort(a,b) }
+        else
+          results[q.midnight] = results[q.midnight] + e
+        end
       end
     end
 

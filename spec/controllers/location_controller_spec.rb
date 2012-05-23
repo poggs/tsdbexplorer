@@ -255,8 +255,17 @@ pending
       response.body.should =~ /Bletchley/
     end
 
-  end
+    it "should correctly sort schedules which span midnight" do
+      session[:mode] = 'advanced'
+      TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_issue_101.cif')
+      TSDBExplorer::Import.locations("test/fixtures/static/bug_issue_101-location.csv")
+      TSDBExplorer::Import.crs_to_tiploc("test/fixtures/static/bug_issue_101-crs.csv")
+      get :index, :location => 'CHI', :year => '2012', :month => '05', :day => '23', :time => '2355'
+      response.code.should eql('200')
+      # TODO: Work out how to match multiple lines - perhaps use JSON output
+    end
 
+  end
 
   context "display a message if the location passed is not a TIPLOC or CRS code" do
 

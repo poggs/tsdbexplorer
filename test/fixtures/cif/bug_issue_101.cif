@@ -1,0 +1,103 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTA       FA010170010170                    
+TICHINGFD00691400TCHINGFORD                 52731   0CHICHINGFORD               
+TIHGHMSPK08691900VHIGHAMS PARK              52732   0HIPHIGHAMS PARK            
+TIWDST   02695400CWOOD STREET               52729   0WSTWOOD STREET             
+TIWLTWCEN08695300TWALTHAMSTOW CENTRAL       52733   0WHCWALTHAMSTOW CTL         
+TISTJMSST18697300LST JAMES STREET           52734   0SJSST JAMES ST WSTW        
+TICLAPTNJ32692611YCLAPTON JN                51938   0                           
+TICLAPTON00692600XCLAPTON                   52735   0CPTCLAPTON                 
+TIHAKNYNM00686700NHACKNEY DOWNS             52736   0HACHACKNEY DOWNS           
+TIBTHNLGR16696100RBETHNAL GREEN             52739   0BETBETHNAL GREEN           
+TILIVST  00696500XLONDON LIVERPOOL STREET   527412904LSTLONDON LIVRPL ST        
+TICHINCS400691464ZCHINGFORD LONDON END SDGS 52728   0                           
+TICHINCS500691465TCHINGFORD COUNTRY END SDGS52730   0
+BSNG292911112121207201111100 POO2T47    121910000 EMU317 100D     S            P
+BX         LEY                                                                  
+LOCHINGFD 2325 23252         TB                                                 
+LIHGHMSPK 2328H2329      23292329         T                                     
+LIWDST    2331H2332      23322332         T                                     
+LIWLTWCEN 2333H2334      233423341        T                                     
+LISTJMSST 2335H2336      23362336         T                                     
+LICLAPTNJ           2338 00000000                                               
+LICLAPTON 2339 2339H     23392339         T           1                         
+LIHAKNYNM 2342H2343      234323431  FL    T                                     
+LIBTHNLGR 2346H2347      23472347   S  FL T X                                   
+LTLIVST   2351 23514     TF
+BSNG292671112121207201111100 POO2T36    121910000 EMU315 075D     S            P
+BX         LEY                                                                  
+LOLIVST   2303 23033  S      TB                                                 
+LIBTHNLGR 2306 2306H     23062306   FL S  T X                                   
+LIHAKNYNM 2310 2310H     231023102        T                                     
+LICLAPTON 2312H2313      23132313         T                                     
+LICLAPTNJ           2314 00000000                                               
+LISTJMSST 2316 2316H     23162316         T                                     
+LIWLTWCEN 2318 2318H     231823182        T                                     
+LIWDST    2320 2320H     23202320         T                                     
+LIHGHMSPK 2323 2323H     23232323         T           1                         
+LTCHINGFD 2329 23291     TF
+BSNG292711112121207201111100 POO2T38    121910000 EMU317 100D     S            P
+BX         LEY                                                                  
+LOLIVST   2318 23182  S      TB                                                 
+LIBTHNLGR 2321 2321H     23212321   FL S  T X                                   
+LIHAKNYNM 2325 2325H     232523252        T                                     
+LICLAPTON 2327H2328      23282328         T                                     
+LICLAPTNJ           2329 00000000                                               
+LISTJMSST 2331 2331H     23312331         T                                     
+LIWLTWCEN 2333 2333H     233323332        T                                     
+LIWDST    2335 2335H     23352335         T                                     
+LIHGHMSPK 2338 2338H     23382338         T           1                         
+LTCHINGFD 2344 23442     TF
+BSNG292751112121207201111100 POO2T40    121910000 EMU315 075D     S            P
+BX         LEY                                                                  
+LOLIVST   2333 23332  S      TB                                                 
+LIBTHNLGR           2336 00000000   FL S  X                                     
+LIHAKNYNM           2339 000000002                                              
+LICLAPTNJ           2341H00000000                                               
+LIWLTWCEN 2344 2344H     234423442        T           1                         
+LTCHINGFD 2353 23543     TF
+BSNG292791112121207201111100 POO2T42    121910000 EMU315 075D     S            P
+BX         LEY                                                                  
+LOLIVST   2348 23482  S      TB                                                 
+LIBTHNLGR 2351 2351H     23512351   FL S  T X                                   
+LIHAKNYNM 2355 2355H     235523552        T                                     
+LICLAPTON 2357H2358      23582358         T                                     
+LICLAPTNJ           2359 00000000                                               
+LISTJMSST 0001 0001H     00010001         T                                     
+LIWLTWCEN 0003 0003H     000300032        T                                     
+LIWDST    0005 0005H     00050005         T                                     
+LIHGHMSPK 0008 0008H     00080008         T           1                         
+LTCHINGFD 0014 00141     TF
+BSNG292841112131207210111110 POO2T44    121910000 EMU315 075D     S            P
+BX         LEY                                                                  
+LOLIVST   0003 00033  S      TB                                                 
+LIBTHNLGR 0006H0007      00060006   FL S  T X                                   
+LIHAKNYNM 0010H0011      001000102        T                                     
+LICLAPTON 0013 0013H     00130013         T                                     
+LICLAPTNJ           0014H00000000                                               
+LISTJMSST 0016H0017      00160016         T                                     
+LIWLTWCEN 0018H0019      001800182        T                                     
+LIWDST    0020H0021      00200020         T                                     
+LIHGHMSPK 0023H0024      00230023         T           1                         
+LTCHINGFD 0029 00292     TF
+BSNG093271112131207210111110 PEE5T44    121916400 EMU315 075D                  P
+BX         LEY                                                                  
+LOCHINGFD 0036 00002         TB                                                 
+LTCHINCS4 0038 0000      TF
+BSNG292891112131207210111110 POO2T46    121910000 EMU317 100D     S            P
+BX         LEY                                                                  
+LOLIVST   0018 00182  S      TB                                                 
+LIBTHNLGR 0021 0021H     00210021      S  T                                     
+LIHAKNYNM 0025 0025H     002500254        T X                                   
+LICLAPTON 0028 0028H     00280028         T                                     
+LICLAPTNJ           0029H00000000                                               
+LISTJMSST 0031H0032      00320032         T                                     
+LIWLTWCEN 0033H0034      003400342        T                                     
+LIWDST    0035H0036      00360036         T                                     
+LIHGHMSPK 0038H0039      00390039         T           1                         
+LTCHINGFD 0044 00442     TF
+BSNG295951112131207210111110 PEE5T46    121916400 EMU317 100D                  P
+BX         LEY                                                                  
+LOCHINGFD 0054 00002         TB                                                 
+LICHINCS4 0056 0102      00000000         OPRM                                  
+LTCHINCS5 0104 0000      TF
+ZZ

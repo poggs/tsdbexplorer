@@ -1,4 +1,4 @@
-<% schedule.sort { |a,b| TSDBExplorer::train_sort(a,b) }.each do |s| %>
+<% schedule.each do |s| %>
   <%= tag 'tr', { :style => s.basic_schedule.atoc_code == "ZZ" ? 'background: #eee;' : nil }, 'open' %>
   <% if advanced_mode? %>
    <td><%= link_to raw('<i class="icon-info-sign"></i>'), { :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s.basic_schedule.train_uid, :year => runs_on.year, :month => runs_on.month, :day => runs_on.day } %> <%= s.basic_schedule.train_identity %>&nbsp;<%= decode_stp_indicator(s.basic_schedule, :A) %>
