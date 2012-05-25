@@ -91,6 +91,7 @@ class Location < ActiveRecord::Base
 
     queries = Hash.new
 
+    trains = Array.new
 
     # We're going to be forming a Location query
 
@@ -115,8 +116,9 @@ class Location < ActiveRecord::Base
         q1 = q1.calls_between(from.to_s(:hhmm), to.to_s(:hhmm))
       end
 
-      queries[run_date] = Array.new unless queries.has_key? run_date
-      queries[run_date].push q1
+      q1.each do |s|
+        trains.push({ :a => s.arrival_secs.nil? ? nil : run_date + s.arrival_secs, :p => s.pass_secs.nil? ? nil : run_date + s.pass_secs, :d => s.departure_secs.nil? ? nil : run_date + s.departure_secs, :runs_on => run_date, :obj => s })
+      end
 
 
       # Return all schedules which ran yesterday and call on the next day within the window (i.e. over midnight)
@@ -129,8 +131,9 @@ class Location < ActiveRecord::Base
         q2 = q2.calls_between(from.to_s(:hhmm), to.to_s(:hhmm))
       end
 
-      queries[(run_date - 1.day)] = Array.new unless queries.has_key? (run_date - 1.day)
-      queries[(run_date - 1.day)].push q2
+      q2.each do |s|
+        trains.push({ :a => s.arrival_secs.nil? ? nil : run_date + s.arrival_secs, :p => s.pass_secs.nil? ? nil : run_date + s.pass_secs, :d => s.departure_secs.nil? ? nil : run_date + s.departure_secs, :runs_on => run_date - 1.day, :obj => s })
+      end
 
     else
 
@@ -140,9 +143,12 @@ class Location < ActiveRecord::Base
       #  - Runs on the day before midnight and calls after midnight
       #  - Runs on the day after midnight and calls between midnight and the end of the time window
 
+      day_before_midnight = from.midnight
+      day_after_midnight = to.midnight
+
       # Return all schedules which run on the day before midnight and call up until midnight
 
-      q1 = schedule_base.runs_on(from.to_s(:yyyymmdd)).where('locations.next_day_departure = false OR locations.next_day_arrival = false').includes(:basic_schedule)
+      q1 = schedule_base.runs_on(day_before_midnight.to_s(:yyyymmdd)).where('locations.next_day_departure = false OR locations.next_day_arrival = false').includes(:basic_schedule)
 
       if show_passing == true
         q1 = q1.passes_between(from.to_s(:hhmm), "2359H")
@@ -150,14 +156,14 @@ class Location < ActiveRecord::Base
         q1 = q1.calls_between(from.to_s(:hhmm), "2359H")
       end
 
-
-      queries[from] = Array.new unless queries.has_key? from
-      queries[from].push q1.sort { |a,b| TSDBExplorer::train_sort(a,b) }
+      q1.each do |s|
+        trains.push({ :a => s.arrival_secs.nil? ? nil : day_before_midnight + s.arrival_secs, :p => s.pass_secs.nil? ? nil : day_before_midnight + s.pass_secs, :d => s.departure_secs.nil? ? nil : day_before_midnight + s.departure_secs, :runs_on => day_before_midnight, :obj => s })
+      end
 
 
       # Return all schedules which run on the day before midnight and call after midnight
 
-      q2 = schedule_base.runs_on((from - 1.day).to_s(:yyyymmdd)).where('locations.next_day_departure = true OR locations.next_day_arrival = true').includes(:basic_schedule)
+      q2 = schedule_base.runs_on(day_before_midnight.to_s(:yyyymmdd)).where('locations.next_day_departure = true OR locations.next_day_arrival = true').includes(:basic_schedule)
 
       if show_passing == true
         q2 = q2.passes_between('0000', to.to_s(:hhmm))
@@ -165,8 +171,9 @@ class Location < ActiveRecord::Base
         q2 = q2.calls_between('0000', to.to_s(:hhmm))
       end
 
-      queries[from] = Array.new unless queries.has_key? from
-      queries[from].push q2.sort { |a,b| TSDBExplorer::train_sort(a,b) }
+      q2.each do |s|
+        trains.push({ :a => s.arrival_secs.nil? ? nil : day_after_midnight + s.arrival_secs, :p => s.pass_secs.nil? ? nil : day_after_midnight + s.pass_secs, :d => s.departure_secs.nil? ? nil : day_after_midnight + s.departure_secs, :runs_on => day_before_midnight, :obj => s })
+      end
 
 
       # Return all schedules which run on the day after midnight and call between midnight and the end of the time window
@@ -179,25 +186,14 @@ class Location < ActiveRecord::Base
         q3 = q3.calls_between('0000', to.to_s(:hhmm))
       end
 
-      queries[to] = Array.new unless queries.has_key? to
-      queries[to].push q3.sort { |a,b| TSDBExplorer::train_sort(a,b) }
-
-    end
-
-    results = Hash.new
-
-    queries.keys.each do |q|
-      results[q.midnight] = Array.new unless results.has_key? q.midnight
-      queries[q].each do |e|
-        if from.midnight == to.midnight
-          results[q.midnight] = results[q.midnight] + e.sort { |a,b| TSDBExplorer::train_sort(a,b) }
-        else
-          results[q.midnight] = results[q.midnight] + e
-        end
+      q3.each do |s|
+        trains.push({ :a => s.arrival_secs.nil? ? nil : day_after_midnight + s.arrival_secs, :p => s.pass_secs.nil? ? nil : day_after_midnight + s.pass_secs, :d => s.departure_secs.nil? ? nil : day_after_midnight + s.departure_secs, :runs_on => day_after_midnight, :obj => s })
       end
+
+
     end
 
-    return results
+    return trains
 
   end
 

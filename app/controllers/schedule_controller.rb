@@ -116,16 +116,5 @@ class ScheduleController < ApplicationController
 
   end
 
-
-  # Display real-time information
-
-  def actual
-
-    @schedule = DailySchedule.find_by_uuid(params[:uuid])
-
-    render 'common/_schedule_instance'
-
-  end
-
 end
 

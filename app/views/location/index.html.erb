@@ -11,39 +11,11 @@
 
 <%= render :partial => 'time_navigation_buttons' %>
 
-<div class="row">
+<div class="row-fluid">
  <div class="span12">
   <table class="table">
-   <thead>
-   <% if advanced_mode? %>
-    <tr>
-     <th>Info</th>
-     <th><span class="hidden-desktop">Arr</span><span class="visible-desktop">Arrives</span></th>
-     <th>From</th>
-     <th><span class="hidden-desktop">Pfm</span><span class="visible-desktop">Platform</span></th>
-     <th>To</th>
-     <th><span class="hidden-desktop">Dep</span><span class="visible-desktop">Departs</span></th>
-     <th>TOC</th>
-    </tr>
-   <% else %>
-    <tr>
-     <th>Info</th>
-     <th><span class="hidden-desktop">Arr</span><span class="visible-desktop">Arrives</span></th>
-     <th>From</th>
-     <th><span class="hidden-desktop">Pfm</span><span class="visible-desktop">Platform</span></th>
-     <th>To</th>
-     <th><span class="hidden-desktop">Dep</span><span class="visible-desktop">Departs</span></th>
-     <th>Operator</th>
-    </tr>
-   <% end %>
-   </thead>
-   <tbody>
-
-    <% @schedule.each do |s| %>
-     <%= render :partial => 'display_schedule', :locals => { :runs_on => s[0], :schedule => s[1] } unless s[1].blank? %>
-    <% end %>
-
-   </tbody>
+   <%= render :partial => 'location_header' %> 
+   <%= render :partial => 'location_body', :locals => { :schedule => @schedule } %>
   </table>
  </div>
 </div>

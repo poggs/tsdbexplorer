@@ -173,24 +173,24 @@ module TSDBExplorer
 
   def TSDBExplorer.train_sort(a, b)
 
-    if !a[:arrival].nil? && !a[:departure].nil?
-      cmp_a = :departure  # CALL
-    elsif !a[:arrival].nil? && a[:departure].nil?
-      cmp_a = :arrival    # TERM
-    elsif a[:arrival].nil? && !a[:departure].nil?
-      cmp_a = :departure  # ORIG
+    if !a[:a].nil? && !a[:d].nil?
+      cmp_a = :d  # CALL
+    elsif !a[:a].nil? && a[:d].nil?
+      cmp_a = :a  # TERM
+    elsif a[:a].nil? && !a[:d].nil?
+      cmp_a = :d  # ORIG
     else
-      cmp_a = :pass
+      cmp_a = :p  # PASS
     end
 
-    if !b[:arrival].nil? && !b[:departure].nil?
-      cmp_b = :departure  # CALL
-    elsif !b[:arrival].nil? && b[:departure].nil?
-      cmp_b = :arrival    # TERM
-    elsif b[:arrival].nil? && !b[:departure].nil?
-      cmp_b = :departure  # ORIG
+    if !b[:a].nil? && !b[:d].nil?
+      cmp_b = :d  # CALL
+    elsif !b[:a].nil? && b[:d].nil?
+      cmp_b = :a  # TERM
+    elsif b[:a].nil? && !b[:d].nil?
+      cmp_b = :d  # ORIG
     else
-      cmp_b = :pass
+      cmp_b = :p  # PASS
     end 
 
     return a[cmp_a] <=> b[cmp_b]

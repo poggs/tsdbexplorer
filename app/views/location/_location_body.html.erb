@@ -1,0 +1,25 @@
+<tbody>
+<% schedule.sort { |a,b| TSDBExplorer::train_sort(a,b) }.each do |s| %>
+ <% if advanced_mode? %>
+ <tr>
+  <td><%= link_to raw('<i class="icon-info-sign"></i>'), { :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s[:obj].basic_schedule.train_uid, :year => s[:runs_on].year, :month => s[:runs_on].month, :day => s[:runs_on].day } %> <%= s[:obj].basic_schedule.train_identity %> <%= decode_stp_indicator(s[:obj].basic_schedule, :A) %> <%= raw runs_as_required_flags_for(s[:obj].basic_schedule) %></td>
+  <td><% if s[:obj].pass? %><em>PASS</em><% else %><%= raw format_location_time(s[:obj], :arrival) %><% end %></td>
+  <td><%= raw show_location_name(s[:obj], :from) %></td>
+  <td><%= format_platform_and_line(s[:obj]) %>
+  <td><%= raw show_location_name(s[:obj], :to) %></td>
+  <td><% if s[:obj].pass? %><%= raw format_location_time(s[:obj], :pass) %><% else %><%= raw format_location_time(s[:obj], :departure) %><% end %></td>
+  <td><%= s[:obj].basic_schedule.atoc_code %></td>
+ </tr>
+ <% else %>
+ <tr>
+  <td><%= link_to raw('<i class="icon-info-sign"></i>'), { :controller => 'schedule', :action => 'schedule_by_uid_and_run_date', :uid => s[:obj].basic_schedule.train_uid, :year => s[:runs_on].year, :month => s[:runs_on].month, :day => s[:runs_on].day } %></td>
+  <td><%= s[:obj].public_arrival %></td>
+  <td><%= raw show_location_name(s[:obj], :from) %></td>
+  <td><%= s[:obj].basic_schedule.train_identity == "0B00" ? "BUS" : s[:obj].platform %></td>
+  <td><%= raw show_location_name(s[:obj], :to) %></td>
+  <td><%= s[:obj].public_departure %></td>
+  <td><%= decode_toc(s[:obj].basic_schedule.atoc_code) %></td>
+ </tr>
+ <% end %>
+<% end %>
+</tbody>
