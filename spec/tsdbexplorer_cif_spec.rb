@@ -589,4 +589,49 @@ describe "lib/tsdbexplorer/cif.rb" do
     result_2.message.should =~ /Schedules: 1 inserted, 0 amended, 1 deleted/
   end
 
+  it "should process a CIF update with a revision where the schedule end date is altered" do
+
+    result_1 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_revise_date_part1.cif')
+    result_1.status.should eql(:ok)
+    result_1.message.should =~ /Schedules: 2 inserted, 0 amended, 0 deleted/
+    num_records_1 = BasicSchedule.all.count
+    num_records_1.should eql(2)
+
+    p_schedule_1 = BasicSchedule.where(:train_uid => 'G09079').where(:runs_from => '2012-05-20').where(:stp_indicator => 'P')
+    p_schedule_1.count.should eql(1)
+
+    o_schedule_1 = BasicSchedule.where(:train_uid => 'G09079').where(:runs_from => '2012-05-20').where(:stp_indicator => 'O')
+    o_schedule_1.count.should eql(1)
+
+    result_2 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_revise_date_part2.cif')
+    result_2.status.should eql(:ok)
+    result_2.message.should =~ /Schedules: 0 inserted, 1 amended, 0 deleted/
+    num_records_2 = BasicSchedule.all.count
+    num_records_2.should eql(2)
+
+    p_schedule_2 = BasicSchedule.where(:train_uid => 'G09079').where(:runs_from => '2012-05-20').where(:stp_indicator => 'P')
+    p_schedule_2.count.should eql(1)
+
+    o_schedule_2 = BasicSchedule.where(:train_uid => 'G09079').where(:runs_from => '2012-05-20').where(:stp_indicator => 'O')
+    o_schedule_2.count.should eql(1)
+
+    result_3 = TSDBExplorer::CIF::process_cif_file('test/fixtures/cif/bug_revise_date_part3.cif')
+    result_3.status.should eql(:ok)
+    result_3.message.should =~ /Schedules: 1 inserted, 1 amended, 0 deleted/
+
+    BasicSchedule.count.should eql(3)
+
+    p_schedule_3 = BasicSchedule.where(:train_uid => 'G09079').where(:runs_from => '2012-05-20').where(:stp_indicator => 'P')
+    p_schedule_3.count.should eql(1)
+
+    o1_schedule_3 = BasicSchedule.where(:train_uid => 'G09079').where(:runs_from => '2012-05-20').where(:stp_indicator => 'O')
+    o1_schedule_3.count.should eql(1)
+    o1_schedule_3.first.runs_to.should eql(Date.parse('2012-05-20'))
+
+    o2_schedule_3 = BasicSchedule.where(:train_uid => 'G09079').where(:runs_from => '2012-05-27').where(:stp_indicator => 'O')
+    o2_schedule_3.count.should eql(1)
+    o2_schedule_3.first.runs_to.should eql(Date.parse('2012-05-27'))
+
+  end
+
 end

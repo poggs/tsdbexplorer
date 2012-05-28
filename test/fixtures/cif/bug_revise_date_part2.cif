@@ -1,0 +1,21 @@
+HDTPS.UDFTEST.PD7001010101700000DFTESTBDFTESTAUA010170010170                    
+BSRG090791205201205270000001 POO2S30    112302012 EMU    075      S            O
+BX         MEY                                                                  
+LOLVRPLCH 1338 13381         TB                                                 
+LIMORFNL  1340 1340H     134013402        T                                     
+LISANDH   1343H1344H     134413442        T                                     
+LIBNKHALL 1346 1346H     134613462        T                                     
+LIBOOTLOR 1348 1348H     134813482        T                                     
+LIBOOTLNS 1349H1350      135013502        T                                     
+LISFRTHAL 1351H1352      135213522        T                                     
+LIWLOO    1354 1354H     135413542        T                                     
+LIBLNDLAC 1356H1357      135713572        T                                     
+LIHALLRD  1358H1359      135913592        T                                     
+LIHITN    1402 1402H     140214022        T                                     
+LIFORMBY  1405H1406      140614062        T                                     
+LIFRSHFLD 1407H1408      140814082        T                                     
+LIAINSDAL 1411H1412      141214122        T                                     
+LIHILLSID 1414H1415      141514152        T                                     
+LIBKDLE   1417 1417H     141714172        T               3                     
+LTSOUTHPT 1424 14242     TF                                                     
+ZZ
