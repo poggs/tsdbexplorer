@@ -340,7 +340,7 @@ module TSDBExplorer
             return Struct.new(:status, :message).new(:error, "Basic Schedule Delete (BSD) record not allowed in a CIF full extract") if header_data.update_indicator == "F"
 
             deletion_record = BasicSchedule.find(:first, :conditions => { :train_uid => record.train_uid, :runs_from => record.runs_from, :stp_indicator => record.stp_indicator })
-            return Struct.new(:status, :message).new(:error, "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]} with STP indicator #{record[:stp_indicator]}") if deletion_record.nil?e
+            return Struct.new(:status, :message).new(:error, "Unknown schedule for UID #{record[:train_uid]} on #{record[:runs_from]} with STP indicator #{record[:stp_indicator]}") if deletion_record.nil?
 
             deletion_record.destroy
 
