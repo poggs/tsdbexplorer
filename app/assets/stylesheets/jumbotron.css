@@ -55,7 +55,7 @@
   background-image: -webkit-gradient(linear, left top, left bottom, from(#0088B5), to(white));
   background-image: -webkit-linear-gradient(#0088B5, white);
   background-image: -moz-linear-gradient(#0088B5, white);
-  background-image: -o-linear-gradient(top, #004D9F, #049cd9);
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#004D9F), to(#049cd9));
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#004D9F', endColorstr='#049cd9', GradientType=0); /* IE8 and down */
+  background-image: -o-linear-gradient(top, #0088B5, #ffffff);
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#0088B5), to(#ffffff));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088B5', endColorstr='#ffffff', GradientType=0); /* IE8 and down */
 }
